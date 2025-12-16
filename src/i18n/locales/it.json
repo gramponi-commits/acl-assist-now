@@ -227,10 +227,10 @@
     "add": "Aggiungi"
   },
   "voice": {
-    "rhythmCheck": "Controllo ritmo ora. Pausa RCP. Analizza ritmo.",
-    "preCharge": "Pre-carica defibrillatore. Controllo ritmo tra 15 secondi.",
-    "epiDue": "Adrenalina scaduta. Somministra 1 milligrammo IV o IO.",
-    "resumeCPR": "Riprendi RCP di alta qualità.",
-    "rosc": "ROSC raggiunto. Inizia cure post arresto cardiaco."
+    "rhythmCheck": "Controllo ritmo",
+    "preCharge": "15 secondi, carica defibrillatore",
+    "epiDue": "Adrenalina",
+    "resumeCPR": "Ricomincia RCP",
+    "rosc": "ROSC"
   }
 }
