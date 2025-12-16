@@ -227,10 +227,10 @@
     "add": "Add"
   },
   "voice": {
-    "rhythmCheck": "Rhythm check now. Pause CPR. Analyze rhythm.",
-    "preCharge": "Pre-charge defibrillator. Rhythm check in 15 seconds.",
-    "epiDue": "Epinephrine due. Give 1 milligram IV or IO.",
-    "resumeCPR": "Resume high quality CPR.",
-    "rosc": "ROSC achieved. Begin post cardiac arrest care."
+    "rhythmCheck": "Rhythm check",
+    "preCharge": "15 seconds, charge defibrillator",
+    "epiDue": "Epinephrine",
+    "resumeCPR": "Resume CPR",
+    "rosc": "ROSC"
   }
 }
