@@ -97,6 +97,16 @@ export function CodeScreen() {
                 onRhythmCheck={actions.startRhythmCheck}
               />
 
+              {/* Timers */}
+              <TimerDisplay
+                cprCycleRemaining={timerState.cprCycleRemaining}
+                epiRemaining={timerState.epiRemaining}
+                totalElapsed={timerState.totalElapsed}
+                totalCPRTime={timerState.totalCPRTime}
+                preShockAlert={timerState.preShockAlert}
+                rhythmCheckDue={timerState.rhythmCheckDue}
+              />
+
               {/* CPR Quality */}
               <CPRQualityPanel
                 airwayStatus={session.airwayStatus}
@@ -107,16 +117,6 @@ export function CodeScreen() {
               <HsAndTsChecklist
                 hsAndTs={session.hsAndTs}
                 onUpdate={actions.updateHsAndTs}
-              />
-
-              {/* Timers - above timeline */}
-              <TimerDisplay
-                cprCycleRemaining={timerState.cprCycleRemaining}
-                epiRemaining={timerState.epiRemaining}
-                totalElapsed={timerState.totalElapsed}
-                totalCPRTime={timerState.totalCPRTime}
-                preShockAlert={timerState.preShockAlert}
-                rhythmCheckDue={timerState.rhythmCheckDue}
               />
 
               {/* Code Timeline */}
