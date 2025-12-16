@@ -317,6 +317,35 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
     setIsInRhythmCheck(false);
   }, [config]);
 
+  const resumeSession = useCallback((savedSession: ACLSSession, savedTimerState: { totalElapsed: number; totalCPRTime: number; savedAt: number }) => {
+    const now = Date.now();
+    const elapsedSinceSave = now - savedTimerState.savedAt;
+    
+    // Recalculate times based on how long ago the session was saved
+    const newSession = {
+      ...savedSession,
+      // Update cprCycleStartTime to account for time passed
+      cprCycleStartTime: savedSession.cprCycleStartTime 
+        ? savedSession.cprCycleStartTime + elapsedSinceSave 
+        : null,
+      // Update lastEpinephrineTime to account for time passed
+      lastEpinephrineTime: savedSession.lastEpinephrineTime 
+        ? savedSession.lastEpinephrineTime + elapsedSinceSave 
+        : null,
+    };
+    
+    setSession(newSession);
+    setTimerState({
+      cprCycleRemaining: config.rhythmCheckIntervalMs,
+      epiRemaining: config.epinephrineIntervalMs,
+      totalElapsed: savedTimerState.totalElapsed,
+      totalCPRTime: savedTimerState.totalCPRTime,
+      preShockAlert: false,
+      rhythmCheckDue: false,
+    });
+    setIsInRhythmCheck(false);
+  }, [config]);
+
   const exportSession = useCallback(() => {
     const pdf = new jsPDF();
     const startDate = new Date(session.startTime);
@@ -569,6 +598,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       updatePostROSCVitals,
       endCode,
       resetSession,
+      resumeSession,
       exportSession,
       saveSessionLocally,
       addIntervention,

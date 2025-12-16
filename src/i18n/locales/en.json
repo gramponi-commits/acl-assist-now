@@ -132,7 +132,21 @@
     "language": "Language",
     "languageDesc": "Select your preferred language",
     "english": "English",
-    "italian": "Italiano"
+    "italian": "Italiano",
+    "audio": "Audio Alerts",
+    "audioDesc": "Play sounds for rhythm check, epi reminders",
+    "vibration": "Vibration",
+    "vibrationDesc": "Vibrate for critical alerts",
+    "metronome": "CPR Metronome",
+    "metronomeDesc": "Audio metronome at 110 BPM during CPR",
+    "metronomeBPM": "Metronome BPM"
+  },
+  "resume": {
+    "title": "Active Code Detected",
+    "description": "An interrupted code session was found.",
+    "duration": "Duration",
+    "resume": "Resume Code",
+    "discard": "Start New Code"
   },
   "common": {
     "back": "Back",
