@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* ACLS Decision Support System - Clinical Design System
+   All colors MUST be HSL.
 */
 
 @layer base {
@@ -38,31 +38,42 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
+    /* ACLS Clinical Colors */
+    --acls-shockable: 0 84% 50%;
+    --acls-shockable-foreground: 0 0% 100%;
+    --acls-non-shockable: 210 100% 45%;
+    --acls-non-shockable-foreground: 0 0% 100%;
+    --acls-pea: 45 100% 45%;
+    --acls-pea-foreground: 0 0% 0%;
+    --acls-success: 142 76% 36%;
+    --acls-success-foreground: 0 0% 100%;
+    --acls-warning: 38 92% 50%;
+    --acls-warning-foreground: 0 0% 0%;
+    --acls-critical: 0 84% 50%;
+    --acls-critical-foreground: 0 0% 100%;
+    --acls-info: 217 91% 60%;
+    --acls-info-foreground: 0 0% 100%;
+    --acls-medication: 262 83% 58%;
+    --acls-medication-foreground: 0 0% 100%;
+
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222 47% 8%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 222 47% 11%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 222 47% 11%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 210 40% 98%;
@@ -80,9 +91,28 @@ All colors MUST be HSL.
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
+    --border: 217.2 32.6% 20%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    /* ACLS Clinical Colors - Dark Mode (slightly brighter for visibility) */
+    --acls-shockable: 0 84% 55%;
+    --acls-shockable-foreground: 0 0% 100%;
+    --acls-non-shockable: 210 100% 55%;
+    --acls-non-shockable-foreground: 0 0% 100%;
+    --acls-pea: 45 100% 50%;
+    --acls-pea-foreground: 0 0% 0%;
+    --acls-success: 142 76% 42%;
+    --acls-success-foreground: 0 0% 100%;
+    --acls-warning: 38 92% 55%;
+    --acls-warning-foreground: 0 0% 0%;
+    --acls-critical: 0 84% 55%;
+    --acls-critical-foreground: 0 0% 100%;
+    --acls-info: 217 91% 65%;
+    --acls-info-foreground: 0 0% 100%;
+    --acls-medication: 262 83% 65%;
+    --acls-medication-foreground: 0 0% 100%;
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -101,5 +131,13 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Touch-friendly tap targets */
+@layer utilities {
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
   }
 }
