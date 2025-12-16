@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Intervention } from '@/types/acls';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -45,6 +46,7 @@ function getInterventionIcon(type: Intervention['type']) {
 }
 
 export function CodeTimeline({ interventions, startTime }: CodeTimelineProps) {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(true);
   const sortedInterventions = [...interventions].sort((a, b) => b.timestamp - a.timestamp);
 
@@ -54,8 +56,8 @@ export function CodeTimeline({ interventions, startTime }: CodeTimelineProps) {
         <div className="flex items-center justify-between p-3 rounded-lg bg-card border border-border hover:bg-muted/50 transition-colors">
           <div className="flex items-center gap-2">
             <Clock className="h-4 w-4 text-muted-foreground" />
-            <span className="font-semibold text-foreground">Code Timeline</span>
-            <span className="text-sm text-muted-foreground">({interventions.length} events)</span>
+            <span className="font-semibold text-foreground">{t('timeline.title')}</span>
+            <span className="text-sm text-muted-foreground">({interventions.length} {t('timeline.events')})</span>
           </div>
           <ChevronDown className={cn(
             'h-4 w-4 text-muted-foreground transition-transform',
@@ -69,7 +71,7 @@ export function CodeTimeline({ interventions, startTime }: CodeTimelineProps) {
           <div className="p-3 space-y-2">
             {sortedInterventions.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-4">
-                No interventions recorded yet
+                {t('timeline.noInterventions')}
               </p>
             ) : (
               sortedInterventions.map((intervention) => (

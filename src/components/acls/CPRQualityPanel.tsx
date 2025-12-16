@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { AirwayStatus } from '@/types/acls';
@@ -12,6 +13,7 @@ interface CPRQualityPanelProps {
 }
 
 export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Change }: CPRQualityPanelProps) {
+  const { t } = useTranslation();
   const [etco2, setEtco2] = useState<string>('');
 
   const handleETCO2Change = (value: string) => {
@@ -27,7 +29,7 @@ export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Change }:
 
   return (
     <div className="space-y-3">
-      <h2 className="text-lg font-semibold text-foreground">CPR Quality</h2>
+      <h2 className="text-lg font-semibold text-foreground">{t('cpr.title')}</h2>
       
       {/* ETCO2 */}
       <div className="bg-card rounded-lg p-4 border border-border">
@@ -38,7 +40,7 @@ export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Change }:
         <div className="flex items-center gap-3">
           <Input
             type="number"
-            placeholder="Enter ETCO₂"
+            placeholder="ETCO₂"
             value={etco2}
             onChange={(e) => handleETCO2Change(e.target.value)}
             className="h-12 text-lg font-mono"
@@ -53,7 +55,7 @@ export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Change }:
           )}
         </div>
         <p className="text-xs text-muted-foreground mt-2">
-          Target: ≥10 mmHg indicates adequate CPR quality
+          {t('postRosc.target')}: ≥10 mmHg
         </p>
       </div>
 
@@ -61,7 +63,7 @@ export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Change }:
       <div className="bg-card rounded-lg p-4 border border-border">
         <div className="flex items-center gap-2 mb-3">
           <Wind className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-medium">Airway Management</span>
+          <span className="text-sm font-medium">{t('airway.title')}</span>
         </div>
         <div className="grid grid-cols-3 gap-2">
           <Button
@@ -73,7 +75,7 @@ export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Change }:
               airwayStatus === 'none' && 'bg-primary text-primary-foreground border-primary'
             )}
           >
-            None
+            {t('airway.none')}
           </Button>
           <Button
             variant="outline"
@@ -84,7 +86,7 @@ export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Change }:
               airwayStatus === 'bvm' && 'bg-primary text-primary-foreground border-primary'
             )}
           >
-            BVM
+            {t('airway.bvm')}
           </Button>
           <Button
             variant="outline"
@@ -95,14 +97,9 @@ export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Change }:
               airwayStatus === 'advanced' && 'bg-acls-success text-white border-acls-success'
             )}
           >
-            Advanced
+            {t('airway.advanced')}
           </Button>
         </div>
-        <p className="text-xs text-muted-foreground mt-2">
-          {airwayStatus === 'advanced' 
-            ? 'Continuous compressions with 10 breaths/min' 
-            : '30:2 compression-ventilation ratio'}
-        </p>
       </div>
     </div>
   );

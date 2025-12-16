@@ -7,17 +7,20 @@
   "rhythm": {
     "identify": "IDENTIFY RHYTHM",
     "selectInitial": "Select initial rhythm to begin ACLS protocol",
-    "vfPvt": "VF/pVT",
-    "shockable": "Shockable",
+    "changeRhythm": "Change Rhythm",
+    "vfPvt": "VF / pVT",
+    "shockable": "Shockable Rhythm",
     "asystole": "Asystole",
     "nonShockable": "Non-Shockable",
     "pea": "PEA"
   },
   "actions": {
+    "title": "Actions",
     "shock": "SHOCK",
     "epinephrine": "EPINEPHRINE",
     "amiodarone": "AMIODARONE",
-    "rhythmCheck": "Rhythm Check",
+    "rhythmCheck": "RHYTHM CHECK",
+    "rhythmCheckNow": "RHYTHM CHECK NOW",
     "rosc": "ROSC",
     "terminate": "Terminate Code - Declare Death",
     "resumeCPR": "Resume CPR - Same Rhythm",
@@ -28,17 +31,20 @@
     "newCode": "New Code"
   },
   "timers": {
-    "cprCycle": "CPR Cycle",
-    "epiDue": "Epi Due",
+    "rhythmCheck": "Rhythm Check",
+    "epiDueIn": "Epi Due In",
+    "now": "NOW",
+    "preCharge": "PRE-CHARGE AED",
+    "tapRhythmCheck": "TAP RHYTHM CHECK",
+    "giveEpi": "GIVE EPI 1mg",
     "total": "Total",
-    "cpr": "CPR",
-    "preCharge": "PRE-CHARGE DEFIBRILLATOR",
-    "rhythmCheckIn": "Rhythm check in"
+    "cpr": "CPR"
   },
-  "rhythmCheck": {
+  "rhythmCheckModal": {
     "title": "RHYTHM CHECK",
     "subtitle": "Pause CPR briefly. Analyze rhythm. Check pulse.",
     "shockVfPvt": "SHOCK - VF/pVT",
+    "shockAt": "Shock #{{number}} @ {{energy}}J",
     "noShock": "No shock"
   },
   "codeEnded": {
@@ -49,7 +55,7 @@
     "cprTime": "CPR Time",
     "cprFraction": "CPR Fraction",
     "shocks": "Shocks",
-    "epiDoses": "doses"
+    "doses": "doses"
   },
   "postRosc": {
     "roscAchieved": "ROSC ACHIEVED",
@@ -57,23 +63,58 @@
     "vitalTargets": "Vital Targets",
     "target": "Target",
     "inRange": "In Range",
-    "outOfRange": "Out of Range"
+    "outOfRange": "Out of Range",
+    "initialStabilization": "Initial Stabilization",
+    "diagnostics": "Diagnostics",
+    "neuroprotection": "Neuroprotection",
+    "specialAssessments": "Special Assessments",
+    "airwaySecured": "Airway secured",
+    "ventilationOptimized": "Ventilation optimized",
+    "hemodynamicsOptimized": "Hemodynamics optimized",
+    "twelveLeadECG": "12-lead ECG obtained",
+    "labsOrdered": "Labs ordered",
+    "ctHeadOrdered": "CT Head/Chest/Abd considered",
+    "echoOrdered": "Echocardiography ordered",
+    "temperatureManagement": "Temperature management initiated",
+    "neurologicalAssessment": "Neurological assessment",
+    "eegOrdered": "EEG ordered if comatose",
+    "followingCommands": "Following commands?",
+    "stElevation": "ST-elevation present?",
+    "cardiogenicShock": "Cardiogenic shock?",
+    "yes": "Yes",
+    "no": "No"
   },
   "hsTs": {
     "title": "H's & T's - Reversible Causes",
+    "itemsChecked": "{{count}} item(s) checked",
+    "tapToReview": "Tap to review",
+    "hs": "H's",
+    "ts": "T's",
     "hypovolemia": "Hypovolemia",
+    "hypovolemiaDesc": "Volume resuscitation, blood products",
     "hypoxia": "Hypoxia",
-    "hydrogenIon": "Hydrogen ion (acidosis)",
+    "hypoxiaDesc": "Oxygenation, secure airway",
+    "hydrogenIon": "Hydrogen Ion (Acidosis)",
+    "hydrogenIonDesc": "Consider bicarb, ventilation",
     "hypoHyperkalemia": "Hypo/Hyperkalemia",
+    "hypoHyperkalemiaDesc": "Check K+, calcium, D50/insulin",
     "hypothermia": "Hypothermia",
-    "tensionPneumo": "Tension pneumothorax",
-    "tamponade": "Tamponade",
+    "hypothermiaDesc": "Warm fluids, rewarming",
+    "tensionPneumo": "Tension Pneumothorax",
+    "tensionPneumoDesc": "Needle decompression, chest tube",
+    "tamponade": "Tamponade (Cardiac)",
+    "tamponadeDesc": "Pericardiocentesis, echo",
     "toxins": "Toxins",
-    "thrombosisPulm": "Thrombosis (pulmonary)",
-    "thrombosisCoro": "Thrombosis (coronary)"
+    "toxinsDesc": "Antidotes, decontamination",
+    "thrombosisPulm": "Thrombosis (Pulmonary)",
+    "thrombosisPulmDesc": "Thrombolytics, ECMO consideration",
+    "thrombosisCoro": "Thrombosis (Coronary)",
+    "thrombosisCoroDesc": "PCI, thrombolytics"
   },
   "timeline": {
-    "title": "Code Timeline"
+    "title": "Code Timeline",
+    "events": "events",
+    "noInterventions": "No interventions recorded yet"
   },
   "history": {
     "title": "Session History",
@@ -97,5 +138,16 @@
     "back": "Back",
     "confirm": "Confirm",
     "cancel": "Cancel"
+  },
+  "airway": {
+    "title": "Airway Status",
+    "none": "None",
+    "bvm": "BVM",
+    "advanced": "Advanced"
+  },
+  "cpr": {
+    "title": "CPR Quality",
+    "compressionRate": "Compression Rate",
+    "targetRate": "Target: 100-120/min"
   }
 }

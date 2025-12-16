@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { RhythmType } from '@/types/acls';
 import { Zap, Activity, Heart } from 'lucide-react';
@@ -10,10 +11,12 @@ interface RhythmSelectorProps {
 }
 
 export function RhythmSelector({ currentRhythm, onSelectRhythm, isInitial = true }: RhythmSelectorProps) {
+  const { t } = useTranslation();
+  
   return (
     <div className="space-y-3">
       <h2 className="text-lg font-semibold text-foreground">
-        {isInitial ? 'Select Initial Rhythm' : 'Change Rhythm'}
+        {isInitial ? t('rhythm.selectInitial') : t('rhythm.changeRhythm')}
       </h2>
       <div className="grid grid-cols-1 gap-3">
         <Button
@@ -29,8 +32,8 @@ export function RhythmSelector({ currentRhythm, onSelectRhythm, isInitial = true
         >
           <Zap className="h-6 w-6" />
           <div className="text-left">
-            <div>VF / pVT</div>
-            <div className="text-xs font-normal opacity-80">Shockable Rhythm</div>
+            <div>{t('rhythm.vfPvt')}</div>
+            <div className="text-xs font-normal opacity-80">{t('rhythm.shockable')}</div>
           </div>
         </Button>
 
@@ -47,8 +50,8 @@ export function RhythmSelector({ currentRhythm, onSelectRhythm, isInitial = true
         >
           <Activity className="h-6 w-6" />
           <div className="text-left">
-            <div>Asystole</div>
-            <div className="text-xs font-normal opacity-80">Non-Shockable</div>
+            <div>{t('rhythm.asystole')}</div>
+            <div className="text-xs font-normal opacity-80">{t('rhythm.nonShockable')}</div>
           </div>
         </Button>
 
@@ -65,8 +68,8 @@ export function RhythmSelector({ currentRhythm, onSelectRhythm, isInitial = true
         >
           <Heart className="h-6 w-6" />
           <div className="text-left">
-            <div>PEA</div>
-            <div className="text-xs font-normal opacity-80">Non-Shockable</div>
+            <div>{t('rhythm.pea')}</div>
+            <div className="text-xs font-normal opacity-80">{t('rhythm.nonShockable')}</div>
           </div>
         </Button>
       </div>
