@@ -19,48 +19,91 @@ interface CommandBanner {
 }
 
 interface TimerState {
-  cprRemaining: number;
+  cprCycleRemaining: number;
   epiRemaining: number;
+  totalElapsed: number;
+  totalCPRTime: number;
   preShockAlert: boolean;
+  rhythmCheckDue: boolean;
 }
 
 export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
   const [session, setSession] = useState<ACLSSession>(createInitialSession);
   const [timerState, setTimerState] = useState<TimerState>({
-    cprRemaining: config.rhythmCheckIntervalMs,
+    cprCycleRemaining: config.rhythmCheckIntervalMs,
     epiRemaining: config.epinephrineIntervalMs,
+    totalElapsed: 0,
+    totalCPRTime: 0,
     preShockAlert: false,
+    rhythmCheckDue: false,
   });
+  const [isInRhythmCheck, setIsInRhythmCheck] = useState(false);
   const intervalRef = useRef<number | null>(null);
+  const cprActiveRef = useRef<boolean>(false);
+  const lastTickRef = useRef<number>(Date.now());
 
   // Timer logic
   useEffect(() => {
-    if (session.phase === 'shockable_pathway' || session.phase === 'non_shockable_pathway') {
+    const isActive = session.phase === 'shockable_pathway' || session.phase === 'non_shockable_pathway';
+    
+    if (isActive && !isInRhythmCheck) {
+      cprActiveRef.current = true;
+      lastTickRef.current = Date.now();
+      
       intervalRef.current = window.setInterval(() => {
         const now = Date.now();
+        const delta = now - lastTickRef.current;
+        lastTickRef.current = now;
         
         setTimerState(prev => {
-          const cprRemaining = session.cprCycleStartTime 
+          const cprCycleRemaining = session.cprCycleStartTime 
             ? Math.max(0, config.rhythmCheckIntervalMs - (now - session.cprCycleStartTime))
             : config.rhythmCheckIntervalMs;
           
           const epiRemaining = session.lastEpinephrineTime
             ? Math.max(0, config.epinephrineIntervalMs - (now - session.lastEpinephrineTime))
-            : 0;
+            : (session.phase === 'non_shockable_pathway' && session.epinephrineCount === 0) ? 0 : prev.epiRemaining;
           
-          const preShockAlert = session.phase === 'shockable_pathway' && 
-            cprRemaining > 0 && 
-            cprRemaining <= config.preShockAlertAdvanceMs;
+          const preShockAlert = cprCycleRemaining > 0 && 
+            cprCycleRemaining <= config.preShockAlertAdvanceMs;
+          
+          const rhythmCheckDue = cprCycleRemaining === 0;
 
-          return { cprRemaining, epiRemaining, preShockAlert };
+          // Only accumulate CPR time when actively doing CPR (not in rhythm check)
+          const totalCPRTime = cprActiveRef.current ? prev.totalCPRTime + delta : prev.totalCPRTime;
+
+          return { 
+            cprCycleRemaining, 
+            epiRemaining, 
+            preShockAlert,
+            rhythmCheckDue,
+            totalElapsed: now - session.startTime,
+            totalCPRTime,
+          };
         });
       }, 100);
 
       return () => {
         if (intervalRef.current) clearInterval(intervalRef.current);
+        cprActiveRef.current = false;
       };
+    } else {
+      cprActiveRef.current = false;
     }
-  }, [session.phase, session.cprCycleStartTime, session.lastEpinephrineTime, config]);
+  }, [session.phase, session.cprCycleStartTime, session.lastEpinephrineTime, session.startTime, session.epinephrineCount, isInRhythmCheck, config]);
+
+  // Update total elapsed even during rhythm check
+  useEffect(() => {
+    if (isInRhythmCheck) {
+      const interval = window.setInterval(() => {
+        setTimerState(prev => ({
+          ...prev,
+          totalElapsed: Date.now() - session.startTime,
+        }));
+      }, 100);
+      return () => clearInterval(interval);
+    }
+  }, [isInRhythmCheck, session.startTime]);
 
   const addIntervention = useCallback((type: Intervention['type'], details: string, value?: number | string) => {
     const intervention: Intervention = {
@@ -89,7 +132,6 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
         details: `Rhythm identified: ${rhythm === 'vf_pvt' ? 'VF/pVT' : rhythm === 'asystole' ? 'Asystole' : 'PEA'}`,
       }];
 
-      // For non-shockable, immediately flag for epinephrine
       return {
         ...prev,
         currentRhythm: rhythm,
@@ -102,25 +144,13 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
     addIntervention('cpr_start', 'CPR initiated');
   }, [addIntervention]);
 
-  const changeRhythm = useCallback((newRhythm: RhythmType) => {
-    if (newRhythm === session.currentRhythm) return;
-    
-    const isShockable = newRhythm === 'vf_pvt';
-    const wasShockable = session.currentRhythm === 'vf_pvt';
-    
-    setSession(prev => ({
-      ...prev,
-      currentRhythm: newRhythm,
-      phase: isShockable ? 'shockable_pathway' : 'non_shockable_pathway',
-      cprCycleStartTime: Date.now(),
-    }));
+  const startRhythmCheck = useCallback(() => {
+    setIsInRhythmCheck(true);
+    cprActiveRef.current = false;
+    addIntervention('note', 'Rhythm check - CPR paused');
+  }, [addIntervention]);
 
-    addIntervention('rhythm_change', 
-      `Rhythm changed: ${wasShockable ? 'Shockable' : 'Non-shockable'} → ${isShockable ? 'VF/pVT' : newRhythm === 'asystole' ? 'Asystole' : 'PEA'}`
-    );
-  }, [session.currentRhythm, addIntervention]);
-
-  const deliverShock = useCallback(() => {
+  const completeRhythmCheckWithShock = useCallback(() => {
     const now = Date.now();
     setSession(prev => {
       const newShockCount = prev.shockCount + 1;
@@ -131,11 +161,50 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
         shockCount: newShockCount,
         currentEnergy: newEnergy,
         cprCycleStartTime: now,
+        phase: 'shockable_pathway',
+        currentRhythm: 'vf_pvt',
       };
     });
 
-    addIntervention('shock', `Shock #${session.shockCount + 1} delivered`, session.currentEnergy);
+    addIntervention('shock', `Shock #${session.shockCount + 1} delivered at ${session.currentEnergy}J`, session.currentEnergy);
+    setIsInRhythmCheck(false);
   }, [session.shockCount, session.currentEnergy, config.biphasicMaxJoules, config.biphasicMinJoules, addIntervention]);
+
+  const completeRhythmCheckNoShock = useCallback((newRhythm: 'asystole' | 'pea') => {
+    const now = Date.now();
+    setSession(prev => ({
+      ...prev,
+      currentRhythm: newRhythm,
+      phase: 'non_shockable_pathway',
+      cprCycleStartTime: now,
+    }));
+
+    addIntervention('rhythm_change', `No shock - ${newRhythm === 'asystole' ? 'Asystole' : 'PEA'} - Resume CPR`);
+    setIsInRhythmCheck(false);
+  }, [addIntervention]);
+
+  const completeRhythmCheckResumeCPR = useCallback(() => {
+    const now = Date.now();
+    setSession(prev => ({
+      ...prev,
+      cprCycleStartTime: now,
+    }));
+
+    addIntervention('cpr_start', 'CPR resumed - same rhythm');
+    setIsInRhythmCheck(false);
+  }, [addIntervention]);
+
+  const achieveROSC = useCallback(() => {
+    const now = Date.now();
+    setSession(prev => ({
+      ...prev,
+      phase: 'post_rosc',
+      roscTime: now,
+    }));
+
+    addIntervention('rosc', 'ROSC achieved - Pulse and rhythm detected!');
+    setIsInRhythmCheck(false);
+  }, [addIntervention]);
 
   const giveEpinephrine = useCallback(() => {
     const now = Date.now();
@@ -178,17 +247,6 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
     addIntervention('airway', `Airway: ${status === 'advanced' ? 'Advanced airway placed' : status === 'bvm' ? 'BVM ventilation' : 'No airway'}`);
   }, [addIntervention]);
 
-  const achieveROSC = useCallback(() => {
-    const now = Date.now();
-    setSession(prev => ({
-      ...prev,
-      phase: 'post_rosc',
-      roscTime: now,
-    }));
-
-    addIntervention('rosc', 'ROSC achieved!');
-  }, [addIntervention]);
-
   const updateHsAndTs = useCallback((updates: Partial<HsAndTs>) => {
     setSession(prev => ({
       ...prev,
@@ -218,13 +276,6 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
     }));
   }, []);
 
-  const startNewCPRCycle = useCallback(() => {
-    setSession(prev => ({
-      ...prev,
-      cprCycleStartTime: Date.now(),
-    }));
-  }, []);
-
   const endCode = useCallback((outcome: 'rosc' | 'deceased' | 'transferred') => {
     setSession(prev => ({
       ...prev,
@@ -238,14 +289,25 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
   const resetSession = useCallback(() => {
     setSession(createInitialSession());
     setTimerState({
-      cprRemaining: config.rhythmCheckIntervalMs,
+      cprCycleRemaining: config.rhythmCheckIntervalMs,
       epiRemaining: config.epinephrineIntervalMs,
+      totalElapsed: 0,
+      totalCPRTime: 0,
       preShockAlert: false,
+      rhythmCheckDue: false,
     });
+    setIsInRhythmCheck(false);
   }, [config]);
 
   const exportSession = useCallback(() => {
-    const dataStr = JSON.stringify(session, null, 2);
+    const exportData = {
+      ...session,
+      totalCPRTime: timerState.totalCPRTime,
+      cprFraction: timerState.totalElapsed > 0 
+        ? ((timerState.totalCPRTime / timerState.totalElapsed) * 100).toFixed(1) + '%'
+        : 'N/A',
+    };
+    const dataStr = JSON.stringify(exportData, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
@@ -253,7 +315,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
     link.download = `acls-session-${new Date(session.startTime).toISOString().split('T')[0]}.json`;
     link.click();
     URL.revokeObjectURL(url);
-  }, [session]);
+  }, [session, timerState.totalCPRTime, timerState.totalElapsed]);
 
   // Command banner logic
   const getCommandBanner = useCallback((): CommandBanner => {
@@ -276,25 +338,42 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       };
     }
 
-    // Pre-shock alert
-    if (timerState.preShockAlert && currentRhythm === 'vf_pvt') {
+    // During rhythm check
+    if (isInRhythmCheck) {
+      if (currentRhythm === 'vf_pvt') {
+        return {
+          message: '⚡ RHYTHM CHECK - VF/pVT?',
+          priority: 'critical',
+          subMessage: 'If VF/pVT: SHOCK | If not: Select new rhythm | If pulse: ROSC',
+        };
+      }
       return {
-        message: '⚡ PREPARE FOR SHOCK',
+        message: '🔍 RHYTHM CHECK',
         priority: 'warning',
-        subMessage: 'Pre-charge defibrillator - rhythm check in 15 seconds',
+        subMessage: 'Check rhythm and pulse. If VF/pVT: SHOCK | If pulse: ROSC',
+      };
+    }
+
+    // Pre-shock alert - 15 seconds before rhythm check
+    if (timerState.preShockAlert) {
+      return {
+        message: '⚡ PRE-CHARGE DEFIBRILLATOR',
+        priority: 'warning',
+        subMessage: `Rhythm check in ${Math.ceil(timerState.cprCycleRemaining / 1000)}s - Prepare to analyze rhythm`,
+      };
+    }
+
+    // Rhythm check due
+    if (timerState.rhythmCheckDue) {
+      return {
+        message: '🔍 RHYTHM CHECK NOW',
+        priority: 'critical',
+        subMessage: 'Tap "Rhythm Check" to pause CPR and analyze',
       };
     }
 
     // Shockable pathway
     if (phase === 'shockable_pathway') {
-      if (timerState.cprRemaining === 0) {
-        return {
-          message: 'RHYTHM CHECK - DELIVER SHOCK IF VF/pVT',
-          priority: 'critical',
-          subMessage: `Shock #${shockCount + 1} ready at ${session.currentEnergy}J`,
-        };
-      }
-
       // Check for epinephrine timing (after shock #2)
       if (shockCount >= 2 && (!lastEpinephrineTime || (now - lastEpinephrineTime) >= config.epinephrineIntervalMs)) {
         return {
@@ -316,7 +395,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       return {
         message: 'CONTINUE HIGH-QUALITY CPR',
         priority: 'info',
-        subMessage: `Rhythm check in ${Math.ceil(timerState.cprRemaining / 1000)}s | Shock #${shockCount + 1} pending`,
+        subMessage: `Rhythm check in ${Math.ceil(timerState.cprCycleRemaining / 1000)}s`,
       };
     }
 
@@ -340,18 +419,10 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
         };
       }
 
-      if (timerState.cprRemaining === 0) {
-        return {
-          message: 'RHYTHM CHECK',
-          priority: 'warning',
-          subMessage: 'Check for shockable rhythm - if VF/pVT, deliver shock',
-        };
-      }
-
       return {
         message: 'CONTINUE HIGH-QUALITY CPR',
         priority: 'info',
-        subMessage: `Rhythm check in ${Math.ceil(timerState.cprRemaining / 1000)}s | Consider H's & T's`,
+        subMessage: `Rhythm check in ${Math.ceil(timerState.cprCycleRemaining / 1000)}s | Consider H's & T's`,
       };
     }
 
@@ -359,12 +430,11 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       message: 'ACLS IN PROGRESS',
       priority: 'info',
     };
-  }, [session, timerState, config.epinephrineIntervalMs]);
+  }, [session, timerState, isInRhythmCheck, config.epinephrineIntervalMs]);
 
   // Button state calculations
-  const canDeliverShock = session.phase === 'shockable_pathway';
-  const canGiveEpinephrine = session.phase === 'shockable_pathway' || session.phase === 'non_shockable_pathway';
-  const canGiveAmiodarone = session.phase === 'shockable_pathway' && session.shockCount >= 3 && session.amiodaroneCount < 2;
+  const canGiveEpinephrine = (session.phase === 'shockable_pathway' || session.phase === 'non_shockable_pathway') && !isInRhythmCheck;
+  const canGiveAmiodarone = session.phase === 'shockable_pathway' && session.shockCount >= 3 && session.amiodaroneCount < 2 && !isInRhythmCheck;
   const epiDue = session.lastEpinephrineTime 
     ? (Date.now() - session.lastEpinephrineTime) >= config.epinephrineIntervalMs 
     : session.phase !== 'initial' && session.phase !== 'rhythm_selection';
@@ -372,11 +442,14 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
   return {
     session,
     timerState,
+    isInRhythmCheck,
     commandBanner: getCommandBanner(),
     actions: {
       selectRhythm,
-      changeRhythm,
-      deliverShock,
+      startRhythmCheck,
+      completeRhythmCheckWithShock,
+      completeRhythmCheckNoShock,
+      completeRhythmCheckResumeCPR,
       giveEpinephrine,
       giveAmiodarone,
       giveLidocaine,
@@ -385,17 +458,16 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       updateHsAndTs,
       updatePostROSCChecklist,
       updatePostROSCVitals,
-      startNewCPRCycle,
       endCode,
       resetSession,
       exportSession,
       addIntervention,
     },
     buttonStates: {
-      canDeliverShock,
       canGiveEpinephrine,
       canGiveAmiodarone,
       epiDue,
+      rhythmCheckDue: timerState.rhythmCheckDue,
     },
     config,
   };

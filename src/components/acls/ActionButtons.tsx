@@ -1,58 +1,49 @@
 import { Button } from '@/components/ui/button';
-import { Zap, Syringe, Pill, Heart } from 'lucide-react';
+import { Syringe, Pill, Stethoscope } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ActionButtonsProps {
-  canDeliverShock: boolean;
   canGiveEpinephrine: boolean;
   canGiveAmiodarone: boolean;
   epiDue: boolean;
-  shockCount: number;
-  currentEnergy: number;
+  rhythmCheckDue: boolean;
   epinephrineCount: number;
   amiodaroneCount: number;
-  onShock: () => void;
   onEpinephrine: () => void;
   onAmiodarone: () => void;
-  onROSC: () => void;
+  onRhythmCheck: () => void;
 }
 
 export function ActionButtons({
-  canDeliverShock,
   canGiveEpinephrine,
   canGiveAmiodarone,
   epiDue,
-  shockCount,
-  currentEnergy,
+  rhythmCheckDue,
   epinephrineCount,
   amiodaroneCount,
-  onShock,
   onEpinephrine,
   onAmiodarone,
-  onROSC,
+  onRhythmCheck,
 }: ActionButtonsProps) {
   return (
     <div className="space-y-3">
       <h2 className="text-lg font-semibold text-foreground">Actions</h2>
-      <div className="grid grid-cols-2 gap-3">
-        {/* Shock Button */}
-        <Button
-          onClick={onShock}
-          disabled={!canDeliverShock}
-          className={cn(
-            'h-20 flex-col gap-1 text-base font-bold transition-all',
-            canDeliverShock 
-              ? 'bg-acls-shockable hover:bg-acls-shockable/90 text-white shadow-lg shadow-acls-shockable/30' 
-              : 'bg-muted text-muted-foreground'
-          )}
-        >
-          <Zap className="h-6 w-6" />
-          <span>SHOCK</span>
-          <span className="text-xs font-normal">
-            #{shockCount + 1} @ {currentEnergy}J
-          </span>
-        </Button>
+      
+      {/* Rhythm Check Button - Most prominent when due */}
+      <Button
+        onClick={onRhythmCheck}
+        className={cn(
+          'w-full h-16 text-lg font-bold gap-3 transition-all',
+          rhythmCheckDue
+            ? 'bg-acls-critical hover:bg-acls-critical/90 text-white animate-pulse shadow-lg shadow-acls-critical/30'
+            : 'bg-acls-info hover:bg-acls-info/90 text-white'
+        )}
+      >
+        <Stethoscope className="h-6 w-6" />
+        <span>{rhythmCheckDue ? 'RHYTHM CHECK NOW' : 'RHYTHM CHECK'}</span>
+      </Button>
 
+      <div className="grid grid-cols-2 gap-3">
         {/* Epinephrine Button */}
         <Button
           onClick={onEpinephrine}
@@ -89,16 +80,6 @@ export function ActionButtons({
           <span className="text-xs font-normal">
             {amiodaroneCount === 0 ? '300mg' : '150mg'} (#{amiodaroneCount + 1})
           </span>
-        </Button>
-
-        {/* ROSC Button */}
-        <Button
-          onClick={onROSC}
-          className="h-20 flex-col gap-1 text-base font-bold bg-acls-success hover:bg-acls-success/90 text-white transition-all"
-        >
-          <Heart className="h-6 w-6" />
-          <span>ROSC</span>
-          <span className="text-xs font-normal">Pulse Restored</span>
         </Button>
       </div>
     </div>
