@@ -1,8 +1,40 @@
 {
   "nav": {
     "code": "Codice",
+    "training": "Addestramento",
     "history": "Cronologia Sessioni",
     "settings": "Impostazioni"
+  },
+  "training": {
+    "title": "Modalità Addestramento",
+    "subtitle": "Pratica scenari ACLS con feedback in tempo reale",
+    "mode": "Addestramento",
+    "startScenario": "Inizia Scenario",
+    "objectives": "Obiettivi",
+    "more": "altri",
+    "allLevels": "Tutti",
+    "difficulty": {
+      "beginner": "Principiante",
+      "intermediate": "Intermedio",
+      "advanced": "Avanzato"
+    },
+    "reviewTitle": "Revisione Prestazioni",
+    "points": "punti",
+    "protocolAdherence": "Protocollo",
+    "timingAccuracy": "Tempistiche",
+    "cprFraction": "RCP %",
+    "actionTimeline": "Timeline Azioni",
+    "noActions": "Nessuna azione registrata",
+    "backToScenarios": "Torna agli Scenari",
+    "retry": "Riprova",
+    "scenarioComplete": "Scenario completato con successo!",
+    "grades": {
+      "excellent": "Eccellente",
+      "good": "Buono",
+      "satisfactory": "Sufficiente",
+      "needsWork": "Da Migliorare",
+      "unsatisfactory": "Insufficiente"
+    }
   },
   "rhythm": {
     "identify": "IDENTIFICA RITMO",
