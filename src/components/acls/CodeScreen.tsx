@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CommandBanner } from './CommandBanner';
 import { RhythmSelector } from './RhythmSelector';
@@ -9,22 +9,135 @@ import { HsAndTsChecklist } from './HsAndTsChecklist';
 import { CodeTimeline } from './CodeTimeline';
 import { PostROSCScreen } from './PostROSCScreen';
 import { RhythmCheckModal } from './RhythmCheckModal';
+import { ResumeSessionDialog } from './ResumeSessionDialog';
 import { useACLSLogic } from '@/hooks/useACLSLogic';
+import { useWakeLock } from '@/hooks/useWakeLock';
+import { useAudioAlerts } from '@/hooks/useAudioAlerts';
+import { useMetronome } from '@/hooks/useMetronome';
+import { useSettings } from '@/hooks/useSettings';
 import { Button } from '@/components/ui/button';
 import { Download, RotateCcw, Save, CheckCircle, XCircle } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { 
+  saveActiveSession, 
+  getActiveSession, 
+  clearActiveSession 
+} from '@/lib/activeSessionStorage';
 
 export function CodeScreen() {
   const { t } = useTranslation();
   const { session, timerState, isInRhythmCheck, commandBanner, actions, buttonStates } = useACLSLogic();
+  const { settings } = useSettings();
+  const { requestWakeLock, releaseWakeLock } = useWakeLock();
+  const { playAlert, setEnabled: setAudioEnabled, vibrate } = useAudioAlerts();
+  const { start: startMetronome, stop: stopMetronome } = useMetronome({ 
+    bpm: settings.metronomeBPM, 
+    enabled: settings.metronomeEnabled 
+  });
+  
   const [isSaved, setIsSaved] = useState(false);
+  const [showResumeDialog, setShowResumeDialog] = useState(false);
+  const [pendingResumeSession, setPendingResumeSession] = useState<ReturnType<typeof getActiveSession>>(null);
+  
+  // Track previous states for alert triggers
+  const prevRhythmCheckDue = useRef(false);
+  const prevPreShockAlert = useRef(false);
+  const prevEpiDue = useRef(false);
 
   const isActive = session.phase === 'shockable_pathway' || session.phase === 'non_shockable_pathway';
   const isPostROSC = session.phase === 'post_rosc';
   const isCodeEnded = session.phase === 'code_ended';
   const isInitial = session.phase === 'initial' || session.phase === 'rhythm_selection';
+
+  // Check for active session on mount
+  useEffect(() => {
+    const activeSession = getActiveSession();
+    if (activeSession) {
+      setPendingResumeSession(activeSession);
+      setShowResumeDialog(true);
+    }
+  }, []);
+
+  // Enable audio alerts based on settings
+  useEffect(() => {
+    setAudioEnabled(settings.soundEnabled);
+  }, [settings.soundEnabled, setAudioEnabled]);
+
+  // Wake lock during active code
+  useEffect(() => {
+    if (isActive && !isInRhythmCheck) {
+      requestWakeLock();
+    } else if (isCodeEnded || isPostROSC) {
+      releaseWakeLock();
+    }
+  }, [isActive, isInRhythmCheck, isCodeEnded, isPostROSC, requestWakeLock, releaseWakeLock]);
+
+  // Metronome control during active CPR
+  useEffect(() => {
+    if (isActive && !isInRhythmCheck && settings.metronomeEnabled) {
+      startMetronome();
+    } else {
+      stopMetronome();
+    }
+  }, [isActive, isInRhythmCheck, settings.metronomeEnabled, startMetronome, stopMetronome]);
+
+  // Save active session periodically
+  useEffect(() => {
+    if (isActive) {
+      const interval = setInterval(() => {
+        saveActiveSession(session, {
+          cprCycleRemaining: timerState.cprCycleRemaining,
+          epiRemaining: timerState.epiRemaining,
+          totalElapsed: timerState.totalElapsed,
+          totalCPRTime: timerState.totalCPRTime,
+          savedAt: Date.now(),
+        });
+      }, 5000); // Save every 5 seconds
+      
+      return () => clearInterval(interval);
+    }
+  }, [isActive, session, timerState]);
+
+  // Clear active session when code ends
+  useEffect(() => {
+    if (isCodeEnded || isPostROSC) {
+      clearActiveSession();
+    }
+  }, [isCodeEnded, isPostROSC]);
+
+  // Audio alerts for state changes
+  useEffect(() => {
+    // Rhythm check due alert
+    if (timerState.rhythmCheckDue && !prevRhythmCheckDue.current) {
+      playAlert('rhythmCheck');
+      if (settings.vibrationEnabled) vibrate([200, 100, 200, 100, 200]);
+    }
+    prevRhythmCheckDue.current = timerState.rhythmCheckDue;
+
+    // Pre-shock alert
+    if (timerState.preShockAlert && !prevPreShockAlert.current) {
+      playAlert('preCharge');
+      if (settings.vibrationEnabled) vibrate([150, 75, 150]);
+    }
+    prevPreShockAlert.current = timerState.preShockAlert;
+
+    // Epi due alert
+    if (buttonStates.epiDue && !prevEpiDue.current) {
+      playAlert('epiDue');
+      if (settings.vibrationEnabled) vibrate([300, 150, 300]);
+    }
+    prevEpiDue.current = buttonStates.epiDue;
+  }, [timerState.rhythmCheckDue, timerState.preShockAlert, buttonStates.epiDue, playAlert, vibrate, settings.vibrationEnabled]);
+
+  // ROSC alert
+  useEffect(() => {
+    if (isPostROSC) {
+      playAlert('rosc');
+      if (settings.vibrationEnabled) vibrate(500);
+    }
+  }, [isPostROSC, playAlert, vibrate, settings.vibrationEnabled]);
 
   const handleSaveSession = async () => {
     try {
@@ -38,7 +151,22 @@ export function CodeScreen() {
 
   const handleNewCode = () => {
     setIsSaved(false);
+    clearActiveSession();
     actions.resetSession();
+  };
+
+  const handleResumeSession = () => {
+    if (pendingResumeSession) {
+      actions.resumeSession(pendingResumeSession.session, pendingResumeSession.timerState);
+    }
+    setShowResumeDialog(false);
+    setPendingResumeSession(null);
+  };
+
+  const handleDiscardSession = () => {
+    clearActiveSession();
+    setShowResumeDialog(false);
+    setPendingResumeSession(null);
   };
 
   const formatDuration = (ms: number) => {
@@ -49,6 +177,14 @@ export function CodeScreen() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      {/* Resume Session Dialog */}
+      <ResumeSessionDialog
+        open={showResumeDialog}
+        onResume={handleResumeSession}
+        onDiscard={handleDiscardSession}
+        sessionDuration={pendingResumeSession ? formatDuration(pendingResumeSession.timerState.totalElapsed) : '0:00'}
+      />
+
       {/* Command Banner - Always visible at top */}
       <CommandBanner
         message={commandBanner.message}
@@ -140,7 +276,7 @@ export function CodeScreen() {
                   {t('actions.export')}
                 </Button>
                 <Button
-                  onClick={actions.resetSession}
+                  onClick={handleNewCode}
                   variant="outline"
                   className="h-12 gap-2"
                 >

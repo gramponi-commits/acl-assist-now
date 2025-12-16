@@ -132,7 +132,21 @@
     "language": "Lingua",
     "languageDesc": "Seleziona la tua lingua preferita",
     "english": "English",
-    "italian": "Italiano"
+    "italian": "Italiano",
+    "audio": "Avvisi Audio",
+    "audioDesc": "Riproduci suoni per controllo ritmo, promemoria epi",
+    "vibration": "Vibrazione",
+    "vibrationDesc": "Vibra per avvisi critici",
+    "metronome": "Metronomo RCP",
+    "metronomeDesc": "Metronomo audio a 110 BPM durante RCP",
+    "metronomeBPM": "BPM Metronomo"
+  },
+  "resume": {
+    "title": "Codice Attivo Rilevato",
+    "description": "È stata trovata una sessione di codice interrotta.",
+    "duration": "Durata",
+    "resume": "Riprendi Codice",
+    "discard": "Inizia Nuovo Codice"
   },
   "common": {
     "back": "Indietro",
