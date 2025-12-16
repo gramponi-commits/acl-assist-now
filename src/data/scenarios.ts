@@ -1,5 +1,56 @@
-import { TrainingScenario } from '@/types/training';
+import { TrainingScenario, QuizScenario, RhythmQuestion } from '@/types/training';
 
+// Import ECG images
+import vfImage from '@/assets/ecg/vf.png';
+import vtImage from '@/assets/ecg/vt.png';
+import asystoleImage from '@/assets/ecg/asystole.png';
+import peaSinusImage from '@/assets/ecg/pea_sinus.png';
+
+// ========== RHYTHM QUIZ DATA ==========
+const rhythmQuestions: RhythmQuestion[] = [
+  { id: 'vf_1', ecgImage: vfImage, correctAnswer: 'vf', hasPulse: false, difficulty: 'beginner' },
+  { id: 'vt_1', ecgImage: vtImage, correctAnswer: 'vt', hasPulse: false, difficulty: 'beginner' },
+  { id: 'asystole_1', ecgImage: asystoleImage, correctAnswer: 'asystole', hasPulse: false, difficulty: 'beginner' },
+  { id: 'pea_1', ecgImage: peaSinusImage, correctAnswer: 'pea', hasPulse: false, difficulty: 'intermediate' },
+  { id: 'sinus_1', ecgImage: peaSinusImage, correctAnswer: 'sinus', hasPulse: true, difficulty: 'intermediate' },
+];
+
+export const quizScenarios: QuizScenario[] = [
+  {
+    id: 'basic_recognition',
+    nameKey: 'quizBasicRecognition',
+    descriptionKey: 'quizBasicRecognitionDesc',
+    difficulty: 'beginner',
+    questions: rhythmQuestions.filter(q => q.difficulty === 'beginner'),
+  },
+  {
+    id: 'pea_vs_rosc',
+    nameKey: 'quizPEAvsROSC',
+    descriptionKey: 'quizPEAvsROSCDesc',
+    difficulty: 'intermediate',
+    questions: rhythmQuestions.filter(q => q.correctAnswer === 'pea' || q.correctAnswer === 'sinus'),
+  },
+  {
+    id: 'full_assessment',
+    nameKey: 'quizFullAssessment',
+    descriptionKey: 'quizFullAssessmentDesc',
+    difficulty: 'intermediate',
+    questions: [...rhythmQuestions],
+  },
+  {
+    id: 'quick_fire',
+    nameKey: 'quizQuickFire',
+    descriptionKey: 'quizQuickFireDesc',
+    difficulty: 'advanced',
+    questions: [...rhythmQuestions, ...rhythmQuestions].sort(() => Math.random() - 0.5),
+  },
+];
+
+export function getQuizById(id: string): QuizScenario | undefined {
+  return quizScenarios.find(s => s.id === id);
+}
+
+// ========== SIMULATION SCENARIO DATA ==========
 export const scenarios: TrainingScenario[] = [
   {
     id: 'basic-vf',
