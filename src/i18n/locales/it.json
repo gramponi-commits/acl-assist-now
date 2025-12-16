@@ -17,7 +17,7 @@
   "actions": {
     "title": "Azioni",
     "shock": "SHOCK",
-    "epinephrine": "EPINEFRINA",
+    "epinephrine": "ADRENALINA",
     "amiodarone": "AMIODARONE",
     "rhythmCheck": "CONTROLLO RITMO",
     "rhythmCheckNow": "CONTROLLO RITMO ORA",
@@ -36,7 +36,7 @@
     "now": "ORA",
     "preCharge": "PRE-CARICA DAE",
     "tapRhythmCheck": "TOCCA CONTROLLO RITMO",
-    "giveEpi": "SOMMINISTRA EPI 1mg",
+    "giveEpi": "SOMMINISTRA ADRENALINA 1mg",
     "total": "Totale",
     "cpr": "RCP"
   },
