@@ -374,65 +374,165 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     };
 
-    // Header
-    pdf.setFontSize(20);
+    const outcomeText = session.outcome === 'rosc' ? 'ROSC' : session.outcome === 'deceased' ? 'Deceased' : 'In Progress';
+    const rhythmText = session.currentRhythm === 'vf_pvt' ? 'VF/pVT' : session.currentRhythm === 'asystole' ? 'Asystole' : session.currentRhythm === 'pea' ? 'PEA' : 'N/A';
+    const airwayText = session.airwayStatus === 'advanced' ? 'Advanced (ETT/SGA)' : session.airwayStatus === 'bvm' ? 'BVM' : 'Not documented';
+
+    // Header with background
+    pdf.setFillColor(220, 38, 38); // Red header
+    pdf.rect(0, 0, 210, 35, 'F');
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(22);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('ACLS Code Session Report', 105, 20, { align: 'center' });
+    pdf.text('ACLS CODE REPORT', 105, 18, { align: 'center' });
+    pdf.setFontSize(11);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`${startDate.toLocaleDateString()} - ${formatDeviceTime(session.startTime)}`, 105, 28, { align: 'center' });
     
-    // Session info
+    // Reset text color
+    pdf.setTextColor(0, 0, 0);
+    
+    // Key metrics boxes
+    let y = 45;
+    const boxWidth = 42;
+    const boxHeight = 25;
+    const boxGap = 5;
+    const startX = 15;
+    
+    // Outcome box
+    const outcomeColor = session.outcome === 'rosc' ? [34, 197, 94] : session.outcome === 'deceased' ? [107, 114, 128] : [234, 179, 8];
+    pdf.setFillColor(outcomeColor[0], outcomeColor[1], outcomeColor[2]);
+    pdf.roundedRect(startX, y, boxWidth, boxHeight, 3, 3, 'F');
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(9);
+    pdf.text('OUTCOME', startX + boxWidth/2, y + 8, { align: 'center' });
     pdf.setFontSize(12);
-    pdf.setFont('helvetica', 'normal');
-    let y = 35;
-    pdf.text(`Date: ${startDate.toLocaleDateString()}`, 20, y);
-    pdf.text(`Code Start Time: ${formatDeviceTime(session.startTime)}`, 20, y + 7);
-    pdf.text(`Total Duration: ${formatTime(timerState.totalElapsed)}`, 20, y + 14);
-    pdf.text(`Total CPR Time: ${formatTime(timerState.totalCPRTime)}`, 20, y + 21);
-    pdf.text(`CPR Fraction: ${cprFraction}%`, 20, y + 28);
-    
-    // Summary stats
-    y = 75;
     pdf.setFont('helvetica', 'bold');
-    pdf.text('Summary', 20, y);
+    pdf.text(outcomeText, startX + boxWidth/2, y + 18, { align: 'center' });
+    
+    // Duration box
+    pdf.setFillColor(59, 130, 246); // Blue
+    pdf.roundedRect(startX + boxWidth + boxGap, y, boxWidth, boxHeight, 3, 3, 'F');
+    pdf.setFontSize(9);
     pdf.setFont('helvetica', 'normal');
-    pdf.text(`Final Rhythm: ${session.currentRhythm || 'N/A'}`, 20, y + 10);
-    pdf.text(`Outcome: ${session.phase === 'post_rosc' ? 'ROSC Achieved' : session.phase}`, 20, y + 17);
-    pdf.text(`Total Shocks: ${session.shockCount}`, 20, y + 24);
-    pdf.text(`Epinephrine Doses: ${session.epinephrineCount}`, 20, y + 31);
-    pdf.text(`Amiodarone Doses: ${session.amiodaroneCount}`, 20, y + 38);
-    pdf.text(`Airway: ${session.airwayStatus}`, 20, y + 45);
+    pdf.text('DURATION', startX + boxWidth + boxGap + boxWidth/2, y + 8, { align: 'center' });
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text(formatTime(timerState.totalElapsed), startX + boxWidth + boxGap + boxWidth/2, y + 18, { align: 'center' });
+    
+    // CPR Fraction box
+    pdf.setFillColor(139, 92, 246); // Purple
+    pdf.roundedRect(startX + 2*(boxWidth + boxGap), y, boxWidth, boxHeight, 3, 3, 'F');
+    pdf.setFontSize(9);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text('CPR FRACTION', startX + 2*(boxWidth + boxGap) + boxWidth/2, y + 8, { align: 'center' });
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text(`${cprFraction}%`, startX + 2*(boxWidth + boxGap) + boxWidth/2, y + 18, { align: 'center' });
+    
+    // Shocks box
+    pdf.setFillColor(249, 115, 22); // Orange
+    pdf.roundedRect(startX + 3*(boxWidth + boxGap), y, boxWidth, boxHeight, 3, 3, 'F');
+    pdf.setFontSize(9);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text('SHOCKS', startX + 3*(boxWidth + boxGap) + boxWidth/2, y + 8, { align: 'center' });
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text(String(session.shockCount), startX + 3*(boxWidth + boxGap) + boxWidth/2, y + 18, { align: 'center' });
+    
+    // Reset text color
+    pdf.setTextColor(0, 0, 0);
+    
+    // Summary section
+    y = 80;
+    pdf.setFillColor(245, 245, 245);
+    pdf.roundedRect(15, y, 180, 40, 3, 3, 'F');
+    pdf.setFontSize(11);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Session Summary', 20, y + 10);
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'normal');
+    
+    // Left column
+    pdf.text(`Final Rhythm: ${rhythmText}`, 20, y + 20);
+    pdf.text(`CPR Time: ${formatTime(timerState.totalCPRTime)}`, 20, y + 28);
+    pdf.text(`Airway: ${airwayText}`, 20, y + 36);
+    
+    // Right column
+    pdf.text(`Epinephrine: ${session.epinephrineCount} dose(s)`, 110, y + 20);
+    pdf.text(`Amiodarone: ${session.amiodaroneCount} dose(s)`, 110, y + 28);
+    pdf.text(`Lidocaine: ${session.lidocaineCount} dose(s)`, 110, y + 36);
     
     // Interventions Timeline
-    y = 135;
+    y = 130;
+    pdf.setFontSize(11);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('Interventions Timeline', 20, y);
-    pdf.setFontSize(10);
-    pdf.setFont('helvetica', 'bold');
-    y += 10;
-    pdf.text('Device Time', 20, y);
-    pdf.text('Code Min', 60, y);
-    pdf.text('Intervention', 90, y);
+    pdf.text('Interventions Timeline', 15, y);
     
+    // Table header
+    y += 8;
+    pdf.setFillColor(75, 85, 99);
+    pdf.rect(15, y - 5, 180, 8, 'F');
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(9);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Time', 20, y);
+    pdf.text('Code +', 50, y);
+    pdf.text('Event', 80, y);
+    
+    pdf.setTextColor(0, 0, 0);
     pdf.setFont('helvetica', 'normal');
-    y += 7;
+    y += 6;
     
+    let isOddRow = false;
     session.interventions.forEach((intervention) => {
       if (y > 270) {
         pdf.addPage();
         y = 20;
+        // Repeat header on new page
+        pdf.setFillColor(75, 85, 99);
+        pdf.rect(15, y - 5, 180, 8, 'F');
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Time', 20, y);
+        pdf.text('Code +', 50, y);
+        pdf.text('Event', 80, y);
+        pdf.setTextColor(0, 0, 0);
+        pdf.setFont('helvetica', 'normal');
+        y += 6;
+        isOddRow = false;
       }
+      
+      // Alternating row colors
+      if (isOddRow) {
+        pdf.setFillColor(249, 250, 251);
+        pdf.rect(15, y - 4, 180, 7, 'F');
+      }
+      isOddRow = !isOddRow;
+      
       const relativeTime = intervention.timestamp - session.startTime;
+      pdf.setFontSize(9);
       pdf.text(formatDeviceTime(intervention.timestamp), 20, y);
-      pdf.text(formatTime(relativeTime), 60, y);
-      const details = intervention.details ? ` (${intervention.details})` : '';
-      pdf.text(`${intervention.type}${details}`, 90, y);
-      y += 6;
+      pdf.text(formatTime(relativeTime), 50, y);
+      
+      // Truncate long details
+      let eventText = intervention.details || intervention.type;
+      if (eventText.length > 60) {
+        eventText = eventText.substring(0, 57) + '...';
+      }
+      pdf.text(eventText, 80, y);
+      y += 7;
     });
     
     // Footer
+    pdf.setFillColor(245, 245, 245);
+    pdf.rect(0, 280, 210, 17, 'F');
     pdf.setFontSize(8);
-    pdf.text(`Generated: ${new Date().toLocaleString()}`, 105, 290, { align: 'center' });
+    pdf.setTextColor(107, 114, 128);
+    pdf.text(`Generated: ${new Date().toLocaleString()} | ACLS Decision Support App`, 105, 288, { align: 'center' });
     
-    pdf.save(`acls-session-${startDate.toISOString().split('T')[0]}.pdf`);
+    pdf.save(`acls-code-${startDate.toISOString().split('T')[0]}-${formatDeviceTime(session.startTime).replace(/:/g, '')}.pdf`);
   }, [session, timerState.totalCPRTime, timerState.totalElapsed]);
 
   const saveSessionLocally = useCallback(async () => {
@@ -583,9 +683,27 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
   const canGiveEpinephrine = (session.phase === 'shockable_pathway' || session.phase === 'non_shockable_pathway') && !isInRhythmCheck;
   const canGiveAmiodarone = session.phase === 'shockable_pathway' && session.shockCount >= 3 && session.amiodaroneCount < 2 && !isInRhythmCheck;
   const canGiveLidocaine = session.phase === 'shockable_pathway' && session.shockCount >= 3 && !isInRhythmCheck;
-  const epiDue = session.lastEpinephrineTime 
-    ? (Date.now() - session.lastEpinephrineTime) >= config.epinephrineIntervalMs 
-    : session.phase !== 'initial' && session.phase !== 'rhythm_selection';
+  
+  // Epinephrine timing:
+  // - VF/pVT (shockable): after 2nd shock, then every 3-5 minutes
+  // - Asystole/PEA (non-shockable): immediately, then every 3-5 minutes
+  const epiDue = (() => {
+    if (session.phase === 'initial' || session.phase === 'rhythm_selection') return false;
+    
+    // If we've given epi before, check interval
+    if (session.lastEpinephrineTime) {
+      return (Date.now() - session.lastEpinephrineTime) >= config.epinephrineIntervalMs;
+    }
+    
+    // First dose timing
+    if (session.phase === 'shockable_pathway') {
+      // VF/pVT: after 2nd shock
+      return session.shockCount >= 2;
+    }
+    
+    // Non-shockable: immediately
+    return session.phase === 'non_shockable_pathway';
+  })();
 
   const addNote = useCallback((note: string) => {
     addIntervention('note', t('interventions.noteAdded', { note }));
