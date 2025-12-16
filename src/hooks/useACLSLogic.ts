@@ -10,8 +10,10 @@ import {
   HsAndTs,
   PostROSCChecklist,
   PostROSCVitals,
+  CodeOutcome,
   createInitialSession,
 } from '@/types/acls';
+import { saveSession as saveToIndexedDB, StoredSession } from '@/lib/sessionStorage';
 
 interface CommandBanner {
   message: string;
@@ -200,10 +202,25 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
     setSession(prev => ({
       ...prev,
       phase: 'post_rosc',
+      outcome: 'rosc',
       roscTime: now,
+      endTime: now,
     }));
 
     addIntervention('rosc', 'ROSC achieved - Pulse and rhythm detected!');
+    setIsInRhythmCheck(false);
+  }, [addIntervention]);
+
+  const terminateCode = useCallback(() => {
+    const now = Date.now();
+    setSession(prev => ({
+      ...prev,
+      phase: 'code_ended',
+      outcome: 'deceased',
+      endTime: now,
+    }));
+
+    addIntervention('note', 'Code terminated - Death declared');
     setIsInRhythmCheck(false);
   }, [addIntervention]);
 
@@ -380,6 +397,34 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
     pdf.save(`acls-session-${startDate.toISOString().split('T')[0]}.pdf`);
   }, [session, timerState.totalCPRTime, timerState.totalElapsed]);
 
+  const saveSessionLocally = useCallback(async () => {
+    const cprFraction = timerState.totalElapsed > 0 
+      ? (timerState.totalCPRTime / timerState.totalElapsed) * 100
+      : 0;
+
+    const storedSession: StoredSession = {
+      id: session.id,
+      savedAt: Date.now(),
+      startTime: session.startTime,
+      endTime: session.endTime,
+      outcome: session.outcome,
+      duration: timerState.totalElapsed,
+      totalCPRTime: timerState.totalCPRTime,
+      cprFraction,
+      shockCount: session.shockCount,
+      epinephrineCount: session.epinephrineCount,
+      amiodaroneCount: session.amiodaroneCount,
+      interventions: session.interventions.map(i => ({
+        timestamp: i.timestamp,
+        type: i.type,
+        details: i.details,
+      })),
+    };
+
+    await saveToIndexedDB(storedSession);
+    return storedSession;
+  }, [session, timerState.totalCPRTime, timerState.totalElapsed]);
+
   // Command banner logic
   const getCommandBanner = useCallback((): CommandBanner => {
     const { phase, currentRhythm, shockCount, epinephrineCount, lastEpinephrineTime, amiodaroneCount } = session;
@@ -518,12 +563,14 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       giveLidocaine,
       setAirway,
       achieveROSC,
+      terminateCode,
       updateHsAndTs,
       updatePostROSCChecklist,
       updatePostROSCVitals,
       endCode,
       resetSession,
       exportSession,
+      saveSessionLocally,
       addIntervention,
     },
     buttonStates: {
