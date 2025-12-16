@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { jsPDF } from 'jspdf';
 import {
   ACLSSession,
   ACLSConfig,
@@ -300,21 +301,83 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
   }, [config]);
 
   const exportSession = useCallback(() => {
-    const exportData = {
-      ...session,
-      totalCPRTime: timerState.totalCPRTime,
-      cprFraction: timerState.totalElapsed > 0 
-        ? ((timerState.totalCPRTime / timerState.totalElapsed) * 100).toFixed(1) + '%'
-        : 'N/A',
+    const pdf = new jsPDF();
+    const startDate = new Date(session.startTime);
+    const cprFraction = timerState.totalElapsed > 0 
+      ? ((timerState.totalCPRTime / timerState.totalElapsed) * 100).toFixed(1)
+      : 'N/A';
+    
+    const formatTime = (ms: number) => {
+      const totalSec = Math.floor(ms / 1000);
+      const min = Math.floor(totalSec / 60);
+      const sec = totalSec % 60;
+      return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
     };
-    const dataStr = JSON.stringify(exportData, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `acls-session-${new Date(session.startTime).toISOString().split('T')[0]}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
+    
+    const formatDeviceTime = (timestamp: number) => {
+      const date = new Date(timestamp);
+      return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    };
+
+    // Header
+    pdf.setFontSize(20);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('ACLS Code Session Report', 105, 20, { align: 'center' });
+    
+    // Session info
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    let y = 35;
+    pdf.text(`Date: ${startDate.toLocaleDateString()}`, 20, y);
+    pdf.text(`Code Start Time: ${formatDeviceTime(session.startTime)}`, 20, y + 7);
+    pdf.text(`Total Duration: ${formatTime(timerState.totalElapsed)}`, 20, y + 14);
+    pdf.text(`Total CPR Time: ${formatTime(timerState.totalCPRTime)}`, 20, y + 21);
+    pdf.text(`CPR Fraction: ${cprFraction}%`, 20, y + 28);
+    
+    // Summary stats
+    y = 75;
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Summary', 20, y);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`Final Rhythm: ${session.currentRhythm || 'N/A'}`, 20, y + 10);
+    pdf.text(`Outcome: ${session.phase === 'post_rosc' ? 'ROSC Achieved' : session.phase}`, 20, y + 17);
+    pdf.text(`Total Shocks: ${session.shockCount}`, 20, y + 24);
+    pdf.text(`Epinephrine Doses: ${session.epinephrineCount}`, 20, y + 31);
+    pdf.text(`Amiodarone Doses: ${session.amiodaroneCount}`, 20, y + 38);
+    pdf.text(`Airway: ${session.airwayStatus}`, 20, y + 45);
+    
+    // Interventions Timeline
+    y = 135;
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Interventions Timeline', 20, y);
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'bold');
+    y += 10;
+    pdf.text('Device Time', 20, y);
+    pdf.text('Code Min', 60, y);
+    pdf.text('Intervention', 90, y);
+    
+    pdf.setFont('helvetica', 'normal');
+    y += 7;
+    
+    session.interventions.forEach((intervention) => {
+      if (y > 270) {
+        pdf.addPage();
+        y = 20;
+      }
+      const relativeTime = intervention.timestamp - session.startTime;
+      pdf.text(formatDeviceTime(intervention.timestamp), 20, y);
+      pdf.text(formatTime(relativeTime), 60, y);
+      const details = intervention.details ? ` (${intervention.details})` : '';
+      pdf.text(`${intervention.type}${details}`, 90, y);
+      y += 6;
+    });
+    
+    // Footer
+    pdf.setFontSize(8);
+    pdf.text(`Generated: ${new Date().toLocaleString()}`, 105, 290, { align: 'center' });
+    
+    pdf.save(`acls-session-${startDate.toISOString().split('T')[0]}.pdf`);
   }, [session, timerState.totalCPRTime, timerState.totalElapsed]);
 
   // Command banner logic
