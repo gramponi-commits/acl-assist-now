@@ -28,7 +28,8 @@
     "save": "Salva Sessione Localmente",
     "saved": "Salvato Localmente",
     "reset": "Reimposta",
-    "newCode": "Nuovo Codice"
+    "newCode": "Nuovo Codice",
+    "saveFailed": "Salvataggio sessione fallito"
   },
   "timers": {
     "rhythmCheck": "Controllo Ritmo",
@@ -55,7 +56,9 @@
     "cprTime": "Tempo RCP",
     "cprFraction": "Frazione RCP",
     "shocks": "Shock",
-    "doses": "dosi"
+    "doses": "dosi",
+    "epi": "Adre",
+    "amio": "Amio"
   },
   "postRosc": {
     "roscAchieved": "ROSC RAGGIUNTO",
@@ -163,5 +166,48 @@
     "title": "Qualità RCP",
     "compressionRate": "Frequenza Compressioni",
     "targetRate": "Target: 100-120/min"
+  },
+  "banner": {
+    "identifyRhythm": "IDENTIFICA RITMO",
+    "selectRhythm": "Seleziona il ritmo iniziale per iniziare il protocollo ACLS",
+    "roscAchieved": "ROSC RAGGIUNTO",
+    "beginPostCare": "Inizia cure post-arresto cardiaco",
+    "rhythmCheckVfPvt": "⚡ CONTROLLO RITMO - FV/TVp?",
+    "rhythmCheckVfPvtSub": "Se FV/TVp: SHOCK | Se no: Seleziona nuovo ritmo | Se polso: ROSC",
+    "rhythmCheckGeneric": "🔍 CONTROLLO RITMO",
+    "rhythmCheckGenericSub": "Controlla ritmo e polso. Se FV/TVp: SHOCK | Se polso: ROSC",
+    "preCharge": "⚡ PRE-CARICA DEFIBRILLATORE",
+    "preChargeSub": "Controllo ritmo tra {{seconds}}s - Preparati ad analizzare",
+    "rhythmCheckNow": "🔍 CONTROLLO RITMO ORA",
+    "rhythmCheckNowSub": "Tocca \"Controllo Ritmo\" per pausare RCP e analizzare",
+    "giveEpi": "SOMMINISTRA ADRENALINA 1mg IV/IO",
+    "giveEpiRepeat": "Scaduta - ripetere ogni 4 minuti",
+    "giveAmio300": "SOMMINISTRA AMIODARONE 300mg IV/IO",
+    "giveAmio300Sub": "Prima dose - può ripetere 150mg una volta",
+    "continueHQCPR": "CONTINUA RCP DI ALTA QUALITÀ",
+    "rhythmCheckIn": "Controllo ritmo tra {{seconds}}s",
+    "giveEpiNow": "SOMMINISTRA ADRENALINA 1mg IV/IO ORA",
+    "asystoleEpi": "Asistolia - Adrenalina subito",
+    "peaEpi": "PEA - Adrenalina subito",
+    "considerHsTs": "Controllo ritmo tra {{seconds}}s | Considera H's & T's",
+    "aclsInProgress": "ACLS IN CORSO"
+  },
+  "interventions": {
+    "rhythmIdentified": "Ritmo identificato: {{rhythm}}",
+    "cprInitiated": "RCP iniziata",
+    "rhythmCheckPaused": "Controllo ritmo - RCP in pausa",
+    "shockDelivered": "Shock #{{number}} erogato a {{energy}}J",
+    "noShockResume": "No shock - {{rhythm}} - Riprendi RCP",
+    "cprResumedSame": "RCP ripresa - stesso ritmo",
+    "roscAchieved": "ROSC raggiunto - Polso e ritmo rilevati!",
+    "codeTerminated": "Codice terminato - Decesso dichiarato",
+    "epinephrineGiven": "Adrenalina {{dose}}mg IV/IO",
+    "amiodaroneGiven": "Amiodarone {{dose}}mg IV/IO",
+    "lidocaineGiven": "Lidocaina {{dose}}mg IV/IO",
+    "airwayAdvanced": "Vie aeree: Vie aeree avanzate posizionate",
+    "airwayBvm": "Vie aeree: Ventilazione con AMBU",
+    "airwayNone": "Vie aeree: Nessuna",
+    "hsTsChecked": "H's & T's controllate: {{items}}",
+    "codeEnded": "Codice terminato: {{outcome}}"
   }
 }

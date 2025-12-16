@@ -28,7 +28,8 @@
     "save": "Save Session Locally",
     "saved": "Saved Locally",
     "reset": "Reset",
-    "newCode": "New Code"
+    "newCode": "New Code",
+    "saveFailed": "Failed to save session"
   },
   "timers": {
     "rhythmCheck": "Rhythm Check",
@@ -55,7 +56,9 @@
     "cprTime": "CPR Time",
     "cprFraction": "CPR Fraction",
     "shocks": "Shocks",
-    "doses": "doses"
+    "doses": "doses",
+    "epi": "Epi",
+    "amio": "Amio"
   },
   "postRosc": {
     "roscAchieved": "ROSC ACHIEVED",
@@ -163,5 +166,48 @@
     "title": "CPR Quality",
     "compressionRate": "Compression Rate",
     "targetRate": "Target: 100-120/min"
+  },
+  "banner": {
+    "identifyRhythm": "IDENTIFY RHYTHM",
+    "selectRhythm": "Select initial rhythm to begin ACLS protocol",
+    "roscAchieved": "ROSC ACHIEVED",
+    "beginPostCare": "Begin post-cardiac arrest care",
+    "rhythmCheckVfPvt": "⚡ RHYTHM CHECK - VF/pVT?",
+    "rhythmCheckVfPvtSub": "If VF/pVT: SHOCK | If not: Select new rhythm | If pulse: ROSC",
+    "rhythmCheckGeneric": "🔍 RHYTHM CHECK",
+    "rhythmCheckGenericSub": "Check rhythm and pulse. If VF/pVT: SHOCK | If pulse: ROSC",
+    "preCharge": "⚡ PRE-CHARGE DEFIBRILLATOR",
+    "preChargeSub": "Rhythm check in {{seconds}}s - Prepare to analyze rhythm",
+    "rhythmCheckNow": "🔍 RHYTHM CHECK NOW",
+    "rhythmCheckNowSub": "Tap \"Rhythm Check\" to pause CPR and analyze",
+    "giveEpi": "GIVE EPINEPHRINE 1mg IV/IO",
+    "giveEpiRepeat": "Due now - repeat every 4 minutes",
+    "giveAmio300": "GIVE AMIODARONE 300mg IV/IO",
+    "giveAmio300Sub": "First dose - may repeat 150mg once",
+    "continueHQCPR": "CONTINUE HIGH-QUALITY CPR",
+    "rhythmCheckIn": "Rhythm check in {{seconds}}s",
+    "giveEpiNow": "GIVE EPINEPHRINE 1mg IV/IO NOW",
+    "asystoleEpi": "Asystole - Epi immediately",
+    "peaEpi": "PEA - Epi immediately",
+    "considerHsTs": "Rhythm check in {{seconds}}s | Consider H's & T's",
+    "aclsInProgress": "ACLS IN PROGRESS"
+  },
+  "interventions": {
+    "rhythmIdentified": "Rhythm identified: {{rhythm}}",
+    "cprInitiated": "CPR initiated",
+    "rhythmCheckPaused": "Rhythm check - CPR paused",
+    "shockDelivered": "Shock #{{number}} delivered at {{energy}}J",
+    "noShockResume": "No shock - {{rhythm}} - Resume CPR",
+    "cprResumedSame": "CPR resumed - same rhythm",
+    "roscAchieved": "ROSC achieved - Pulse and rhythm detected!",
+    "codeTerminated": "Code terminated - Death declared",
+    "epinephrineGiven": "Epinephrine {{dose}}mg IV/IO",
+    "amiodaroneGiven": "Amiodarone {{dose}}mg IV/IO",
+    "lidocaineGiven": "Lidocaine {{dose}}mg IV/IO",
+    "airwayAdvanced": "Airway: Advanced airway placed",
+    "airwayBvm": "Airway: BVM ventilation",
+    "airwayNone": "Airway: No airway",
+    "hsTsChecked": "H's & T's checked: {{items}}",
+    "codeEnded": "Code ended: {{outcome}}"
   }
 }
