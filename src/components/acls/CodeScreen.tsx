@@ -6,18 +6,15 @@ import { CPRQualityPanel } from './CPRQualityPanel';
 import { HsAndTsChecklist } from './HsAndTsChecklist';
 import { CodeTimeline } from './CodeTimeline';
 import { PostROSCScreen } from './PostROSCScreen';
+import { RhythmCheckModal } from './RhythmCheckModal';
 import { useACLSLogic } from '@/hooks/useACLSLogic';
 import { Button } from '@/components/ui/button';
-import { Download, RotateCcw, RefreshCw } from 'lucide-react';
+import { Download, RotateCcw } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { cn } from '@/lib/utils';
-import { ChevronDown } from 'lucide-react';
-import { useState } from 'react';
 
 export function CodeScreen() {
-  const { session, timerState, commandBanner, actions, buttonStates, config } = useACLSLogic();
-  const [rhythmChangeOpen, setRhythmChangeOpen] = useState(false);
+  const { session, timerState, isInRhythmCheck, commandBanner, actions, buttonStates } = useACLSLogic();
 
   const isActive = session.phase === 'shockable_pathway' || session.phase === 'non_shockable_pathway';
   const isPostROSC = session.phase === 'post_rosc';
@@ -44,7 +41,7 @@ export function CodeScreen() {
           )}
 
           {/* Active Code Screen */}
-          {isActive && (
+          {isActive && !isInRhythmCheck && (
             <>
               {/* Current Rhythm Indicator */}
               <div className={cn(
@@ -55,33 +52,32 @@ export function CodeScreen() {
                   ? 'bg-acls-non-shockable/20 text-acls-non-shockable border-2 border-acls-non-shockable'
                   : 'bg-acls-pea/20 text-acls-pea border-2 border-acls-pea'
               )}>
-                {session.currentRhythm === 'vf_pvt' && 'VF/pVT - Shockable'}
+                {session.currentRhythm === 'vf_pvt' && `VF/pVT - Shockable | Shock #${session.shockCount}`}
                 {session.currentRhythm === 'asystole' && 'Asystole - Non-Shockable'}
                 {session.currentRhythm === 'pea' && 'PEA - Non-Shockable'}
               </div>
 
               {/* Timers */}
               <TimerDisplay
-                cprRemaining={timerState.cprRemaining}
+                cprCycleRemaining={timerState.cprCycleRemaining}
                 epiRemaining={timerState.epiRemaining}
+                totalElapsed={timerState.totalElapsed}
+                totalCPRTime={timerState.totalCPRTime}
                 preShockAlert={timerState.preShockAlert}
-                isShockable={session.currentRhythm === 'vf_pvt'}
+                rhythmCheckDue={timerState.rhythmCheckDue}
               />
 
               {/* Action Buttons */}
               <ActionButtons
-                canDeliverShock={buttonStates.canDeliverShock}
                 canGiveEpinephrine={buttonStates.canGiveEpinephrine}
                 canGiveAmiodarone={buttonStates.canGiveAmiodarone}
                 epiDue={buttonStates.epiDue}
-                shockCount={session.shockCount}
-                currentEnergy={session.currentEnergy}
+                rhythmCheckDue={buttonStates.rhythmCheckDue}
                 epinephrineCount={session.epinephrineCount}
                 amiodaroneCount={session.amiodaroneCount}
-                onShock={actions.deliverShock}
                 onEpinephrine={actions.giveEpinephrine}
                 onAmiodarone={actions.giveAmiodarone}
-                onROSC={actions.achieveROSC}
+                onRhythmCheck={actions.startRhythmCheck}
               />
 
               {/* CPR Quality */}
@@ -95,31 +91,6 @@ export function CodeScreen() {
                 hsAndTs={session.hsAndTs}
                 onUpdate={actions.updateHsAndTs}
               />
-
-              {/* Rhythm Change Option */}
-              <Collapsible open={rhythmChangeOpen} onOpenChange={setRhythmChangeOpen}>
-                <CollapsibleTrigger className="w-full">
-                  <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50 border border-border hover:bg-muted transition-colors">
-                    <div className="flex items-center gap-2">
-                      <RefreshCw className="h-4 w-4 text-muted-foreground" />
-                      <span className="font-medium text-foreground">Change Rhythm</span>
-                    </div>
-                    <ChevronDown className={cn(
-                      'h-4 w-4 text-muted-foreground transition-transform',
-                      rhythmChangeOpen && 'rotate-180'
-                    )} />
-                  </div>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <div className="mt-2">
-                    <RhythmSelector
-                      currentRhythm={session.currentRhythm}
-                      onSelectRhythm={actions.changeRhythm}
-                      isInitial={false}
-                    />
-                  </div>
-                </CollapsibleContent>
-              </Collapsible>
 
               {/* Code Timeline */}
               <CodeTimeline
@@ -149,6 +120,20 @@ export function CodeScreen() {
             </>
           )}
 
+          {/* Rhythm Check Modal */}
+          {isInRhythmCheck && (
+            <RhythmCheckModal
+              isShockable={session.currentRhythm === 'vf_pvt'}
+              currentEnergy={session.currentEnergy}
+              shockNumber={session.shockCount + 1}
+              onShock={actions.completeRhythmCheckWithShock}
+              onNoShockAsystole={() => actions.completeRhythmCheckNoShock('asystole')}
+              onNoShockPEA={() => actions.completeRhythmCheckNoShock('pea')}
+              onResumeCPR={actions.completeRhythmCheckResumeCPR}
+              onROSC={actions.achieveROSC}
+            />
+          )}
+
           {/* Post-ROSC Screen */}
           {isPostROSC && (
             <>
@@ -170,7 +155,7 @@ export function CodeScreen() {
       </ScrollArea>
 
       {/* Code Stats Footer */}
-      {(isActive || isPostROSC) && (
+      {(isActive || isPostROSC) && !isInRhythmCheck && (
         <div className="border-t border-border bg-card px-4 py-2">
           <div className="flex justify-around text-center max-w-lg mx-auto">
             <div>
@@ -179,15 +164,15 @@ export function CodeScreen() {
             </div>
             <div>
               <div className="text-lg font-bold text-foreground">{session.epinephrineCount}</div>
-              <div className="text-xs text-muted-foreground">Epi Doses</div>
+              <div className="text-xs text-muted-foreground">Epi</div>
             </div>
             <div>
               <div className="text-lg font-bold text-foreground">{session.amiodaroneCount}</div>
-              <div className="text-xs text-muted-foreground">Amio Doses</div>
+              <div className="text-xs text-muted-foreground">Amio</div>
             </div>
             <div>
               <div className="text-lg font-bold text-foreground">
-                {Math.floor((Date.now() - session.startTime) / 60000)}:{((Math.floor((Date.now() - session.startTime) / 1000)) % 60).toString().padStart(2, '0')}
+                {Math.floor(timerState.totalElapsed / 60000)}:{((Math.floor(timerState.totalElapsed / 1000)) % 60).toString().padStart(2, '0')}
               </div>
               <div className="text-xs text-muted-foreground">Duration</div>
             </div>

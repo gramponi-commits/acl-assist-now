@@ -1,11 +1,13 @@
 import { cn } from '@/lib/utils';
-import { Clock, Syringe, Zap } from 'lucide-react';
+import { Clock, Syringe, Timer, Activity } from 'lucide-react';
 
 interface TimerDisplayProps {
-  cprRemaining: number;
+  cprCycleRemaining: number;
   epiRemaining: number;
+  totalElapsed: number;
+  totalCPRTime: number;
   preShockAlert: boolean;
-  isShockable: boolean;
+  rhythmCheckDue: boolean;
 }
 
 function formatTime(ms: number): string {
@@ -15,40 +17,64 @@ function formatTime(ms: number): string {
   return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
-export function TimerDisplay({ cprRemaining, epiRemaining, preShockAlert, isShockable }: TimerDisplayProps) {
-  const cprUrgent = cprRemaining <= 15000 && cprRemaining > 0;
+function formatDuration(ms: number): string {
+  const totalSeconds = Math.floor(ms / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  
+  if (hours > 0) {
+    return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+export function TimerDisplay({ 
+  cprCycleRemaining, 
+  epiRemaining, 
+  totalElapsed,
+  totalCPRTime,
+  preShockAlert, 
+  rhythmCheckDue 
+}: TimerDisplayProps) {
   const epiDue = epiRemaining === 0;
+  const cprFraction = totalElapsed > 0 ? ((totalCPRTime / totalElapsed) * 100).toFixed(0) : '100';
 
   return (
     <div className="space-y-3">
-      <h2 className="text-lg font-semibold text-foreground">Timers</h2>
+      {/* Main Timers Row */}
       <div className="grid grid-cols-2 gap-3">
         {/* CPR Cycle Timer */}
         <div
           className={cn(
             'rounded-lg p-4 text-center border-2 transition-all',
-            preShockAlert
+            rhythmCheckDue
+              ? 'bg-acls-critical/20 border-acls-critical animate-pulse'
+              : preShockAlert
               ? 'bg-acls-warning/20 border-acls-warning animate-pulse'
-              : cprUrgent
-              ? 'bg-acls-critical/20 border-acls-critical'
               : 'bg-card border-border'
           )}
         >
           <div className="flex items-center justify-center gap-2 mb-1">
-            {isShockable ? <Zap className="h-4 w-4" /> : <Clock className="h-4 w-4" />}
+            <Timer className="h-4 w-4" />
             <span className="text-sm font-medium text-muted-foreground">
-              {isShockable ? 'Next Shock' : 'Rhythm Check'}
+              Rhythm Check
             </span>
           </div>
           <div className={cn(
             'text-3xl font-mono font-bold',
-            preShockAlert ? 'text-acls-warning' : cprUrgent ? 'text-acls-critical' : 'text-foreground'
+            rhythmCheckDue ? 'text-acls-critical' : preShockAlert ? 'text-acls-warning' : 'text-foreground'
           )}>
-            {formatTime(cprRemaining)}
+            {rhythmCheckDue ? 'NOW' : formatTime(cprCycleRemaining)}
           </div>
-          {preShockAlert && (
-            <div className="text-xs text-acls-warning font-medium mt-1">
-              PRE-CHARGE AED
+          {preShockAlert && !rhythmCheckDue && (
+            <div className="text-xs text-acls-warning font-bold mt-1 animate-pulse">
+              ⚡ PRE-CHARGE AED
+            </div>
+          )}
+          {rhythmCheckDue && (
+            <div className="text-xs text-acls-critical font-bold mt-1">
+              TAP RHYTHM CHECK
             </div>
           )}
         </div>
@@ -73,10 +99,59 @@ export function TimerDisplay({ cprRemaining, epiRemaining, preShockAlert, isShoc
             {epiDue ? 'NOW' : formatTime(epiRemaining)}
           </div>
           {epiDue && (
-            <div className="text-xs text-acls-critical font-medium mt-1">
+            <div className="text-xs text-acls-critical font-bold mt-1">
               GIVE EPI 1mg
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Secondary Stats Row */}
+      <div className="grid grid-cols-3 gap-2">
+        {/* Total Code Time */}
+        <div className="rounded-lg p-2 text-center bg-card border border-border">
+          <div className="flex items-center justify-center gap-1 mb-1">
+            <Clock className="h-3 w-3 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">Total</span>
+          </div>
+          <div className="text-lg font-mono font-semibold text-foreground">
+            {formatDuration(totalElapsed)}
+          </div>
+        </div>
+
+        {/* CPR Time */}
+        <div className="rounded-lg p-2 text-center bg-card border border-border">
+          <div className="flex items-center justify-center gap-1 mb-1">
+            <Activity className="h-3 w-3 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">CPR</span>
+          </div>
+          <div className="text-lg font-mono font-semibold text-foreground">
+            {formatDuration(totalCPRTime)}
+          </div>
+        </div>
+
+        {/* CPR Fraction */}
+        <div className={cn(
+          'rounded-lg p-2 text-center border',
+          parseInt(cprFraction) >= 80 
+            ? 'bg-acls-success/10 border-acls-success' 
+            : parseInt(cprFraction) >= 60 
+            ? 'bg-acls-warning/10 border-acls-warning'
+            : 'bg-acls-critical/10 border-acls-critical'
+        )}>
+          <div className="flex items-center justify-center gap-1 mb-1">
+            <span className="text-xs text-muted-foreground">CPR%</span>
+          </div>
+          <div className={cn(
+            'text-lg font-mono font-bold',
+            parseInt(cprFraction) >= 80 
+              ? 'text-acls-success' 
+              : parseInt(cprFraction) >= 60 
+              ? 'text-acls-warning'
+              : 'text-acls-critical'
+          )}>
+            {cprFraction}%
+          </div>
         </div>
       </div>
     </div>
