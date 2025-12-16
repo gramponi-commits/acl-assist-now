@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { CommandBanner } from './CommandBanner';
 import { RhythmSelector } from './RhythmSelector';
 import { ActionButtons } from './ActionButtons';
-import { TimerDisplay } from './TimerDisplay';
+import { CycleTimers, CodeTimers } from './TimerDisplay';
 import { CPRQualityPanel } from './CPRQualityPanel';
 import { HsAndTsChecklist } from './HsAndTsChecklist';
 import { CodeTimeline } from './CodeTimeline';
@@ -97,12 +97,10 @@ export function CodeScreen() {
                 onRhythmCheck={actions.startRhythmCheck}
               />
 
-              {/* Timers */}
-              <TimerDisplay
+              {/* Cycle Timers - Rhythm Check & Epi */}
+              <CycleTimers
                 cprCycleRemaining={timerState.cprCycleRemaining}
                 epiRemaining={timerState.epiRemaining}
-                totalElapsed={timerState.totalElapsed}
-                totalCPRTime={timerState.totalCPRTime}
                 preShockAlert={timerState.preShockAlert}
                 rhythmCheckDue={timerState.rhythmCheckDue}
               />
@@ -117,6 +115,12 @@ export function CodeScreen() {
               <HsAndTsChecklist
                 hsAndTs={session.hsAndTs}
                 onUpdate={actions.updateHsAndTs}
+              />
+
+              {/* Code Timers - Total & CPR */}
+              <CodeTimers
+                totalElapsed={timerState.totalElapsed}
+                totalCPRTime={timerState.totalCPRTime}
               />
 
               {/* Code Timeline */}
