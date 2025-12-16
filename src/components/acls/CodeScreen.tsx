@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { CommandBanner } from './CommandBanner';
 import { RhythmSelector } from './RhythmSelector';
 import { ActionButtons } from './ActionButtons';
@@ -9,16 +10,40 @@ import { PostROSCScreen } from './PostROSCScreen';
 import { RhythmCheckModal } from './RhythmCheckModal';
 import { useACLSLogic } from '@/hooks/useACLSLogic';
 import { Button } from '@/components/ui/button';
-import { Download, RotateCcw } from 'lucide-react';
+import { Download, RotateCcw, Save, CheckCircle, XCircle, Heart } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 export function CodeScreen() {
   const { session, timerState, isInRhythmCheck, commandBanner, actions, buttonStates } = useACLSLogic();
+  const [isSaved, setIsSaved] = useState(false);
 
   const isActive = session.phase === 'shockable_pathway' || session.phase === 'non_shockable_pathway';
   const isPostROSC = session.phase === 'post_rosc';
+  const isCodeEnded = session.phase === 'code_ended';
   const isInitial = session.phase === 'initial' || session.phase === 'rhythm_selection';
+
+  const handleSaveSession = async () => {
+    try {
+      await actions.saveSessionLocally();
+      setIsSaved(true);
+      toast.success('Session saved locally');
+    } catch (error) {
+      toast.error('Failed to save session');
+    }
+  };
+
+  const handleNewCode = () => {
+    setIsSaved(false);
+    actions.resetSession();
+  };
+
+  const formatDuration = (ms: number) => {
+    const min = Math.floor(ms / 60000);
+    const sec = Math.floor((ms % 60000) / 1000);
+    return `${min}:${sec.toString().padStart(2, '0')}`;
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -131,6 +156,7 @@ export function CodeScreen() {
               onNoShockPEA={() => actions.completeRhythmCheckNoShock('pea')}
               onResumeCPR={actions.completeRhythmCheckResumeCPR}
               onROSC={actions.achieveROSC}
+              onTerminate={actions.terminateCode}
             />
           )}
 
@@ -147,8 +173,108 @@ export function CodeScreen() {
                 onChecklistUpdate={actions.updatePostROSCChecklist}
                 onVitalsUpdate={actions.updatePostROSCVitals}
                 onExport={actions.exportSession}
-                onNewCode={actions.resetSession}
+                onNewCode={handleNewCode}
+                onSave={handleSaveSession}
+                isSaved={isSaved}
               />
+            </>
+          )}
+
+          {/* Code Ended Screen (Death) */}
+          {isCodeEnded && (
+            <>
+              <div className="text-center py-6">
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-destructive/20 mb-4">
+                  <XCircle className="h-10 w-10 text-destructive" />
+                </div>
+                <h2 className="text-2xl font-bold text-foreground">Code Terminated</h2>
+                <p className="text-muted-foreground mt-2">Death declared at {new Date(session.endTime || Date.now()).toLocaleTimeString()}</p>
+              </div>
+
+              {/* Summary Stats */}
+              <div className="bg-card rounded-lg p-4 border border-border">
+                <h3 className="font-bold text-foreground mb-3">Code Summary</h3>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="text-muted-foreground">Duration:</span>
+                    <span className="ml-2 font-semibold">{formatDuration(timerState.totalElapsed)}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">CPR Time:</span>
+                    <span className="ml-2 font-semibold">{formatDuration(timerState.totalCPRTime)}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">CPR Fraction:</span>
+                    <span className="ml-2 font-semibold">
+                      {timerState.totalElapsed > 0 
+                        ? ((timerState.totalCPRTime / timerState.totalElapsed) * 100).toFixed(1) + '%'
+                        : 'N/A'}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Shocks:</span>
+                    <span className="ml-2 font-semibold">{session.shockCount}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Epinephrine:</span>
+                    <span className="ml-2 font-semibold">{session.epinephrineCount} doses</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Amiodarone:</span>
+                    <span className="ml-2 font-semibold">{session.amiodaroneCount} doses</span>
+                  </div>
+                </div>
+              </div>
+
+              <CodeTimeline
+                interventions={session.interventions}
+                startTime={session.startTime}
+              />
+
+              {/* Actions */}
+              <div className="space-y-3 pt-2">
+                <Button
+                  onClick={handleSaveSession}
+                  disabled={isSaved}
+                  className={cn(
+                    'w-full h-14 text-lg font-semibold gap-2',
+                    isSaved 
+                      ? 'bg-acls-success hover:bg-acls-success text-white' 
+                      : 'bg-primary hover:bg-primary/90'
+                  )}
+                >
+                  {isSaved ? (
+                    <>
+                      <CheckCircle className="h-5 w-5" />
+                      Saved Locally
+                    </>
+                  ) : (
+                    <>
+                      <Save className="h-5 w-5" />
+                      Save Session Locally
+                    </>
+                  )}
+                </Button>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                    onClick={actions.exportSession}
+                    variant="outline"
+                    className="h-12 gap-2"
+                  >
+                    <Download className="h-4 w-4" />
+                    Export PDF
+                  </Button>
+                  <Button
+                    onClick={handleNewCode}
+                    variant="outline"
+                    className="h-12 gap-2"
+                  >
+                    <RotateCcw className="h-4 w-4" />
+                    New Code
+                  </Button>
+                </div>
+              </div>
             </>
           )}
         </div>

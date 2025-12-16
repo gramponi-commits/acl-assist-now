@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { PostROSCChecklist, PostROSCVitals } from '@/types/acls';
 import { cn } from '@/lib/utils';
-import { Heart, Thermometer, Activity, Droplet, Download, RotateCcw } from 'lucide-react';
+import { Heart, Thermometer, Activity, Droplet, Download, RotateCcw, Save, CheckCircle } from 'lucide-react';
 
 interface PostROSCScreenProps {
   checklist: PostROSCChecklist;
@@ -12,6 +12,8 @@ interface PostROSCScreenProps {
   onVitalsUpdate: (updates: Partial<PostROSCVitals>) => void;
   onExport: () => void;
   onNewCode: () => void;
+  onSave?: () => void;
+  isSaved?: boolean;
 }
 
 const CHECKLIST_ITEMS: { key: keyof PostROSCChecklist; label: string; section: string }[] = [
@@ -81,7 +83,9 @@ export function PostROSCScreen({
   onChecklistUpdate, 
   onVitalsUpdate, 
   onExport, 
-  onNewCode 
+  onNewCode,
+  onSave,
+  isSaved = false 
 }: PostROSCScreenProps) {
   const checkSpo2 = vitals.spo2 !== null ? vitals.spo2 >= 90 && vitals.spo2 <= 98 : null;
   const checkPaco2 = vitals.paco2 !== null ? vitals.paco2 >= 35 && vitals.paco2 <= 45 : null;
@@ -237,23 +241,49 @@ export function PostROSCScreen({
       </div>
 
       {/* Action Buttons */}
-      <div className="grid grid-cols-2 gap-3 pt-4">
-        <Button
-          onClick={onExport}
-          variant="outline"
-          className="h-12 gap-2"
-        >
-          <Download className="h-4 w-4" />
-          Export Session
-        </Button>
-        <Button
-          onClick={onNewCode}
-          variant="outline"
-          className="h-12 gap-2"
-        >
-          <RotateCcw className="h-4 w-4" />
-          New Code
-        </Button>
+      <div className="space-y-3 pt-4">
+        {onSave && (
+          <Button
+            onClick={onSave}
+            disabled={isSaved}
+            className={cn(
+              'w-full h-14 text-lg font-semibold gap-2',
+              isSaved 
+                ? 'bg-acls-success hover:bg-acls-success text-white' 
+                : 'bg-primary hover:bg-primary/90'
+            )}
+          >
+            {isSaved ? (
+              <>
+                <CheckCircle className="h-5 w-5" />
+                Saved Locally
+              </>
+            ) : (
+              <>
+                <Save className="h-5 w-5" />
+                Save Session Locally
+              </>
+            )}
+          </Button>
+        )}
+        <div className="grid grid-cols-2 gap-3">
+          <Button
+            onClick={onExport}
+            variant="outline"
+            className="h-12 gap-2"
+          >
+            <Download className="h-4 w-4" />
+            Export PDF
+          </Button>
+          <Button
+            onClick={onNewCode}
+            variant="outline"
+            className="h-12 gap-2"
+          >
+            <RotateCcw className="h-4 w-4" />
+            New Code
+          </Button>
+        </div>
       </div>
     </div>
   );

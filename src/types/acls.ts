@@ -68,12 +68,15 @@ export interface PostROSCVitals {
   glucose: number | null; // Target 70-180 mg/dL
 }
 
+export type CodeOutcome = 'rosc' | 'deceased' | null;
+
 export interface ACLSSession {
   id: string;
   startTime: number;
   endTime: number | null;
   currentRhythm: RhythmType;
   phase: ACLSPhase;
+  outcome: CodeOutcome;
   shockCount: number;
   currentEnergy: number;
   epinephrineCount: number;
@@ -159,6 +162,7 @@ export function createInitialSession(): ACLSSession {
     endTime: null,
     currentRhythm: null,
     phase: 'initial',
+    outcome: null,
     shockCount: 0,
     currentEnergy: DEFAULT_ACLS_CONFIG.biphasicMinJoules,
     epinephrineCount: 0,

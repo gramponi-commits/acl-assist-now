@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Zap, Heart, Activity, RotateCcw } from 'lucide-react';
+import { Zap, Heart, Activity, RotateCcw, XCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface RhythmCheckModalProps {
@@ -11,6 +11,7 @@ interface RhythmCheckModalProps {
   onNoShockPEA: () => void;
   onResumeCPR: () => void;
   onROSC: () => void;
+  onTerminate: () => void;
 }
 
 export function RhythmCheckModal({
@@ -22,6 +23,7 @@ export function RhythmCheckModal({
   onNoShockPEA,
   onResumeCPR,
   onROSC,
+  onTerminate,
 }: RhythmCheckModalProps) {
   return (
     <div className="fixed inset-0 bg-background/95 z-50 flex items-center justify-center p-4">
@@ -109,6 +111,20 @@ export function RhythmCheckModal({
               <div>ROSC - Pulse Detected!</div>
               <div className="text-sm font-normal opacity-90">Spontaneous circulation restored</div>
             </div>
+          </Button>
+
+          {/* Terminate Code */}
+          <Button
+            onClick={onTerminate}
+            variant="outline"
+            className={cn(
+              'w-full h-14 text-base font-semibold gap-2',
+              'border-2 border-destructive text-destructive',
+              'hover:bg-destructive hover:text-destructive-foreground'
+            )}
+          >
+            <XCircle className="h-5 w-5" />
+            Terminate Code - Declare Death
           </Button>
         </div>
       </div>
