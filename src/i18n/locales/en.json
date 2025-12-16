@@ -36,7 +36,45 @@
       "unsatisfactory": "Unsatisfactory"
     }
   },
-  "rhythm": {
+  "quiz": {
+    "subtitle": "Practice rhythm recognition and ACLS decision-making",
+    "ecgMonitor": "ECG Monitor",
+    "pulsePresent": "PULSE PRESENT",
+    "noPulse": "NO PULSE",
+    "whatRhythm": "What is this rhythm?",
+    "correct": "Correct!",
+    "incorrect": "Incorrect",
+    "correctWas": "Correct answer",
+    "complete": "Quiz Complete!",
+    "correctAnswers": "Correct",
+    "avgTime": "Avg Time",
+    "answerTimeline": "Your Answers",
+    "youAnswered": "You said",
+    "backToQuizzes": "Back",
+    "tryAgain": "Try Again",
+    "questions": "questions",
+    "start": "Start",
+    "quizBasicRecognition": "Basic Rhythm Recognition",
+    "quizBasicRecognitionDesc": "Learn to identify VF, VT, and Asystole",
+    "quizPEAvsROSC": "PEA vs ROSC",
+    "quizPEAvsROSCDesc": "Distinguish PEA from sinus rhythm using pulse check",
+    "quizFullAssessment": "Full Assessment",
+    "quizFullAssessmentDesc": "All rhythms including pulse differentiation",
+    "quizQuickFire": "Quick Fire",
+    "quizQuickFireDesc": "Rapid rhythm identification challenge",
+    "rhythms": {
+      "vf": "Ventricular Fibrillation (VF)",
+      "vt": "Ventricular Tachycardia (VT)",
+      "asystole": "Asystole",
+      "pea": "PEA (Pulseless Electrical Activity)",
+      "sinus": "Sinus Rhythm (ROSC)"
+    },
+    "actions": {
+      "shock": "SHOCK",
+      "cpr": "Continue CPR",
+      "rosc": "ROSC"
+    }
+  },
     "identify": "IDENTIFY RHYTHM",
     "selectInitial": "Select initial rhythm to begin ACLS protocol",
     "changeRhythm": "Change Rhythm",
