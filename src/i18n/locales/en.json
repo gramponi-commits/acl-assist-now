@@ -19,6 +19,7 @@
     "shock": "SHOCK",
     "epinephrine": "EPINEPHRINE",
     "amiodarone": "AMIODARONE",
+    "lidocaine": "LIDOCAINE",
     "rhythmCheck": "RHYTHM CHECK",
     "rhythmCheckNow": "RHYTHM CHECK NOW",
     "rosc": "ROSC",
@@ -29,7 +30,8 @@
     "saved": "Saved Locally",
     "reset": "Reset",
     "newCode": "New Code",
-    "saveFailed": "Failed to save session"
+    "saveFailed": "Failed to save session",
+    "addNote": "Add Note"
   },
   "timers": {
     "rhythmCheck": "Rhythm Check",
@@ -58,7 +60,8 @@
     "shocks": "Shocks",
     "doses": "doses",
     "epi": "Epi",
-    "amio": "Amio"
+    "amio": "Amio",
+    "lido": "Lido"
   },
   "postRosc": {
     "roscAchieved": "ROSC ACHIEVED",
@@ -141,8 +144,14 @@
     "vibration": "Vibration",
     "vibrationDesc": "Vibrate for critical alerts",
     "metronome": "CPR Metronome",
-    "metronomeDesc": "Audio metronome at 110 BPM during CPR",
-    "metronomeBPM": "Metronome BPM"
+    "metronomeDesc": "Audio metronome during CPR",
+    "metronomeBPM": "Metronome BPM",
+    "voice": "Voice Announcements",
+    "voiceDesc": "Spoken alerts for epi, rhythm check, pre-charge",
+    "antiarrhythmic": "Prefer Lidocaine",
+    "antiarrhythmicDesc": "Use Lidocaine instead of Amiodarone",
+    "usingLidocaine": "Using Lidocaine 100mg",
+    "usingAmiodarone": "Using Amiodarone 300mg/150mg"
   },
   "resume": {
     "title": "Active Code Detected",
@@ -208,6 +217,20 @@
     "airwayBvm": "Airway: BVM ventilation",
     "airwayNone": "Airway: No airway",
     "hsTsChecked": "H's & T's checked: {{items}}",
-    "codeEnded": "Code ended: {{outcome}}"
+    "codeEnded": "Code ended: {{outcome}}",
+    "noteAdded": "Note: {{note}}"
+  },
+  "notes": {
+    "addNote": "Add Note",
+    "placeholder": "Enter your clinical note here...",
+    "hint": "Press Ctrl+Enter to save",
+    "add": "Add"
+  },
+  "voice": {
+    "rhythmCheck": "Rhythm check now. Pause CPR. Analyze rhythm.",
+    "preCharge": "Pre-charge defibrillator. Rhythm check in 15 seconds.",
+    "epiDue": "Epinephrine due. Give 1 milligram IV or IO.",
+    "resumeCPR": "Resume high quality CPR.",
+    "rosc": "ROSC achieved. Begin post cardiac arrest care."
   }
 }

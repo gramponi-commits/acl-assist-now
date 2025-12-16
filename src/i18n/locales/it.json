@@ -19,6 +19,7 @@
     "shock": "SHOCK",
     "epinephrine": "ADRENALINA",
     "amiodarone": "AMIODARONE",
+    "lidocaine": "LIDOCAINA",
     "rhythmCheck": "CONTROLLO RITMO",
     "rhythmCheckNow": "CONTROLLO RITMO ORA",
     "rosc": "ROSC",
@@ -29,7 +30,8 @@
     "saved": "Salvato Localmente",
     "reset": "Reimposta",
     "newCode": "Nuovo Codice",
-    "saveFailed": "Salvataggio sessione fallito"
+    "saveFailed": "Salvataggio sessione fallito",
+    "addNote": "Aggiungi Nota"
   },
   "timers": {
     "rhythmCheck": "Controllo Ritmo",
@@ -58,7 +60,8 @@
     "shocks": "Shock",
     "doses": "dosi",
     "epi": "Adre",
-    "amio": "Amio"
+    "amio": "Amio",
+    "lido": "Lido"
   },
   "postRosc": {
     "roscAchieved": "ROSC RAGGIUNTO",
@@ -141,8 +144,14 @@
     "vibration": "Vibrazione",
     "vibrationDesc": "Vibra per avvisi critici",
     "metronome": "Metronomo RCP",
-    "metronomeDesc": "Metronomo audio a 110 BPM durante RCP",
-    "metronomeBPM": "BPM Metronomo"
+    "metronomeDesc": "Metronomo audio durante RCP",
+    "metronomeBPM": "BPM Metronomo",
+    "voice": "Annunci Vocali",
+    "voiceDesc": "Avvisi parlati per adrenalina, controllo ritmo, pre-carica",
+    "antiarrhythmic": "Preferisci Lidocaina",
+    "antiarrhythmicDesc": "Usa Lidocaina invece di Amiodarone",
+    "usingLidocaine": "Usando Lidocaina 100mg",
+    "usingAmiodarone": "Usando Amiodarone 300mg/150mg"
   },
   "resume": {
     "title": "Codice Attivo Rilevato",
@@ -208,6 +217,20 @@
     "airwayBvm": "Vie aeree: Ventilazione con AMBU",
     "airwayNone": "Vie aeree: Nessuna",
     "hsTsChecked": "H's & T's controllate: {{items}}",
-    "codeEnded": "Codice terminato: {{outcome}}"
+    "codeEnded": "Codice terminato: {{outcome}}",
+    "noteAdded": "Nota: {{note}}"
+  },
+  "notes": {
+    "addNote": "Aggiungi Nota",
+    "placeholder": "Inserisci la tua nota clinica qui...",
+    "hint": "Premi Ctrl+Invio per salvare",
+    "add": "Aggiungi"
+  },
+  "voice": {
+    "rhythmCheck": "Controllo ritmo ora. Pausa RCP. Analizza ritmo.",
+    "preCharge": "Pre-carica defibrillatore. Controllo ritmo tra 15 secondi.",
+    "epiDue": "Adrenalina scaduta. Somministra 1 milligrammo IV o IO.",
+    "resumeCPR": "Riprendi RCP di alta qualità.",
+    "rosc": "ROSC raggiunto. Inizia cure post arresto cardiaco."
   }
 }
