@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { jsPDF } from 'jspdf';
 import {
   ACLSSession,
@@ -31,6 +32,7 @@ interface TimerState {
 }
 
 export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
+  const { t } = useTranslation();
   const [session, setSession] = useState<ACLSSession>(createInitialSession);
   const [timerState, setTimerState] = useState<TimerState>({
     cprCycleRemaining: config.rhythmCheckIntervalMs,
@@ -125,6 +127,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
   const selectRhythm = useCallback((rhythm: RhythmType) => {
     const now = Date.now();
     const isShockable = rhythm === 'vf_pvt';
+    const rhythmName = rhythm === 'vf_pvt' ? 'VF/pVT' : rhythm === 'asystole' ? t('rhythm.asystole') : 'PEA';
     
     setSession(prev => {
       const newPhase = isShockable ? 'shockable_pathway' : 'non_shockable_pathway';
@@ -132,7 +135,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
         id: crypto.randomUUID(),
         timestamp: now,
         type: 'rhythm_change' as const,
-        details: `Rhythm identified: ${rhythm === 'vf_pvt' ? 'VF/pVT' : rhythm === 'asystole' ? 'Asystole' : 'PEA'}`,
+        details: t('interventions.rhythmIdentified', { rhythm: rhythmName }),
       }];
 
       return {
@@ -144,17 +147,20 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       };
     });
 
-    addIntervention('cpr_start', 'CPR initiated');
-  }, [addIntervention]);
+    addIntervention('cpr_start', t('interventions.cprInitiated'));
+  }, [addIntervention, t]);
 
   const startRhythmCheck = useCallback(() => {
     setIsInRhythmCheck(true);
     cprActiveRef.current = false;
-    addIntervention('note', 'Rhythm check - CPR paused');
-  }, [addIntervention]);
+    addIntervention('note', t('interventions.rhythmCheckPaused'));
+  }, [addIntervention, t]);
 
   const completeRhythmCheckWithShock = useCallback(() => {
     const now = Date.now();
+    const shockNumber = session.shockCount + 1;
+    const energy = session.currentEnergy;
+    
     setSession(prev => {
       const newShockCount = prev.shockCount + 1;
       const newEnergy = newShockCount >= 2 ? config.biphasicMaxJoules : config.biphasicMinJoules;
@@ -169,12 +175,14 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       };
     });
 
-    addIntervention('shock', `Shock #${session.shockCount + 1} delivered at ${session.currentEnergy}J`, session.currentEnergy);
+    addIntervention('shock', t('interventions.shockDelivered', { number: shockNumber, energy }), energy);
     setIsInRhythmCheck(false);
-  }, [session.shockCount, session.currentEnergy, config.biphasicMaxJoules, config.biphasicMinJoules, addIntervention]);
+  }, [session.shockCount, session.currentEnergy, config.biphasicMaxJoules, config.biphasicMinJoules, addIntervention, t]);
 
   const completeRhythmCheckNoShock = useCallback((newRhythm: 'asystole' | 'pea') => {
     const now = Date.now();
+    const rhythmName = newRhythm === 'asystole' ? t('rhythm.asystole') : 'PEA';
+    
     setSession(prev => ({
       ...prev,
       currentRhythm: newRhythm,
@@ -182,9 +190,9 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       cprCycleStartTime: now,
     }));
 
-    addIntervention('rhythm_change', `No shock - ${newRhythm === 'asystole' ? 'Asystole' : 'PEA'} - Resume CPR`);
+    addIntervention('rhythm_change', t('interventions.noShockResume', { rhythm: rhythmName }));
     setIsInRhythmCheck(false);
-  }, [addIntervention]);
+  }, [addIntervention, t]);
 
   const completeRhythmCheckResumeCPR = useCallback(() => {
     const now = Date.now();
@@ -193,9 +201,9 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       cprCycleStartTime: now,
     }));
 
-    addIntervention('cpr_start', 'CPR resumed - same rhythm');
+    addIntervention('cpr_start', t('interventions.cprResumedSame'));
     setIsInRhythmCheck(false);
-  }, [addIntervention]);
+  }, [addIntervention, t]);
 
   const achieveROSC = useCallback(() => {
     const now = Date.now();
@@ -207,9 +215,9 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       endTime: now,
     }));
 
-    addIntervention('rosc', 'ROSC achieved - Pulse and rhythm detected!');
+    addIntervention('rosc', t('interventions.roscAchieved'));
     setIsInRhythmCheck(false);
-  }, [addIntervention]);
+  }, [addIntervention, t]);
 
   const terminateCode = useCallback(() => {
     const now = Date.now();
@@ -220,9 +228,9 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       endTime: now,
     }));
 
-    addIntervention('note', 'Code terminated - Death declared');
+    addIntervention('note', t('interventions.codeTerminated'));
     setIsInRhythmCheck(false);
-  }, [addIntervention]);
+  }, [addIntervention, t]);
 
   const giveEpinephrine = useCallback(() => {
     const now = Date.now();
@@ -232,8 +240,8 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       lastEpinephrineTime: now,
     }));
 
-    addIntervention('epinephrine', `Epinephrine ${config.epinephrineDose}mg IV/IO`, config.epinephrineDose);
-  }, [config.epinephrineDose, addIntervention]);
+    addIntervention('epinephrine', t('interventions.epinephrineGiven', { dose: config.epinephrineDose }), config.epinephrineDose);
+  }, [config.epinephrineDose, addIntervention, t]);
 
   const giveAmiodarone = useCallback(() => {
     const dose = session.amiodaroneCount === 0 ? config.amiodaroneFirstDose : config.amiodaroneSecondDose;
@@ -244,8 +252,8 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       lastAmiodaroneTime: Date.now(),
     }));
 
-    addIntervention('amiodarone', `Amiodarone ${dose}mg IV/IO`, dose);
-  }, [session.amiodaroneCount, config.amiodaroneFirstDose, config.amiodaroneSecondDose, addIntervention]);
+    addIntervention('amiodarone', t('interventions.amiodaroneGiven', { dose }), dose);
+  }, [session.amiodaroneCount, config.amiodaroneFirstDose, config.amiodaroneSecondDose, addIntervention, t]);
 
   const giveLidocaine = useCallback(() => {
     setSession(prev => ({
@@ -253,8 +261,8 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       lidocaineCount: prev.lidocaineCount + 1,
     }));
 
-    addIntervention('lidocaine', `Lidocaine ${config.lidocaineDose}mg IV/IO`, config.lidocaineDose);
-  }, [config.lidocaineDose, addIntervention]);
+    addIntervention('lidocaine', t('interventions.lidocaineGiven', { dose: config.lidocaineDose }), config.lidocaineDose);
+  }, [config.lidocaineDose, addIntervention, t]);
 
   const setAirway = useCallback((status: AirwayStatus) => {
     setSession(prev => ({
@@ -262,8 +270,9 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       airwayStatus: status,
     }));
 
-    addIntervention('airway', `Airway: ${status === 'advanced' ? 'Advanced airway placed' : status === 'bvm' ? 'BVM ventilation' : 'No airway'}`);
-  }, [addIntervention]);
+    const airwayText = status === 'advanced' ? t('interventions.airwayAdvanced') : status === 'bvm' ? t('interventions.airwayBvm') : t('interventions.airwayNone');
+    addIntervention('airway', airwayText);
+  }, [addIntervention, t]);
 
   const updateHsAndTs = useCallback((updates: Partial<HsAndTs>) => {
     setSession(prev => ({
@@ -276,9 +285,9 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       .map(([key]) => key);
     
     if (checkedItems.length > 0) {
-      addIntervention('hs_ts_check', `H's & T's checked: ${checkedItems.join(', ')}`);
+      addIntervention('hs_ts_check', t('interventions.hsTsChecked', { items: checkedItems.join(', ') }));
     }
-  }, [addIntervention]);
+  }, [addIntervention, t]);
 
   const updatePostROSCChecklist = useCallback((updates: Partial<PostROSCChecklist>) => {
     setSession(prev => ({
@@ -301,8 +310,8 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       endTime: Date.now(),
     }));
 
-    addIntervention('note', `Code ended: ${outcome}`);
-  }, [addIntervention]);
+    addIntervention('note', t('interventions.codeEnded', { outcome }));
+  }, [addIntervention, t]);
 
   const resetSession = useCallback(() => {
     setSession(createInitialSession());
@@ -458,20 +467,21 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
   const getCommandBanner = useCallback((): CommandBanner => {
     const { phase, currentRhythm, shockCount, epinephrineCount, lastEpinephrineTime, amiodaroneCount } = session;
     const now = Date.now();
+    const seconds = Math.ceil(timerState.cprCycleRemaining / 1000);
 
     if (phase === 'initial' || phase === 'rhythm_selection') {
       return {
-        message: 'IDENTIFY RHYTHM',
+        message: t('banner.identifyRhythm'),
         priority: 'critical',
-        subMessage: 'Select initial rhythm to begin ACLS protocol',
+        subMessage: t('banner.selectRhythm'),
       };
     }
 
     if (phase === 'post_rosc') {
       return {
-        message: 'ROSC ACHIEVED',
+        message: t('banner.roscAchieved'),
         priority: 'success',
-        subMessage: 'Begin post-cardiac arrest care',
+        subMessage: t('banner.beginPostCare'),
       };
     }
 
@@ -479,33 +489,33 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
     if (isInRhythmCheck) {
       if (currentRhythm === 'vf_pvt') {
         return {
-          message: '⚡ RHYTHM CHECK - VF/pVT?',
+          message: t('banner.rhythmCheckVfPvt'),
           priority: 'critical',
-          subMessage: 'If VF/pVT: SHOCK | If not: Select new rhythm | If pulse: ROSC',
+          subMessage: t('banner.rhythmCheckVfPvtSub'),
         };
       }
       return {
-        message: '🔍 RHYTHM CHECK',
+        message: t('banner.rhythmCheckGeneric'),
         priority: 'warning',
-        subMessage: 'Check rhythm and pulse. If VF/pVT: SHOCK | If pulse: ROSC',
+        subMessage: t('banner.rhythmCheckGenericSub'),
       };
     }
 
     // Pre-shock alert - 15 seconds before rhythm check
     if (timerState.preShockAlert) {
       return {
-        message: '⚡ PRE-CHARGE DEFIBRILLATOR',
+        message: t('banner.preCharge'),
         priority: 'warning',
-        subMessage: `Rhythm check in ${Math.ceil(timerState.cprCycleRemaining / 1000)}s - Prepare to analyze rhythm`,
+        subMessage: t('banner.preChargeSub', { seconds }),
       };
     }
 
     // Rhythm check due
     if (timerState.rhythmCheckDue) {
       return {
-        message: '🔍 RHYTHM CHECK NOW',
+        message: t('banner.rhythmCheckNow'),
         priority: 'critical',
-        subMessage: 'Tap "Rhythm Check" to pause CPR and analyze',
+        subMessage: t('banner.rhythmCheckNowSub'),
       };
     }
 
@@ -514,25 +524,25 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       // Check for epinephrine timing (after shock #2)
       if (shockCount >= 2 && (!lastEpinephrineTime || (now - lastEpinephrineTime) >= config.epinephrineIntervalMs)) {
         return {
-          message: 'GIVE EPINEPHRINE 1mg IV/IO',
+          message: t('banner.giveEpi'),
           priority: 'critical',
-          subMessage: 'Due now - repeat every 4 minutes',
+          subMessage: t('banner.giveEpiRepeat'),
         };
       }
 
       // Check for amiodarone timing (after shock #3)
       if (shockCount >= 3 && amiodaroneCount === 0) {
         return {
-          message: 'GIVE AMIODARONE 300mg IV/IO',
+          message: t('banner.giveAmio300'),
           priority: 'critical',
-          subMessage: 'First dose - may repeat 150mg once',
+          subMessage: t('banner.giveAmio300Sub'),
         };
       }
 
       return {
-        message: 'CONTINUE HIGH-QUALITY CPR',
+        message: t('banner.continueHQCPR'),
         priority: 'info',
-        subMessage: `Rhythm check in ${Math.ceil(timerState.cprCycleRemaining / 1000)}s`,
+        subMessage: t('banner.rhythmCheckIn', { seconds }),
       };
     }
 
@@ -541,33 +551,33 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       // Immediate epi for non-shockable
       if (epinephrineCount === 0) {
         return {
-          message: 'GIVE EPINEPHRINE 1mg IV/IO NOW',
+          message: t('banner.giveEpiNow'),
           priority: 'critical',
-          subMessage: currentRhythm === 'asystole' ? 'Asystole - Epi immediately' : 'PEA - Epi immediately',
+          subMessage: currentRhythm === 'asystole' ? t('banner.asystoleEpi') : t('banner.peaEpi'),
         };
       }
 
       // Subsequent epi doses
       if (lastEpinephrineTime && (now - lastEpinephrineTime) >= config.epinephrineIntervalMs) {
         return {
-          message: 'GIVE EPINEPHRINE 1mg IV/IO',
+          message: t('banner.giveEpi'),
           priority: 'critical',
-          subMessage: 'Due now - repeat every 4 minutes',
+          subMessage: t('banner.giveEpiRepeat'),
         };
       }
 
       return {
-        message: 'CONTINUE HIGH-QUALITY CPR',
+        message: t('banner.continueHQCPR'),
         priority: 'info',
-        subMessage: `Rhythm check in ${Math.ceil(timerState.cprCycleRemaining / 1000)}s | Consider H's & T's`,
+        subMessage: t('banner.considerHsTs', { seconds }),
       };
     }
 
     return {
-      message: 'ACLS IN PROGRESS',
+      message: t('banner.aclsInProgress'),
       priority: 'info',
     };
-  }, [session, timerState, isInRhythmCheck, config.epinephrineIntervalMs]);
+  }, [session, timerState, isInRhythmCheck, config.epinephrineIntervalMs, t]);
 
   // Button state calculations
   const canGiveEpinephrine = (session.phase === 'shockable_pathway' || session.phase === 'non_shockable_pathway') && !isInRhythmCheck;

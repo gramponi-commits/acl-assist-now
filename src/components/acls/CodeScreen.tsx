@@ -145,7 +145,7 @@ export function CodeScreen() {
       setIsSaved(true);
       toast.success(t('actions.saved'));
     } catch (error) {
-      toast.error('Failed to save session');
+      toast.error(t('actions.saveFailed'));
     }
   };
 
@@ -432,11 +432,11 @@ export function CodeScreen() {
             </div>
             <div>
               <div className="text-lg font-bold text-foreground">{session.epinephrineCount}</div>
-              <div className="text-xs text-muted-foreground">Epi</div>
+              <div className="text-xs text-muted-foreground">{t('codeEnded.epi')}</div>
             </div>
             <div>
               <div className="text-lg font-bold text-foreground">{session.amiodaroneCount}</div>
-              <div className="text-xs text-muted-foreground">Amio</div>
+              <div className="text-xs text-muted-foreground">{t('codeEnded.amio')}</div>
             </div>
             <div>
               <div className="text-lg font-bold text-foreground">
