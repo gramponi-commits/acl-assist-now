@@ -57,16 +57,6 @@ export function CodeScreen() {
                 {session.currentRhythm === 'pea' && 'PEA - Non-Shockable'}
               </div>
 
-              {/* Timers */}
-              <TimerDisplay
-                cprCycleRemaining={timerState.cprCycleRemaining}
-                epiRemaining={timerState.epiRemaining}
-                totalElapsed={timerState.totalElapsed}
-                totalCPRTime={timerState.totalCPRTime}
-                preShockAlert={timerState.preShockAlert}
-                rhythmCheckDue={timerState.rhythmCheckDue}
-              />
-
               {/* Action Buttons */}
               <ActionButtons
                 canGiveEpinephrine={buttonStates.canGiveEpinephrine}
@@ -90,6 +80,16 @@ export function CodeScreen() {
               <HsAndTsChecklist
                 hsAndTs={session.hsAndTs}
                 onUpdate={actions.updateHsAndTs}
+              />
+
+              {/* Timers - above timeline */}
+              <TimerDisplay
+                cprCycleRemaining={timerState.cprCycleRemaining}
+                epiRemaining={timerState.epiRemaining}
+                totalElapsed={timerState.totalElapsed}
+                totalCPRTime={timerState.totalCPRTime}
+                preShockAlert={timerState.preShockAlert}
+                rhythmCheckDue={timerState.rhythmCheckDue}
               />
 
               {/* Code Timeline */}
