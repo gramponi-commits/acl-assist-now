@@ -5,6 +5,8 @@ export interface AppSettings {
   vibrationEnabled: boolean;
   metronomeEnabled: boolean;
   metronomeBPM: number;
+  voiceAnnouncementsEnabled: boolean;
+  preferLidocaine: boolean;
 }
 
 const SETTINGS_KEY = 'acls-settings';
@@ -14,6 +16,8 @@ const DEFAULT_SETTINGS: AppSettings = {
   vibrationEnabled: true,
   metronomeEnabled: false,
   metronomeBPM: 110,
+  voiceAnnouncementsEnabled: false,
+  preferLidocaine: false,
 };
 
 export function useSettings() {

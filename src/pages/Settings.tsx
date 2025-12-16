@@ -2,7 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Switch } from '@/components/ui/switch';
-import { Globe, Check, Volume2, Vibrate, Music } from 'lucide-react';
+import { Slider } from '@/components/ui/slider';
+import { Globe, Check, Volume2, Vibrate, Music, Mic, Pill } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSettings } from '@/hooks/useSettings';
 
@@ -45,6 +46,23 @@ export default function Settings() {
             </div>
           </div>
 
+          {/* Voice Announcements Section */}
+          <div className="bg-card rounded-lg border border-border p-4">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <Mic className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h2 className="font-semibold text-foreground">{t('settings.voice')}</h2>
+                <p className="text-sm text-muted-foreground">{t('settings.voiceDesc')}</p>
+              </div>
+              <Switch
+                checked={settings.voiceAnnouncementsEnabled}
+                onCheckedChange={(checked) => updateSetting('voiceAnnouncementsEnabled', checked)}
+              />
+            </div>
+          </div>
+
           {/* Vibration Section */}
           <div className="bg-card rounded-lg border border-border p-4">
             <div className="flex items-center gap-3">
@@ -78,13 +96,48 @@ export default function Settings() {
               />
             </div>
             {settings.metronomeEnabled && (
-              <div className="mt-4 pl-[52px]">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <span>{t('settings.metronomeBPM')}:</span>
-                  <span className="font-mono font-bold text-foreground">{settings.metronomeBPM}</span>
+              <div className="mt-4 pl-[52px] space-y-3">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">{t('settings.metronomeBPM')}:</span>
+                  <span className="font-mono font-bold text-foreground text-lg">{settings.metronomeBPM}</span>
+                </div>
+                <Slider
+                  value={[settings.metronomeBPM]}
+                  onValueChange={([value]) => updateSetting('metronomeBPM', value)}
+                  min={100}
+                  max={120}
+                  step={1}
+                  className="w-full"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>100</span>
+                  <span>110</span>
+                  <span>120</span>
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Antiarrhythmic Preference Section */}
+          <div className="bg-card rounded-lg border border-border p-4">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <Pill className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1">
+                <h2 className="font-semibold text-foreground">{t('settings.antiarrhythmic')}</h2>
+                <p className="text-sm text-muted-foreground">{t('settings.antiarrhythmicDesc')}</p>
+              </div>
+              <Switch
+                checked={settings.preferLidocaine}
+                onCheckedChange={(checked) => updateSetting('preferLidocaine', checked)}
+              />
+            </div>
+            <div className="mt-2 pl-[52px]">
+              <span className="text-sm text-muted-foreground">
+                {settings.preferLidocaine ? t('settings.usingLidocaine') : t('settings.usingAmiodarone')}
+              </span>
+            </div>
           </div>
 
           {/* Language Section */}

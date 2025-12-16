@@ -10,13 +10,15 @@ import { CodeTimeline } from './CodeTimeline';
 import { PostROSCScreen } from './PostROSCScreen';
 import { RhythmCheckModal } from './RhythmCheckModal';
 import { ResumeSessionDialog } from './ResumeSessionDialog';
+import { AddNoteDialog } from './AddNoteDialog';
 import { useACLSLogic } from '@/hooks/useACLSLogic';
 import { useWakeLock } from '@/hooks/useWakeLock';
 import { useAudioAlerts } from '@/hooks/useAudioAlerts';
 import { useMetronome } from '@/hooks/useMetronome';
+import { useVoiceAnnouncements } from '@/hooks/useVoiceAnnouncements';
 import { useSettings } from '@/hooks/useSettings';
 import { Button } from '@/components/ui/button';
-import { Download, RotateCcw, Save, CheckCircle, XCircle } from 'lucide-react';
+import { Download, RotateCcw, Save, CheckCircle, XCircle, StickyNote } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -32,6 +34,7 @@ export function CodeScreen() {
   const { settings } = useSettings();
   const { requestWakeLock, releaseWakeLock } = useWakeLock();
   const { playAlert, setEnabled: setAudioEnabled, vibrate } = useAudioAlerts();
+  const { announce, setEnabled: setVoiceEnabled } = useVoiceAnnouncements();
   const { start: startMetronome, stop: stopMetronome } = useMetronome({ 
     bpm: settings.metronomeBPM, 
     enabled: settings.metronomeEnabled 
@@ -39,6 +42,7 @@ export function CodeScreen() {
   
   const [isSaved, setIsSaved] = useState(false);
   const [showResumeDialog, setShowResumeDialog] = useState(false);
+  const [showNoteDialog, setShowNoteDialog] = useState(false);
   const [pendingResumeSession, setPendingResumeSession] = useState<ReturnType<typeof getActiveSession>>(null);
   
   // Track previous states for alert triggers
@@ -64,6 +68,11 @@ export function CodeScreen() {
   useEffect(() => {
     setAudioEnabled(settings.soundEnabled);
   }, [settings.soundEnabled, setAudioEnabled]);
+
+  // Enable voice announcements based on settings
+  useEffect(() => {
+    setVoiceEnabled(settings.voiceAnnouncementsEnabled);
+  }, [settings.voiceAnnouncementsEnabled, setVoiceEnabled]);
 
   // Wake lock during active code
   useEffect(() => {
@@ -112,6 +121,7 @@ export function CodeScreen() {
     // Rhythm check due alert
     if (timerState.rhythmCheckDue && !prevRhythmCheckDue.current) {
       playAlert('rhythmCheck');
+      announce('rhythmCheck');
       if (settings.vibrationEnabled) vibrate([200, 100, 200, 100, 200]);
     }
     prevRhythmCheckDue.current = timerState.rhythmCheckDue;
@@ -119,6 +129,7 @@ export function CodeScreen() {
     // Pre-shock alert
     if (timerState.preShockAlert && !prevPreShockAlert.current) {
       playAlert('preCharge');
+      announce('preCharge');
       if (settings.vibrationEnabled) vibrate([150, 75, 150]);
     }
     prevPreShockAlert.current = timerState.preShockAlert;
@@ -126,18 +137,25 @@ export function CodeScreen() {
     // Epi due alert
     if (buttonStates.epiDue && !prevEpiDue.current) {
       playAlert('epiDue');
+      announce('epiDue');
       if (settings.vibrationEnabled) vibrate([300, 150, 300]);
     }
     prevEpiDue.current = buttonStates.epiDue;
-  }, [timerState.rhythmCheckDue, timerState.preShockAlert, buttonStates.epiDue, playAlert, vibrate, settings.vibrationEnabled]);
+  }, [timerState.rhythmCheckDue, timerState.preShockAlert, buttonStates.epiDue, playAlert, announce, vibrate, settings.vibrationEnabled]);
 
   // ROSC alert
   useEffect(() => {
     if (isPostROSC) {
       playAlert('rosc');
+      announce('rosc');
       if (settings.vibrationEnabled) vibrate(500);
     }
-  }, [isPostROSC, playAlert, vibrate, settings.vibrationEnabled]);
+  }, [isPostROSC, playAlert, announce, vibrate, settings.vibrationEnabled]);
+
+  const handleAddNote = (note: string) => {
+    actions.addNote(note);
+    toast.success(t('notes.addNote'));
+  };
 
   const handleSaveSession = async () => {
     try {
@@ -184,6 +202,13 @@ export function CodeScreen() {
         onDiscard={handleDiscardSession}
         sessionDuration={pendingResumeSession ? formatDuration(pendingResumeSession.timerState.totalElapsed) : '0:00'}
       />
+      
+      {/* Add Note Dialog */}
+      <AddNoteDialog
+        open={showNoteDialog}
+        onOpenChange={setShowNoteDialog}
+        onAddNote={handleAddNote}
+      />
 
       {/* Command Banner - Always visible at top */}
       <CommandBanner
@@ -224,12 +249,16 @@ export function CodeScreen() {
               <ActionButtons
                 canGiveEpinephrine={buttonStates.canGiveEpinephrine}
                 canGiveAmiodarone={buttonStates.canGiveAmiodarone}
+                canGiveLidocaine={buttonStates.canGiveLidocaine}
                 epiDue={buttonStates.epiDue}
                 rhythmCheckDue={buttonStates.rhythmCheckDue}
                 epinephrineCount={session.epinephrineCount}
                 amiodaroneCount={session.amiodaroneCount}
+                lidocaineCount={session.lidocaineCount}
+                preferLidocaine={settings.preferLidocaine}
                 onEpinephrine={actions.giveEpinephrine}
                 onAmiodarone={actions.giveAmiodarone}
+                onLidocaine={actions.giveLidocaine}
                 onRhythmCheck={actions.startRhythmCheck}
               />
 
@@ -266,7 +295,15 @@ export function CodeScreen() {
               />
 
               {/* Session Controls */}
-              <div className="grid grid-cols-2 gap-3 pt-2">
+              <div className="grid grid-cols-3 gap-3 pt-2">
+                <Button
+                  onClick={() => setShowNoteDialog(true)}
+                  variant="outline"
+                  className="h-12 gap-2"
+                >
+                  <StickyNote className="h-4 w-4" />
+                  {t('actions.addNote')}
+                </Button>
                 <Button
                   onClick={actions.exportSession}
                   variant="outline"

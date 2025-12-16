@@ -6,27 +6,41 @@ import { cn } from '@/lib/utils';
 interface ActionButtonsProps {
   canGiveEpinephrine: boolean;
   canGiveAmiodarone: boolean;
+  canGiveLidocaine: boolean;
   epiDue: boolean;
   rhythmCheckDue: boolean;
   epinephrineCount: number;
   amiodaroneCount: number;
+  lidocaineCount: number;
+  preferLidocaine: boolean;
   onEpinephrine: () => void;
   onAmiodarone: () => void;
+  onLidocaine: () => void;
   onRhythmCheck: () => void;
 }
 
 export function ActionButtons({
   canGiveEpinephrine,
   canGiveAmiodarone,
+  canGiveLidocaine,
   epiDue,
   rhythmCheckDue,
   epinephrineCount,
   amiodaroneCount,
+  lidocaineCount,
+  preferLidocaine,
   onEpinephrine,
   onAmiodarone,
+  onLidocaine,
   onRhythmCheck,
 }: ActionButtonsProps) {
   const { t } = useTranslation();
+
+  // Show lidocaine if preferred, otherwise amiodarone
+  const showLidocaine = preferLidocaine;
+  const antiarrhythmicCount = showLidocaine ? lidocaineCount : amiodaroneCount;
+  const canGiveAntiarrhythmic = showLidocaine ? canGiveLidocaine : canGiveAmiodarone;
+  const onAntiarrhythmic = showLidocaine ? onLidocaine : onAmiodarone;
 
   return (
     <div className="space-y-3">
@@ -67,21 +81,24 @@ export function ActionButtons({
           </span>
         </Button>
 
-        {/* Amiodarone Button */}
+        {/* Amiodarone/Lidocaine Button */}
         <Button
-          onClick={onAmiodarone}
-          disabled={!canGiveAmiodarone}
+          onClick={onAntiarrhythmic}
+          disabled={!canGiveAntiarrhythmic}
           className={cn(
             'h-20 flex-col gap-1 text-base font-bold transition-all',
-            canGiveAmiodarone
+            canGiveAntiarrhythmic
               ? 'bg-acls-medication hover:bg-acls-medication/90 text-white'
               : 'bg-muted text-muted-foreground'
           )}
         >
           <Pill className="h-6 w-6" />
-          <span>{t('actions.amiodarone')}</span>
+          <span>{showLidocaine ? t('actions.lidocaine') : t('actions.amiodarone')}</span>
           <span className="text-xs font-normal">
-            {amiodaroneCount === 0 ? '300mg' : '150mg'} (#{amiodaroneCount + 1})
+            {showLidocaine 
+              ? `100mg (${antiarrhythmicCount > 0 ? '#' + (antiarrhythmicCount + 1) : '#1'})`
+              : `${amiodaroneCount === 0 ? '300mg' : '150mg'} (#${amiodaroneCount + 1})`
+            }
           </span>
         </Button>
       </div>

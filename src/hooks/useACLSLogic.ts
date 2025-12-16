@@ -582,9 +582,14 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
   // Button state calculations
   const canGiveEpinephrine = (session.phase === 'shockable_pathway' || session.phase === 'non_shockable_pathway') && !isInRhythmCheck;
   const canGiveAmiodarone = session.phase === 'shockable_pathway' && session.shockCount >= 3 && session.amiodaroneCount < 2 && !isInRhythmCheck;
+  const canGiveLidocaine = session.phase === 'shockable_pathway' && session.shockCount >= 3 && !isInRhythmCheck;
   const epiDue = session.lastEpinephrineTime 
     ? (Date.now() - session.lastEpinephrineTime) >= config.epinephrineIntervalMs 
     : session.phase !== 'initial' && session.phase !== 'rhythm_selection';
+
+  const addNote = useCallback((note: string) => {
+    addIntervention('note', t('interventions.noteAdded', { note }));
+  }, [addIntervention, t]);
 
   return {
     session,
@@ -612,10 +617,12 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       exportSession,
       saveSessionLocally,
       addIntervention,
+      addNote,
     },
     buttonStates: {
       canGiveEpinephrine,
       canGiveAmiodarone,
+      canGiveLidocaine,
       epiDue,
       rhythmCheckDue: timerState.rhythmCheckDue,
     },
