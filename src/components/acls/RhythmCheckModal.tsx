@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Zap, Heart, Activity, RotateCcw, XCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -25,6 +26,8 @@ export function RhythmCheckModal({
   onROSC,
   onTerminate,
 }: RhythmCheckModalProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="fixed inset-0 bg-background/95 z-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-4">
@@ -32,9 +35,9 @@ export function RhythmCheckModal({
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-acls-warning/20 mb-4">
             <Activity className="h-8 w-8 text-acls-warning" />
           </div>
-          <h2 className="text-2xl font-bold text-foreground">RHYTHM CHECK</h2>
+          <h2 className="text-2xl font-bold text-foreground">{t('rhythmCheckModal.title')}</h2>
           <p className="text-muted-foreground mt-2">
-            Pause CPR briefly. Analyze rhythm. Check pulse.
+            {t('rhythmCheckModal.subtitle')}
           </p>
         </div>
 
@@ -50,9 +53,9 @@ export function RhythmCheckModal({
           >
             <Zap className="h-8 w-8" />
             <div className="text-left">
-              <div>SHOCK - VF/pVT</div>
+              <div>{t('rhythmCheckModal.shockVfPvt')}</div>
               <div className="text-sm font-normal opacity-90">
-                Shock #{shockNumber} @ {currentEnergy}J
+                {t('rhythmCheckModal.shockAt', { number: shockNumber, energy: currentEnergy })}
               </div>
             </div>
           </Button>
@@ -69,8 +72,8 @@ export function RhythmCheckModal({
               )}
             >
               <Activity className="h-5 w-5" />
-              <span>Asystole</span>
-              <span className="text-xs font-normal">No shock</span>
+              <span>{t('rhythm.asystole')}</span>
+              <span className="text-xs font-normal">{t('rhythmCheckModal.noShock')}</span>
             </Button>
 
             <Button
@@ -83,8 +86,8 @@ export function RhythmCheckModal({
               )}
             >
               <Heart className="h-5 w-5" />
-              <span>PEA</span>
-              <span className="text-xs font-normal">No shock</span>
+              <span>{t('rhythm.pea')}</span>
+              <span className="text-xs font-normal">{t('rhythmCheckModal.noShock')}</span>
             </Button>
           </div>
 
@@ -95,7 +98,7 @@ export function RhythmCheckModal({
             className="w-full h-14 text-base font-semibold gap-2 border-2"
           >
             <RotateCcw className="h-5 w-5" />
-            Resume CPR - Same Rhythm
+            {t('actions.resumeCPR')}
           </Button>
 
           {/* ROSC */}
@@ -108,8 +111,8 @@ export function RhythmCheckModal({
           >
             <Heart className="h-6 w-6" />
             <div className="text-left">
-              <div>ROSC - Pulse Detected!</div>
-              <div className="text-sm font-normal opacity-90">Spontaneous circulation restored</div>
+              <div>{t('actions.rosc')} - {t('postRosc.roscAchieved')}</div>
+              <div className="text-sm font-normal opacity-90">{t('postRosc.beginCare')}</div>
             </div>
           </Button>
 
@@ -124,7 +127,7 @@ export function RhythmCheckModal({
             )}
           >
             <XCircle className="h-5 w-5" />
-            Terminate Code - Declare Death
+            {t('actions.terminate')}
           </Button>
         </div>
       </div>

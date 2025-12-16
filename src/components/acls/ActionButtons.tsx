@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Syringe, Pill, Stethoscope } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -25,9 +26,11 @@ export function ActionButtons({
   onAmiodarone,
   onRhythmCheck,
 }: ActionButtonsProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-3">
-      <h2 className="text-lg font-semibold text-foreground">Actions</h2>
+      <h2 className="text-lg font-semibold text-foreground">{t('actions.title')}</h2>
       
       {/* Rhythm Check Button - Most prominent when due */}
       <Button
@@ -40,7 +43,7 @@ export function ActionButtons({
         )}
       >
         <Stethoscope className="h-6 w-6" />
-        <span>{rhythmCheckDue ? 'RHYTHM CHECK NOW' : 'RHYTHM CHECK'}</span>
+        <span>{rhythmCheckDue ? t('actions.rhythmCheckNow') : t('actions.rhythmCheck')}</span>
       </Button>
 
       <div className="grid grid-cols-2 gap-3">
@@ -58,7 +61,7 @@ export function ActionButtons({
           )}
         >
           <Syringe className="h-6 w-6" />
-          <span>EPINEPHRINE</span>
+          <span>{t('actions.epinephrine')}</span>
           <span className="text-xs font-normal">
             1mg IV/IO (#{epinephrineCount + 1})
           </span>
@@ -76,7 +79,7 @@ export function ActionButtons({
           )}
         >
           <Pill className="h-6 w-6" />
-          <span>AMIODARONE</span>
+          <span>{t('actions.amiodarone')}</span>
           <span className="text-xs font-normal">
             {amiodaroneCount === 0 ? '300mg' : '150mg'} (#{amiodaroneCount + 1})
           </span>

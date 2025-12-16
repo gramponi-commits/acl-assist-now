@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { Clock, Syringe, Timer, Activity } from 'lucide-react';
 
@@ -37,6 +38,7 @@ export function TimerDisplay({
   preShockAlert, 
   rhythmCheckDue 
 }: TimerDisplayProps) {
+  const { t } = useTranslation();
   const epiDue = epiRemaining === 0;
   const cprFraction = totalElapsed > 0 ? ((totalCPRTime / totalElapsed) * 100).toFixed(0) : '100';
 
@@ -58,23 +60,23 @@ export function TimerDisplay({
           <div className="flex items-center justify-center gap-2 mb-1">
             <Timer className="h-4 w-4" />
             <span className="text-sm font-medium text-muted-foreground">
-              Rhythm Check
+              {t('timers.rhythmCheck')}
             </span>
           </div>
           <div className={cn(
             'text-3xl font-mono font-bold',
             rhythmCheckDue ? 'text-acls-critical' : preShockAlert ? 'text-acls-warning' : 'text-foreground'
           )}>
-            {rhythmCheckDue ? 'NOW' : formatTime(cprCycleRemaining)}
+            {rhythmCheckDue ? t('timers.now') : formatTime(cprCycleRemaining)}
           </div>
           {preShockAlert && !rhythmCheckDue && (
             <div className="text-xs text-acls-warning font-bold mt-1 animate-pulse">
-              ⚡ PRE-CHARGE AED
+              ⚡ {t('timers.preCharge')}
             </div>
           )}
           {rhythmCheckDue && (
             <div className="text-xs text-acls-critical font-bold mt-1">
-              TAP RHYTHM CHECK
+              {t('timers.tapRhythmCheck')}
             </div>
           )}
         </div>
@@ -90,17 +92,17 @@ export function TimerDisplay({
         >
           <div className="flex items-center justify-center gap-2 mb-1">
             <Syringe className="h-4 w-4" />
-            <span className="text-sm font-medium text-muted-foreground">Epi Due In</span>
+            <span className="text-sm font-medium text-muted-foreground">{t('timers.epiDueIn')}</span>
           </div>
           <div className={cn(
             'text-3xl font-mono font-bold',
             epiDue ? 'text-acls-critical' : 'text-foreground'
           )}>
-            {epiDue ? 'NOW' : formatTime(epiRemaining)}
+            {epiDue ? t('timers.now') : formatTime(epiRemaining)}
           </div>
           {epiDue && (
             <div className="text-xs text-acls-critical font-bold mt-1">
-              GIVE EPI 1mg
+              {t('timers.giveEpi')}
             </div>
           )}
         </div>
@@ -112,7 +114,7 @@ export function TimerDisplay({
         <div className="rounded-lg p-2 text-center bg-card border border-border">
           <div className="flex items-center justify-center gap-1 mb-1">
             <Clock className="h-3 w-3 text-muted-foreground" />
-            <span className="text-xs text-muted-foreground">Total</span>
+            <span className="text-xs text-muted-foreground">{t('timers.total')}</span>
           </div>
           <div className="text-lg font-mono font-semibold text-foreground">
             {formatDuration(totalElapsed)}
@@ -123,7 +125,7 @@ export function TimerDisplay({
         <div className="rounded-lg p-2 text-center bg-card border border-border">
           <div className="flex items-center justify-center gap-1 mb-1">
             <Activity className="h-3 w-3 text-muted-foreground" />
-            <span className="text-xs text-muted-foreground">CPR</span>
+            <span className="text-xs text-muted-foreground">{t('timers.cpr')}</span>
           </div>
           <div className="text-lg font-mono font-semibold text-foreground">
             {formatDuration(totalCPRTime)}
@@ -140,7 +142,7 @@ export function TimerDisplay({
             : 'bg-acls-critical/10 border-acls-critical'
         )}>
           <div className="flex items-center justify-center gap-1 mb-1">
-            <span className="text-xs text-muted-foreground">CPR%</span>
+            <span className="text-xs text-muted-foreground">{t('timers.cpr')}%</span>
           </div>
           <div className={cn(
             'text-lg font-mono font-bold',

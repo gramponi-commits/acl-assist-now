@@ -7,17 +7,20 @@
   "rhythm": {
     "identify": "IDENTIFICA RITMO",
     "selectInitial": "Seleziona il ritmo iniziale per iniziare il protocollo ACLS",
-    "vfPvt": "FV/TVp",
-    "shockable": "Defibrillabile",
+    "changeRhythm": "Cambia Ritmo",
+    "vfPvt": "FV / TVp",
+    "shockable": "Ritmo Defibrillabile",
     "asystole": "Asistolia",
     "nonShockable": "Non Defibrillabile",
     "pea": "PEA"
   },
   "actions": {
+    "title": "Azioni",
     "shock": "SHOCK",
     "epinephrine": "EPINEFRINA",
     "amiodarone": "AMIODARONE",
-    "rhythmCheck": "Controllo Ritmo",
+    "rhythmCheck": "CONTROLLO RITMO",
+    "rhythmCheckNow": "CONTROLLO RITMO ORA",
     "rosc": "ROSC",
     "terminate": "Termina Codice - Dichiara Decesso",
     "resumeCPR": "Riprendi RCP - Stesso Ritmo",
@@ -28,17 +31,20 @@
     "newCode": "Nuovo Codice"
   },
   "timers": {
-    "cprCycle": "Ciclo RCP",
-    "epiDue": "Epi Dovuta",
+    "rhythmCheck": "Controllo Ritmo",
+    "epiDueIn": "Epi Scadenza",
+    "now": "ORA",
+    "preCharge": "PRE-CARICA DAE",
+    "tapRhythmCheck": "TOCCA CONTROLLO RITMO",
+    "giveEpi": "SOMMINISTRA EPI 1mg",
     "total": "Totale",
-    "cpr": "RCP",
-    "preCharge": "PRE-CARICA DEFIBRILLATORE",
-    "rhythmCheckIn": "Controllo ritmo tra"
+    "cpr": "RCP"
   },
-  "rhythmCheck": {
+  "rhythmCheckModal": {
     "title": "CONTROLLO RITMO",
     "subtitle": "Pausa breve RCP. Analizza ritmo. Controlla polso.",
     "shockVfPvt": "SHOCK - FV/TVp",
+    "shockAt": "Shock #{{number}} @ {{energy}}J",
     "noShock": "No shock"
   },
   "codeEnded": {
@@ -49,7 +55,7 @@
     "cprTime": "Tempo RCP",
     "cprFraction": "Frazione RCP",
     "shocks": "Shock",
-    "epiDoses": "dosi"
+    "doses": "dosi"
   },
   "postRosc": {
     "roscAchieved": "ROSC RAGGIUNTO",
@@ -57,23 +63,58 @@
     "vitalTargets": "Obiettivi Vitali",
     "target": "Target",
     "inRange": "Nel Range",
-    "outOfRange": "Fuori Range"
+    "outOfRange": "Fuori Range",
+    "initialStabilization": "Stabilizzazione Iniziale",
+    "diagnostics": "Diagnostica",
+    "neuroprotection": "Neuroprotezione",
+    "specialAssessments": "Valutazioni Speciali",
+    "airwaySecured": "Vie aeree assicurate",
+    "ventilationOptimized": "Ventilazione ottimizzata",
+    "hemodynamicsOptimized": "Emodinamica ottimizzata",
+    "twelveLeadECG": "ECG a 12 derivazioni eseguito",
+    "labsOrdered": "Esami richiesti",
+    "ctHeadOrdered": "TC Cranio/Torace/Addome considerata",
+    "echoOrdered": "Ecocardiografia richiesta",
+    "temperatureManagement": "Gestione temperatura iniziata",
+    "neurologicalAssessment": "Valutazione neurologica",
+    "eegOrdered": "EEG richiesto se comatoso",
+    "followingCommands": "Segue comandi?",
+    "stElevation": "Sopraslivellamento ST presente?",
+    "cardiogenicShock": "Shock cardiogeno?",
+    "yes": "Sì",
+    "no": "No"
   },
   "hsTs": {
     "title": "H's & T's - Cause Reversibili",
+    "itemsChecked": "{{count}} elemento/i selezionato/i",
+    "tapToReview": "Tocca per rivedere",
+    "hs": "H's",
+    "ts": "T's",
     "hypovolemia": "Ipovolemia",
+    "hypovolemiaDesc": "Rianimazione volemica, emoderivati",
     "hypoxia": "Ipossia",
-    "hydrogenIon": "Ione idrogeno (acidosi)",
+    "hypoxiaDesc": "Ossigenazione, vie aeree sicure",
+    "hydrogenIon": "Ione Idrogeno (Acidosi)",
+    "hydrogenIonDesc": "Considerare bicarbonato, ventilazione",
     "hypoHyperkalemia": "Ipo/Iperkaliemia",
+    "hypoHyperkalemiaDesc": "Controlla K+, calcio, D50/insulina",
     "hypothermia": "Ipotermia",
-    "tensionPneumo": "Pneumotorace iperteso",
-    "tamponade": "Tamponamento",
+    "hypothermiaDesc": "Liquidi caldi, riscaldamento",
+    "tensionPneumo": "Pneumotorace Iperteso",
+    "tensionPneumoDesc": "Decompressione con ago, drenaggio toracico",
+    "tamponade": "Tamponamento (Cardiaco)",
+    "tamponadeDesc": "Pericardiocentesi, eco",
     "toxins": "Tossine",
-    "thrombosisPulm": "Trombosi (polmonare)",
-    "thrombosisCoro": "Trombosi (coronarica)"
+    "toxinsDesc": "Antidoti, decontaminazione",
+    "thrombosisPulm": "Trombosi (Polmonare)",
+    "thrombosisPulmDesc": "Trombolitici, considerare ECMO",
+    "thrombosisCoro": "Trombosi (Coronarica)",
+    "thrombosisCoroDesc": "PCI, trombolitici"
   },
   "timeline": {
-    "title": "Cronologia Codice"
+    "title": "Cronologia Codice",
+    "events": "eventi",
+    "noInterventions": "Nessun intervento registrato"
   },
   "history": {
     "title": "Cronologia Sessioni",
@@ -97,5 +138,16 @@
     "back": "Indietro",
     "confirm": "Conferma",
     "cancel": "Annulla"
+  },
+  "airway": {
+    "title": "Stato Vie Aeree",
+    "none": "Nessuno",
+    "bvm": "AMBU",
+    "advanced": "Avanzato"
+  },
+  "cpr": {
+    "title": "Qualità RCP",
+    "compressionRate": "Frequenza Compressioni",
+    "targetRate": "Target: 100-120/min"
   }
 }
