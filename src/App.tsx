@@ -9,6 +9,7 @@ import { MobileHeader } from "@/components/MobileHeader";
 import Index from "./pages/Index";
 import SessionHistory from "./pages/SessionHistory";
 import Settings from "./pages/Settings";
+import Training from "./pages/Training";
 import NotFound from "./pages/NotFound";
 import "@/i18n";
 
@@ -27,6 +28,7 @@ const App = () => (
             <main className="flex-1 overflow-auto pt-14 md:pt-0">
               <Routes>
                 <Route path="/" element={<Index />} />
+                <Route path="/training" element={<Training />} />
                 <Route path="/history" element={<SessionHistory />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="*" element={<NotFound />} />
