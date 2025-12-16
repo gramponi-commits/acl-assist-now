@@ -1,0 +1,101 @@
+{
+  "nav": {
+    "code": "Code",
+    "history": "Session History",
+    "settings": "Settings"
+  },
+  "rhythm": {
+    "identify": "IDENTIFY RHYTHM",
+    "selectInitial": "Select initial rhythm to begin ACLS protocol",
+    "vfPvt": "VF/pVT",
+    "shockable": "Shockable",
+    "asystole": "Asystole",
+    "nonShockable": "Non-Shockable",
+    "pea": "PEA"
+  },
+  "actions": {
+    "shock": "SHOCK",
+    "epinephrine": "EPINEPHRINE",
+    "amiodarone": "AMIODARONE",
+    "rhythmCheck": "Rhythm Check",
+    "rosc": "ROSC",
+    "terminate": "Terminate Code - Declare Death",
+    "resumeCPR": "Resume CPR - Same Rhythm",
+    "export": "Export PDF",
+    "save": "Save Session Locally",
+    "saved": "Saved Locally",
+    "reset": "Reset",
+    "newCode": "New Code"
+  },
+  "timers": {
+    "cprCycle": "CPR Cycle",
+    "epiDue": "Epi Due",
+    "total": "Total",
+    "cpr": "CPR",
+    "preCharge": "PRE-CHARGE DEFIBRILLATOR",
+    "rhythmCheckIn": "Rhythm check in"
+  },
+  "rhythmCheck": {
+    "title": "RHYTHM CHECK",
+    "subtitle": "Pause CPR briefly. Analyze rhythm. Check pulse.",
+    "shockVfPvt": "SHOCK - VF/pVT",
+    "noShock": "No shock"
+  },
+  "codeEnded": {
+    "title": "Code Terminated",
+    "deathDeclared": "Death declared at",
+    "summary": "Code Summary",
+    "duration": "Duration",
+    "cprTime": "CPR Time",
+    "cprFraction": "CPR Fraction",
+    "shocks": "Shocks",
+    "epiDoses": "doses"
+  },
+  "postRosc": {
+    "roscAchieved": "ROSC ACHIEVED",
+    "beginCare": "Begin post-cardiac arrest care",
+    "vitalTargets": "Vital Targets",
+    "target": "Target",
+    "inRange": "In Range",
+    "outOfRange": "Out of Range"
+  },
+  "hsTs": {
+    "title": "H's & T's - Reversible Causes",
+    "hypovolemia": "Hypovolemia",
+    "hypoxia": "Hypoxia",
+    "hydrogenIon": "Hydrogen ion (acidosis)",
+    "hypoHyperkalemia": "Hypo/Hyperkalemia",
+    "hypothermia": "Hypothermia",
+    "tensionPneumo": "Tension pneumothorax",
+    "tamponade": "Tamponade",
+    "toxins": "Toxins",
+    "thrombosisPulm": "Thrombosis (pulmonary)",
+    "thrombosisCoro": "Thrombosis (coronary)"
+  },
+  "timeline": {
+    "title": "Code Timeline"
+  },
+  "history": {
+    "title": "Session History",
+    "noSessions": "No saved sessions yet",
+    "startNew": "Start a new code and save it to see your session history here.",
+    "outcome": "Outcome",
+    "rosc": "ROSC",
+    "deceased": "Deceased",
+    "unknown": "Unknown",
+    "delete": "Delete",
+    "confirmDelete": "Are you sure you want to delete this session?"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "languageDesc": "Select your preferred language",
+    "english": "English",
+    "italian": "Italiano"
+  },
+  "common": {
+    "back": "Back",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "nav": {
+    "code": "Codice",
+    "history": "Cronologia Sessioni",
+    "settings": "Impostazioni"
+  },
+  "rhythm": {
+    "identify": "IDENTIFICA RITMO",
+    "selectInitial": "Seleziona il ritmo iniziale per iniziare il protocollo ACLS",
+    "vfPvt": "FV/TVp",
+    "shockable": "Defibrillabile",
+    "asystole": "Asistolia",
+    "nonShockable": "Non Defibrillabile",
+    "pea": "PEA"
+  },
+  "actions": {
+    "shock": "SHOCK",
+    "epinephrine": "EPINEFRINA",
+    "amiodarone": "AMIODARONE",
+    "rhythmCheck": "Controllo Ritmo",
+    "rosc": "ROSC",
+    "terminate": "Termina Codice - Dichiara Decesso",
+    "resumeCPR": "Riprendi RCP - Stesso Ritmo",
+    "export": "Esporta PDF",
+    "save": "Salva Sessione Localmente",
+    "saved": "Salvato Localmente",
+    "reset": "Reimposta",
+    "newCode": "Nuovo Codice"
+  },
+  "timers": {
+    "cprCycle": "Ciclo RCP",
+    "epiDue": "Epi Dovuta",
+    "total": "Totale",
+    "cpr": "RCP",
+    "preCharge": "PRE-CARICA DEFIBRILLATORE",
+    "rhythmCheckIn": "Controllo ritmo tra"
+  },
+  "rhythmCheck": {
+    "title": "CONTROLLO RITMO",
+    "subtitle": "Pausa breve RCP. Analizza ritmo. Controlla polso.",
+    "shockVfPvt": "SHOCK - FV/TVp",
+    "noShock": "No shock"
+  },
+  "codeEnded": {
+    "title": "Codice Terminato",
+    "deathDeclared": "Decesso dichiarato alle",
+    "summary": "Riepilogo Codice",
+    "duration": "Durata",
+    "cprTime": "Tempo RCP",
+    "cprFraction": "Frazione RCP",
+    "shocks": "Shock",
+    "epiDoses": "dosi"
+  },
+  "postRosc": {
+    "roscAchieved": "ROSC RAGGIUNTO",
+    "beginCare": "Inizia cure post-arresto cardiaco",
+    "vitalTargets": "Obiettivi Vitali",
+    "target": "Target",
+    "inRange": "Nel Range",
+    "outOfRange": "Fuori Range"
+  },
+  "hsTs": {
+    "title": "H's & T's - Cause Reversibili",
+    "hypovolemia": "Ipovolemia",
+    "hypoxia": "Ipossia",
+    "hydrogenIon": "Ione idrogeno (acidosi)",
+    "hypoHyperkalemia": "Ipo/Iperkaliemia",
+    "hypothermia": "Ipotermia",
+    "tensionPneumo": "Pneumotorace iperteso",
+    "tamponade": "Tamponamento",
+    "toxins": "Tossine",
+    "thrombosisPulm": "Trombosi (polmonare)",
+    "thrombosisCoro": "Trombosi (coronarica)"
+  },
+  "timeline": {
+    "title": "Cronologia Codice"
+  },
+  "history": {
+    "title": "Cronologia Sessioni",
+    "noSessions": "Nessuna sessione salvata",
+    "startNew": "Inizia un nuovo codice e salvalo per vedere la cronologia delle sessioni qui.",
+    "outcome": "Esito",
+    "rosc": "ROSC",
+    "deceased": "Deceduto",
+    "unknown": "Sconosciuto",
+    "delete": "Elimina",
+    "confirmDelete": "Sei sicuro di voler eliminare questa sessione?"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "language": "Lingua",
+    "languageDesc": "Seleziona la tua lingua preferita",
+    "english": "English",
+    "italian": "Italiano"
+  },
+  "common": {
+    "back": "Indietro",
+    "confirm": "Conferma",
+    "cancel": "Annulla"
+  }
+}
