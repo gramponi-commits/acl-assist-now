@@ -75,6 +75,7 @@
       "rosc": "ROSC"
     }
   },
+  "rhythm": {
     "identify": "IDENTIFY RHYTHM",
     "selectInitial": "Select initial rhythm to begin ACLS protocol",
     "changeRhythm": "Change Rhythm",
