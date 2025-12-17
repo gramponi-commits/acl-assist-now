@@ -3,7 +3,8 @@
     "code": "Code",
     "history": "Session History",
     "settings": "Settings",
-    "install": "Install App"
+    "install": "Install App",
+    "about": "Info"
   },
   "rhythm": {
     "identify": "IDENTIFY RHYTHM",
@@ -270,5 +271,21 @@
     "benefit3": "Screen stays on during resuscitation",
     "benefit4": "Auto-updates when online",
     "footer": "The app updates automatically when connected to the internet"
+  },
+  "about": {
+    "title": "Info",
+    "disclaimerTitle": "Disclaimer",
+    "disclaimerEducational": "This app is intended solely for educational and training purposes in simulations",
+    "disclaimerNotReal": "Do not use on real patients - always follow local protocols and clinical judgment",
+    "disclaimerResponsibility": "The user is solely responsible for clinical decisions made during real resuscitations",
+    "developerTitle": "Developer",
+    "developerName": "Developed by Dr. Giacomo Ramponi",
+    "usageTitle": "Usage",
+    "usageFree": "Completely free to use",
+    "usageLocalData": "All data saved locally on your device only",
+    "usageOffline": "Works fully offline",
+    "referencesTitle": "References",
+    "referencesAHA": "Based on AHA 2025 Adult Cardiac Arrest Algorithm Guidelines",
+    "version": "Version"
   }
 }

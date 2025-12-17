@@ -3,7 +3,8 @@
     "code": "Codice",
     "history": "Cronologia Sessioni",
     "settings": "Impostazioni",
-    "install": "Installa App"
+    "install": "Installa App",
+    "about": "Info"
   },
   "rhythm": {
     "identify": "IDENTIFICA RITMO",
@@ -270,5 +271,21 @@
     "benefit3": "Lo schermo resta acceso durante la rianimazione",
     "benefit4": "Aggiornamenti automatici quando online",
     "footer": "L'app si aggiorna automaticamente quando connessa a internet"
+  },
+  "about": {
+    "title": "Info",
+    "disclaimerTitle": "Disclaimer",
+    "disclaimerEducational": "Questa app è destinata esclusivamente a scopi educativi e formativi in simulazioni/training",
+    "disclaimerNotReal": "Non utilizzare su pazienti reali - seguire sempre i protocolli locali e il giudizio clinico",
+    "disclaimerResponsibility": "L'utente è l'unico responsabile delle decisioni cliniche prese durante rianimazioni reali",
+    "developerTitle": "Sviluppatore",
+    "developerName": "Sviluppato da Dr. Giacomo Ramponi",
+    "usageTitle": "Utilizzo",
+    "usageFree": "Completamente gratuito",
+    "usageLocalData": "Tutti i dati salvati localmente solo sul tuo dispositivo",
+    "usageOffline": "Funziona completamente offline",
+    "referencesTitle": "Riferimenti",
+    "referencesAHA": "Basata sulle Linee Guida AHA 2025 per l'Arresto Cardiaco dell'Adulto",
+    "version": "Versione"
   }
 }
