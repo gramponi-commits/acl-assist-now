@@ -249,17 +249,10 @@ export function CodeScreen() {
                 </div>
               </div>
 
-              {/* Analyze Rhythm Button - Prominent */}
-              <Button
-                onClick={() => {}}
-                className="h-16 w-full text-xl font-bold bg-primary hover:bg-primary/90"
-                asChild
-              >
-                <div>
-                  <Activity className="h-6 w-6 mr-2" />
-                  {t('actions.analyzeRhythm')}
-                </div>
-              </Button>
+              {/* Prompt to select rhythm */}
+              <div className="text-center text-muted-foreground text-sm">
+                {t('banner.analyzeRhythmWhenReady')}
+              </div>
               
               {/* Rhythm Selector for first analysis */}
               <RhythmSelector
