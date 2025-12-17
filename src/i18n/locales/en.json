@@ -286,6 +286,12 @@
     "usageOffline": "Works fully offline",
     "referencesTitle": "References",
     "referencesAHA": "Based on AHA 2025 Adult Cardiac Arrest Algorithm Guidelines",
-    "version": "Version"
+    "version": "Version",
+    "shareTitle": "Share",
+    "shareDesc": "Share this app with colleagues for training",
+    "shareText": "Check out this ACLS training app!",
+    "copyLink": "Copy Link",
+    "share": "Share",
+    "linkCopied": "Link copied!"
   }
 }

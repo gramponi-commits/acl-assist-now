@@ -11,7 +11,7 @@ export function CommandBanner({ message, priority, subMessage }: CommandBannerPr
     <div
       className={cn(
         'w-full px-4 py-4 text-center transition-all duration-300',
-        priority === 'critical' && 'bg-acls-critical text-acls-critical-foreground animate-pulse',
+        priority === 'critical' && 'bg-acls-critical text-acls-critical-foreground',
         priority === 'warning' && 'bg-acls-warning text-acls-warning-foreground',
         priority === 'info' && 'bg-acls-info text-acls-info-foreground',
         priority === 'success' && 'bg-acls-success text-acls-success-foreground'
