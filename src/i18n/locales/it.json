@@ -286,6 +286,12 @@
     "usageOffline": "Funziona completamente offline",
     "referencesTitle": "Riferimenti",
     "referencesAHA": "Basata sulle Linee Guida AHA 2025 per l'Arresto Cardiaco dell'Adulto",
-    "version": "Versione"
+    "version": "Versione",
+    "shareTitle": "Condividi",
+    "shareDesc": "Condividi questa app con i colleghi per la formazione",
+    "shareText": "Prova questa app per il training ACLS!",
+    "copyLink": "Copia Link",
+    "share": "Condividi",
+    "linkCopied": "Link copiato!"
   }
 }

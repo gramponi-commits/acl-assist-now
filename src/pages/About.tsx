@@ -1,10 +1,47 @@
 import { useTranslation } from 'react-i18next';
-import { AlertTriangle, User, Gift, BookOpen, Shield, Info, ExternalLink } from 'lucide-react';
+import { AlertTriangle, User, Gift, BookOpen, Shield, Info, ExternalLink, Share2, Copy, Mail, MessageCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { toast } from '@/hooks/use-toast';
 
 const About = () => {
   const { t } = useTranslation();
+  const appUrl = window.location.origin;
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(appUrl);
+      toast({ title: t('about.linkCopied') });
+    } catch {
+      toast({ title: 'Failed to copy', variant: 'destructive' });
+    }
+  };
+
+  const handleNativeShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'ACLS Training App',
+          text: t('about.shareText'),
+          url: appUrl,
+        });
+      } catch {
+        // User cancelled
+      }
+    }
+  };
+
+  const handleWhatsAppShare = () => {
+    const text = encodeURIComponent(`${t('about.shareText')} ${appUrl}`);
+    window.open(`https://wa.me/?text=${text}`, '_blank');
+  };
+
+  const handleEmailShare = () => {
+    const subject = encodeURIComponent('ACLS Training App');
+    const body = encodeURIComponent(`${t('about.shareText')}\n\n${appUrl}`);
+    window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
+  };
 
   return (
     <div className="container mx-auto px-4 py-6 max-w-2xl">
@@ -25,6 +62,39 @@ const About = () => {
           </ul>
         </AlertDescription>
       </Alert>
+
+      {/* Share */}
+      <Card className="mb-4">
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Share2 className="h-5 w-5 text-primary" />
+            {t('about.shareTitle')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground text-sm mb-3">{t('about.shareDesc')}</p>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" size="sm" onClick={handleCopyLink}>
+              <Copy className="h-4 w-4 mr-2" />
+              {t('about.copyLink')}
+            </Button>
+            {navigator.share && (
+              <Button variant="outline" size="sm" onClick={handleNativeShare}>
+                <Share2 className="h-4 w-4 mr-2" />
+                {t('about.share')}
+              </Button>
+            )}
+            <Button variant="outline" size="sm" onClick={handleWhatsAppShare}>
+              <MessageCircle className="h-4 w-4 mr-2" />
+              WhatsApp
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleEmailShare}>
+              <Mail className="h-4 w-4 mr-2" />
+              Email
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Developer Credits */}
       <Card className="mb-4">

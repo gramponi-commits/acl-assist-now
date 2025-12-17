@@ -224,7 +224,7 @@ export function CodeScreen() {
           {isInitial && (
             <div className="flex flex-col items-center justify-center py-12 space-y-6">
               <div className="text-center space-y-2">
-                <Heart className="h-16 w-16 text-acls-shockable mx-auto animate-pulse" />
+                <Heart className="h-16 w-16 text-acls-shockable mx-auto" />
                 <h2 className="text-2xl font-bold text-foreground">{t('actions.startCPR')}</h2>
                 <p className="text-muted-foreground">{t('actions.startCPRDesc')}</p>
               </div>
@@ -242,7 +242,7 @@ export function CodeScreen() {
           {isCPRPendingRhythm && (
             <>
               {/* CPR Active Indicator */}
-              <div className="bg-acls-warning/20 border-2 border-acls-warning rounded-lg p-4 text-center animate-pulse">
+              <div className="bg-acls-warning/20 border-2 border-acls-warning rounded-lg p-4 text-center">
                 <div className="flex items-center justify-center gap-2 text-acls-warning font-bold text-lg">
                   <Heart className="h-6 w-6" />
                   {t('banner.cprActive')}
