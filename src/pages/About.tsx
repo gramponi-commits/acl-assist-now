@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { AlertTriangle, User, Gift, BookOpen, Shield, Info } from 'lucide-react';
+import { AlertTriangle, Gift, BookOpen, Shield, Info, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import developerHeadshot from '@/assets/developer-headshot.jpg';
 
 const About = () => {
   const { t } = useTranslation();
@@ -30,12 +31,24 @@ const About = () => {
       <Card className="mb-4">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-lg">
-            <User className="h-5 w-5 text-primary" />
+            <img 
+              src={developerHeadshot} 
+              alt="Dr. Giacomo Ramponi" 
+              className="h-6 w-6 rounded-full object-cover"
+            />
             {t('about.developerTitle')}
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">{t('about.developerName')}</p>
+          <a 
+            href="https://www.linkedin.com/in/g-r-078715203/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-primary flex items-center gap-2 transition-colors"
+          >
+            {t('about.developerName')}
+            <ExternalLink className="h-4 w-4" />
+          </a>
         </CardContent>
       </Card>
 
@@ -74,7 +87,15 @@ const About = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">{t('about.referencesAHA')}</p>
+          <a 
+            href="https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines/algorithms" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-primary flex items-center gap-2 transition-colors"
+          >
+            {t('about.referencesAHA')}
+            <ExternalLink className="h-4 w-4" />
+          </a>
         </CardContent>
       </Card>
 
