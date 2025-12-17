@@ -2,7 +2,8 @@
   "nav": {
     "code": "Codice",
     "history": "Cronologia Sessioni",
-    "settings": "Impostazioni"
+    "settings": "Impostazioni",
+    "install": "Installa App"
   },
   "rhythm": {
     "identify": "IDENTIFICA RITMO",
@@ -240,5 +241,34 @@
     "epiDue": "Adrenalina",
     "resumeCPR": "Ricomincia RCP",
     "rosc": "ROSC"
+  },
+  "install": {
+    "title": "Installa App",
+    "subtitle": "Aggiungi ACLS alla schermata home per accesso immediato",
+    "alreadyInstalled": "L'app è già installata!",
+    "installNow": "Installa Ora",
+    "yourDevice": "Il tuo dispositivo",
+    "iosTitle": "iPhone / iPad",
+    "iosNote": "Devi usare Safari - Chrome/Firefox non funzionano su iOS",
+    "iosStep1Title": "Tocca il pulsante Condividi",
+    "iosStep1Desc": "Trova l'icona di condivisione (quadrato con freccia) in basso su Safari",
+    "iosStep2Title": "Aggiungi alla schermata Home",
+    "iosStep2Desc": "Scorri verso il basso e tocca \"Aggiungi alla schermata Home\"",
+    "iosStep3Title": "Conferma",
+    "iosStep3Desc": "Tocca \"Aggiungi\" in alto a destra",
+    "androidTitle": "Android",
+    "androidNote": "Funziona meglio con il browser Chrome",
+    "androidStep1Title": "Apri menu",
+    "androidStep1Desc": "Tocca i tre puntini (⋮) in alto a destra su Chrome",
+    "androidStep2Title": "Installa app",
+    "androidStep2Desc": "Tocca \"Installa app\" o \"Aggiungi a schermata Home\"",
+    "androidStep3Title": "Conferma",
+    "androidStep3Desc": "Tocca \"Installa\" per aggiungere l'app",
+    "benefitsTitle": "Vantaggi dell'Installazione",
+    "benefit1": "Funziona offline - nessuna connessione necessaria durante i codici",
+    "benefit2": "Avvio istantaneo dalla schermata home",
+    "benefit3": "Lo schermo resta acceso durante la rianimazione",
+    "benefit4": "Aggiornamenti automatici quando online",
+    "footer": "L'app si aggiorna automaticamente quando connessa a internet"
   }
 }

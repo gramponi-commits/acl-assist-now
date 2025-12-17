@@ -2,7 +2,8 @@
   "nav": {
     "code": "Code",
     "history": "Session History",
-    "settings": "Settings"
+    "settings": "Settings",
+    "install": "Install App"
   },
   "rhythm": {
     "identify": "IDENTIFY RHYTHM",
@@ -240,5 +241,34 @@
     "epiDue": "Epinephrine",
     "resumeCPR": "Resume CPR",
     "rosc": "ROSC"
+  },
+  "install": {
+    "title": "Install App",
+    "subtitle": "Add ACLS to your home screen for instant access",
+    "alreadyInstalled": "App is already installed!",
+    "installNow": "Install Now",
+    "yourDevice": "Your device",
+    "iosTitle": "iPhone / iPad",
+    "iosNote": "Must use Safari browser - Chrome/Firefox won't work on iOS",
+    "iosStep1Title": "Tap the Share button",
+    "iosStep1Desc": "Find the share icon (square with arrow) at the bottom of Safari",
+    "iosStep2Title": "Add to Home Screen",
+    "iosStep2Desc": "Scroll down and tap \"Add to Home Screen\"",
+    "iosStep3Title": "Confirm",
+    "iosStep3Desc": "Tap \"Add\" in the top right corner",
+    "androidTitle": "Android",
+    "androidNote": "Works best with Chrome browser",
+    "androidStep1Title": "Open menu",
+    "androidStep1Desc": "Tap the three dots (⋮) in the top right corner of Chrome",
+    "androidStep2Title": "Install app",
+    "androidStep2Desc": "Tap \"Install app\" or \"Add to Home screen\"",
+    "androidStep3Title": "Confirm",
+    "androidStep3Desc": "Tap \"Install\" to add the app",
+    "benefitsTitle": "Benefits of Installing",
+    "benefit1": "Works offline - no internet required during codes",
+    "benefit2": "Instant launch from home screen",
+    "benefit3": "Screen stays on during resuscitation",
+    "benefit4": "Auto-updates when online",
+    "footer": "The app updates automatically when connected to the internet"
   }
 }
