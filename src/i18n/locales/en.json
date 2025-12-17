@@ -1,79 +1,8 @@
 {
   "nav": {
     "code": "Code",
-    "training": "Training",
     "history": "Session History",
     "settings": "Settings"
-  },
-  "training": {
-    "title": "Training Mode",
-    "subtitle": "Practice ACLS scenarios with real-time feedback",
-    "mode": "Training",
-    "startScenario": "Start Scenario",
-    "objectives": "Objectives",
-    "more": "more",
-    "allLevels": "All",
-    "difficulty": {
-      "beginner": "Beginner",
-      "intermediate": "Intermediate",
-      "advanced": "Advanced"
-    },
-    "reviewTitle": "Performance Review",
-    "points": "points",
-    "protocolAdherence": "Protocol",
-    "timingAccuracy": "Timing",
-    "cprFraction": "CPR %",
-    "actionTimeline": "Action Timeline",
-    "noActions": "No actions recorded",
-    "backToScenarios": "Back to Scenarios",
-    "retry": "Retry",
-    "scenarioComplete": "Scenario completed successfully!",
-    "grades": {
-      "excellent": "Excellent",
-      "good": "Good",
-      "satisfactory": "Satisfactory",
-      "needsWork": "Needs Work",
-      "unsatisfactory": "Unsatisfactory"
-    }
-  },
-  "quiz": {
-    "subtitle": "Practice rhythm recognition and ACLS decision-making",
-    "ecgMonitor": "ECG Monitor",
-    "pulsePresent": "PULSE PRESENT",
-    "noPulse": "NO PULSE",
-    "whatRhythm": "What is this rhythm?",
-    "correct": "Correct!",
-    "incorrect": "Incorrect",
-    "correctWas": "Correct answer",
-    "complete": "Quiz Complete!",
-    "correctAnswers": "Correct",
-    "avgTime": "Avg Time",
-    "answerTimeline": "Your Answers",
-    "youAnswered": "You said",
-    "backToQuizzes": "Back",
-    "tryAgain": "Try Again",
-    "questions": "questions",
-    "start": "Start",
-    "quizBasicRecognition": "Basic Rhythm Recognition",
-    "quizBasicRecognitionDesc": "Learn to identify VF, VT, and Asystole",
-    "quizPEAvsROSC": "PEA vs ROSC",
-    "quizPEAvsROSCDesc": "Distinguish PEA from sinus rhythm using pulse check",
-    "quizFullAssessment": "Full Assessment",
-    "quizFullAssessmentDesc": "All rhythms including pulse differentiation",
-    "quizQuickFire": "Quick Fire",
-    "quizQuickFireDesc": "Rapid rhythm identification challenge",
-    "rhythms": {
-      "vf": "Ventricular Fibrillation (VF)",
-      "vt": "Ventricular Tachycardia (VT)",
-      "asystole": "Asystole",
-      "pea": "PEA (Pulseless Electrical Activity)",
-      "sinus": "Sinus Rhythm (ROSC)"
-    },
-    "actions": {
-      "shock": "SHOCK",
-      "cpr": "Continue CPR",
-      "rosc": "ROSC"
-    }
   },
   "rhythm": {
     "identify": "IDENTIFY RHYTHM",
