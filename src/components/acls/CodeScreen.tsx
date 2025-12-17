@@ -49,6 +49,7 @@ export function CodeScreen() {
   const prevRhythmCheckDue = useRef(false);
   const prevPreShockAlert = useRef(false);
   const prevEpiDue = useRef(false);
+  const prevAntiarrhythmicDue = useRef(false);
 
   const isActive = session.phase === 'shockable_pathway' || session.phase === 'non_shockable_pathway';
   const isCPRPendingRhythm = session.phase === 'cpr_pending_rhythm';
@@ -142,7 +143,18 @@ export function CodeScreen() {
       if (settings.vibrationEnabled) vibrate([300, 150, 300]);
     }
     prevEpiDue.current = buttonStates.epiDue;
-  }, [timerState.rhythmCheckDue, timerState.preShockAlert, buttonStates.epiDue, playAlert, announce, vibrate, settings.vibrationEnabled]);
+
+    // Antiarrhythmic due alert (after shock #3)
+    const antiarrhythmicDue = session.shockCount >= 3 && (buttonStates.canGiveAmiodarone || buttonStates.canGiveLidocaine);
+    if (antiarrhythmicDue && !prevAntiarrhythmicDue.current) {
+      if (settings.preferLidocaine) {
+        announce('lidocaineDue');
+      } else {
+        announce('amiodaroneDue');
+      }
+    }
+    prevAntiarrhythmicDue.current = antiarrhythmicDue;
+  }, [timerState.rhythmCheckDue, timerState.preShockAlert, buttonStates.epiDue, buttonStates.canGiveAmiodarone, buttonStates.canGiveLidocaine, session.shockCount, playAlert, announce, vibrate, settings.vibrationEnabled, settings.preferLidocaine]);
 
   // ROSC alert
   useEffect(() => {
@@ -406,10 +418,22 @@ export function CodeScreen() {
               isShockable={session.currentRhythm === 'vf_pvt'}
               currentEnergy={session.currentEnergy}
               shockNumber={session.shockCount + 1}
-              onShock={actions.completeRhythmCheckWithShock}
-              onNoShockAsystole={() => actions.completeRhythmCheckNoShock('asystole')}
-              onNoShockPEA={() => actions.completeRhythmCheckNoShock('pea')}
-              onResumeCPR={actions.completeRhythmCheckResumeCPR}
+              onShock={() => {
+                announce('shock');
+                actions.completeRhythmCheckWithShock();
+              }}
+              onNoShockAsystole={() => {
+                announce('noShock');
+                actions.completeRhythmCheckNoShock('asystole');
+              }}
+              onNoShockPEA={() => {
+                announce('noShock');
+                actions.completeRhythmCheckNoShock('pea');
+              }}
+              onResumeCPR={() => {
+                announce('resumeCPR');
+                actions.completeRhythmCheckResumeCPR();
+              }}
               onROSC={actions.achieveROSC}
               onTerminate={actions.terminateCode}
             />

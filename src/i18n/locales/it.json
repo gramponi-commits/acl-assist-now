@@ -241,7 +241,11 @@
     "preCharge": "15 secondi, carica defibrillatore",
     "epiDue": "Adrenalina",
     "resumeCPR": "Ricomincia RCP",
-    "rosc": "ROSC"
+    "rosc": "ROSC",
+    "amiodaroneDue": "Amiodarone",
+    "lidocaineDue": "Lidocaina",
+    "shock": "Shock erogato",
+    "noShock": "Nessuno shock, ricomincia RCP"
   },
   "install": {
     "title": "Installa App",
