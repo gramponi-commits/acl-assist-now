@@ -211,26 +211,23 @@ export function CodeScreen() {
         onAddNote={handleAddNote}
       />
 
-      {/* Command Banner - Always visible at top */}
-      <CommandBanner
-        message={commandBanner.message}
-        priority={commandBanner.priority}
-        subMessage={commandBanner.subMessage}
-      />
+      {/* Command Banner - Hidden on initial screen */}
+      {!isInitial && (
+        <CommandBanner
+          message={commandBanner.message}
+          priority={commandBanner.priority}
+          subMessage={commandBanner.subMessage}
+        />
+      )}
 
       <ScrollArea className="flex-1">
         <div className="p-4 space-y-4 max-w-lg mx-auto">
-          {/* Initial Screen - Start CPR Button */}
+          {/* Initial Screen - Start CPR Button Only */}
           {isInitial && (
-            <div className="flex flex-col items-center justify-center py-12 space-y-6">
-              <div className="text-center space-y-2">
-                <Heart className="h-16 w-16 text-acls-shockable mx-auto" />
-                <h2 className="text-2xl font-bold text-foreground">{t('actions.startCPR')}</h2>
-                <p className="text-muted-foreground">{t('actions.startCPRDesc')}</p>
-              </div>
+            <div className="flex flex-col items-center justify-center py-16">
               <Button
                 onClick={actions.startCPR}
-                className="h-20 w-full max-w-sm text-2xl font-bold bg-acls-shockable hover:bg-acls-shockable/90 text-white"
+                className="h-24 w-full max-w-sm text-2xl font-bold bg-acls-shockable hover:bg-acls-shockable/90 text-white"
               >
                 <Heart className="h-8 w-8 mr-3" />
                 {t('actions.startCPR')}
