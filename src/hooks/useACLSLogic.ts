@@ -150,6 +150,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
   }, [t]);
 
   // Modified: selectRhythm now handles both initial selection and rhythm analysis during cpr_pending_rhythm
+  // When VF/pVT is identified, first shock is delivered immediately
   const selectRhythm = useCallback((rhythm: RhythmType) => {
     const now = Date.now();
     const isShockable = rhythm === 'vf_pvt';
@@ -157,12 +158,23 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
     
     setSession(prev => {
       const newPhase = isShockable ? 'shockable_pathway' : 'non_shockable_pathway';
-      const interventions = [...prev.interventions, {
+      const interventions: Intervention[] = [...prev.interventions, {
         id: crypto.randomUUID(),
         timestamp: now,
         type: 'rhythm_change' as const,
         details: t('interventions.rhythmIdentified', { rhythm: rhythmName }),
       }];
+
+      // If shockable rhythm, deliver first shock immediately
+      if (isShockable) {
+        interventions.push({
+          id: crypto.randomUUID(),
+          timestamp: now,
+          type: 'shock' as const,
+          details: t('interventions.shockDelivered', { number: 1, energy: config.biphasicMinJoules }),
+          value: config.biphasicMinJoules,
+        });
+      }
 
       return {
         ...prev,
@@ -170,9 +182,12 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
         phase: newPhase,
         cprCycleStartTime: now,
         interventions,
+        // If shockable, count first shock and set energy for next shock
+        shockCount: isShockable ? 1 : prev.shockCount,
+        currentEnergy: isShockable ? config.biphasicMaxJoules : prev.currentEnergy,
       };
     });
-  }, [t]);
+  }, [t, config.biphasicMinJoules, config.biphasicMaxJoules]);
 
   const startRhythmCheck = useCallback(() => {
     setIsInRhythmCheck(true);
