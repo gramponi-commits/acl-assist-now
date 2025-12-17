@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { AlertTriangle, Gift, BookOpen, Shield, Info, ExternalLink } from 'lucide-react';
+import { AlertTriangle, User, Gift, BookOpen, Shield, Info, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import developerHeadshot from '@/assets/developer-headshot.jpg';
 
 const About = () => {
   const { t } = useTranslation();
@@ -31,11 +30,7 @@ const About = () => {
       <Card className="mb-4">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-lg">
-            <img 
-              src={developerHeadshot} 
-              alt="Dr. Giacomo Ramponi" 
-              className="h-8 w-8 rounded-full object-cover object-top scale-150"
-            />
+            <User className="h-5 w-5 text-primary" />
             {t('about.developerTitle')}
           </CardTitle>
         </CardHeader>
