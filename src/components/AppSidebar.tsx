@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
-import { Heart, History, Settings, Menu, GraduationCap } from 'lucide-react';
+import { Heart, History, Settings, Menu } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import {
   Sidebar,
@@ -22,7 +21,6 @@ export function AppSidebar() {
 
   const items = [
     { title: t('nav.code'), url: '/', icon: Heart },
-    { title: t('nav.training'), url: '/training', icon: GraduationCap },
     { title: t('nav.history'), url: '/history', icon: History },
     { title: t('nav.settings'), url: '/settings', icon: Settings },
   ];

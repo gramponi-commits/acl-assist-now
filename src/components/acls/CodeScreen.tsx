@@ -18,7 +18,7 @@ import { useMetronome } from '@/hooks/useMetronome';
 import { useVoiceAnnouncements } from '@/hooks/useVoiceAnnouncements';
 import { useSettings } from '@/hooks/useSettings';
 import { Button } from '@/components/ui/button';
-import { Download, RotateCcw, Save, CheckCircle, XCircle, StickyNote } from 'lucide-react';
+import { Download, RotateCcw, Save, CheckCircle, XCircle, StickyNote, Heart, Activity } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -51,6 +51,7 @@ export function CodeScreen() {
   const prevEpiDue = useRef(false);
 
   const isActive = session.phase === 'shockable_pathway' || session.phase === 'non_shockable_pathway';
+  const isCPRPendingRhythm = session.phase === 'cpr_pending_rhythm';
   const isPostROSC = session.phase === 'post_rosc';
   const isCodeEnded = session.phase === 'code_ended';
   const isInitial = session.phase === 'initial' || session.phase === 'rhythm_selection';
@@ -74,27 +75,27 @@ export function CodeScreen() {
     setVoiceEnabled(settings.voiceAnnouncementsEnabled);
   }, [settings.voiceAnnouncementsEnabled, setVoiceEnabled]);
 
-  // Wake lock during active code
+  // Wake lock during active code (including cpr_pending_rhythm)
   useEffect(() => {
-    if (isActive && !isInRhythmCheck) {
+    if ((isActive || isCPRPendingRhythm) && !isInRhythmCheck) {
       requestWakeLock();
     } else if (isCodeEnded || isPostROSC) {
       releaseWakeLock();
     }
-  }, [isActive, isInRhythmCheck, isCodeEnded, isPostROSC, requestWakeLock, releaseWakeLock]);
+  }, [isActive, isCPRPendingRhythm, isInRhythmCheck, isCodeEnded, isPostROSC, requestWakeLock, releaseWakeLock]);
 
-  // Metronome control during active CPR
+  // Metronome control during active CPR (including cpr_pending_rhythm)
   useEffect(() => {
-    if (isActive && !isInRhythmCheck && settings.metronomeEnabled) {
+    if ((isActive || isCPRPendingRhythm) && !isInRhythmCheck && settings.metronomeEnabled) {
       startMetronome();
     } else {
       stopMetronome();
     }
-  }, [isActive, isInRhythmCheck, settings.metronomeEnabled, startMetronome, stopMetronome]);
+  }, [isActive, isCPRPendingRhythm, isInRhythmCheck, settings.metronomeEnabled, startMetronome, stopMetronome]);
 
   // Save active session periodically
   useEffect(() => {
-    if (isActive) {
+    if (isActive || isCPRPendingRhythm) {
       const interval = setInterval(() => {
         saveActiveSession(session, {
           cprCycleRemaining: timerState.cprCycleRemaining,
@@ -107,7 +108,7 @@ export function CodeScreen() {
       
       return () => clearInterval(interval);
     }
-  }, [isActive, session, timerState]);
+  }, [isActive, isCPRPendingRhythm, session, timerState]);
 
   // Clear active session when code ends
   useEffect(() => {
@@ -219,13 +220,98 @@ export function CodeScreen() {
 
       <ScrollArea className="flex-1">
         <div className="p-4 space-y-4 max-w-lg mx-auto">
-          {/* Initial Rhythm Selection */}
+          {/* Initial Screen - Start CPR Button */}
           {isInitial && (
-            <RhythmSelector
-              currentRhythm={session.currentRhythm}
-              onSelectRhythm={actions.selectRhythm}
-              isInitial={true}
-            />
+            <div className="flex flex-col items-center justify-center py-12 space-y-6">
+              <div className="text-center space-y-2">
+                <Heart className="h-16 w-16 text-acls-shockable mx-auto animate-pulse" />
+                <h2 className="text-2xl font-bold text-foreground">{t('actions.startCPR')}</h2>
+                <p className="text-muted-foreground">{t('actions.startCPRDesc')}</p>
+              </div>
+              <Button
+                onClick={actions.startCPR}
+                className="h-20 w-full max-w-sm text-2xl font-bold bg-acls-shockable hover:bg-acls-shockable/90 text-white"
+              >
+                <Heart className="h-8 w-8 mr-3" />
+                {t('actions.startCPR')}
+              </Button>
+            </div>
+          )}
+
+          {/* CPR Pending Rhythm - Active CPR without rhythm yet */}
+          {isCPRPendingRhythm && (
+            <>
+              {/* CPR Active Indicator */}
+              <div className="bg-acls-warning/20 border-2 border-acls-warning rounded-lg p-4 text-center animate-pulse">
+                <div className="flex items-center justify-center gap-2 text-acls-warning font-bold text-lg">
+                  <Heart className="h-6 w-6" />
+                  {t('banner.cprActive')}
+                </div>
+              </div>
+
+              {/* Analyze Rhythm Button - Prominent */}
+              <Button
+                onClick={() => {}}
+                className="h-16 w-full text-xl font-bold bg-primary hover:bg-primary/90"
+                asChild
+              >
+                <div>
+                  <Activity className="h-6 w-6 mr-2" />
+                  {t('actions.analyzeRhythm')}
+                </div>
+              </Button>
+              
+              {/* Rhythm Selector for first analysis */}
+              <RhythmSelector
+                currentRhythm={session.currentRhythm}
+                onSelectRhythm={actions.selectRhythm}
+                isInitial={false}
+              />
+
+              {/* Code Timers - Total & CPR */}
+              <CodeTimers
+                totalElapsed={timerState.totalElapsed}
+                totalCPRTime={timerState.totalCPRTime}
+              />
+
+              {/* CPR Quality */}
+              <CPRQualityPanel
+                airwayStatus={session.airwayStatus}
+                onAirwayChange={actions.setAirway}
+              />
+
+              {/* H's & T's */}
+              <HsAndTsChecklist
+                hsAndTs={session.hsAndTs}
+                onUpdate={actions.updateHsAndTs}
+              />
+
+              {/* Code Timeline */}
+              <CodeTimeline
+                interventions={session.interventions}
+                startTime={session.startTime}
+              />
+
+              {/* Session Controls */}
+              <div className="grid grid-cols-2 gap-3 pt-2">
+                <Button
+                  onClick={() => setShowNoteDialog(true)}
+                  variant="outline"
+                  className="h-12 gap-2"
+                >
+                  <StickyNote className="h-4 w-4" />
+                  {t('actions.addNote')}
+                </Button>
+                <Button
+                  onClick={handleNewCode}
+                  variant="outline"
+                  className="h-12 gap-2"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                  {t('actions.reset')}
+                </Button>
+              </div>
+            </>
           )}
 
           {/* Active Code Screen */}
@@ -459,27 +545,25 @@ export function CodeScreen() {
         </div>
       </ScrollArea>
 
-      {/* Code Stats Footer */}
-      {(isActive || isPostROSC) && !isInRhythmCheck && (
-        <div className="border-t border-border bg-card px-4 py-2">
-          <div className="flex justify-around text-center max-w-lg mx-auto">
+      {/* Footer Stats Bar - Visible during active code */}
+      {(isActive || isCPRPendingRhythm || isPostROSC) && (
+        <div className="bg-card border-t border-border p-3">
+          <div className="flex justify-around text-center text-sm max-w-lg mx-auto">
             <div>
-              <div className="text-lg font-bold text-foreground">{session.shockCount}</div>
-              <div className="text-xs text-muted-foreground">{t('codeEnded.shocks')}</div>
+              <span className="text-muted-foreground">{t('codeEnded.epi')}</span>
+              <span className="ml-1 font-bold text-foreground">{session.epinephrineCount}</span>
             </div>
             <div>
-              <div className="text-lg font-bold text-foreground">{session.epinephrineCount}</div>
-              <div className="text-xs text-muted-foreground">{t('codeEnded.epi')}</div>
+              <span className="text-muted-foreground">{t('codeEnded.amio')}</span>
+              <span className="ml-1 font-bold text-foreground">{session.amiodaroneCount}</span>
             </div>
             <div>
-              <div className="text-lg font-bold text-foreground">{session.amiodaroneCount}</div>
-              <div className="text-xs text-muted-foreground">{t('codeEnded.amio')}</div>
+              <span className="text-muted-foreground">{t('codeEnded.lido')}</span>
+              <span className="ml-1 font-bold text-foreground">{session.lidocaineCount}</span>
             </div>
             <div>
-              <div className="text-lg font-bold text-foreground">
-                {Math.floor(timerState.totalElapsed / 60000)}:{((Math.floor(timerState.totalElapsed / 1000)) % 60).toString().padStart(2, '0')}
-              </div>
-              <div className="text-xs text-muted-foreground">{t('codeEnded.duration')}</div>
+              <span className="text-muted-foreground">{t('codeEnded.shocks')}</span>
+              <span className="ml-1 font-bold text-foreground">{session.shockCount}</span>
             </div>
           </div>
         </div>
