@@ -1,15 +1,19 @@
 import { useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-type AnnouncementType = 'rhythmCheck' | 'preCharge' | 'epiDue' | 'resumeCPR' | 'rosc';
+type AnnouncementType = 'rhythmCheck' | 'preCharge' | 'epiDue' | 'resumeCPR' | 'rosc' | 'amiodaroneDue' | 'lidocaineDue' | 'shock' | 'noShock';
 
 // Priority order: lower number = higher priority
 const ANNOUNCEMENT_PRIORITY: Record<AnnouncementType, number> = {
   rhythmCheck: 1,
   preCharge: 2,
-  resumeCPR: 3,
-  rosc: 4,
-  epiDue: 5,
+  shock: 3,
+  noShock: 3,
+  resumeCPR: 4,
+  rosc: 5,
+  epiDue: 6,
+  amiodaroneDue: 7,
+  lidocaineDue: 7,
 };
 
 export function useVoiceAnnouncements() {
@@ -45,6 +49,10 @@ export function useVoiceAnnouncements() {
       epiDue: t('voice.epiDue'),
       resumeCPR: t('voice.resumeCPR'),
       rosc: t('voice.rosc'),
+      amiodaroneDue: t('voice.amiodaroneDue'),
+      lidocaineDue: t('voice.lidocaineDue'),
+      shock: t('voice.shock'),
+      noShock: t('voice.noShock'),
     };
 
     const text = announcements[type];

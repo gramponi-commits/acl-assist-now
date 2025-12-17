@@ -241,7 +241,11 @@
     "preCharge": "15 seconds, charge defibrillator",
     "epiDue": "Epinephrine",
     "resumeCPR": "Resume CPR",
-    "rosc": "ROSC"
+    "rosc": "ROSC",
+    "amiodaroneDue": "Amiodarone",
+    "lidocaineDue": "Lidocaine",
+    "shock": "Shock delivered",
+    "noShock": "No shock, resume CPR"
   },
   "install": {
     "title": "Install App",
