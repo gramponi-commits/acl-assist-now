@@ -5,6 +5,7 @@ export type RhythmType = 'vf_pvt' | 'asystole' | 'pea' | null;
 
 export type ACLSPhase = 
   | 'initial'
+  | 'cpr_pending_rhythm'
   | 'rhythm_selection'
   | 'shockable_pathway'
   | 'non_shockable_pathway'

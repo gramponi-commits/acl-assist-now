@@ -46,7 +46,7 @@
     "nonShockable": "Non Defibrillabile",
     "pea": "PEA"
   },
-  "actions": {
+"actions": {
     "title": "Azioni",
     "shock": "SHOCK",
     "epinephrine": "ADRENALINA",
@@ -63,7 +63,10 @@
     "reset": "Reimposta",
     "newCode": "Nuovo Codice",
     "saveFailed": "Salvataggio sessione fallito",
-    "addNote": "Aggiungi Nota"
+    "addNote": "Aggiungi Nota",
+    "startCPR": "INIZIA RCP",
+    "startCPRDesc": "Inizia subito le compressioni toraciche",
+    "analyzeRhythm": "ANALISI RITMO"
   },
   "timers": {
     "rhythmCheck": "Controllo Ritmo",
@@ -208,7 +211,12 @@
     "compressionRate": "Frequenza Compressioni",
     "targetRate": "Target: 100-120/min"
   },
-  "banner": {
+"banner": {
+    "startCPR": "INIZIA RCP",
+    "startCPRSub": "Premi il pulsante per iniziare le compressioni toraciche",
+    "cprInProgress": "RCP IN CORSO",
+    "cprActive": "RCP ATTIVA",
+    "analyzeRhythmWhenReady": "Analizza il ritmo appena possibile - seleziona sotto",
     "identifyRhythm": "IDENTIFICA RITMO",
     "selectRhythm": "Seleziona il ritmo iniziale per iniziare il protocollo ACLS",
     "roscAchieved": "ROSC RAGGIUNTO",

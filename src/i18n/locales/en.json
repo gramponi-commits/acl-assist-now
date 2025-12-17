@@ -85,7 +85,7 @@
     "nonShockable": "Non-Shockable",
     "pea": "PEA"
   },
-  "actions": {
+"actions": {
     "title": "Actions",
     "shock": "SHOCK",
     "epinephrine": "EPINEPHRINE",
@@ -102,7 +102,10 @@
     "reset": "Reset",
     "newCode": "New Code",
     "saveFailed": "Failed to save session",
-    "addNote": "Add Note"
+    "addNote": "Add Note",
+    "startCPR": "START CPR",
+    "startCPRDesc": "Begin chest compressions immediately",
+    "analyzeRhythm": "ANALYZE RHYTHM"
   },
   "timers": {
     "rhythmCheck": "Rhythm Check",
@@ -247,7 +250,12 @@
     "compressionRate": "Compression Rate",
     "targetRate": "Target: 100-120/min"
   },
-  "banner": {
+"banner": {
+    "startCPR": "START CPR",
+    "startCPRSub": "Press the button to begin chest compressions",
+    "cprInProgress": "CPR IN PROGRESS",
+    "cprActive": "CPR ACTIVE",
+    "analyzeRhythmWhenReady": "Analyze rhythm when possible - select rhythm below",
     "identifyRhythm": "IDENTIFY RHYTHM",
     "selectRhythm": "Select initial rhythm to begin ACLS protocol",
     "roscAchieved": "ROSC ACHIEVED",
