@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Heart, History, Settings, Menu } from 'lucide-react';
+import { Heart, History, Settings, Menu, Smartphone } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import {
   Sidebar,
@@ -23,6 +23,7 @@ export function AppSidebar() {
     { title: t('nav.code'), url: '/', icon: Heart },
     { title: t('nav.history'), url: '/history', icon: History },
     { title: t('nav.settings'), url: '/settings', icon: Settings },
+    { title: t('nav.install'), url: '/install', icon: Smartphone },
   ];
 
   return (

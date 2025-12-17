@@ -9,6 +9,7 @@ import { MobileHeader } from "@/components/MobileHeader";
 import Index from "./pages/Index";
 import SessionHistory from "./pages/SessionHistory";
 import Settings from "./pages/Settings";
+import InstallHelp from "./pages/InstallHelp";
 import NotFound from "./pages/NotFound";
 import "@/i18n";
 
@@ -29,6 +30,7 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/history" element={<SessionHistory />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/install" element={<InstallHelp />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
