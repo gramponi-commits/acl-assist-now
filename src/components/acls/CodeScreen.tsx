@@ -267,7 +267,10 @@ export function CodeScreen() {
                     {t('banner.analyzeRhythmWhenReady')}
                   </div>
                   <Button
-                    onClick={() => setShowRhythmSelector(true)}
+                    onClick={() => {
+                      setShowRhythmSelector(true);
+                      actions.setRhythmAnalysisActive(true);
+                    }}
                     className="h-16 w-full text-xl font-bold bg-acls-info hover:bg-acls-info/90 text-white"
                   >
                     <Stethoscope className="h-6 w-6 mr-3" />
@@ -277,7 +280,10 @@ export function CodeScreen() {
               ) : (
                 <RhythmSelector
                   currentRhythm={session.currentRhythm}
-                  onSelectRhythm={actions.selectRhythm}
+                  onSelectRhythm={(rhythm) => {
+                    actions.setRhythmAnalysisActive(false);
+                    actions.selectRhythm(rhythm);
+                  }}
                   isInitial={false}
                 />
               )}
