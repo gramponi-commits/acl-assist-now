@@ -22,7 +22,7 @@ const About = () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'ACLS Training App',
+          title: 'ResusBuddy',
           text: t('about.shareText'),
           url: appUrl,
         });
@@ -38,7 +38,7 @@ const About = () => {
   };
 
   const handleEmailShare = () => {
-    const subject = encodeURIComponent('ACLS Training App');
+    const subject = encodeURIComponent('ResusBuddy');
     const body = encodeURIComponent(`${t('about.shareText')}\n\n${appUrl}`);
     window.open(`mailto:?subject=${subject}&body=${body}`, '_blank');
   };
