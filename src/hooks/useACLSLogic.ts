@@ -569,9 +569,9 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
     pdf.rect(0, 280, 210, 17, 'F');
     pdf.setFontSize(8);
     pdf.setTextColor(107, 114, 128);
-    pdf.text(`Generated: ${new Date().toLocaleString()} | ACLS Decision Support App`, 105, 288, { align: 'center' });
+    pdf.text(`Generated: ${new Date().toLocaleString()} | ResusBuddy`, 105, 288, { align: 'center' });
     
-    pdf.save(`acls-code-${startDate.toISOString().split('T')[0]}-${formatDeviceTime(session.startTime).replace(/:/g, '')}.pdf`);
+    pdf.save(`resusbuddy-code-${startDate.toISOString().split('T')[0]}-${formatDeviceTime(session.startTime).replace(/:/g, '')}.pdf`);
   }, [session, timerState.totalCPRTime, timerState.totalElapsed]);
 
   const saveSessionLocally = useCallback(async () => {

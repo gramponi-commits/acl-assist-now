@@ -20,7 +20,7 @@ export function MobileHeader() {
         <Menu className="h-6 w-6" />
       </Button>
       
-      <span className="font-bold text-lg text-acls-shockable">ACLS</span>
+      <span className="font-bold text-lg text-acls-shockable">ResusBuddy</span>
       
       {isInstallable ? (
         <Button

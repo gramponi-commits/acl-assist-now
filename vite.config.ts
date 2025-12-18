@@ -17,8 +17,8 @@ export default defineConfig(({ mode }) => ({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
-        name: 'ACLS Decision Support',
-        short_name: 'ACLS',
+        name: 'ResusBuddy',
+        short_name: 'ResusBuddy',
         description: 'Clinical-grade ACLS Intelligent Decision Support implementing 2025 AHA Adult Cardiac Arrest Algorithm',
         theme_color: '#dc2626',
         background_color: '#0f172a',

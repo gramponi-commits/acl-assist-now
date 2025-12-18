@@ -37,7 +37,7 @@ export function AppSidebar() {
     >
       <div className="flex items-center justify-between p-3 border-b border-border">
         {!collapsed && (
-          <span className="font-bold text-lg text-acls-shockable">ACLS</span>
+          <span className="font-bold text-lg text-acls-shockable">ResusBuddy</span>
         )}
         <SidebarTrigger className="h-8 w-8">
           <Menu className="h-5 w-5" />
