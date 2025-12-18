@@ -30,8 +30,8 @@ import {
 
 export function CodeScreen() {
   const { t } = useTranslation();
-  const { session, timerState, isInRhythmCheck, commandBanner, actions, buttonStates } = useACLSLogic();
   const { settings } = useSettings();
+  const { session, timerState, isInRhythmCheck, commandBanner, actions, buttonStates } = useACLSLogic(undefined, settings.defibrillatorEnergy);
   const { requestWakeLock, releaseWakeLock } = useWakeLock();
   const { playAlert, setEnabled: setAudioEnabled, vibrate } = useAudioAlerts();
   const { announce, setEnabled: setVoiceEnabled } = useVoiceAnnouncements();
@@ -439,7 +439,7 @@ export function CodeScreen() {
               shockNumber={session.shockCount + 1}
               onShock={() => {
                 announce('shock');
-                actions.completeRhythmCheckWithShock();
+                actions.completeRhythmCheckWithShock(settings.defibrillatorEnergy);
               }}
               onNoShockAsystole={() => {
                 announce('noShock');
