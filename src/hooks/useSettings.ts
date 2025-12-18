@@ -7,6 +7,7 @@ export interface AppSettings {
   metronomeBPM: number;
   voiceAnnouncementsEnabled: boolean;
   preferLidocaine: boolean;
+  defibrillatorEnergy: number;
 }
 
 const SETTINGS_KEY = 'acls-settings';
@@ -18,6 +19,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   metronomeBPM: 110,
   voiceAnnouncementsEnabled: false,
   preferLidocaine: false,
+  defibrillatorEnergy: 200,
 };
 
 export function useSettings() {

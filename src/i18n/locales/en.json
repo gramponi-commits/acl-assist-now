@@ -156,7 +156,9 @@
     "antiarrhythmic": "Prefer Lidocaine",
     "antiarrhythmicDesc": "Use Lidocaine instead of Amiodarone",
     "usingLidocaine": "Using Lidocaine 100mg",
-    "usingAmiodarone": "Using Amiodarone 300mg/150mg"
+    "usingAmiodarone": "Using Amiodarone 300mg/150mg",
+    "defibrillator": "Defibrillator Energy",
+    "defibrillatorDesc": "Select shock energy in Joules"
   },
   "resume": {
     "title": "Active Code Detected",

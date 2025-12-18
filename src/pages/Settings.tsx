@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
-import { Globe, Check, Volume2, Vibrate, Music, Mic, Pill } from 'lucide-react';
+import { Globe, Check, Volume2, Vibrate, Music, Mic, Pill, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSettings } from '@/hooks/useSettings';
 
@@ -116,6 +116,35 @@ export default function Settings() {
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Defibrillator Energy Section */}
+          <div className="bg-card rounded-lg border border-border p-4">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-10 w-10 rounded-full bg-acls-shockable/10 flex items-center justify-center">
+                <Zap className="h-5 w-5 text-acls-shockable" />
+              </div>
+              <div>
+                <h2 className="font-semibold text-foreground">{t('settings.defibrillator')}</h2>
+                <p className="text-sm text-muted-foreground">{t('settings.defibrillatorDesc')}</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-4 gap-2">
+              {[120, 150, 200, 360].map((energy) => (
+                <Button
+                  key={energy}
+                  variant="outline"
+                  className={cn(
+                    'h-12 text-lg font-bold',
+                    settings.defibrillatorEnergy === energy && 'border-acls-shockable bg-acls-shockable/10 text-acls-shockable'
+                  )}
+                  onClick={() => updateSetting('defibrillatorEnergy', energy)}
+                >
+                  {energy}J
+                </Button>
+              ))}
+            </div>
           </div>
 
           {/* Antiarrhythmic Preference Section */}
