@@ -374,6 +374,7 @@ export function CodeScreen() {
                 epiRemaining={timerState.epiRemaining}
                 preShockAlert={timerState.preShockAlert}
                 rhythmCheckDue={timerState.rhythmCheckDue}
+                showEpiTimer={session.epinephrineCount > 0}
               />
 
               {/* CPR Quality */}
