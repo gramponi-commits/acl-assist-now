@@ -31,7 +31,7 @@ interface TimerState {
   rhythmCheckDue: boolean;
 }
 
-export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
+export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrillatorEnergy: number = 200) {
   const { t } = useTranslation();
   const [session, setSession] = useState<ACLSSession>(createInitialSession);
   const [timerState, setTimerState] = useState<TimerState>({
@@ -171,8 +171,8 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
           id: crypto.randomUUID(),
           timestamp: now,
           type: 'shock' as const,
-          details: t('interventions.shockDelivered', { number: 1, energy: config.biphasicMinJoules }),
-          value: config.biphasicMinJoules,
+          details: t('interventions.shockDelivered', { number: 1, energy: defibrillatorEnergy }),
+          value: defibrillatorEnergy,
         });
       }
 
@@ -187,7 +187,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
         currentEnergy: isShockable ? config.biphasicMaxJoules : prev.currentEnergy,
       };
     });
-  }, [t, config.biphasicMinJoules, config.biphasicMaxJoules]);
+  }, [t, defibrillatorEnergy, config.biphasicMaxJoules]);
 
   const startRhythmCheck = useCallback(() => {
     setIsInRhythmCheck(true);
@@ -195,28 +195,25 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
     addIntervention('note', t('interventions.rhythmCheckPaused'));
   }, [addIntervention, t]);
 
-  const completeRhythmCheckWithShock = useCallback(() => {
+  const completeRhythmCheckWithShock = useCallback((defibrillatorEnergy: number) => {
     const now = Date.now();
     const shockNumber = session.shockCount + 1;
-    const energy = session.currentEnergy;
     
     setSession(prev => {
       const newShockCount = prev.shockCount + 1;
-      const newEnergy = newShockCount >= 2 ? config.biphasicMaxJoules : config.biphasicMinJoules;
       
       return {
         ...prev,
         shockCount: newShockCount,
-        currentEnergy: newEnergy,
         cprCycleStartTime: now,
         phase: 'shockable_pathway',
         currentRhythm: 'vf_pvt',
       };
     });
 
-    addIntervention('shock', t('interventions.shockDelivered', { number: shockNumber, energy }), energy);
+    addIntervention('shock', t('interventions.shockDelivered', { number: shockNumber, energy: defibrillatorEnergy }), defibrillatorEnergy);
     setIsInRhythmCheck(false);
-  }, [session.shockCount, session.currentEnergy, config.biphasicMaxJoules, config.biphasicMinJoules, addIntervention, t]);
+  }, [session.shockCount, addIntervention, t]);
 
   const completeRhythmCheckNoShock = useCallback((newRhythm: 'asystole' | 'pea') => {
     const now = Date.now();
