@@ -18,7 +18,7 @@ import { useMetronome } from '@/hooks/useMetronome';
 import { useVoiceAnnouncements } from '@/hooks/useVoiceAnnouncements';
 import { useSettings } from '@/hooks/useSettings';
 import { Button } from '@/components/ui/button';
-import { Download, RotateCcw, Save, CheckCircle, XCircle, StickyNote, Heart, Activity } from 'lucide-react';
+import { Download, RotateCcw, Save, CheckCircle, XCircle, StickyNote, Heart, Activity, Stethoscope } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -43,6 +43,7 @@ export function CodeScreen() {
   const [isSaved, setIsSaved] = useState(false);
   const [showResumeDialog, setShowResumeDialog] = useState(false);
   const [showNoteDialog, setShowNoteDialog] = useState(false);
+  const [showRhythmSelector, setShowRhythmSelector] = useState(false);
   const [pendingResumeSession, setPendingResumeSession] = useState<ReturnType<typeof getActiveSession>>(null);
   
   // Track previous states for alert triggers
@@ -182,6 +183,7 @@ export function CodeScreen() {
 
   const handleNewCode = () => {
     setIsSaved(false);
+    setShowRhythmSelector(false);
     clearActiveSession();
     actions.resetSession();
   };
@@ -258,17 +260,27 @@ export function CodeScreen() {
                 </div>
               </div>
 
-              {/* Prompt to select rhythm */}
-              <div className="text-center text-muted-foreground text-sm">
-                {t('banner.analyzeRhythmWhenReady')}
-              </div>
-              
-              {/* Rhythm Selector for first analysis */}
-              <RhythmSelector
-                currentRhythm={session.currentRhythm}
-                onSelectRhythm={actions.selectRhythm}
-                isInitial={false}
-              />
+              {/* Analyze Rhythm Button or Rhythm Selector */}
+              {!showRhythmSelector ? (
+                <>
+                  <div className="text-center text-muted-foreground text-sm">
+                    {t('banner.analyzeRhythmWhenReady')}
+                  </div>
+                  <Button
+                    onClick={() => setShowRhythmSelector(true)}
+                    className="h-16 w-full text-xl font-bold bg-acls-info hover:bg-acls-info/90 text-white"
+                  >
+                    <Stethoscope className="h-6 w-6 mr-3" />
+                    {t('actions.analyzeRhythm')}
+                  </Button>
+                </>
+              ) : (
+                <RhythmSelector
+                  currentRhythm={session.currentRhythm}
+                  onSelectRhythm={actions.selectRhythm}
+                  isInitial={false}
+                />
+              )}
 
               {/* Code Timers - Total & CPR */}
               <CodeTimers
