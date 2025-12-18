@@ -2,8 +2,11 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import en from './locales/en.json';
 import it from './locales/it.json';
+import es from './locales/es.json';
+import fr from './locales/fr.json';
+import de from './locales/de.json';
 
-const SUPPORTED_LANGUAGES = ['en', 'it'];
+const SUPPORTED_LANGUAGES = ['en', 'it', 'es', 'fr', 'de'];
 
 const getDefaultLanguage = (): string => {
   // Check if user has a saved preference
@@ -23,6 +26,9 @@ i18n
     resources: {
       en: { translation: en },
       it: { translation: it },
+      es: { translation: es },
+      fr: { translation: fr },
+      de: { translation: de },
     },
     lng: getDefaultLanguage(),
     fallbackLng: 'en',
