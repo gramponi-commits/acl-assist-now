@@ -254,7 +254,7 @@
   },
   "install": {
     "title": "App Installieren",
-    "subtitle": "ACLS zum Startbildschirm hinzufügen für sofortigen Zugriff",
+    "subtitle": "ResusBuddy zum Startbildschirm hinzufügen für sofortigen Zugriff",
     "alreadyInstalled": "App bereits installiert!",
     "installNow": "Jetzt Installieren",
     "yourDevice": "Ihr Gerät",
