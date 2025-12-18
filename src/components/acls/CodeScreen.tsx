@@ -449,10 +449,6 @@ export function CodeScreen() {
                 announce('noShock');
                 actions.completeRhythmCheckNoShock('pea');
               }}
-              onResumeCPR={() => {
-                announce('resumeCPR');
-                actions.completeRhythmCheckResumeCPR();
-              }}
               onROSC={actions.achieveROSC}
               onTerminate={actions.terminateCode}
             />
