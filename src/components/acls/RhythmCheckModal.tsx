@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { Zap, Heart, Activity, RotateCcw, XCircle } from 'lucide-react';
+import { Zap, Heart, Activity, XCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface RhythmCheckModalProps {
@@ -10,7 +10,6 @@ interface RhythmCheckModalProps {
   onShock: () => void;
   onNoShockAsystole: () => void;
   onNoShockPEA: () => void;
-  onResumeCPR: () => void;
   onROSC: () => void;
   onTerminate: () => void;
 }
@@ -22,7 +21,6 @@ export function RhythmCheckModal({
   onShock,
   onNoShockAsystole,
   onNoShockPEA,
-  onResumeCPR,
   onROSC,
   onTerminate,
 }: RhythmCheckModalProps) {
@@ -91,15 +89,6 @@ export function RhythmCheckModal({
             </Button>
           </div>
 
-          {/* Resume CPR - Same rhythm */}
-          <Button
-            onClick={onResumeCPR}
-            variant="outline"
-            className="w-full h-14 text-base font-semibold gap-2 border-2"
-          >
-            <RotateCcw className="h-5 w-5" />
-            {t('actions.resumeCPR')}
-          </Button>
 
           {/* ROSC */}
           <Button
