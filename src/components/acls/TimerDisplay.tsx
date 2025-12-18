@@ -32,13 +32,14 @@ export function CycleTimers({
   cprCycleRemaining, 
   epiRemaining, 
   preShockAlert, 
-  rhythmCheckDue 
-}: CycleTimersProps) {
+  rhythmCheckDue,
+  showEpiTimer = true 
+}: CycleTimersProps & { showEpiTimer?: boolean }) {
   const { t } = useTranslation();
   const epiDue = epiRemaining === 0;
 
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className={cn('grid gap-3', showEpiTimer ? 'grid-cols-2' : 'grid-cols-1')}>
       {/* CPR Cycle Timer */}
       <div
         className={cn(
@@ -74,31 +75,33 @@ export function CycleTimers({
         )}
       </div>
 
-      {/* Epinephrine Timer */}
-      <div
-        className={cn(
-          'rounded-lg p-4 text-center border-2 transition-all',
-          epiDue
-            ? 'bg-acls-critical/20 border-acls-critical animate-pulse'
-            : 'bg-card border-border'
-        )}
-      >
-        <div className="flex items-center justify-center gap-2 mb-1">
-          <Syringe className="h-4 w-4" />
-          <span className="text-sm font-medium text-muted-foreground">{t('timers.epiDueIn')}</span>
-        </div>
-        <div className={cn(
-          'text-3xl font-mono font-bold',
-          epiDue ? 'text-acls-critical' : 'text-foreground'
-        )}>
-          {epiDue ? t('timers.now') : formatTime(epiRemaining)}
-        </div>
-        {epiDue && (
-          <div className="text-xs text-acls-critical font-bold mt-1">
-            {t('timers.giveEpi')}
+      {/* Epinephrine Timer - only shown after first dose */}
+      {showEpiTimer && (
+        <div
+          className={cn(
+            'rounded-lg p-4 text-center border-2 transition-all',
+            epiDue
+              ? 'bg-acls-critical/20 border-acls-critical animate-pulse'
+              : 'bg-card border-border'
+          )}
+        >
+          <div className="flex items-center justify-center gap-2 mb-1">
+            <Syringe className="h-4 w-4" />
+            <span className="text-sm font-medium text-muted-foreground">{t('timers.epiDueIn')}</span>
           </div>
-        )}
-      </div>
+          <div className={cn(
+            'text-3xl font-mono font-bold',
+            epiDue ? 'text-acls-critical' : 'text-foreground'
+          )}>
+            {epiDue ? t('timers.now') : formatTime(epiRemaining)}
+          </div>
+          {epiDue && (
+            <div className="text-xs text-acls-critical font-bold mt-1">
+              {t('timers.giveEpi')}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
