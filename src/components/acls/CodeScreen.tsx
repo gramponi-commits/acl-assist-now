@@ -238,7 +238,7 @@ export function CodeScreen() {
         <div className="p-4 space-y-4 max-w-lg mx-auto">
           {/* Initial Screen - Start CPR Button Only */}
           {isInitial && (
-            <div className="flex flex-col items-center justify-center py-16">
+            <div className="flex flex-col items-center justify-center pt-28 pb-8">
               <Button
                 onClick={actions.startCPR}
                 className="h-24 w-full max-w-sm text-2xl font-bold bg-acls-shockable hover:bg-acls-shockable/90 text-white"
