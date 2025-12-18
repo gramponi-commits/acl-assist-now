@@ -435,7 +435,7 @@ export function CodeScreen() {
           {isInRhythmCheck && (
             <RhythmCheckModal
               isShockable={session.currentRhythm === 'vf_pvt'}
-              currentEnergy={session.currentEnergy}
+              currentEnergy={settings.defibrillatorEnergy}
               shockNumber={session.shockCount + 1}
               onShock={() => {
                 announce('shock');
