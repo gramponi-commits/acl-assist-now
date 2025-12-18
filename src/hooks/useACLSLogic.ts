@@ -758,6 +758,11 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
     addIntervention('note', t('interventions.noteAdded', { note }));
   }, [addIntervention, t]);
 
+  // Allow external control of rhythm analysis state (for initial rhythm selection)
+  const setRhythmAnalysisActive = useCallback((active: boolean) => {
+    setIsInRhythmCheck(active);
+  }, []);
+
   return {
     session,
     timerState,
@@ -786,6 +791,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG) {
       saveSessionLocally,
       addIntervention,
       addNote,
+      setRhythmAnalysisActive,
     },
     buttonStates: {
       canGiveEpinephrine,
