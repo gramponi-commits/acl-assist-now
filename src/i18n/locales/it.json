@@ -251,7 +251,7 @@
   },
   "install": {
     "title": "Installa App",
-    "subtitle": "Aggiungi ACLS alla schermata home per accesso immediato",
+    "subtitle": "Aggiungi ResusBuddy alla schermata home per accesso immediato",
     "alreadyInstalled": "L'app è già installata!",
     "installNow": "Installa Ora",
     "yourDevice": "Il tuo dispositivo",

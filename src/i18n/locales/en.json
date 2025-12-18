@@ -251,7 +251,7 @@
   },
   "install": {
     "title": "Install App",
-    "subtitle": "Add ACLS to your home screen for instant access",
+    "subtitle": "Add ResusBuddy to your home screen for instant access",
     "alreadyInstalled": "App is already installed!",
     "installNow": "Install Now",
     "yourDevice": "Your device",
