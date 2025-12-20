@@ -175,8 +175,11 @@
   "airway": {
     "title": "Κατάσταση Αεραγωγού",
     "ambu": "AMBU",
+    "ambuDesc": "Ασκός-μάσκα",
     "sga": "SGA",
-    "ett": "ETT"
+    "sgaDesc": "Υπεργλωττιδική",
+    "ett": "ETT",
+    "ettDesc": "Ενδοτραχειακός"
   },
   "cpr": {
     "title": "Ποιότητα ΚΑΡΠΑ",

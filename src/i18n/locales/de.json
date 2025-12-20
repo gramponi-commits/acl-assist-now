@@ -178,8 +178,11 @@
   "airway": {
     "title": "Atemwegsstatus",
     "ambu": "AMBU",
+    "ambuDesc": "Beutel-Maske",
     "sga": "SGA",
-    "ett": "ETT"
+    "sgaDesc": "Supraglottisch",
+    "ett": "ETT",
+    "ettDesc": "Endotracheal"
   },
   "cpr": {
     "title": "HLW-Qualität",

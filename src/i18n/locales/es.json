@@ -178,8 +178,11 @@
   "airway": {
     "title": "Estado Vía Aérea",
     "ambu": "AMBU",
+    "ambuDesc": "Bolsa-mascarilla",
     "sga": "SGA",
-    "ett": "ETT"
+    "sgaDesc": "Supraglótico",
+    "ett": "ETT",
+    "ettDesc": "Tubo endotraqueal"
   },
   "cpr": {
     "title": "Calidad RCP",

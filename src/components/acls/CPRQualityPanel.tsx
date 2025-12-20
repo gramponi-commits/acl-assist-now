@@ -81,39 +81,51 @@ export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Record }:
           <span className="text-sm font-medium">{t('airway.title')}</span>
         </div>
         <div className="grid grid-cols-3 gap-2">
-          <Button
-            variant="outline"
-            size="sm"
+          <button
             onClick={() => onAirwayChange('ambu')}
             className={cn(
-              'h-12 transition-all',
-              airwayStatus === 'ambu' && 'bg-primary text-primary-foreground border-primary'
+              'flex flex-col items-center justify-center p-2 rounded-md border transition-all min-h-[60px]',
+              airwayStatus === 'ambu' 
+                ? 'bg-primary text-primary-foreground border-primary' 
+                : 'border-border hover:bg-accent'
             )}
           >
-            {t('airway.ambu')}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
+            <span className="font-semibold text-sm">{t('airway.ambu')}</span>
+            <span className={cn(
+              'text-[10px] leading-tight text-center',
+              airwayStatus === 'ambu' ? 'text-primary-foreground/80' : 'text-muted-foreground'
+            )}>{t('airway.ambuDesc')}</span>
+          </button>
+          <button
             onClick={() => onAirwayChange('sga')}
             className={cn(
-              'h-12 transition-all',
-              airwayStatus === 'sga' && 'bg-acls-warning text-white border-acls-warning'
+              'flex flex-col items-center justify-center p-2 rounded-md border transition-all min-h-[60px]',
+              airwayStatus === 'sga' 
+                ? 'bg-acls-warning text-white border-acls-warning' 
+                : 'border-border hover:bg-accent'
             )}
           >
-            {t('airway.sga')}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
+            <span className="font-semibold text-sm">{t('airway.sga')}</span>
+            <span className={cn(
+              'text-[10px] leading-tight text-center',
+              airwayStatus === 'sga' ? 'text-white/80' : 'text-muted-foreground'
+            )}>{t('airway.sgaDesc')}</span>
+          </button>
+          <button
             onClick={() => onAirwayChange('ett')}
             className={cn(
-              'h-12 transition-all',
-              airwayStatus === 'ett' && 'bg-acls-success text-white border-acls-success'
+              'flex flex-col items-center justify-center p-2 rounded-md border transition-all min-h-[60px]',
+              airwayStatus === 'ett' 
+                ? 'bg-acls-success text-white border-acls-success' 
+                : 'border-border hover:bg-accent'
             )}
           >
-            {t('airway.ett')}
-          </Button>
+            <span className="font-semibold text-sm">{t('airway.ett')}</span>
+            <span className={cn(
+              'text-[10px] leading-tight text-center',
+              airwayStatus === 'ett' ? 'text-white/80' : 'text-muted-foreground'
+            )}>{t('airway.ettDesc')}</span>
+          </button>
         </div>
       </div>
     </div>

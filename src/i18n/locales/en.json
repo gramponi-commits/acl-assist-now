@@ -175,8 +175,11 @@
   "airway": {
     "title": "Airway Status",
     "ambu": "AMBU",
+    "ambuDesc": "Bag-mask",
     "sga": "SGA",
-    "ett": "ETT"
+    "sgaDesc": "Supraglottic",
+    "ett": "ETT",
+    "ettDesc": "Endotracheal"
   },
   "cpr": {
     "title": "CPR Quality",
