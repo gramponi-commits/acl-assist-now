@@ -5,8 +5,9 @@ import it from './locales/it.json';
 import es from './locales/es.json';
 import fr from './locales/fr.json';
 import de from './locales/de.json';
+import el from './locales/el.json';
 
-const SUPPORTED_LANGUAGES = ['en', 'it', 'es', 'fr', 'de'];
+const SUPPORTED_LANGUAGES = ['en', 'it', 'es', 'fr', 'de', 'el'];
 
 const getDefaultLanguage = (): string => {
   // Check if user has a saved preference
@@ -29,6 +30,7 @@ i18n
       es: { translation: es },
       fr: { translation: fr },
       de: { translation: de },
+      el: { translation: el },
     },
     lng: getDefaultLanguage(),
     fallbackLng: 'en',
