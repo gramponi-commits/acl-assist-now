@@ -177,14 +177,15 @@
   },
   "airway": {
     "title": "Atemwegsstatus",
-    "none": "Keiner",
-    "bvm": "Beatmungsbeutel",
-    "advanced": "Erweitert"
+    "ambu": "AMBU",
+    "sga": "SGA",
+    "ett": "ETT"
   },
   "cpr": {
     "title": "HLW-Qualität",
     "compressionRate": "Kompressionsrate",
-    "targetRate": "Ziel: 100-120/min"
+    "targetRate": "Ziel: 100-120/min",
+    "pressEnter": "Enter drücken zum Speichern"
   },
   "banner": {
     "startCPR": "HLW STARTEN",
@@ -228,12 +229,13 @@
     "epinephrineGiven": "Adrenalin {{dose}}mg IV/IO",
     "amiodaroneGiven": "Amiodaron {{dose}}mg IV/IO",
     "lidocaineGiven": "Lidocain {{dose}}mg IV/IO",
-    "airwayAdvanced": "Atemweg: Erweiterter Atemweg gelegt",
-    "airwayBvm": "Atemweg: Beatmungsbeutel-Beatmung",
-    "airwayNone": "Atemweg: Kein Atemweg",
+    "airwayAmbu": "Atemweg: AMBU-Beatmung",
+    "airwaySga": "Atemweg: SGA gelegt",
+    "airwayEtt": "Atemweg: ETT gelegt",
     "hsTsChecked": "H's & T's geprüft: {{items}}",
     "codeEnded": "Code beendet: {{outcome}}",
-    "noteAdded": "Notiz: {{note}}"
+    "noteAdded": "Notiz: {{note}}",
+    "etco2Recorded": "ETCO₂: {{value}} mmHg"
   },
   "notes": {
     "addNote": "Notiz Hinzufügen",

@@ -12,12 +12,12 @@ export type ACLSPhase =
   | 'post_rosc'
   | 'code_ended';
 
-export type AirwayStatus = 'bvm' | 'advanced' | 'none';
+export type AirwayStatus = 'ambu' | 'sga' | 'ett';
 
 export interface Intervention {
   id: string;
   timestamp: number;
-  type: 'shock' | 'epinephrine' | 'amiodarone' | 'lidocaine' | 'rhythm_change' | 'rosc' | 'airway' | 'cpr_start' | 'note' | 'hs_ts_check';
+  type: 'shock' | 'epinephrine' | 'amiodarone' | 'lidocaine' | 'rhythm_change' | 'rosc' | 'airway' | 'cpr_start' | 'note' | 'hs_ts_check' | 'etco2';
   details: string;
   value?: number | string;
 }
@@ -171,7 +171,7 @@ export function createInitialSession(): ACLSSession {
     lidocaineCount: 0,
     lastEpinephrineTime: null,
     lastAmiodaroneTime: null,
-    airwayStatus: 'none',
+    airwayStatus: 'ambu',
     interventions: [],
     vitalReadings: [],
     hsAndTs: { ...DEFAULT_HS_AND_TS },

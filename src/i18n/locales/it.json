@@ -174,14 +174,15 @@
   },
   "airway": {
     "title": "Stato Vie Aeree",
-    "none": "Nessuno",
-    "bvm": "AMBU",
-    "advanced": "Avanzato"
+    "ambu": "AMBU",
+    "sga": "SGA",
+    "ett": "ETT"
   },
   "cpr": {
     "title": "Qualità RCP",
     "compressionRate": "Frequenza Compressioni",
-    "targetRate": "Target: 100-120/min"
+    "targetRate": "Target: 100-120/min",
+    "pressEnter": "Premi Invio per registrare"
   },
 "banner": {
     "startCPR": "INIZIA RCP",
@@ -225,12 +226,13 @@
     "epinephrineGiven": "Adrenalina {{dose}}mg IV/IO",
     "amiodaroneGiven": "Amiodarone {{dose}}mg IV/IO",
     "lidocaineGiven": "Lidocaina {{dose}}mg IV/IO",
-    "airwayAdvanced": "Vie aeree: Vie aeree avanzate posizionate",
-    "airwayBvm": "Vie aeree: Ventilazione con AMBU",
-    "airwayNone": "Vie aeree: Nessuna",
+    "airwayAmbu": "Vie aeree: Ventilazione con AMBU",
+    "airwaySga": "Vie aeree: SGA posizionato",
+    "airwayEtt": "Vie aeree: ETT posizionato",
     "hsTsChecked": "H's & T's controllate: {{items}}",
     "codeEnded": "Codice terminato: {{outcome}}",
-    "noteAdded": "Nota: {{note}}"
+    "noteAdded": "Nota: {{note}}",
+    "etco2Recorded": "ETCO₂: {{value}} mmHg"
   },
   "notes": {
     "addNote": "Aggiungi Nota",

@@ -298,6 +298,7 @@ export function CodeScreen() {
               <CPRQualityPanel
                 airwayStatus={session.airwayStatus}
                 onAirwayChange={actions.setAirway}
+                onETCO2Record={actions.recordETCO2}
               />
 
               {/* H's & T's */}
@@ -381,6 +382,7 @@ export function CodeScreen() {
               <CPRQualityPanel
                 airwayStatus={session.airwayStatus}
                 onAirwayChange={actions.setAirway}
+                onETCO2Record={actions.recordETCO2}
               />
 
               {/* H's & T's */}
