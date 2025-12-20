@@ -175,8 +175,11 @@
   "airway": {
     "title": "Stato Vie Aeree",
     "ambu": "AMBU",
+    "ambuDesc": "Pallone-maschera",
     "sga": "SGA",
-    "ett": "ETT"
+    "sgaDesc": "Sovraglottica",
+    "ett": "ETT",
+    "ettDesc": "Tubo endotracheale"
   },
   "cpr": {
     "title": "Qualità RCP",

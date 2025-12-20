@@ -178,8 +178,11 @@
   "airway": {
     "title": "État Voies Aériennes",
     "ambu": "BAVU",
+    "ambuDesc": "Ballon-masque",
     "sga": "DSG",
-    "ett": "IOT"
+    "sgaDesc": "Supraglottique",
+    "ett": "IOT",
+    "ettDesc": "Tube endotrachéal"
   },
   "cpr": {
     "title": "Qualité RCP",
