@@ -182,7 +182,7 @@
     "title": "CPR Quality",
     "compressionRate": "Compression Rate",
     "targetRate": "Target: 100-120/min",
-    "pressEnter": "Press Enter to record"
+    "record": "Record"
   },
 "banner": {
     "startCPR": "START CPR",

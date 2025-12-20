@@ -182,7 +182,7 @@
     "title": "Qualità RCP",
     "compressionRate": "Frequenza Compressioni",
     "targetRate": "Target: 100-120/min",
-    "pressEnter": "Premi Invio per registrare"
+    "record": "Registra"
   },
 "banner": {
     "startCPR": "INIZIA RCP",

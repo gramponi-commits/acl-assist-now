@@ -185,7 +185,7 @@
     "title": "HLW-Qualität",
     "compressionRate": "Kompressionsrate",
     "targetRate": "Ziel: 100-120/min",
-    "pressEnter": "Enter drücken zum Speichern"
+    "record": "Aufzeichnen"
   },
   "banner": {
     "startCPR": "HLW STARTEN",

@@ -44,19 +44,25 @@ export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Record }:
           <Activity className="h-4 w-4 text-muted-foreground" />
           <span className="text-sm font-medium">ETCO₂ (mmHg)</span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <Input
             type="number"
             placeholder="ETCO₂"
             value={etco2}
             onChange={(e) => setEtco2(e.target.value)}
-            onBlur={handleETCO2Submit}
             onKeyDown={handleETCO2KeyDown}
-            className="h-12 text-lg font-mono"
+            className="h-12 text-lg font-mono flex-1"
           />
+          <Button
+            onClick={handleETCO2Submit}
+            disabled={!etco2 || isNaN(parseInt(etco2)) || parseInt(etco2) <= 0}
+            className="h-12 px-4"
+          >
+            {t('cpr.record')}
+          </Button>
           {etco2Status && (
             <div className={cn(
-              'px-3 py-1 rounded-full text-sm font-medium',
+              'px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap',
               etco2Status === 'good' ? 'bg-acls-success/20 text-acls-success' : 'bg-acls-critical/20 text-acls-critical'
             )}>
               {etco2Status === 'good' ? '≥10 ✓' : '<10 ⚠'}
@@ -64,7 +70,7 @@ export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Record }:
           )}
         </div>
         <p className="text-xs text-muted-foreground mt-2">
-          {t('postRosc.target')}: ≥10 mmHg | {t('cpr.pressEnter')}
+          {t('postRosc.target')}: ≥10 mmHg
         </p>
       </div>
 
