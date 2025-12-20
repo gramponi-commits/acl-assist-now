@@ -185,7 +185,7 @@
     "title": "Qualité RCP",
     "compressionRate": "Fréquence des Compressions",
     "targetRate": "Cible : 100-120/min",
-    "pressEnter": "Appuyez sur Entrée pour enregistrer"
+    "record": "Enregistrer"
   },
   "banner": {
     "startCPR": "DÉMARRER RCP",
