@@ -174,14 +174,15 @@
   },
   "airway": {
     "title": "Airway Status",
-    "none": "None",
-    "bvm": "BVM",
-    "advanced": "Advanced"
+    "ambu": "AMBU",
+    "sga": "SGA",
+    "ett": "ETT"
   },
   "cpr": {
     "title": "CPR Quality",
     "compressionRate": "Compression Rate",
-    "targetRate": "Target: 100-120/min"
+    "targetRate": "Target: 100-120/min",
+    "pressEnter": "Press Enter to record"
   },
 "banner": {
     "startCPR": "START CPR",
@@ -225,12 +226,13 @@
     "epinephrineGiven": "Epinephrine {{dose}}mg IV/IO",
     "amiodaroneGiven": "Amiodarone {{dose}}mg IV/IO",
     "lidocaineGiven": "Lidocaine {{dose}}mg IV/IO",
-    "airwayAdvanced": "Airway: Advanced airway placed",
-    "airwayBvm": "Airway: BVM ventilation",
-    "airwayNone": "Airway: No airway",
+    "airwayAmbu": "Airway: AMBU ventilation",
+    "airwaySga": "Airway: SGA placed",
+    "airwayEtt": "Airway: ETT placed",
     "hsTsChecked": "H's & T's checked: {{items}}",
     "codeEnded": "Code ended: {{outcome}}",
-    "noteAdded": "Note: {{note}}"
+    "noteAdded": "Note: {{note}}",
+    "etco2Recorded": "ETCO₂: {{value}} mmHg"
   },
   "notes": {
     "addNote": "Add Note",

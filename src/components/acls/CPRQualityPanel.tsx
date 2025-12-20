@@ -9,18 +9,25 @@ import { Wind, Activity } from 'lucide-react';
 interface CPRQualityPanelProps {
   airwayStatus: AirwayStatus;
   onAirwayChange: (status: AirwayStatus) => void;
-  onETCO2Change?: (value: number) => void;
+  onETCO2Record?: (value: number) => void;
 }
 
-export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Change }: CPRQualityPanelProps) {
+export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Record }: CPRQualityPanelProps) {
   const { t } = useTranslation();
   const [etco2, setEtco2] = useState<string>('');
+  const [lastRecordedValue, setLastRecordedValue] = useState<number | null>(null);
 
-  const handleETCO2Change = (value: string) => {
-    setEtco2(value);
-    const numValue = parseInt(value);
-    if (!isNaN(numValue) && onETCO2Change) {
-      onETCO2Change(numValue);
+  const handleETCO2Submit = () => {
+    const numValue = parseInt(etco2);
+    if (!isNaN(numValue) && numValue > 0 && numValue !== lastRecordedValue && onETCO2Record) {
+      onETCO2Record(numValue);
+      setLastRecordedValue(numValue);
+    }
+  };
+
+  const handleETCO2KeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleETCO2Submit();
     }
   };
 
@@ -42,7 +49,9 @@ export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Change }:
             type="number"
             placeholder="ETCO₂"
             value={etco2}
-            onChange={(e) => handleETCO2Change(e.target.value)}
+            onChange={(e) => setEtco2(e.target.value)}
+            onBlur={handleETCO2Submit}
+            onKeyDown={handleETCO2KeyDown}
             className="h-12 text-lg font-mono"
           />
           {etco2Status && (
@@ -55,7 +64,7 @@ export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Change }:
           )}
         </div>
         <p className="text-xs text-muted-foreground mt-2">
-          {t('postRosc.target')}: ≥10 mmHg
+          {t('postRosc.target')}: ≥10 mmHg | {t('cpr.pressEnter')}
         </p>
       </div>
 
@@ -69,35 +78,35 @@ export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Change }:
           <Button
             variant="outline"
             size="sm"
-            onClick={() => onAirwayChange('none')}
+            onClick={() => onAirwayChange('ambu')}
             className={cn(
               'h-12 transition-all',
-              airwayStatus === 'none' && 'bg-primary text-primary-foreground border-primary'
+              airwayStatus === 'ambu' && 'bg-primary text-primary-foreground border-primary'
             )}
           >
-            {t('airway.none')}
+            {t('airway.ambu')}
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => onAirwayChange('bvm')}
+            onClick={() => onAirwayChange('sga')}
             className={cn(
               'h-12 transition-all',
-              airwayStatus === 'bvm' && 'bg-primary text-primary-foreground border-primary'
+              airwayStatus === 'sga' && 'bg-acls-warning text-white border-acls-warning'
             )}
           >
-            {t('airway.bvm')}
+            {t('airway.sga')}
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => onAirwayChange('advanced')}
+            onClick={() => onAirwayChange('ett')}
             className={cn(
               'h-12 transition-all',
-              airwayStatus === 'advanced' && 'bg-acls-success text-white border-acls-success'
+              airwayStatus === 'ett' && 'bg-acls-success text-white border-acls-success'
             )}
           >
-            {t('airway.advanced')}
+            {t('airway.ett')}
           </Button>
         </div>
       </div>

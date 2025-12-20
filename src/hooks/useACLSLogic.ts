@@ -306,8 +306,16 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       airwayStatus: status,
     }));
 
-    const airwayText = status === 'advanced' ? t('interventions.airwayAdvanced') : status === 'bvm' ? t('interventions.airwayBvm') : t('interventions.airwayNone');
+    const airwayText = status === 'ett' 
+      ? t('interventions.airwayEtt') 
+      : status === 'sga' 
+        ? t('interventions.airwaySga') 
+        : t('interventions.airwayAmbu');
     addIntervention('airway', airwayText);
+  }, [addIntervention, t]);
+
+  const recordETCO2 = useCallback((value: number) => {
+    addIntervention('etco2', t('interventions.etco2Recorded', { value }), value);
   }, [addIntervention, t]);
 
   const updateHsAndTs = useCallback((updates: Partial<HsAndTs>) => {
@@ -412,7 +420,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
 
     const outcomeText = session.outcome === 'rosc' ? 'ROSC' : session.outcome === 'deceased' ? 'Deceased' : 'In Progress';
     const rhythmText = session.currentRhythm === 'vf_pvt' ? 'VF/pVT' : session.currentRhythm === 'asystole' ? 'Asystole' : session.currentRhythm === 'pea' ? 'PEA' : 'N/A';
-    const airwayText = session.airwayStatus === 'advanced' ? 'Advanced (ETT/SGA)' : session.airwayStatus === 'bvm' ? 'BVM' : 'Not documented';
+    const airwayText = session.airwayStatus === 'ett' ? 'ETT' : session.airwayStatus === 'sga' ? 'SGA' : 'AMBU';
 
     // Header with background
     pdf.setFillColor(220, 38, 38); // Red header
@@ -789,6 +797,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       addIntervention,
       addNote,
       setRhythmAnalysisActive,
+      recordETCO2,
     },
     buttonStates: {
       canGiveEpinephrine,

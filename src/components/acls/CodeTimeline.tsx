@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Intervention } from '@/types/acls';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { ChevronDown, Clock, Zap, Syringe, Pill, Heart, Activity, Wind, FileText } from 'lucide-react';
+import { ChevronDown, Clock, Zap, Syringe, Pill, Heart, Activity, Wind, FileText, Gauge } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -40,6 +40,8 @@ function getInterventionIcon(type: Intervention['type']) {
       return <Wind className="h-4 w-4 text-acls-info" />;
     case 'cpr_start':
       return <Clock className="h-4 w-4 text-foreground" />;
+    case 'etco2':
+      return <Gauge className="h-4 w-4 text-acls-info" />;
     default:
       return <FileText className="h-4 w-4 text-muted-foreground" />;
   }

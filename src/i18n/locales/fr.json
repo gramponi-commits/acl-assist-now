@@ -177,14 +177,15 @@
   },
   "airway": {
     "title": "État Voies Aériennes",
-    "none": "Aucune",
-    "bvm": "BAVU",
-    "advanced": "Avancée"
+    "ambu": "BAVU",
+    "sga": "DSG",
+    "ett": "IOT"
   },
   "cpr": {
     "title": "Qualité RCP",
     "compressionRate": "Fréquence des Compressions",
-    "targetRate": "Cible : 100-120/min"
+    "targetRate": "Cible : 100-120/min",
+    "pressEnter": "Appuyez sur Entrée pour enregistrer"
   },
   "banner": {
     "startCPR": "DÉMARRER RCP",
@@ -228,12 +229,13 @@
     "epinephrineGiven": "Adrénaline {{dose}}mg IV/IO",
     "amiodaroneGiven": "Amiodarone {{dose}}mg IV/IO",
     "lidocaineGiven": "Lidocaïne {{dose}}mg IV/IO",
-    "airwayAdvanced": "Voies aériennes : Voie aérienne avancée placée",
-    "airwayBvm": "Voies aériennes : Ventilation au BAVU",
-    "airwayNone": "Voies aériennes : Aucune voie aérienne",
+    "airwayAmbu": "Voies aériennes : Ventilation au BAVU",
+    "airwaySga": "Voies aériennes : DSG placé",
+    "airwayEtt": "Voies aériennes : IOT placé",
     "hsTsChecked": "H's & T's vérifiés : {{items}}",
     "codeEnded": "Code terminé : {{outcome}}",
-    "noteAdded": "Note : {{note}}"
+    "noteAdded": "Note : {{note}}",
+    "etco2Recorded": "ETCO₂ : {{value}} mmHg"
   },
   "notes": {
     "addNote": "Ajouter Note",
