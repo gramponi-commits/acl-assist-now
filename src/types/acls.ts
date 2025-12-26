@@ -1,12 +1,16 @@
-// PALS Decision Support System Types
-// Based on 2025 AHA Pediatric Cardiac Arrest Algorithm
+// ACLS/PALS Decision Support System Types
+// Based on 2025 AHA Cardiac Arrest Algorithm
 
 export type RhythmType = 'vf_pvt' | 'asystole' | 'pea' | null;
 
 // CPR ratio options for pediatric
 export type CPRRatio = '15:2' | '30:2';
 
+// Pathway mode: Adult ACLS or Pediatric PALS
+export type PathwayMode = 'adult' | 'pediatric';
+
 export type ACLSPhase = 
+  | 'pathway_selection'
   | 'initial'
   | 'cpr_pending_rhythm'
   | 'rhythm_selection'
@@ -96,9 +100,11 @@ export interface ACLSSession {
   postROSCVitals: PostROSCVitals;
   cprCycleStartTime: number | null;
   roscTime: number | null;
-  // PALS-specific fields
+  // PALS-specific fields (optional for adult mode)
   patientWeight: number | null;
   cprRatio: CPRRatio;
+  // Pathway mode
+  pathwayMode: PathwayMode;
 }
 
 export interface ACLSConfig {
@@ -113,17 +119,17 @@ export interface ACLSConfig {
   epinephrineDose: number;
 }
 
-// PALS uses weight-based dosing, so fixed doses are now defaults for display only
+// Config uses 4 minute epi interval for both ACLS and PALS
 export const DEFAULT_ACLS_CONFIG: ACLSConfig = {
-  biphasicMinJoules: 2, // 2 J/kg for first shock
-  biphasicMaxJoules: 4, // 4 J/kg for subsequent shocks
-  epinephrineIntervalMs: 3 * 60 * 1000, // 3 minutes for PALS
+  biphasicMinJoules: 2, // 2 J/kg for first shock (PALS) or 200J (ACLS)
+  biphasicMaxJoules: 4, // 4 J/kg for subsequent shocks (PALS) or 360J (ACLS)
+  epinephrineIntervalMs: 4 * 60 * 1000, // 4 minutes for BOTH ACLS and PALS
   rhythmCheckIntervalMs: 2 * 60 * 1000, // 2 minutes
   preShockAlertAdvanceMs: 15 * 1000, // 15 seconds
-  amiodaroneFirstDose: 5, // 5 mg/kg
-  amiodaroneSecondDose: 5, // 5 mg/kg
-  lidocaineDose: 1, // 1 mg/kg
-  epinephrineDose: 0.01, // 0.01 mg/kg
+  amiodaroneFirstDose: 5, // 5 mg/kg (PALS) or 300mg (ACLS)
+  amiodaroneSecondDose: 5, // 5 mg/kg (PALS) or 150mg (ACLS)
+  lidocaineDose: 1, // 1 mg/kg (PALS) or 100mg (ACLS)
+  epinephrineDose: 0.01, // 0.01 mg/kg (PALS) or 1mg (ACLS)
 };
 
 export const DEFAULT_HS_AND_TS: HsAndTs = {
@@ -169,10 +175,10 @@ export function createInitialSession(): ACLSSession {
     startTime: Date.now(),
     endTime: null,
     currentRhythm: null,
-    phase: 'initial',
+    phase: 'pathway_selection', // Start with pathway selection
     outcome: null,
     shockCount: 0,
-    currentEnergy: 0, // Will be calculated based on weight
+    currentEnergy: 0,
     epinephrineCount: 0,
     amiodaroneCount: 0,
     lidocaineCount: 0,
@@ -187,6 +193,7 @@ export function createInitialSession(): ACLSSession {
     cprCycleStartTime: null,
     roscTime: null,
     patientWeight: null,
-    cprRatio: '15:2', // Default to 2-rescuer pediatric ratio
+    cprRatio: '15:2', // Default to 2-rescuer pediatric ratio (will be ignored for adult)
+    pathwayMode: 'adult', // Default, will be set by pathway selector
   };
 }

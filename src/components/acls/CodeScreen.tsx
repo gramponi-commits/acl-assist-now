@@ -12,6 +12,7 @@ import { RhythmCheckModal } from './RhythmCheckModal';
 import { ResumeSessionDialog } from './ResumeSessionDialog';
 import { AddNoteDialog } from './AddNoteDialog';
 import { WeightInput, WeightDisplay } from './WeightInput';
+import { PathwaySelector, PathwayMode } from './PathwaySelector';
 import { useACLSLogic } from '@/hooks/useACLSLogic';
 import { useWakeLock } from '@/hooks/useWakeLock';
 import { useAudioAlerts } from '@/hooks/useAudioAlerts';
@@ -24,6 +25,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { calculateShockEnergy } from '@/lib/palsDosing';
+import { getAdultShockEnergy } from '@/lib/aclsDosing';
 import { CPRRatio } from '@/types/acls';
 import { 
   saveActiveSession, 
@@ -50,8 +52,10 @@ export function CodeScreen() {
   const [showWeightDialog, setShowWeightDialog] = useState(false);
   const [pendingResumeSession, setPendingResumeSession] = useState<ReturnType<typeof getActiveSession>>(null);
   
-  // Calculate shock energy based on patient weight
-  const shockEnergy = calculateShockEnergy(session.patientWeight, session.shockCount);
+  // Calculate shock energy based on pathway mode and patient weight
+  const shockEnergy = session.pathwayMode === 'pediatric' 
+    ? calculateShockEnergy(session.patientWeight, session.shockCount)
+    : getAdultShockEnergy(session.shockCount, settings.defibrillatorEnergy);
   
   // Track previous states for alert triggers
   const prevRhythmCheckDue = useRef(false);
@@ -63,6 +67,7 @@ export function CodeScreen() {
   const isCPRPendingRhythm = session.phase === 'cpr_pending_rhythm';
   const isPostROSC = session.phase === 'post_rosc';
   const isCodeEnded = session.phase === 'code_ended';
+  const isPathwaySelection = session.phase === 'pathway_selection';
   const isInitial = session.phase === 'initial' || session.phase === 'rhythm_selection';
 
   // Check for active session on mount
@@ -243,25 +248,37 @@ export function CodeScreen() {
 
       <ScrollArea className="flex-1">
         <div className="p-4 space-y-4 max-w-lg mx-auto">
-          {/* Initial Screen - Start CPR Button + Optional Weight */}
+          {/* Pathway Selection Screen */}
+          {isPathwaySelection && (
+            <PathwaySelector onSelectPathway={actions.setPathwayMode} />
+          )}
+
+          {/* Initial Screen - Start CPR Button + Optional Weight (Pediatric only) */}
           {isInitial && (
             <div className="flex flex-col items-center justify-center pt-20 pb-8 space-y-6">
-              {/* Weight Input Section */}
-              <div className="w-full max-w-sm space-y-3">
-                <WeightInput
-                  currentWeight={session.patientWeight}
-                  onWeightChange={actions.setPatientWeight}
-                  isOpen={showWeightDialog}
-                  onOpenChange={setShowWeightDialog}
-                />
-                <p className="text-xs text-muted-foreground text-center">
-                  {t('weight.optionalHint')}
-                </p>
-              </div>
+              {/* Weight Input Section - Only for Pediatric */}
+              {session.pathwayMode === 'pediatric' && (
+                <div className="w-full max-w-sm space-y-3">
+                  <WeightInput
+                    currentWeight={session.patientWeight}
+                    onWeightChange={actions.setPatientWeight}
+                    isOpen={showWeightDialog}
+                    onOpenChange={setShowWeightDialog}
+                  />
+                  <p className="text-xs text-muted-foreground text-center">
+                    {t('weight.optionalHint')}
+                  </p>
+                </div>
+              )}
 
               <Button
                 onClick={actions.startCPR}
-                className="h-24 w-full max-w-sm text-2xl font-bold bg-pals-primary hover:bg-pals-primary/90 text-pals-primary-foreground"
+                className={cn(
+                  "h-24 w-full max-w-sm text-2xl font-bold",
+                  session.pathwayMode === 'adult' 
+                    ? "bg-acls-critical hover:bg-acls-critical/90 text-white"
+                    : "bg-pals-primary hover:bg-pals-primary/90 text-pals-primary-foreground"
+                )}
               >
                 <Heart className="h-8 w-8 mr-3" />
                 {t('actions.startCPR')}
@@ -328,6 +345,7 @@ export function CodeScreen() {
                 onETCO2Record={actions.recordETCO2}
                 cprRatio={session.cprRatio}
                 onCPRRatioChange={actions.setCPRRatio}
+                pathwayMode={session.pathwayMode}
               />
 
               {/* H's & T's */}
@@ -410,6 +428,7 @@ export function CodeScreen() {
                 lidocaineCount={session.lidocaineCount}
                 preferLidocaine={settings.preferLidocaine}
                 patientWeight={session.patientWeight}
+                pathwayMode={session.pathwayMode}
                 onEpinephrine={actions.giveEpinephrine}
                 onAmiodarone={actions.giveAmiodarone}
                 onLidocaine={actions.giveLidocaine}
@@ -432,6 +451,7 @@ export function CodeScreen() {
                 onETCO2Record={actions.recordETCO2}
                 cprRatio={session.cprRatio}
                 onCPRRatioChange={actions.setCPRRatio}
+                pathwayMode={session.pathwayMode}
               />
 
               {/* H's & T's */}
