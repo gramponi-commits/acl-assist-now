@@ -52,7 +52,7 @@
     "title": "ΕΛΕΓΧΟΣ ΡΥΘΜΟΥ",
     "subtitle": "Παύση ΚΑΡΠΑ. Ανάλυση ρυθμού. Έλεγχος σφυγμού.",
     "shockVfPvt": "ΑΠΙΝΙΔΩΣΗ - VF/pVT",
-    "shockAt": "Απινίδωση #{{number}} @ {{energy}}J",
+    "shockAt": "Απινίδωση #{{number}} @ {{energy}}",
     "shockNumber": "Απινίδωση #{{number}}",
     "noShock": "Χωρίς απινίδωση"
   },
@@ -239,7 +239,7 @@
     "rhythmIdentified": "Αναγνωρίστηκε ρυθμός: {{rhythm}}",
     "cprInitiated": "Έναρξη ΚΑΡΠΑ",
     "rhythmCheckPaused": "Έλεγχος ρυθμού - Παύση ΚΑΡΠΑ",
-    "shockDelivered": "Απινίδωση #{{number}} στα {{energy}}J",
+    "shockDelivered": "Απινίδωση #{{number}} στα {{energy}}",
     "noShockResume": "Χωρίς απινίδωση - {{rhythm}} - Συνέχιση ΚΑΡΠΑ",
     "cprResumedSame": "Συνέχιση ΚΑΡΠΑ - ίδιος ρυθμός",
     "roscAchieved": "Επιτεύχθηκε ROSC - Ανιχνεύθηκε σφυγμός και ρυθμός!",

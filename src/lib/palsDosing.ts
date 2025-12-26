@@ -140,29 +140,34 @@ export function calculateShockEnergy(weightKg: number | null, shockNumber: numbe
     }
   }
 
-  let jPerKg: number;
-  let displaySuffix = '';
-  
   if (shockNumber === 0) {
     // First shock: 2 J/kg
-    jPerKg = DEFAULT_PALS_CONFIG.firstShockJoulesPerKg; // 2
+    const calculatedEnergy = weightKg * DEFAULT_PALS_CONFIG.firstShockJoulesPerKg;
+    const energy = Math.min(calculatedEnergy, MAX_SHOCK_JOULES);
+    return {
+      value: Math.round(energy),
+      display: `${Math.round(energy)}J`,
+      unit: 'J',
+    };
   } else if (shockNumber === 1) {
     // Second shock: 4 J/kg
-    jPerKg = DEFAULT_PALS_CONFIG.subsequentShockJoulesPerKg; // 4
+    const calculatedEnergy = weightKg * DEFAULT_PALS_CONFIG.subsequentShockJoulesPerKg;
+    const energy = Math.min(calculatedEnergy, MAX_SHOCK_JOULES);
+    return {
+      value: Math.round(energy),
+      display: `${Math.round(energy)}J`,
+      unit: 'J',
+    };
   } else {
-    // Third+ shocks: 4-10 J/kg (use 4 as base, can escalate)
-    jPerKg = DEFAULT_PALS_CONFIG.subsequentShockJoulesPerKg; // 4
-    displaySuffix = ' (4-10 J/kg)';
+    // Third+ shocks: 4-10 J/kg - show range
+    const minEnergy = Math.min(weightKg * 4, MAX_SHOCK_JOULES);
+    const maxEnergy = Math.min(weightKg * 10, MAX_SHOCK_JOULES);
+    return {
+      value: Math.round(minEnergy),
+      display: `${Math.round(minEnergy)}-${Math.round(maxEnergy)}J`,
+      unit: 'J',
+    };
   }
-
-  const calculatedEnergy = weightKg * jPerKg;
-  const energy = Math.min(calculatedEnergy, MAX_SHOCK_JOULES);
-  
-  return {
-    value: Math.round(energy),
-    display: `${Math.round(energy)}J${displaySuffix}`,
-    unit: 'J',
-  };
 }
 
 /**

@@ -52,7 +52,7 @@
     "title": "ANALYSE DU RYTHME",
     "subtitle": "Pause RCP brièvement. Analyser le rythme. Vérifier le pouls.",
     "shockVfPvt": "CHOC - FV/TVsp",
-    "shockAt": "Choc #{{number}} @ {{energy}}J",
+    "shockAt": "Choc #{{number}} @ {{energy}}",
     "shockNumber": "Choc #{{number}}",
     "noShock": "Pas de choc"
   },
@@ -242,7 +242,7 @@
     "rhythmIdentified": "Rythme identifié : {{rhythm}}",
     "cprInitiated": "RCP initiée",
     "rhythmCheckPaused": "Analyse du rythme - RCP en pause",
-    "shockDelivered": "Choc #{{number}} délivré à {{energy}}J",
+    "shockDelivered": "Choc #{{number}} délivré à {{energy}}",
     "noShockResume": "Pas de choc - {{rhythm}} - Reprendre RCP",
     "cprResumedSame": "RCP reprise - même rythme",
     "roscAchieved": "RACS obtenu - Pouls et rythme détectés !",

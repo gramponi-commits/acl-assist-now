@@ -52,7 +52,7 @@
     "title": "RHYTHMUSANALYSE",
     "subtitle": "HLW kurz pausieren. Rhythmus analysieren. Puls prüfen.",
     "shockVfPvt": "SCHOCK - VF/pVT",
-    "shockAt": "Schock #{{number}} @ {{energy}}J",
+    "shockAt": "Schock #{{number}} @ {{energy}}",
     "shockNumber": "Schock #{{number}}",
     "noShock": "Kein Schock"
   },
@@ -242,7 +242,7 @@
     "rhythmIdentified": "Rhythmus identifiziert: {{rhythm}}",
     "cprInitiated": "HLW eingeleitet",
     "rhythmCheckPaused": "Rhythmusanalyse - HLW pausiert",
-    "shockDelivered": "Schock #{{number}} abgegeben mit {{energy}}J",
+    "shockDelivered": "Schock #{{number}} abgegeben mit {{energy}}",
     "noShockResume": "Kein Schock - {{rhythm}} - HLW fortsetzen",
     "cprResumedSame": "HLW fortgesetzt - gleicher Rhythmus",
     "roscAchieved": "ROSC erreicht - Puls und Rhythmus erkannt!",

@@ -52,7 +52,7 @@
     "title": "ANÁLISIS DE RITMO",
     "subtitle": "Pausar RCP brevemente. Analizar ritmo. Comprobar pulso.",
     "shockVfPvt": "DESCARGA - FV/TVsp",
-    "shockAt": "Descarga #{{number}} @ {{energy}}J",
+    "shockAt": "Descarga #{{number}} @ {{energy}}",
     "shockNumber": "Descarga #{{number}}",
     "noShock": "Sin descarga"
   },
@@ -242,7 +242,7 @@
     "rhythmIdentified": "Ritmo identificado: {{rhythm}}",
     "cprInitiated": "RCP iniciado",
     "rhythmCheckPaused": "Análisis de ritmo - RCP pausado",
-    "shockDelivered": "Descarga #{{number}} administrada a {{energy}}J",
+    "shockDelivered": "Descarga #{{number}} administrada a {{energy}}",
     "noShockResume": "Sin descarga - {{rhythm}} - Reanudar RCP",
     "cprResumedSame": "RCP reanudado - mismo ritmo",
     "roscAchieved": "RCE logrado - ¡Pulso y ritmo detectados!",
