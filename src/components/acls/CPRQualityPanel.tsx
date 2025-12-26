@@ -2,17 +2,19 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { AirwayStatus } from '@/types/acls';
+import { AirwayStatus, CPRRatio } from '@/types/acls';
 import { cn } from '@/lib/utils';
-import { Wind, Activity } from 'lucide-react';
+import { Wind, Activity, Users } from 'lucide-react';
 
 interface CPRQualityPanelProps {
   airwayStatus: AirwayStatus;
   onAirwayChange: (status: AirwayStatus) => void;
   onETCO2Record?: (value: number) => void;
+  cprRatio?: CPRRatio;
+  onCPRRatioChange?: (ratio: CPRRatio) => void;
 }
 
-export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Record }: CPRQualityPanelProps) {
+export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Record, cprRatio = '15:2', onCPRRatioChange }: CPRQualityPanelProps) {
   const { t } = useTranslation();
   const [etco2, setEtco2] = useState<string>('');
   const [lastRecordedValue, setLastRecordedValue] = useState<number | null>(null);
@@ -71,6 +73,49 @@ export function CPRQualityPanel({ airwayStatus, onAirwayChange, onETCO2Record }:
         </div>
         <p className="text-xs text-muted-foreground mt-2">
           {t('postRosc.target')}: ≥10 mmHg
+        </p>
+      </div>
+
+      {/* CPR Ratio (Pediatric) */}
+      <div className="bg-card rounded-lg p-4 border border-border">
+        <div className="flex items-center gap-2 mb-3">
+          <Users className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm font-medium">{t('cpr.ratio')}</span>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            onClick={() => onCPRRatioChange?.('15:2')}
+            className={cn(
+              'flex flex-col items-center justify-center p-3 rounded-md border transition-all',
+              cprRatio === '15:2' 
+                ? 'bg-primary text-primary-foreground border-primary' 
+                : 'border-border hover:bg-accent'
+            )}
+          >
+            <span className="font-bold text-lg">15:2</span>
+            <span className={cn(
+              'text-xs text-center',
+              cprRatio === '15:2' ? 'text-primary-foreground/80' : 'text-muted-foreground'
+            )}>{t('cpr.twoRescuers')}</span>
+          </button>
+          <button
+            onClick={() => onCPRRatioChange?.('30:2')}
+            className={cn(
+              'flex flex-col items-center justify-center p-3 rounded-md border transition-all',
+              cprRatio === '30:2' 
+                ? 'bg-primary text-primary-foreground border-primary' 
+                : 'border-border hover:bg-accent'
+            )}
+          >
+            <span className="font-bold text-lg">30:2</span>
+            <span className={cn(
+              'text-xs text-center',
+              cprRatio === '30:2' ? 'text-primary-foreground/80' : 'text-muted-foreground'
+            )}>{t('cpr.oneRescuer')}</span>
+          </button>
+        </div>
+        <p className="text-xs text-muted-foreground mt-2">
+          {t('cpr.depthPediatric')}
         </p>
       </div>
 

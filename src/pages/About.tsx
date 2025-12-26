@@ -158,7 +158,7 @@ const About = () => {
             rel="noopener noreferrer"
             className="text-muted-foreground hover:text-primary flex items-center gap-2 transition-colors"
           >
-            {t('about.referencesAHA')}
+            {t('about.referencesPALS')}
             <ExternalLink className="h-4 w-4" />
           </a>
         </CardContent>

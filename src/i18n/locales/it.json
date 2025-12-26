@@ -155,10 +155,10 @@
     "voiceDesc": "Avvisi parlati per adrenalina, controllo ritmo, pre-carica",
     "antiarrhythmic": "Preferisci Lidocaina",
     "antiarrhythmicDesc": "Usa Lidocaina invece di Amiodarone",
-    "usingLidocaine": "Usando Lidocaina 100mg",
-    "usingAmiodarone": "Usando Amiodarone 300mg/150mg",
+    "usingLidocaine": "Usando Lidocaina (1 mg/kg)",
+    "usingAmiodarone": "Usando Amiodarone (5 mg/kg)",
     "defibrillator": "Energia Defibrillatore",
-    "defibrillatorDesc": "Seleziona l'energia dello shock in Joule"
+    "defibrillatorDescPALS": "Basato sul peso: 2 J/kg → 4 J/kg → fino a 10 J/kg"
   },
   "resume": {
     "title": "Codice Attivo Rilevato",
@@ -185,7 +185,11 @@
     "title": "Qualità RCP",
     "compressionRate": "Frequenza Compressioni",
     "targetRate": "Target: 100-120/min",
-    "record": "Registra"
+    "record": "Registra",
+    "ratio": "Rapporto RCP",
+    "twoRescuers": "2 soccorritori",
+    "oneRescuer": "1 soccorritore",
+    "depthPediatric": "Profondità: ≥⅓ del diametro toracico"
   },
 "banner": {
     "startCPR": "INIZIA RCP",
@@ -216,56 +220,6 @@
     "peaEpi": "PEA - Adrenalina subito",
     "considerHsTs": "Controllo ritmo tra {{seconds}}s | Considera H's & T's",
     "aclsInProgress": "ACLS IN CORSO"
-  },
-  "interventions": {
-    "rhythmIdentified": "Ritmo identificato: {{rhythm}}",
-    "cprInitiated": "RCP iniziata",
-    "rhythmCheckPaused": "Controllo ritmo - RCP in pausa",
-    "shockDelivered": "Shock #{{number}} erogato a {{energy}}J",
-    "noShockResume": "No shock - {{rhythm}} - Riprendi RCP",
-    "cprResumedSame": "RCP ripresa - stesso ritmo",
-    "roscAchieved": "ROSC raggiunto - Polso e ritmo rilevati!",
-    "codeTerminated": "Codice terminato - Decesso dichiarato",
-    "epinephrineGiven": "Adrenalina {{dose}}mg IV/IO",
-    "amiodaroneGiven": "Amiodarone {{dose}}mg IV/IO",
-    "lidocaineGiven": "Lidocaina {{dose}}mg IV/IO",
-    "airwayAmbu": "Vie aeree: Ventilazione con AMBU",
-    "airwaySga": "Vie aeree: SGA posizionato",
-    "airwayEtt": "Vie aeree: ETT posizionato",
-    "hsTsChecked": "H's & T's controllate: {{items}}",
-    "codeEnded": "Codice terminato: {{outcome}}",
-    "noteAdded": "Nota: {{note}}",
-    "etco2Recorded": "ETCO₂: {{value}} mmHg"
-  },
-  "notes": {
-    "addNote": "Aggiungi Nota",
-    "placeholder": "Inserisci la tua nota clinica qui...",
-    "hint": "Premi Ctrl+Invio per salvare",
-    "add": "Aggiungi"
-  },
-  "voice": {
-    "rhythmCheck": "Controllo ritmo",
-    "preCharge": "15 secondi, carica defibrillatore",
-    "epiDue": "Adrenalina",
-    "resumeCPR": "Ricomincia RCP",
-    "rosc": "ROSC",
-    "amiodaroneDue": "Amiodarone",
-    "lidocaineDue": "Lidocaina",
-    "shock": "Shock erogato",
-    "noShock": "Nessuno shock, ricomincia RCP"
-  },
-  "weight": {
-    "title": "Peso Paziente",
-    "description": "Inserisci il peso del paziente per il calcolo dei dosaggi",
-    "setWeight": "Imposta Peso",
-    "placeholder": "Peso",
-    "confirm": "Conferma Peso",
-    "clear": "Cancella",
-    "unknown": "Peso sconosciuto",
-    "unknownHint": "Lascia vuoto se il peso è sconosciuto - i dosaggi mostreranno valori per kg",
-    "optionalHint": "Opzionale: Inserisci il peso per dosaggi calcolati automaticamente",
-    "calculatedDoses": "Dosaggi Calcolati",
-    "firstShock": "Primo Shock"
   },
   "interventions": {
     "rhythmIdentified": "Ritmo identificato: {{rhythm}}",
@@ -330,7 +284,7 @@
     "usageLocalData": "Tutti i dati salvati localmente solo sul tuo dispositivo",
     "usageOffline": "Funziona completamente offline",
     "referencesTitle": "Riferimenti",
-    "referencesAHA": "Basata sugli Algoritmi AHA 2025 per l'Arresto Cardiaco dell'Adulto",
+    "referencesPALS": "Basata sugli Algoritmi AHA 2025 per l'Arresto Cardiaco Pediatrico (PALS)",
     "version": "Versione",
     "shareTitle": "Condividi",
     "shareDesc": "Condividi questa app con i colleghi per la formazione",

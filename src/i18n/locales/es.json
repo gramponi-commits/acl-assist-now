@@ -158,10 +158,10 @@
     "voiceDesc": "Alertas habladas para adrenalina, ritmo, pre-carga",
     "antiarrhythmic": "Preferir Lidocaína",
     "antiarrhythmicDesc": "Usar Lidocaína en lugar de Amiodarona",
-    "usingLidocaine": "Usando Lidocaína 100mg",
-    "usingAmiodarone": "Usando Amiodarona 300mg/150mg",
+    "usingLidocaine": "Usando Lidocaína (1 mg/kg)",
+    "usingAmiodarone": "Usando Amiodarona (5 mg/kg)",
     "defibrillator": "Energía del Desfibrilador",
-    "defibrillatorDesc": "Seleccione energía de descarga en Julios"
+    "defibrillatorDescPALS": "Calculado por peso: 2 J/kg → 4 J/kg → hasta 10 J/kg"
   },
   "resume": {
     "title": "Código Activo Detectado",
@@ -188,7 +188,24 @@
     "title": "Calidad RCP",
     "compressionRate": "Frecuencia de Compresiones",
     "targetRate": "Objetivo: 100-120/min",
-    "record": "Registrar"
+    "record": "Registrar",
+    "ratio": "Ratio RCP",
+    "twoRescuers": "2 reanimadores",
+    "oneRescuer": "1 reanimador",
+    "depthPediatric": "Profundidad: ≥⅓ del diámetro torácico"
+  },
+  "weight": {
+    "title": "Peso del Paciente",
+    "description": "Ingrese el peso para calcular dosis automáticamente",
+    "setWeight": "Establecer Peso",
+    "placeholder": "Peso en kg",
+    "confirm": "Confirmar Peso",
+    "clear": "Sin peso conocido",
+    "unknown": "Peso Desconocido",
+    "unknownHint": "Se mostrarán dosis por kg",
+    "optionalHint": "Opcional - puede establecerse durante RCP",
+    "calculatedDoses": "Dosis Calculadas",
+    "firstShock": "Primera Descarga"
   },
   "banner": {
     "startCPR": "INICIAR RCP",
@@ -229,9 +246,10 @@
     "cprResumedSame": "RCP reanudado - mismo ritmo",
     "roscAchieved": "RCE logrado - ¡Pulso y ritmo detectados!",
     "codeTerminated": "Código terminado - Muerte declarada",
-    "epinephrineGiven": "Adrenalina {{dose}}mg IV/IO",
-    "amiodaroneGiven": "Amiodarona {{dose}}mg IV/IO",
-    "lidocaineGiven": "Lidocaína {{dose}}mg IV/IO",
+    "epinephrineGiven": "Adrenalina {{dose}} IV/IO",
+    "amiodaroneGiven": "Amiodarona {{dose}} IV/IO",
+    "lidocaineGiven": "Lidocaína {{dose}} IV/IO",
+    "weightSet": "Peso establecido: {{weight}}kg",
     "airwayAmbu": "Vía aérea: Ventilación con AMBU",
     "airwaySga": "Vía aérea: SGA colocado",
     "airwayEtt": "Vía aérea: ETT colocado",
@@ -299,7 +317,7 @@
     "usageLocalData": "Todos los datos guardados localmente solo en su dispositivo",
     "usageOffline": "Funciona completamente sin conexión",
     "referencesTitle": "Referencias",
-    "referencesAHA": "Basado en las Guías del Algoritmo de Paro Cardíaco del Adulto AHA 2025",
+    "referencesPALS": "Basado en las Guías AHA 2025 del Algoritmo de Paro Cardíaco Pediátrico (PALS)",
     "version": "Versión",
     "shareTitle": "Compartir",
     "shareDesc": "Comparta esta app con colegas para entrenamiento",

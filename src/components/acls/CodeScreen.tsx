@@ -326,6 +326,8 @@ export function CodeScreen() {
                 airwayStatus={session.airwayStatus}
                 onAirwayChange={actions.setAirway}
                 onETCO2Record={actions.recordETCO2}
+                cprRatio={session.cprRatio}
+                onCPRRatioChange={actions.setCPRRatio}
               />
 
               {/* H's & T's */}
@@ -411,6 +413,8 @@ export function CodeScreen() {
                 airwayStatus={session.airwayStatus}
                 onAirwayChange={actions.setAirway}
                 onETCO2Record={actions.recordETCO2}
+                cprRatio={session.cprRatio}
+                onCPRRatioChange={actions.setCPRRatio}
               />
 
               {/* H's & T's */}
