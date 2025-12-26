@@ -57,7 +57,11 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // ACLS Clinical Colors
+        // PALS Clinical Colors
+        pals: {
+          primary: "hsl(var(--pals-primary))",
+          "primary-foreground": "hsl(var(--pals-primary-foreground))",
+        },
         acls: {
           shockable: "hsl(var(--acls-shockable))",
           "shockable-foreground": "hsl(var(--acls-shockable-foreground))",

@@ -261,7 +261,7 @@ export function CodeScreen() {
 
               <Button
                 onClick={actions.startCPR}
-                className="h-24 w-full max-w-sm text-2xl font-bold bg-acls-shockable hover:bg-acls-shockable/90 text-white"
+                className="h-24 w-full max-w-sm text-2xl font-bold bg-pals-primary hover:bg-pals-primary/90 text-pals-primary-foreground"
               >
                 <Heart className="h-8 w-8 mr-3" />
                 {t('actions.startCPR')}
@@ -367,6 +367,23 @@ export function CodeScreen() {
           {/* Active Code Screen */}
           {isActive && !isInRhythmCheck && (
             <>
+              {/* Weight Display + Edit Button */}
+              <div className="flex items-center justify-center gap-3">
+                <WeightDisplay 
+                  weight={session.patientWeight} 
+                  onEdit={() => setShowWeightDialog(true)} 
+                />
+              </div>
+
+              {/* Weight Input Dialog - controlled externally */}
+              <WeightInput
+                currentWeight={session.patientWeight}
+                onWeightChange={actions.setPatientWeight}
+                isOpen={showWeightDialog}
+                onOpenChange={setShowWeightDialog}
+                showTrigger={false}
+              />
+
               {/* Current Rhythm Indicator */}
               <div className={cn(
                 'rounded-lg p-3 text-center font-bold text-lg',
