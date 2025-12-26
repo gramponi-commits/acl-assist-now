@@ -1,4 +1,14 @@
 {
+  "pathway": {
+    "selectMode": "Seleziona Tipo Paziente",
+    "selectDescription": "Scegli il protocollo di rianimazione appropriato",
+    "adult": "Adulto",
+    "pediatric": "Pediatrico",
+    "adultACLS": "Protocollo ACLS",
+    "pediatricPALS": "Protocollo PALS",
+    "adultDescription": "Dosaggio fisso - Adrenalina 1mg, Amio 300/150mg",
+    "pediatricDescription": "Dosaggio basato sul peso"
+  },
   "nav": {
     "code": "Codice",
     "history": "Cronologia Sessioni",

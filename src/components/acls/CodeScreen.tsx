@@ -237,8 +237,8 @@ export function CodeScreen() {
         onAddNote={handleAddNote}
       />
 
-      {/* Command Banner - Hidden on initial screen */}
-      {!isInitial && (
+      {/* Command Banner - Hidden on pathway selection and initial screen */}
+      {!isInitial && !isPathwaySelection && (
         <CommandBanner
           message={commandBanner.message}
           priority={commandBanner.priority}

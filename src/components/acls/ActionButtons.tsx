@@ -7,6 +7,12 @@ import {
   calculateAmiodaroneDose,
   calculateLidocaineDose,
 } from '@/lib/palsDosing';
+import {
+  getAdultEpinephrineDose,
+  getAdultAmiodaroneDose,
+  getAdultLidocaineDose,
+} from '@/lib/aclsDosing';
+import { PathwayMode } from '@/types/acls';
 
 interface ActionButtonsProps {
   canGiveEpinephrine: boolean;
@@ -19,6 +25,7 @@ interface ActionButtonsProps {
   lidocaineCount: number;
   preferLidocaine: boolean;
   patientWeight: number | null;
+  pathwayMode: PathwayMode;
   onEpinephrine: () => void;
   onAmiodarone: () => void;
   onLidocaine: () => void;
@@ -36,6 +43,7 @@ export function ActionButtons({
   lidocaineCount,
   preferLidocaine,
   patientWeight,
+  pathwayMode,
   onEpinephrine,
   onAmiodarone,
   onLidocaine,
@@ -43,10 +51,18 @@ export function ActionButtons({
 }: ActionButtonsProps) {
   const { t } = useTranslation();
 
-  // Calculate weight-based doses
-  const epiDose = calculateEpinephrineDose(patientWeight);
-  const amioDose = calculateAmiodaroneDose(patientWeight, amiodaroneCount);
-  const lidoDose = calculateLidocaineDose(patientWeight);
+  // Calculate doses based on pathway mode
+  const epiDose = pathwayMode === 'pediatric' 
+    ? calculateEpinephrineDose(patientWeight)
+    : getAdultEpinephrineDose();
+  
+  const amioDose = pathwayMode === 'pediatric'
+    ? calculateAmiodaroneDose(patientWeight, amiodaroneCount)
+    : getAdultAmiodaroneDose(amiodaroneCount);
+  
+  const lidoDose = pathwayMode === 'pediatric'
+    ? calculateLidocaineDose(patientWeight)
+    : getAdultLidocaineDose(lidocaineCount);
 
   // Show lidocaine if preferred, otherwise amiodarone
   const showLidocaine = preferLidocaine;
@@ -54,6 +70,9 @@ export function ActionButtons({
   const canGiveAntiarrhythmic = showLidocaine ? canGiveLidocaine : canGiveAmiodarone;
   const onAntiarrhythmic = showLidocaine ? onLidocaine : onAmiodarone;
   const antiarrhythmicDose = showLidocaine ? lidoDose : amioDose;
+
+  // Theme colors based on pathway
+  const isAdult = pathwayMode === 'adult';
 
   return (
     <div className="space-y-3">
@@ -66,6 +85,8 @@ export function ActionButtons({
           'w-full h-16 text-lg font-bold gap-3 transition-all',
           rhythmCheckDue
             ? 'bg-acls-critical hover:bg-acls-critical/90 text-white animate-pulse shadow-lg shadow-acls-critical/30'
+            : isAdult
+            ? 'bg-acls-critical/80 hover:bg-acls-critical/70 text-white'
             : 'bg-acls-info hover:bg-acls-info/90 text-white'
         )}
       >
