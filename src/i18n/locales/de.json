@@ -158,10 +158,10 @@
     "voiceDesc": "Gesprochene Alarme für Adrenalin, Rhythmus, Vorladen",
     "antiarrhythmic": "Lidocain Bevorzugen",
     "antiarrhythmicDesc": "Lidocain statt Amiodaron verwenden",
-    "usingLidocaine": "Verwendung Lidocain 100mg",
-    "usingAmiodarone": "Verwendung Amiodaron 300mg/150mg",
+    "usingLidocaine": "Verwendung Lidocain (1 mg/kg)",
+    "usingAmiodarone": "Verwendung Amiodaron (5 mg/kg)",
     "defibrillator": "Defibrillator-Energie",
-    "defibrillatorDesc": "Schockenergie in Joule auswählen"
+    "defibrillatorDescPALS": "Gewichtsbasiert: 2 J/kg → 4 J/kg → bis 10 J/kg"
   },
   "resume": {
     "title": "Aktiver Code Erkannt",
@@ -188,7 +188,24 @@
     "title": "HLW-Qualität",
     "compressionRate": "Kompressionsrate",
     "targetRate": "Ziel: 100-120/min",
-    "record": "Aufzeichnen"
+    "record": "Aufzeichnen",
+    "ratio": "HLW-Verhältnis",
+    "twoRescuers": "2 Helfer",
+    "oneRescuer": "1 Helfer",
+    "depthPediatric": "Tiefe: ≥⅓ des Thoraxdurchmessers"
+  },
+  "weight": {
+    "title": "Patientengewicht",
+    "description": "Gewicht eingeben für automatische Dosisberechnung",
+    "setWeight": "Gewicht Festlegen",
+    "placeholder": "Gewicht in kg",
+    "confirm": "Gewicht Bestätigen",
+    "clear": "Gewicht unbekannt",
+    "unknown": "Gewicht Unbekannt",
+    "unknownHint": "Dosen pro kg werden angezeigt",
+    "optionalHint": "Optional - kann während HLW festgelegt werden",
+    "calculatedDoses": "Berechnete Dosen",
+    "firstShock": "Erster Schock"
   },
   "banner": {
     "startCPR": "HLW STARTEN",
@@ -229,9 +246,10 @@
     "cprResumedSame": "HLW fortgesetzt - gleicher Rhythmus",
     "roscAchieved": "ROSC erreicht - Puls und Rhythmus erkannt!",
     "codeTerminated": "Code beendet - Tod erklärt",
-    "epinephrineGiven": "Adrenalin {{dose}}mg IV/IO",
-    "amiodaroneGiven": "Amiodaron {{dose}}mg IV/IO",
-    "lidocaineGiven": "Lidocain {{dose}}mg IV/IO",
+    "epinephrineGiven": "Adrenalin {{dose}} IV/IO",
+    "amiodaroneGiven": "Amiodaron {{dose}} IV/IO",
+    "lidocaineGiven": "Lidocain {{dose}} IV/IO",
+    "weightSet": "Gewicht festgelegt: {{weight}}kg",
     "airwayAmbu": "Atemweg: AMBU-Beatmung",
     "airwaySga": "Atemweg: SGA gelegt",
     "airwayEtt": "Atemweg: ETT gelegt",
@@ -299,7 +317,7 @@
     "usageLocalData": "Alle Daten nur lokal auf Ihrem Gerät gespeichert",
     "usageOffline": "Funktioniert vollständig offline",
     "referencesTitle": "Referenzen",
-    "referencesAHA": "Basierend auf AHA 2025 Erwachsenen-Herzstillstand-Algorithmus-Leitlinien",
+    "referencesPALS": "Basierend auf AHA 2025 Pädiatrischer Herzstillstand-Algorithmus (PALS)",
     "version": "Version",
     "shareTitle": "Teilen",
     "shareDesc": "Teilen Sie diese App mit Kollegen für Training",

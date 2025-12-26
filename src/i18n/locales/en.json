@@ -155,10 +155,10 @@
     "voiceDesc": "Spoken alerts for epi, rhythm check, pre-charge",
     "antiarrhythmic": "Prefer Lidocaine",
     "antiarrhythmicDesc": "Use Lidocaine instead of Amiodarone",
-    "usingLidocaine": "Using Lidocaine 100mg",
-    "usingAmiodarone": "Using Amiodarone 300mg/150mg",
+    "usingLidocaine": "Using Lidocaine (1 mg/kg)",
+    "usingAmiodarone": "Using Amiodarone (5 mg/kg)",
     "defibrillator": "Defibrillator Energy",
-    "defibrillatorDesc": "Select shock energy in Joules"
+    "defibrillatorDescPALS": "Weight-based: 2 J/kg → 4 J/kg → up to 10 J/kg"
   },
   "resume": {
     "title": "Active Code Detected",
@@ -185,7 +185,11 @@
     "title": "CPR Quality",
     "compressionRate": "Compression Rate",
     "targetRate": "Target: 100-120/min",
-    "record": "Record"
+    "record": "Record",
+    "ratio": "CPR Ratio",
+    "twoRescuers": "2 rescuers",
+    "oneRescuer": "1 rescuer",
+    "depthPediatric": "Depth: ≥⅓ of chest diameter"
   },
 "banner": {
     "startCPR": "START CPR",
@@ -216,56 +220,6 @@
     "peaEpi": "PEA - Epi immediately",
     "considerHsTs": "Rhythm check in {{seconds}}s | Consider H's & T's",
     "aclsInProgress": "ACLS IN PROGRESS"
-  },
-  "interventions": {
-    "rhythmIdentified": "Rhythm identified: {{rhythm}}",
-    "cprInitiated": "CPR initiated",
-    "rhythmCheckPaused": "Rhythm check - CPR paused",
-    "shockDelivered": "Shock #{{number}} delivered at {{energy}}J",
-    "noShockResume": "No shock - {{rhythm}} - Resume CPR",
-    "cprResumedSame": "CPR resumed - same rhythm",
-    "roscAchieved": "ROSC achieved - Pulse and rhythm detected!",
-    "codeTerminated": "Code terminated - Death declared",
-    "epinephrineGiven": "Epinephrine {{dose}}mg IV/IO",
-    "amiodaroneGiven": "Amiodarone {{dose}}mg IV/IO",
-    "lidocaineGiven": "Lidocaine {{dose}}mg IV/IO",
-    "airwayAmbu": "Airway: AMBU ventilation",
-    "airwaySga": "Airway: SGA placed",
-    "airwayEtt": "Airway: ETT placed",
-    "hsTsChecked": "H's & T's checked: {{items}}",
-    "codeEnded": "Code ended: {{outcome}}",
-    "noteAdded": "Note: {{note}}",
-    "etco2Recorded": "ETCO₂: {{value}} mmHg"
-  },
-  "notes": {
-    "addNote": "Add Note",
-    "placeholder": "Enter your clinical note here...",
-    "hint": "Press Ctrl+Enter to save",
-    "add": "Add"
-  },
-  "voice": {
-    "rhythmCheck": "Rhythm check",
-    "preCharge": "15 seconds, charge defibrillator",
-    "epiDue": "Epinephrine",
-    "resumeCPR": "Resume CPR",
-    "rosc": "ROSC",
-    "amiodaroneDue": "Amiodarone",
-    "lidocaineDue": "Lidocaine",
-    "shock": "Shock delivered",
-    "noShock": "No shock, resume CPR"
-  },
-  "weight": {
-    "title": "Patient Weight",
-    "description": "Enter patient weight for dose calculations",
-    "setWeight": "Set Weight",
-    "placeholder": "Weight",
-    "confirm": "Confirm Weight",
-    "clear": "Clear",
-    "unknown": "Unknown weight",
-    "unknownHint": "Leave empty if weight is unknown - doses will show per-kg values",
-    "optionalHint": "Optional: Enter weight for auto-calculated doses",
-    "calculatedDoses": "Calculated Doses",
-    "firstShock": "First Shock"
   },
   "interventions": {
     "rhythmIdentified": "Rhythm identified: {{rhythm}}",
@@ -330,7 +284,7 @@
     "usageLocalData": "All data saved locally on your device only",
     "usageOffline": "Works fully offline",
     "referencesTitle": "References",
-    "referencesAHA": "Based on AHA 2025 Adult Cardiac Arrest Algorithm Guidelines",
+    "referencesPALS": "Based on AHA 2025 Pediatric Cardiac Arrest Algorithm Guidelines (PALS)",
     "version": "Version",
     "shareTitle": "Share",
     "shareDesc": "Share this app with colleagues for training",

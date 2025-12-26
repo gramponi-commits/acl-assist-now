@@ -155,10 +155,10 @@
     "voiceDesc": "Φωνητικές ειδοποιήσεις για επινεφρίνη, έλεγχο ρυθμού, προφόρτιση",
     "antiarrhythmic": "Προτίμηση Λιδοκαΐνης",
     "antiarrhythmicDesc": "Χρήση Λιδοκαΐνης αντί Αμιοδαρόνης",
-    "usingLidocaine": "Χρήση Λιδοκαΐνης 100mg",
-    "usingAmiodarone": "Χρήση Αμιοδαρόνης 300mg/150mg",
+    "usingLidocaine": "Χρήση Λιδοκαΐνης (1 mg/kg)",
+    "usingAmiodarone": "Χρήση Αμιοδαρόνης (5 mg/kg)",
     "defibrillator": "Ενέργεια Απινιδωτή",
-    "defibrillatorDesc": "Επιλογή ενέργειας απινίδωσης σε Joules"
+    "defibrillatorDescPALS": "Υπολογισμός με βάση το βάρος: 2 J/kg → 4 J/kg → έως 10 J/kg"
   },
   "resume": {
     "title": "Ανιχνεύθηκε Ενεργός Κωδικός",
@@ -185,7 +185,24 @@
     "title": "Ποιότητα ΚΑΡΠΑ",
     "compressionRate": "Ρυθμός Συμπιέσεων",
     "targetRate": "Στόχος: 100-120/λεπτό",
-    "record": "Καταγραφή"
+    "record": "Καταγραφή",
+    "ratio": "Αναλογία ΚΑΡΠΑ",
+    "twoRescuers": "2 διασώστες",
+    "oneRescuer": "1 διασώστης",
+    "depthPediatric": "Βάθος: ≥⅓ της διαμέτρου θώρακα"
+  },
+  "weight": {
+    "title": "Βάρος Ασθενή",
+    "description": "Εισάγετε βάρος για αυτόματο υπολογισμό δόσεων",
+    "setWeight": "Ορισμός Βάρους",
+    "placeholder": "Βάρος σε kg",
+    "confirm": "Επιβεβαίωση Βάρους",
+    "clear": "Άγνωστο βάρος",
+    "unknown": "Άγνωστο Βάρος",
+    "unknownHint": "Θα εμφανιστούν δόσεις ανά kg",
+    "optionalHint": "Προαιρετικό - μπορεί να οριστεί κατά τη διάρκεια ΚΑΡΠΑ",
+    "calculatedDoses": "Υπολογισμένες Δόσεις",
+    "firstShock": "Πρώτη Απινίδωση"
   },
   "banner": {
     "startCPR": "ΕΝΑΡΞΗ ΚΑΡΠΑ",
@@ -226,9 +243,10 @@
     "cprResumedSame": "Συνέχιση ΚΑΡΠΑ - ίδιος ρυθμός",
     "roscAchieved": "Επιτεύχθηκε ROSC - Ανιχνεύθηκε σφυγμός και ρυθμός!",
     "codeTerminated": "Τερματισμός κωδικού - Δηλώθηκε θάνατος",
-    "epinephrineGiven": "Επινεφρίνη {{dose}}mg IV/IO",
-    "amiodaroneGiven": "Αμιοδαρόνη {{dose}}mg IV/IO",
-    "lidocaineGiven": "Λιδοκαΐνη {{dose}}mg IV/IO",
+    "epinephrineGiven": "Επινεφρίνη {{dose}} IV/IO",
+    "amiodaroneGiven": "Αμιοδαρόνη {{dose}} IV/IO",
+    "lidocaineGiven": "Λιδοκαΐνη {{dose}} IV/IO",
+    "weightSet": "Βάρος ορίστηκε: {{weight}}kg",
     "airwayAmbu": "Αεραγωγός: Αερισμός AMBU",
     "airwaySga": "Αεραγωγός: Τοποθέτηση SGA",
     "airwayEtt": "Αεραγωγός: Τοποθέτηση ETT",
@@ -296,7 +314,7 @@
     "usageLocalData": "Όλα τα δεδομένα αποθηκεύονται τοπικά μόνο στη συσκευή σας",
     "usageOffline": "Λειτουργεί πλήρως χωρίς σύνδεση",
     "referencesTitle": "Αναφορές",
-    "referencesAHA": "Βασισμένο στις κατευθυντήριες οδηγίες AHA 2025 για Καρδιακή Ανακοπή Ενηλίκων",
+    "referencesPALS": "Βασισμένο στις κατευθυντήριες οδηγίες AHA 2025 για Παιδιατρική Καρδιακή Ανακοπή (PALS)",
     "version": "Έκδοση",
     "shareTitle": "Κοινοποίηση",
     "shareDesc": "Μοιραστείτε αυτή την εφαρμογή με συναδέλφους για εκπαίδευση",
