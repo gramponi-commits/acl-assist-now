@@ -53,6 +53,7 @@
     "subtitle": "HLW kurz pausieren. Rhythmus analysieren. Puls prüfen.",
     "shockVfPvt": "SCHOCK - VF/pVT",
     "shockAt": "Schock #{{number}} @ {{energy}}J",
+    "shockNumber": "Schock #{{number}}",
     "noShock": "Kein Schock"
   },
   "codeEnded": {

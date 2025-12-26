@@ -53,6 +53,7 @@
     "subtitle": "Παύση ΚΑΡΠΑ. Ανάλυση ρυθμού. Έλεγχος σφυγμού.",
     "shockVfPvt": "ΑΠΙΝΙΔΩΣΗ - VF/pVT",
     "shockAt": "Απινίδωση #{{number}} @ {{energy}}J",
+    "shockNumber": "Απινίδωση #{{number}}",
     "noShock": "Χωρίς απινίδωση"
   },
   "codeEnded": {

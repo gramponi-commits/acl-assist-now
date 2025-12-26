@@ -53,6 +53,7 @@
     "subtitle": "Pausar RCP brevemente. Analizar ritmo. Comprobar pulso.",
     "shockVfPvt": "DESCARGA - FV/TVsp",
     "shockAt": "Descarga #{{number}} @ {{energy}}J",
+    "shockNumber": "Descarga #{{number}}",
     "noShock": "Sin descarga"
   },
   "codeEnded": {

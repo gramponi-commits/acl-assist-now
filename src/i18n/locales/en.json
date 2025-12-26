@@ -53,6 +53,7 @@
     "subtitle": "Pause CPR briefly. Analyze rhythm. Check pulse.",
     "shockVfPvt": "SHOCK - VF/pVT",
     "shockAt": "Shock #{{number}} @ {{energy}}J",
+    "shockNumber": "Shock #{{number}}",
     "noShock": "No shock"
   },
   "codeEnded": {

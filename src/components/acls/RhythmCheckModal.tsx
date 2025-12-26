@@ -53,7 +53,7 @@ export function RhythmCheckModal({
             <div className="text-left">
               <div>{t('rhythmCheckModal.shockVfPvt')}</div>
               <div className="text-sm font-normal opacity-90">
-                {t('rhythmCheckModal.shockAt', { number: shockNumber, energy: currentEnergy })}
+                {t('rhythmCheckModal.shockNumber', { number: shockNumber })} - {currentEnergy}
               </div>
             </div>
           </Button>
