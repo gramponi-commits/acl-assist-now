@@ -13,6 +13,7 @@ import {
   PostROSCVitals,
   CodeOutcome,
   CPRRatio,
+  PathwayMode,
   createInitialSession,
 } from '@/types/acls';
 import { saveSession as saveToIndexedDB, StoredSession } from '@/lib/sessionStorage';
@@ -22,6 +23,12 @@ import {
   calculateLidocaineDose,
   calculateShockEnergy,
 } from '@/lib/palsDosing';
+import {
+  getAdultEpinephrineDose,
+  getAdultAmiodaroneDose,
+  getAdultLidocaineDose,
+  getAdultShockEnergy,
+} from '@/lib/aclsDosing';
 
 interface CommandBanner {
   message: string;
@@ -277,7 +284,11 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
 
   const giveEpinephrine = useCallback(() => {
     const now = Date.now();
-    const dose = calculateEpinephrineDose(session.patientWeight);
+    // Use pathway-appropriate dosing
+    const dose = session.pathwayMode === 'pediatric' 
+      ? calculateEpinephrineDose(session.patientWeight)
+      : getAdultEpinephrineDose();
+    
     setSession(prev => ({
       ...prev,
       epinephrineCount: prev.epinephrineCount + 1,
@@ -285,10 +296,13 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
     }));
 
     addIntervention('epinephrine', t('interventions.epinephrineGiven', { dose: dose.display }), dose.display);
-  }, [session.patientWeight, addIntervention, t]);
+  }, [session.patientWeight, session.pathwayMode, addIntervention, t]);
 
   const giveAmiodarone = useCallback(() => {
-    const dose = calculateAmiodaroneDose(session.patientWeight, session.amiodaroneCount);
+    // Use pathway-appropriate dosing
+    const dose = session.pathwayMode === 'pediatric'
+      ? calculateAmiodaroneDose(session.patientWeight, session.amiodaroneCount)
+      : getAdultAmiodaroneDose(session.amiodaroneCount);
     
     setSession(prev => ({
       ...prev,
@@ -297,17 +311,21 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
     }));
 
     addIntervention('amiodarone', t('interventions.amiodaroneGiven', { dose: dose.display }), dose.display);
-  }, [session.patientWeight, session.amiodaroneCount, addIntervention, t]);
+  }, [session.patientWeight, session.amiodaroneCount, session.pathwayMode, addIntervention, t]);
 
   const giveLidocaine = useCallback(() => {
-    const dose = calculateLidocaineDose(session.patientWeight);
+    // Use pathway-appropriate dosing
+    const dose = session.pathwayMode === 'pediatric'
+      ? calculateLidocaineDose(session.patientWeight)
+      : getAdultLidocaineDose(session.lidocaineCount);
+    
     setSession(prev => ({
       ...prev,
       lidocaineCount: prev.lidocaineCount + 1,
     }));
 
     addIntervention('lidocaine', t('interventions.lidocaineGiven', { dose: dose.display }), dose.display);
-  }, [session.patientWeight, addIntervention, t]);
+  }, [session.patientWeight, session.lidocaineCount, session.pathwayMode, addIntervention, t]);
 
   const setAirway = useCallback((status: AirwayStatus) => {
     setSession(prev => ({
@@ -796,6 +814,17 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
     }));
   }, []);
 
+  // Set pathway mode
+  const setPathwayMode = useCallback((mode: PathwayMode) => {
+    setSession(prev => ({
+      ...prev,
+      pathwayMode: mode,
+      phase: 'initial', // Move to initial phase after selecting pathway
+      // Set default CPR ratio based on pathway
+      cprRatio: mode === 'adult' ? '30:2' : '15:2',
+    }));
+  }, []);
+
   return {
     session,
     timerState,
@@ -828,6 +857,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       recordETCO2,
       setPatientWeight,
       setCPRRatio,
+      setPathwayMode,
     },
     buttonStates: {
       canGiveEpinephrine,

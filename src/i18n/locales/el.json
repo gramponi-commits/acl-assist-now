@@ -1,4 +1,14 @@
 {
+  "pathway": {
+    "selectMode": "Επιλέξτε Τύπο Ασθενούς",
+    "selectDescription": "Επιλέξτε το κατάλληλο πρωτόκολλο αναζωογόνησης",
+    "adult": "Ενήλικας",
+    "pediatric": "Παιδιατρικός",
+    "adultACLS": "Πρωτόκολλο ACLS",
+    "pediatricPALS": "Πρωτόκολλο PALS",
+    "adultDescription": "Σταθερή δόση - Αδρεναλίνη 1mg, Αμιο 300/150mg",
+    "pediatricDescription": "Δόση βάσει βάρους"
+  },
   "nav": {
     "code": "Κωδικός",
     "history": "Ιστορικό Συνεδριών",

@@ -1,4 +1,14 @@
 {
+  "pathway": {
+    "selectMode": "Seleccionar Tipo de Paciente",
+    "selectDescription": "Elige el protocolo de reanimación apropiado",
+    "adult": "Adulto",
+    "pediatric": "Pediátrico",
+    "adultACLS": "Protocolo ACLS",
+    "pediatricPALS": "Protocolo PALS",
+    "adultDescription": "Dosis fija - Epi 1mg, Amio 300/150mg",
+    "pediatricDescription": "Dosis basada en peso"
+  },
   "nav": {
     "code": "Código",
     "history": "Historial",
