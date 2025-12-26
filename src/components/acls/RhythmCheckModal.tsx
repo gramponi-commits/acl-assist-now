@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 
 interface RhythmCheckModalProps {
   isShockable: boolean;
-  currentEnergy: number;
+  currentEnergy: string; // Now a display string like "10J" or "2 J/kg"
   shockNumber: number;
   onShock: () => void;
   onNoShockAsystole: () => void;

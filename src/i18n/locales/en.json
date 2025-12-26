@@ -191,7 +191,37 @@
     "oneRescuer": "1 rescuer",
     "depthPediatric": "Depth: ≥⅓ of chest diameter"
   },
-"banner": {
+  "weight": {
+    "title": "Patient Weight",
+    "description": "Enter patient weight for dose calculations",
+    "setWeight": "Set Weight",
+    "placeholder": "Weight in kg",
+    "confirm": "Confirm Weight",
+    "clear": "Unknown weight",
+    "unknown": "Unknown Weight",
+    "unknownHint": "Doses will show per-kg values",
+    "optionalHint": "Optional - can be set during CPR",
+    "calculatedDoses": "Calculated Doses",
+    "firstShock": "First Shock"
+  },
+  "notes": {
+    "addNote": "Add Note",
+    "placeholder": "Enter your clinical note here...",
+    "hint": "Press Ctrl+Enter to save",
+    "add": "Add"
+  },
+  "voice": {
+    "rhythmCheck": "Rhythm check",
+    "preCharge": "15 seconds, charge defibrillator",
+    "epiDue": "Epinephrine",
+    "resumeCPR": "Resume CPR",
+    "rosc": "ROSC",
+    "amiodaroneDue": "Amiodarone",
+    "lidocaineDue": "Lidocaine",
+    "shock": "Shock delivered",
+    "noShock": "No shock, resume CPR"
+  },
+  "banner": {
     "startCPR": "START CPR",
     "startCPRSub": "Press the button to begin chest compressions",
     "cprInProgress": "CPR IN PROGRESS",

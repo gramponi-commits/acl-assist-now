@@ -469,11 +469,11 @@ export function CodeScreen() {
           {isInRhythmCheck && (
             <RhythmCheckModal
               isShockable={session.currentRhythm === 'vf_pvt'}
-              currentEnergy={settings.defibrillatorEnergy}
+              currentEnergy={shockEnergy.display}
               shockNumber={session.shockCount + 1}
               onShock={() => {
                 announce('shock');
-                actions.completeRhythmCheckWithShock(settings.defibrillatorEnergy);
+                actions.completeRhythmCheckWithShock(shockEnergy.value);
               }}
               onNoShockAsystole={() => {
                 announce('noShock');
