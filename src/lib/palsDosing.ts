@@ -113,26 +113,46 @@ export function calculateLidocaineDose(weightKg: number | null): PALSDose {
 /**
  * Calculate shock energy for pediatric patient
  * First shock: 2 J/kg
- * Subsequent shocks: 4 J/kg (can escalate up to 10 J/kg or adult dose)
+ * Second shock: 4 J/kg
+ * Subsequent shocks: 4-10 J/kg (can escalate up to adult dose)
  */
 export function calculateShockEnergy(weightKg: number | null, shockNumber: number): PALSDose {
+  // shockNumber is 0-indexed: 0 = first shock, 1 = second shock, 2+ = subsequent
   if (weightKg === null || weightKg <= 0) {
-    const jPerKg = shockNumber === 0 ? 2 : 4;
-    return {
-      value: null,
-      display: `${jPerKg} J/kg`,
-      unit: 'J/kg',
-    };
+    if (shockNumber === 0) {
+      return {
+        value: null,
+        display: '2 J/kg',
+        unit: 'J/kg',
+      };
+    } else if (shockNumber === 1) {
+      return {
+        value: null,
+        display: '4 J/kg',
+        unit: 'J/kg',
+      };
+    } else {
+      return {
+        value: null,
+        display: '4-10 J/kg',
+        unit: 'J/kg',
+      };
+    }
   }
 
   let jPerKg: number;
+  let displaySuffix = '';
+  
   if (shockNumber === 0) {
-    jPerKg = DEFAULT_PALS_CONFIG.firstShockJoulesPerKg;
-  } else if (shockNumber <= 2) {
-    jPerKg = DEFAULT_PALS_CONFIG.subsequentShockJoulesPerKg;
+    // First shock: 2 J/kg
+    jPerKg = DEFAULT_PALS_CONFIG.firstShockJoulesPerKg; // 2
+  } else if (shockNumber === 1) {
+    // Second shock: 4 J/kg
+    jPerKg = DEFAULT_PALS_CONFIG.subsequentShockJoulesPerKg; // 4
   } else {
-    // Can escalate up to 10 J/kg for subsequent shocks
-    jPerKg = Math.min(DEFAULT_PALS_CONFIG.maxShockJoulesPerKg, 10);
+    // Third+ shocks: 4-10 J/kg (use 4 as base, can escalate)
+    jPerKg = DEFAULT_PALS_CONFIG.subsequentShockJoulesPerKg; // 4
+    displaySuffix = ' (4-10 J/kg)';
   }
 
   const calculatedEnergy = weightKg * jPerKg;
@@ -140,7 +160,7 @@ export function calculateShockEnergy(weightKg: number | null, shockNumber: numbe
   
   return {
     value: Math.round(energy),
-    display: `${Math.round(energy)} J`,
+    display: `${Math.round(energy)}J${displaySuffix}`,
     unit: 'J',
   };
 }

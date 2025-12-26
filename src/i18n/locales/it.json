@@ -53,6 +53,7 @@
     "subtitle": "Pausa breve RCP. Analizza ritmo. Controlla polso.",
     "shockVfPvt": "SHOCK - FV/TVp",
     "shockAt": "Shock #{{number}} @ {{energy}}J",
+    "shockNumber": "Shock #{{number}}",
     "noShock": "No shock"
   },
   "codeEnded": {
