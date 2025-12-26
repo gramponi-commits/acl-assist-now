@@ -1,7 +1,10 @@
-// ACLS Decision Support System Types
-// Based on 2025 AHA Adult Cardiac Arrest Algorithm
+// PALS Decision Support System Types
+// Based on 2025 AHA Pediatric Cardiac Arrest Algorithm
 
 export type RhythmType = 'vf_pvt' | 'asystole' | 'pea' | null;
+
+// CPR ratio options for pediatric
+export type CPRRatio = '15:2' | '30:2';
 
 export type ACLSPhase = 
   | 'initial'
@@ -93,6 +96,9 @@ export interface ACLSSession {
   postROSCVitals: PostROSCVitals;
   cprCycleStartTime: number | null;
   roscTime: number | null;
+  // PALS-specific fields
+  patientWeight: number | null;
+  cprRatio: CPRRatio;
 }
 
 export interface ACLSConfig {
@@ -107,16 +113,17 @@ export interface ACLSConfig {
   epinephrineDose: number;
 }
 
+// PALS uses weight-based dosing, so fixed doses are now defaults for display only
 export const DEFAULT_ACLS_CONFIG: ACLSConfig = {
-  biphasicMinJoules: 120,
-  biphasicMaxJoules: 200,
-  epinephrineIntervalMs: 4 * 60 * 1000, // 4 minutes
+  biphasicMinJoules: 2, // 2 J/kg for first shock
+  biphasicMaxJoules: 4, // 4 J/kg for subsequent shocks
+  epinephrineIntervalMs: 3 * 60 * 1000, // 3 minutes for PALS
   rhythmCheckIntervalMs: 2 * 60 * 1000, // 2 minutes
   preShockAlertAdvanceMs: 15 * 1000, // 15 seconds
-  amiodaroneFirstDose: 300,
-  amiodaroneSecondDose: 150,
-  lidocaineDose: 100,
-  epinephrineDose: 1,
+  amiodaroneFirstDose: 5, // 5 mg/kg
+  amiodaroneSecondDose: 5, // 5 mg/kg
+  lidocaineDose: 1, // 1 mg/kg
+  epinephrineDose: 0.01, // 0.01 mg/kg
 };
 
 export const DEFAULT_HS_AND_TS: HsAndTs = {
@@ -165,7 +172,7 @@ export function createInitialSession(): ACLSSession {
     phase: 'initial',
     outcome: null,
     shockCount: 0,
-    currentEnergy: DEFAULT_ACLS_CONFIG.biphasicMinJoules,
+    currentEnergy: 0, // Will be calculated based on weight
     epinephrineCount: 0,
     amiodaroneCount: 0,
     lidocaineCount: 0,
@@ -179,5 +186,7 @@ export function createInitialSession(): ACLSSession {
     postROSCVitals: { ...DEFAULT_POST_ROSC_VITALS },
     cprCycleStartTime: null,
     roscTime: null,
+    patientWeight: null,
+    cprRatio: '15:2', // Default to 2-rescuer pediatric ratio
   };
 }

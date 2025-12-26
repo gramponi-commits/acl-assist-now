@@ -12,9 +12,16 @@ import {
   PostROSCChecklist,
   PostROSCVitals,
   CodeOutcome,
+  CPRRatio,
   createInitialSession,
 } from '@/types/acls';
 import { saveSession as saveToIndexedDB, StoredSession } from '@/lib/sessionStorage';
+import {
+  calculateEpinephrineDose,
+  calculateAmiodaroneDose,
+  calculateLidocaineDose,
+  calculateShockEnergy,
+} from '@/lib/palsDosing';
 
 interface CommandBanner {
   message: string;
@@ -270,17 +277,18 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
 
   const giveEpinephrine = useCallback(() => {
     const now = Date.now();
+    const dose = calculateEpinephrineDose(session.patientWeight);
     setSession(prev => ({
       ...prev,
       epinephrineCount: prev.epinephrineCount + 1,
       lastEpinephrineTime: now,
     }));
 
-    addIntervention('epinephrine', t('interventions.epinephrineGiven', { dose: config.epinephrineDose }), config.epinephrineDose);
-  }, [config.epinephrineDose, addIntervention, t]);
+    addIntervention('epinephrine', t('interventions.epinephrineGiven', { dose: dose.display }), dose.display);
+  }, [session.patientWeight, addIntervention, t]);
 
   const giveAmiodarone = useCallback(() => {
-    const dose = session.amiodaroneCount === 0 ? config.amiodaroneFirstDose : config.amiodaroneSecondDose;
+    const dose = calculateAmiodaroneDose(session.patientWeight, session.amiodaroneCount);
     
     setSession(prev => ({
       ...prev,
@@ -288,17 +296,18 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       lastAmiodaroneTime: Date.now(),
     }));
 
-    addIntervention('amiodarone', t('interventions.amiodaroneGiven', { dose }), dose);
-  }, [session.amiodaroneCount, config.amiodaroneFirstDose, config.amiodaroneSecondDose, addIntervention, t]);
+    addIntervention('amiodarone', t('interventions.amiodaroneGiven', { dose: dose.display }), dose.display);
+  }, [session.patientWeight, session.amiodaroneCount, addIntervention, t]);
 
   const giveLidocaine = useCallback(() => {
+    const dose = calculateLidocaineDose(session.patientWeight);
     setSession(prev => ({
       ...prev,
       lidocaineCount: prev.lidocaineCount + 1,
     }));
 
-    addIntervention('lidocaine', t('interventions.lidocaineGiven', { dose: config.lidocaineDose }), config.lidocaineDose);
-  }, [config.lidocaineDose, addIntervention, t]);
+    addIntervention('lidocaine', t('interventions.lidocaineGiven', { dose: dose.display }), dose.display);
+  }, [session.patientWeight, addIntervention, t]);
 
   const setAirway = useCallback((status: AirwayStatus) => {
     setSession(prev => ({
@@ -768,6 +777,25 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
     setIsInRhythmCheck(active);
   }, []);
 
+  // Set patient weight
+  const setPatientWeight = useCallback((weight: number | null) => {
+    setSession(prev => ({
+      ...prev,
+      patientWeight: weight,
+    }));
+    if (weight) {
+      addIntervention('note', t('interventions.weightSet', { weight }));
+    }
+  }, [addIntervention, t]);
+
+  // Set CPR ratio
+  const setCPRRatio = useCallback((ratio: CPRRatio) => {
+    setSession(prev => ({
+      ...prev,
+      cprRatio: ratio,
+    }));
+  }, []);
+
   return {
     session,
     timerState,
@@ -798,6 +826,8 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       addNote,
       setRhythmAnalysisActive,
       recordETCO2,
+      setPatientWeight,
+      setCPRRatio,
     },
     buttonStates: {
       canGiveEpinephrine,

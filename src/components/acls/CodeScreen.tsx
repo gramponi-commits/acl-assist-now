@@ -11,6 +11,7 @@ import { PostROSCScreen } from './PostROSCScreen';
 import { RhythmCheckModal } from './RhythmCheckModal';
 import { ResumeSessionDialog } from './ResumeSessionDialog';
 import { AddNoteDialog } from './AddNoteDialog';
+import { WeightInput, WeightDisplay } from './WeightInput';
 import { useACLSLogic } from '@/hooks/useACLSLogic';
 import { useWakeLock } from '@/hooks/useWakeLock';
 import { useAudioAlerts } from '@/hooks/useAudioAlerts';
@@ -18,10 +19,12 @@ import { useMetronome } from '@/hooks/useMetronome';
 import { useVoiceAnnouncements } from '@/hooks/useVoiceAnnouncements';
 import { useSettings } from '@/hooks/useSettings';
 import { Button } from '@/components/ui/button';
-import { Download, RotateCcw, Save, CheckCircle, XCircle, StickyNote, Heart, Activity, Stethoscope } from 'lucide-react';
+import { Download, RotateCcw, Save, CheckCircle, XCircle, StickyNote, Heart, Activity, Stethoscope, Scale } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { calculateShockEnergy } from '@/lib/palsDosing';
+import { CPRRatio } from '@/types/acls';
 import { 
   saveActiveSession, 
   getActiveSession, 
@@ -44,7 +47,11 @@ export function CodeScreen() {
   const [showResumeDialog, setShowResumeDialog] = useState(false);
   const [showNoteDialog, setShowNoteDialog] = useState(false);
   const [showRhythmSelector, setShowRhythmSelector] = useState(false);
+  const [showWeightDialog, setShowWeightDialog] = useState(false);
   const [pendingResumeSession, setPendingResumeSession] = useState<ReturnType<typeof getActiveSession>>(null);
+  
+  // Calculate shock energy based on patient weight
+  const shockEnergy = calculateShockEnergy(session.patientWeight, session.shockCount);
   
   // Track previous states for alert triggers
   const prevRhythmCheckDue = useRef(false);
@@ -236,9 +243,22 @@ export function CodeScreen() {
 
       <ScrollArea className="flex-1">
         <div className="p-4 space-y-4 max-w-lg mx-auto">
-          {/* Initial Screen - Start CPR Button Only */}
+          {/* Initial Screen - Start CPR Button + Optional Weight */}
           {isInitial && (
-            <div className="flex flex-col items-center justify-center pt-28 pb-8">
+            <div className="flex flex-col items-center justify-center pt-20 pb-8 space-y-6">
+              {/* Weight Input Section */}
+              <div className="w-full max-w-sm space-y-3">
+                <WeightInput
+                  currentWeight={session.patientWeight}
+                  onWeightChange={actions.setPatientWeight}
+                  isOpen={showWeightDialog}
+                  onOpenChange={setShowWeightDialog}
+                />
+                <p className="text-xs text-muted-foreground text-center">
+                  {t('weight.optionalHint')}
+                </p>
+              </div>
+
               <Button
                 onClick={actions.startCPR}
                 className="h-24 w-full max-w-sm text-2xl font-bold bg-acls-shockable hover:bg-acls-shockable/90 text-white"
@@ -249,9 +269,16 @@ export function CodeScreen() {
             </div>
           )}
 
-          {/* CPR Pending Rhythm - Active CPR without rhythm yet */}
           {isCPRPendingRhythm && (
             <>
+              {/* Weight Display + Edit Button */}
+              <div className="flex items-center justify-center gap-3">
+                <WeightDisplay 
+                  weight={session.patientWeight} 
+                  onEdit={() => setShowWeightDialog(true)} 
+                />
+              </div>
+
               {/* CPR Active Indicator */}
               <div className="bg-acls-warning/20 border-2 border-acls-warning rounded-lg p-4 text-center">
                 <div className="flex items-center justify-center gap-2 text-acls-warning font-bold text-lg">
@@ -363,6 +390,7 @@ export function CodeScreen() {
                 amiodaroneCount={session.amiodaroneCount}
                 lidocaineCount={session.lidocaineCount}
                 preferLidocaine={settings.preferLidocaine}
+                patientWeight={session.patientWeight}
                 onEpinephrine={actions.giveEpinephrine}
                 onAmiodarone={actions.giveAmiodarone}
                 onLidocaine={actions.giveLidocaine}

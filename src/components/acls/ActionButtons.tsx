@@ -2,6 +2,11 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Syringe, Pill, Stethoscope } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+  calculateEpinephrineDose,
+  calculateAmiodaroneDose,
+  calculateLidocaineDose,
+} from '@/lib/palsDosing';
 
 interface ActionButtonsProps {
   canGiveEpinephrine: boolean;
@@ -13,6 +18,7 @@ interface ActionButtonsProps {
   amiodaroneCount: number;
   lidocaineCount: number;
   preferLidocaine: boolean;
+  patientWeight: number | null;
   onEpinephrine: () => void;
   onAmiodarone: () => void;
   onLidocaine: () => void;
@@ -29,6 +35,7 @@ export function ActionButtons({
   amiodaroneCount,
   lidocaineCount,
   preferLidocaine,
+  patientWeight,
   onEpinephrine,
   onAmiodarone,
   onLidocaine,
@@ -36,11 +43,17 @@ export function ActionButtons({
 }: ActionButtonsProps) {
   const { t } = useTranslation();
 
+  // Calculate weight-based doses
+  const epiDose = calculateEpinephrineDose(patientWeight);
+  const amioDose = calculateAmiodaroneDose(patientWeight, amiodaroneCount);
+  const lidoDose = calculateLidocaineDose(patientWeight);
+
   // Show lidocaine if preferred, otherwise amiodarone
   const showLidocaine = preferLidocaine;
   const antiarrhythmicCount = showLidocaine ? lidocaineCount : amiodaroneCount;
   const canGiveAntiarrhythmic = showLidocaine ? canGiveLidocaine : canGiveAmiodarone;
   const onAntiarrhythmic = showLidocaine ? onLidocaine : onAmiodarone;
+  const antiarrhythmicDose = showLidocaine ? lidoDose : amioDose;
 
   return (
     <div className="space-y-3">
@@ -77,7 +90,7 @@ export function ActionButtons({
           <Syringe className="h-6 w-6" />
           <span>{t('actions.epinephrine')}</span>
           <span className="text-xs font-normal">
-            1mg IV/IO (#{epinephrineCount + 1})
+            {epiDose.display} IV/IO (#{epinephrineCount + 1})
           </span>
         </Button>
 
@@ -95,10 +108,7 @@ export function ActionButtons({
           <Pill className="h-6 w-6" />
           <span>{showLidocaine ? t('actions.lidocaine') : t('actions.amiodarone')}</span>
           <span className="text-xs font-normal">
-            {showLidocaine 
-              ? `100mg (${antiarrhythmicCount > 0 ? '#' + (antiarrhythmicCount + 1) : '#1'})`
-              : `${amiodaroneCount === 0 ? '300mg' : '150mg'} (#${amiodaroneCount + 1})`
-            }
+            {antiarrhythmicDose.display} (#{antiarrhythmicCount + 1})
           </span>
         </Button>
       </div>
