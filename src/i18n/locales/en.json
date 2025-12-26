@@ -52,7 +52,7 @@
     "title": "RHYTHM CHECK",
     "subtitle": "Pause CPR briefly. Analyze rhythm. Check pulse.",
     "shockVfPvt": "SHOCK - VF/pVT",
-    "shockAt": "Shock #{{number}} @ {{energy}}J",
+    "shockAt": "Shock #{{number}} @ {{energy}}",
     "shockNumber": "Shock #{{number}}",
     "noShock": "No shock"
   },
@@ -256,7 +256,7 @@
     "rhythmIdentified": "Rhythm identified: {{rhythm}}",
     "cprInitiated": "CPR initiated",
     "rhythmCheckPaused": "Rhythm check - CPR paused",
-    "shockDelivered": "Shock #{{number}} delivered at {{energy}}J",
+    "shockDelivered": "Shock #{{number}} delivered at {{energy}}",
     "noShockResume": "No shock - {{rhythm}} - Resume CPR",
     "cprResumedSame": "CPR resumed - same rhythm",
     "roscAchieved": "ROSC achieved - Pulse and rhythm detected!",

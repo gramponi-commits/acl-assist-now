@@ -52,7 +52,7 @@
     "title": "CONTROLLO RITMO",
     "subtitle": "Pausa breve RCP. Analizza ritmo. Controlla polso.",
     "shockVfPvt": "SHOCK - FV/TVp",
-    "shockAt": "Shock #{{number}} @ {{energy}}J",
+    "shockAt": "Shock #{{number}} @ {{energy}}",
     "shockNumber": "Shock #{{number}}",
     "noShock": "No shock"
   },
@@ -256,7 +256,7 @@
     "rhythmIdentified": "Ritmo identificato: {{rhythm}}",
     "cprInitiated": "RCP iniziata",
     "rhythmCheckPaused": "Controllo ritmo - RCP in pausa",
-    "shockDelivered": "Shock #{{number}} erogato a {{energy}}J",
+    "shockDelivered": "Shock #{{number}} erogato a {{energy}}",
     "noShockResume": "No shock - {{rhythm}} - Riprendi RCP",
     "cprResumedSame": "RCP ripresa - stesso ritmo",
     "roscAchieved": "ROSC raggiunto - Polso e ritmo rilevati!",
