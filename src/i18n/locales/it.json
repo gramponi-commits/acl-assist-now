@@ -191,7 +191,37 @@
     "oneRescuer": "1 soccorritore",
     "depthPediatric": "Profondità: ≥⅓ del diametro toracico"
   },
-"banner": {
+  "weight": {
+    "title": "Peso Paziente",
+    "description": "Inserisci il peso del paziente per il calcolo dei dosaggi",
+    "setWeight": "Imposta Peso",
+    "placeholder": "Peso in kg",
+    "confirm": "Conferma Peso",
+    "clear": "Peso non noto",
+    "unknown": "Peso Sconosciuto",
+    "unknownHint": "Verranno mostrati i dosaggi per kg",
+    "optionalHint": "Opzionale - può essere impostato durante RCP",
+    "calculatedDoses": "Dosaggi Calcolati",
+    "firstShock": "Primo Shock"
+  },
+  "notes": {
+    "addNote": "Aggiungi Nota",
+    "placeholder": "Inserisci la tua nota clinica qui...",
+    "hint": "Premi Ctrl+Invio per salvare",
+    "add": "Aggiungi"
+  },
+  "voice": {
+    "rhythmCheck": "Controllo ritmo",
+    "preCharge": "15 secondi, carica defibrillatore",
+    "epiDue": "Adrenalina",
+    "resumeCPR": "Ricomincia RCP",
+    "rosc": "ROSC",
+    "amiodaroneDue": "Amiodarone",
+    "lidocaineDue": "Lidocaina",
+    "shock": "Shock erogato",
+    "noShock": "Nessuno shock, ricomincia RCP"
+  },
+  "banner": {
     "startCPR": "INIZIA RCP",
     "startCPRSub": "Premi il pulsante per iniziare le compressioni toraciche",
     "cprInProgress": "RCP IN CORSO",
