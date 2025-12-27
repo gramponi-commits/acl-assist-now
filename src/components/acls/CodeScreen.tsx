@@ -250,51 +250,37 @@ export function CodeScreen() {
         <div className="p-4 space-y-4 max-w-lg mx-auto">
           {/* Pathway Selection Screen */}
           {isPathwaySelection && (
-            <PathwaySelector onSelectPathway={actions.setPathwayMode} />
+            <PathwaySelector 
+              onSelectPathway={actions.setPathwayMode}
+              onStartCPR={actions.startCPR}
+              onSetWeight={actions.setPatientWeight}
+              currentWeight={session.patientWeight}
+            />
           )}
 
-          {/* Initial Screen - Start CPR Button + Optional Weight (Pediatric only) */}
-          {isInitial && (
-            <div className="flex flex-col items-center justify-center pt-20 pb-8 space-y-6">
-              {/* Weight Input Section - Only for Pediatric */}
+          {/* Active CPR Pending Rhythm - Only show weight for pediatric */}
+          {isCPRPendingRhythm && (
+            <>
+              {/* Weight Display + Edit Button - Only for Pediatric */}
               {session.pathwayMode === 'pediatric' && (
-                <div className="w-full max-w-sm space-y-3">
-                  <WeightInput
-                    currentWeight={session.patientWeight}
-                    onWeightChange={actions.setPatientWeight}
-                    isOpen={showWeightDialog}
-                    onOpenChange={setShowWeightDialog}
+                <div className="flex items-center justify-center gap-3">
+                  <WeightDisplay 
+                    weight={session.patientWeight} 
+                    onEdit={() => setShowWeightDialog(true)} 
                   />
-                  <p className="text-xs text-muted-foreground text-center">
-                    {t('weight.optionalHint')}
-                  </p>
                 </div>
               )}
 
-              <Button
-                onClick={actions.startCPR}
-                className={cn(
-                  "h-24 w-full max-w-sm text-2xl font-bold",
-                  session.pathwayMode === 'adult' 
-                    ? "bg-acls-critical hover:bg-acls-critical/90 text-white"
-                    : "bg-pals-primary hover:bg-pals-primary/90 text-pals-primary-foreground"
-                )}
-              >
-                <Heart className="h-8 w-8 mr-3" />
-                {t('actions.startCPR')}
-              </Button>
-            </div>
-          )}
-
-          {isCPRPendingRhythm && (
-            <>
-              {/* Weight Display + Edit Button */}
-              <div className="flex items-center justify-center gap-3">
-                <WeightDisplay 
-                  weight={session.patientWeight} 
-                  onEdit={() => setShowWeightDialog(true)} 
+              {/* Weight Input Dialog - only for pediatric */}
+              {session.pathwayMode === 'pediatric' && (
+                <WeightInput
+                  currentWeight={session.patientWeight}
+                  onWeightChange={actions.setPatientWeight}
+                  isOpen={showWeightDialog}
+                  onOpenChange={setShowWeightDialog}
+                  showTrigger={false}
                 />
-              </div>
+              )}
 
               {/* CPR Active Indicator */}
               <div className="bg-acls-warning/20 border-2 border-acls-warning rounded-lg p-4 text-center">
@@ -385,22 +371,26 @@ export function CodeScreen() {
           {/* Active Code Screen */}
           {isActive && !isInRhythmCheck && (
             <>
-              {/* Weight Display + Edit Button */}
-              <div className="flex items-center justify-center gap-3">
-                <WeightDisplay 
-                  weight={session.patientWeight} 
-                  onEdit={() => setShowWeightDialog(true)} 
-                />
-              </div>
+              {/* Weight Display + Edit Button - Only for Pediatric */}
+              {session.pathwayMode === 'pediatric' && (
+                <>
+                  <div className="flex items-center justify-center gap-3">
+                    <WeightDisplay 
+                      weight={session.patientWeight} 
+                      onEdit={() => setShowWeightDialog(true)} 
+                    />
+                  </div>
 
-              {/* Weight Input Dialog - controlled externally */}
-              <WeightInput
-                currentWeight={session.patientWeight}
-                onWeightChange={actions.setPatientWeight}
-                isOpen={showWeightDialog}
-                onOpenChange={setShowWeightDialog}
-                showTrigger={false}
-              />
+                  {/* Weight Input Dialog - controlled externally */}
+                  <WeightInput
+                    currentWeight={session.patientWeight}
+                    onWeightChange={actions.setPatientWeight}
+                    isOpen={showWeightDialog}
+                    onOpenChange={setShowWeightDialog}
+                    showTrigger={false}
+                  />
+                </>
+              )}
 
               {/* Current Rhythm Indicator */}
               <div className={cn(
