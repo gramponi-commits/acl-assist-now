@@ -7,7 +7,25 @@
     "adultACLS": "ACLS Protocol",
     "pediatricPALS": "PALS Protocol",
     "adultDescription": "Fixed dosing - Epi 1mg, Amio 300/150mg",
-    "pediatricDescription": "Weight-based dosing"
+    "pediatricDescription": "Weight-based dosing",
+    "setWeight": "Set Patient Weight",
+    "weightDescription": "For accurate dose calculations (can skip if unknown)",
+    "tapToSetWeight": "Tap to enter weight",
+    "weightCanBeSetLater": "Weight can be set or changed anytime during CPR"
+  },
+  "weight": {
+    "title": "Patient Weight",
+    "description": "Enter patient weight for dose calculations",
+    "setWeight": "Set Weight",
+    "placeholder": "Weight in kg",
+    "confirm": "Confirm Weight",
+    "clear": "Unknown weight",
+    "unknown": "Unknown Weight",
+    "unknownWeight": "Weight Unknown",
+    "unknownHint": "Doses will show per-kg values",
+    "optionalHint": "Optional - can be set during CPR",
+    "calculatedDoses": "Calculated Doses",
+    "firstShock": "First Shock"
   },
   "nav": {
     "code": "Code",
@@ -201,19 +219,6 @@
     "twoRescuers": "2 rescuers",
     "oneRescuer": "1 rescuer",
     "depthPediatric": "Depth: ≥⅓ of chest diameter"
-  },
-  "weight": {
-    "title": "Patient Weight",
-    "description": "Enter patient weight for dose calculations",
-    "setWeight": "Set Weight",
-    "placeholder": "Weight in kg",
-    "confirm": "Confirm Weight",
-    "clear": "Unknown weight",
-    "unknown": "Unknown Weight",
-    "unknownHint": "Doses will show per-kg values",
-    "optionalHint": "Optional - can be set during CPR",
-    "calculatedDoses": "Calculated Doses",
-    "firstShock": "First Shock"
   },
   "notes": {
     "addNote": "Add Note",

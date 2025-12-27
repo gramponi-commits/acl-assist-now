@@ -7,7 +7,25 @@
     "adultACLS": "Protocollo ACLS",
     "pediatricPALS": "Protocollo PALS",
     "adultDescription": "Dosaggio fisso - Adrenalina 1mg, Amio 300/150mg",
-    "pediatricDescription": "Dosaggio basato sul peso"
+    "pediatricDescription": "Dosaggio basato sul peso",
+    "setWeight": "Imposta Peso Paziente",
+    "weightDescription": "Per calcoli di dosaggio accurati (può essere saltato se sconosciuto)",
+    "tapToSetWeight": "Tocca per inserire il peso",
+    "weightCanBeSetLater": "Il peso può essere impostato o modificato in qualsiasi momento durante la RCP"
+  },
+  "weight": {
+    "title": "Peso Paziente",
+    "description": "Inserisci il peso del paziente per i calcoli di dosaggio",
+    "setWeight": "Imposta Peso",
+    "placeholder": "Peso in kg",
+    "confirm": "Conferma Peso",
+    "clear": "Peso sconosciuto",
+    "unknown": "Peso Sconosciuto",
+    "unknownWeight": "Peso Sconosciuto",
+    "unknownHint": "Le dosi mostreranno valori per kg",
+    "optionalHint": "Opzionale - può essere impostato durante RCP",
+    "calculatedDoses": "Dosi Calcolate",
+    "firstShock": "Primo Shock"
   },
   "nav": {
     "code": "Codice",
@@ -201,19 +219,6 @@
     "twoRescuers": "2 soccorritori",
     "oneRescuer": "1 soccorritore",
     "depthPediatric": "Profondità: ≥⅓ del diametro toracico"
-  },
-  "weight": {
-    "title": "Peso Paziente",
-    "description": "Inserisci il peso del paziente per il calcolo dei dosaggi",
-    "setWeight": "Imposta Peso",
-    "placeholder": "Peso in kg",
-    "confirm": "Conferma Peso",
-    "clear": "Peso non noto",
-    "unknown": "Peso Sconosciuto",
-    "unknownHint": "Verranno mostrati i dosaggi per kg",
-    "optionalHint": "Opzionale - può essere impostato durante RCP",
-    "calculatedDoses": "Dosaggi Calcolati",
-    "firstShock": "Primo Shock"
   },
   "notes": {
     "addNote": "Aggiungi Nota",

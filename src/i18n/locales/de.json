@@ -7,7 +7,25 @@
     "adultACLS": "ACLS Protokoll",
     "pediatricPALS": "PALS Protokoll",
     "adultDescription": "Feste Dosierung - Epi 1mg, Amio 300/150mg",
-    "pediatricDescription": "Gewichtsbasierte Dosierung"
+    "pediatricDescription": "Gewichtsbasierte Dosierung",
+    "setWeight": "Patientengewicht Einstellen",
+    "weightDescription": "Für genaue Dosisberechnungen (kann übersprungen werden wenn unbekannt)",
+    "tapToSetWeight": "Tippen um Gewicht einzugeben",
+    "weightCanBeSetLater": "Das Gewicht kann jederzeit während der CPR eingestellt oder geändert werden"
+  },
+  "weight": {
+    "title": "Patientengewicht",
+    "description": "Geben Sie das Patientengewicht für Dosisberechnungen ein",
+    "setWeight": "Gewicht Einstellen",
+    "placeholder": "Gewicht in kg",
+    "confirm": "Gewicht Bestätigen",
+    "clear": "Unbekanntes Gewicht",
+    "unknown": "Unbekanntes Gewicht",
+    "unknownWeight": "Gewicht Unbekannt",
+    "unknownHint": "Dosen zeigen Werte pro kg",
+    "optionalHint": "Optional - kann während CPR eingestellt werden",
+    "calculatedDoses": "Berechnete Dosen",
+    "firstShock": "Erster Schock"
   },
   "nav": {
     "code": "Code",
@@ -204,19 +222,6 @@
     "twoRescuers": "2 Helfer",
     "oneRescuer": "1 Helfer",
     "depthPediatric": "Tiefe: ≥⅓ des Thoraxdurchmessers"
-  },
-  "weight": {
-    "title": "Patientengewicht",
-    "description": "Gewicht eingeben für automatische Dosisberechnung",
-    "setWeight": "Gewicht Festlegen",
-    "placeholder": "Gewicht in kg",
-    "confirm": "Gewicht Bestätigen",
-    "clear": "Gewicht unbekannt",
-    "unknown": "Gewicht Unbekannt",
-    "unknownHint": "Dosen pro kg werden angezeigt",
-    "optionalHint": "Optional - kann während HLW festgelegt werden",
-    "calculatedDoses": "Berechnete Dosen",
-    "firstShock": "Erster Schock"
   },
   "banner": {
     "startCPR": "HLW STARTEN",

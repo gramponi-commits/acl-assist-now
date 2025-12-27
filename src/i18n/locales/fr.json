@@ -7,7 +7,25 @@
     "adultACLS": "Protocole ACLS",
     "pediatricPALS": "Protocole PALS",
     "adultDescription": "Dosage fixe - Épi 1mg, Amio 300/150mg",
-    "pediatricDescription": "Dosage basé sur le poids"
+    "pediatricDescription": "Dosage basé sur le poids",
+    "setWeight": "Définir le Poids du Patient",
+    "weightDescription": "Pour des calculs de doses précis (peut être ignoré si inconnu)",
+    "tapToSetWeight": "Appuyez pour entrer le poids",
+    "weightCanBeSetLater": "Le poids peut être défini ou modifié à tout moment pendant la RCP"
+  },
+  "weight": {
+    "title": "Poids du Patient",
+    "description": "Entrez le poids du patient pour les calculs de doses",
+    "setWeight": "Définir le Poids",
+    "placeholder": "Poids en kg",
+    "confirm": "Confirmer le Poids",
+    "clear": "Poids inconnu",
+    "unknown": "Poids Inconnu",
+    "unknownWeight": "Poids Inconnu",
+    "unknownHint": "Les doses afficheront des valeurs par kg",
+    "optionalHint": "Optionnel - peut être défini pendant la RCP",
+    "calculatedDoses": "Doses Calculées",
+    "firstShock": "Premier Choc"
   },
   "nav": {
     "code": "Code",
@@ -204,19 +222,6 @@
     "twoRescuers": "2 secouristes",
     "oneRescuer": "1 secouriste",
     "depthPediatric": "Profondeur : ≥⅓ du diamètre thoracique"
-  },
-  "weight": {
-    "title": "Poids du Patient",
-    "description": "Entrez le poids pour calculer automatiquement les doses",
-    "setWeight": "Définir le Poids",
-    "placeholder": "Poids en kg",
-    "confirm": "Confirmer le Poids",
-    "clear": "Poids inconnu",
-    "unknown": "Poids Inconnu",
-    "unknownHint": "Les doses par kg seront affichées",
-    "optionalHint": "Optionnel - peut être défini pendant la RCP",
-    "calculatedDoses": "Doses Calculées",
-    "firstShock": "Premier Choc"
   },
   "banner": {
     "startCPR": "DÉMARRER RCP",
