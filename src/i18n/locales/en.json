@@ -187,7 +187,14 @@
     "usingLidocaine": "Using Lidocaine (1 mg/kg)",
     "usingAmiodarone": "Using Amiodarone (5 mg/kg)",
     "defibrillator": "Defibrillator Energy",
-    "defibrillatorDescPALS": "Weight-based: 2 J/kg → 4 J/kg → up to 10 J/kg"
+    "defibrillatorDescPALS": "Weight-based: 2 J/kg → 4 J/kg → up to 10 J/kg",
+    "theme": "Theme",
+    "themeDesc": "Switch between light and dark mode",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "adultDefibrillator": "Adult Defibrillator Energy",
+    "adultDefibrillatorDesc": "Select shock energy for adult patients",
+    "pediatricDefibrillator": "Pediatric Defibrillator Energy"
   },
   "resume": {
     "title": "Active Code Detected",

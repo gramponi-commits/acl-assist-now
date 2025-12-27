@@ -814,12 +814,11 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
     }));
   }, []);
 
-  // Set pathway mode
+  // Set pathway mode - don't change phase, let the UI handle flow
   const setPathwayMode = useCallback((mode: PathwayMode) => {
     setSession(prev => ({
       ...prev,
       pathwayMode: mode,
-      phase: 'initial', // Move to initial phase after selecting pathway
       // Set default CPR ratio based on pathway
       cprRatio: mode === 'adult' ? '30:2' : '15:2',
     }));

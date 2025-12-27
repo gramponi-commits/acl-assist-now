@@ -187,7 +187,14 @@
     "usingLidocaine": "Usando Lidocaina (1 mg/kg)",
     "usingAmiodarone": "Usando Amiodarone (5 mg/kg)",
     "defibrillator": "Energia Defibrillatore",
-    "defibrillatorDescPALS": "Basato sul peso: 2 J/kg → 4 J/kg → fino a 10 J/kg"
+    "defibrillatorDescPALS": "Basato sul peso: 2 J/kg → 4 J/kg → fino a 10 J/kg",
+    "theme": "Tema",
+    "themeDesc": "Passa tra modalità chiara e scura",
+    "darkMode": "Modalità Scura",
+    "lightMode": "Modalità Chiara",
+    "adultDefibrillator": "Energia Defibrillatore Adulti",
+    "adultDefibrillatorDesc": "Seleziona energia shock per pazienti adulti",
+    "pediatricDefibrillator": "Energia Defibrillatore Pediatrico"
   },
   "resume": {
     "title": "Codice Attivo Rilevato",

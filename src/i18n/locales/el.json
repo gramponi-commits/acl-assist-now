@@ -187,7 +187,14 @@
     "usingLidocaine": "Χρήση Λιδοκαΐνης (1 mg/kg)",
     "usingAmiodarone": "Χρήση Αμιοδαρόνης (5 mg/kg)",
     "defibrillator": "Ενέργεια Απινιδωτή",
-    "defibrillatorDescPALS": "Υπολογισμός με βάση το βάρος: 2 J/kg → 4 J/kg → έως 10 J/kg"
+    "defibrillatorDescPALS": "Υπολογισμός με βάση το βάρος: 2 J/kg → 4 J/kg → έως 10 J/kg",
+    "theme": "Θέμα",
+    "themeDesc": "Εναλλαγή μεταξύ φωτεινής και σκοτεινής λειτουργίας",
+    "darkMode": "Σκοτεινή Λειτουργία",
+    "lightMode": "Φωτεινή Λειτουργία",
+    "adultDefibrillator": "Ενέργεια Απινιδωτή Ενηλίκων",
+    "adultDefibrillatorDesc": "Επιλέξτε ενέργεια απινίδωσης για ενήλικες",
+    "pediatricDefibrillator": "Ενέργεια Απινιδωτή Παιδιατρική"
   },
   "resume": {
     "title": "Ανιχνεύθηκε Ενεργός Κωδικός",

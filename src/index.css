@@ -8,34 +8,34 @@
 
 @layer base {
   :root {
-    /* Black/Dark theme as default for medical app */
-    --background: 0 0% 5%;
-    --foreground: 210 40% 98%;
+    /* Light theme */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
-    --card: 0 0% 8%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
 
-    --popover: 0 0% 10%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 5%;
+    --primary: 222 47% 11%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 0 0% 18%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 15%;
-    --ring: 0 0% 80%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222 47% 11%;
 
     --radius: 0.5rem;
 
@@ -51,33 +51,33 @@
     /* Shockable rhythms */
     --acls-shockable: 0 84% 50%;
     --acls-shockable-foreground: 0 0% 100%;
-    --acls-non-shockable: 210 100% 50%;
+    --acls-non-shockable: 210 100% 45%;
     --acls-non-shockable-foreground: 0 0% 100%;
-    --acls-pea: 45 100% 45%;
+    --acls-pea: 45 100% 40%;
     --acls-pea-foreground: 0 0% 0%;
-    --acls-success: 142 76% 42%;
+    --acls-success: 142 76% 36%;
     --acls-success-foreground: 0 0% 100%;
-    --acls-warning: 38 92% 55%;
+    --acls-warning: 38 92% 50%;
     --acls-warning-foreground: 0 0% 0%;
     --acls-critical: 0 84% 50%;
     --acls-critical-foreground: 0 0% 100%;
-    --acls-info: 199 89% 55%;
+    --acls-info: 199 89% 48%;
     --acls-info-foreground: 0 0% 100%;
     --acls-medication: 262 83% 58%;
     --acls-medication-foreground: 0 0% 100%;
 
-    --sidebar-background: 0 0% 8%;
-    --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 0 0% 98%;
-    --sidebar-primary-foreground: 0 0% 5%;
-    --sidebar-accent: 0 0% 15%;
-    --sidebar-accent-foreground: 0 0% 90%;
-    --sidebar-border: 0 0% 20%;
-    --sidebar-ring: 0 0% 80%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    /* Same as root - app is always dark themed */
+    /* Dark/Black theme */
     --background: 0 0% 5%;
     --foreground: 210 40% 98%;
 
@@ -106,7 +106,7 @@
     --input: 0 0% 15%;
     --ring: 0 0% 80%;
 
-    /* ACLS/PALS Clinical Colors - same as light (app is always dark) */
+    /* ACLS/PALS Clinical Colors - Dark Mode */
     --acls-primary: 0 84% 55%;
     --acls-primary-foreground: 0 0% 100%;
     --pals-primary: 199 89% 55%;

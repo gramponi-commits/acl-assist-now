@@ -1,5 +1,8 @@
 import { useState, useCallback, useEffect } from 'react';
 
+export type ThemeMode = 'dark' | 'light';
+export type AdultDefibrillatorEnergy = 120 | 150 | 200 | 360;
+
 export interface AppSettings {
   soundEnabled: boolean;
   vibrationEnabled: boolean;
@@ -8,6 +11,8 @@ export interface AppSettings {
   voiceAnnouncementsEnabled: boolean;
   preferLidocaine: boolean;
   defibrillatorEnergy: number;
+  theme: ThemeMode;
+  adultDefibrillatorEnergy: AdultDefibrillatorEnergy;
 }
 
 const SETTINGS_KEY = 'acls-settings';
@@ -20,6 +25,8 @@ const DEFAULT_SETTINGS: AppSettings = {
   voiceAnnouncementsEnabled: false,
   preferLidocaine: false,
   defibrillatorEnergy: 200,
+  theme: 'dark',
+  adultDefibrillatorEnergy: 200,
 };
 
 export function useSettings() {
