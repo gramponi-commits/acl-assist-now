@@ -165,7 +165,16 @@
     "deceased": "Deceased",
     "unknown": "Unknown",
     "delete": "Delete",
-    "confirmDelete": "Are you sure you want to delete this session?"
+    "confirmDelete": "Are you sure you want to delete this session?",
+    "sessionDeleted": "Session deleted",
+    "deleteFailed": "Failed to delete session",
+    "all": "All",
+    "showMore": "Show Details",
+    "showLess": "Hide Details",
+    "readings": "Readings",
+    "postRoscCare": "Post-ROSC Care",
+    "actionsDone": "Completed",
+    "actionsNotDone": "Not Completed"
   },
   "settings": {
     "title": "Settings",
@@ -337,7 +346,7 @@
     "usageLocalData": "All data saved locally on your device only",
     "usageOffline": "Works fully offline",
     "referencesTitle": "References",
-    "referencesPALS": "Based on AHA 2025 Pediatric Cardiac Arrest Algorithm Guidelines (PALS)",
+    "referencesAHA": "Based on AHA 2025 Adult (ACLS) and Pediatric (PALS) Cardiac Arrest Algorithms",
     "version": "Version",
     "shareTitle": "Share",
     "shareDesc": "Share this app with colleagues for training",

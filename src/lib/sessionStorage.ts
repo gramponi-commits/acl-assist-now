@@ -1,7 +1,9 @@
 // IndexedDB helper for storing ACLS session reports locally
 
+import { HsAndTs, PostROSCChecklist, PostROSCVitals, PathwayMode } from '@/types/acls';
+
 const DB_NAME = 'acls_sessions';
-const DB_VERSION = 1;
+const DB_VERSION = 2; // Bump version for schema update
 const STORE_NAME = 'sessions';
 
 export interface StoredSession {
@@ -9,6 +11,7 @@ export interface StoredSession {
   savedAt: number;
   startTime: number;
   endTime: number | null;
+  roscTime: number | null;
   outcome: 'rosc' | 'deceased' | null;
   duration: number;
   totalCPRTime: number;
@@ -16,11 +19,29 @@ export interface StoredSession {
   shockCount: number;
   epinephrineCount: number;
   amiodaroneCount: number;
+  lidocaineCount: number;
+  // Pathway mode (Adult ACLS / Pediatric PALS)
+  pathwayMode: PathwayMode;
+  patientWeight: number | null;
+  // All interventions with full detail
   interventions: Array<{
     timestamp: number;
     type: string;
     details: string;
+    value?: number | string;
   }>;
+  // EtCO2 readings
+  etco2Readings: Array<{
+    timestamp: number;
+    value: number;
+  }>;
+  // H's & T's analysis
+  hsAndTs: HsAndTs;
+  // Post-ROSC data
+  postROSCChecklist: PostROSCChecklist | null;
+  postROSCVitals: PostROSCVitals | null;
+  // Airway status
+  airwayStatus: 'ambu' | 'sga' | 'ett';
 }
 
 function openDB(): Promise<IDBDatabase> {
@@ -35,6 +56,7 @@ function openDB(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains(STORE_NAME)) {
         const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
         store.createIndex('savedAt', 'savedAt', { unique: false });
+        store.createIndex('pathwayMode', 'pathwayMode', { unique: false });
       }
     };
   });

@@ -616,6 +616,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       savedAt: Date.now(),
       startTime: session.startTime,
       endTime: session.endTime,
+      roscTime: session.roscTime,
       outcome: session.outcome,
       duration: timerState.totalElapsed,
       totalCPRTime: timerState.totalCPRTime,
@@ -623,11 +624,22 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       shockCount: session.shockCount,
       epinephrineCount: session.epinephrineCount,
       amiodaroneCount: session.amiodaroneCount,
+      lidocaineCount: session.lidocaineCount,
+      pathwayMode: session.pathwayMode,
+      patientWeight: session.patientWeight,
       interventions: session.interventions.map(i => ({
         timestamp: i.timestamp,
         type: i.type,
         details: i.details,
+        value: i.value,
       })),
+      etco2Readings: session.vitalReadings
+        .filter(v => v.etco2 !== undefined)
+        .map(v => ({ timestamp: v.timestamp, value: v.etco2! })),
+      hsAndTs: session.hsAndTs,
+      postROSCChecklist: session.phase === 'post_rosc' || session.outcome === 'rosc' ? session.postROSCChecklist : null,
+      postROSCVitals: session.phase === 'post_rosc' || session.outcome === 'rosc' ? session.postROSCVitals : null,
+      airwayStatus: session.airwayStatus,
     };
 
     await saveToIndexedDB(storedSession);
