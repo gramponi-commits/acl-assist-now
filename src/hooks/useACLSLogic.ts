@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { jsPDF } from 'jspdf';
 import {
   ACLSSession,
   ACLSConfig,
@@ -17,6 +16,7 @@ import {
   createInitialSession,
 } from '@/types/acls';
 import { saveSession as saveToIndexedDB, StoredSession } from '@/lib/sessionStorage';
+import { exportSessionToPDF } from '@/lib/pdfExport';
 import {
   calculateEpinephrineDose,
   calculateAmiodaroneDose,
@@ -427,183 +427,43 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
   }, [config]);
 
   const exportSession = useCallback(() => {
-    const pdf = new jsPDF();
-    const startDate = new Date(session.startTime);
     const cprFraction = timerState.totalElapsed > 0 
-      ? ((timerState.totalCPRTime / timerState.totalElapsed) * 100).toFixed(1)
-      : 'N/A';
+      ? (timerState.totalCPRTime / timerState.totalElapsed) * 100
+      : 0;
     
-    const formatTime = (ms: number) => {
-      const totalSec = Math.floor(ms / 1000);
-      const min = Math.floor(totalSec / 60);
-      const sec = totalSec % 60;
-      return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+    // Convert current session to StoredSession format for PDF export
+    const storedSession: StoredSession = {
+      id: session.id,
+      savedAt: Date.now(),
+      startTime: session.startTime,
+      endTime: session.endTime,
+      roscTime: session.roscTime,
+      outcome: session.outcome,
+      duration: timerState.totalElapsed,
+      totalCPRTime: timerState.totalCPRTime,
+      cprFraction,
+      shockCount: session.shockCount,
+      epinephrineCount: session.epinephrineCount,
+      amiodaroneCount: session.amiodaroneCount,
+      lidocaineCount: session.lidocaineCount,
+      pathwayMode: session.pathwayMode,
+      patientWeight: session.patientWeight,
+      interventions: session.interventions.map(i => ({
+        timestamp: i.timestamp,
+        type: i.type,
+        details: i.details,
+        value: i.value,
+      })),
+      etco2Readings: session.vitalReadings
+        .filter(v => v.etco2 !== undefined)
+        .map(v => ({ timestamp: v.timestamp, value: v.etco2! })),
+      hsAndTs: session.hsAndTs,
+      postROSCChecklist: session.phase === 'post_rosc' || session.outcome === 'rosc' ? session.postROSCChecklist : null,
+      postROSCVitals: session.phase === 'post_rosc' || session.outcome === 'rosc' ? session.postROSCVitals : null,
+      airwayStatus: session.airwayStatus,
     };
     
-    const formatDeviceTime = (timestamp: number) => {
-      const date = new Date(timestamp);
-      return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    };
-
-    const outcomeText = session.outcome === 'rosc' ? 'ROSC' : session.outcome === 'deceased' ? 'Deceased' : 'In Progress';
-    const rhythmText = session.currentRhythm === 'vf_pvt' ? 'VF/pVT' : session.currentRhythm === 'asystole' ? 'Asystole' : session.currentRhythm === 'pea' ? 'PEA' : 'N/A';
-    const airwayText = session.airwayStatus === 'ett' ? 'ETT' : session.airwayStatus === 'sga' ? 'SGA' : 'AMBU';
-
-    // Header with background
-    pdf.setFillColor(220, 38, 38); // Red header
-    pdf.rect(0, 0, 210, 35, 'F');
-    pdf.setTextColor(255, 255, 255);
-    pdf.setFontSize(22);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('ACLS CODE REPORT', 105, 18, { align: 'center' });
-    pdf.setFontSize(11);
-    pdf.setFont('helvetica', 'normal');
-    pdf.text(`${startDate.toLocaleDateString()} - ${formatDeviceTime(session.startTime)}`, 105, 28, { align: 'center' });
-    
-    // Reset text color
-    pdf.setTextColor(0, 0, 0);
-    
-    // Key metrics boxes
-    let y = 45;
-    const boxWidth = 42;
-    const boxHeight = 25;
-    const boxGap = 5;
-    const startX = 15;
-    
-    // Outcome box
-    const outcomeColor = session.outcome === 'rosc' ? [34, 197, 94] : session.outcome === 'deceased' ? [107, 114, 128] : [234, 179, 8];
-    pdf.setFillColor(outcomeColor[0], outcomeColor[1], outcomeColor[2]);
-    pdf.roundedRect(startX, y, boxWidth, boxHeight, 3, 3, 'F');
-    pdf.setTextColor(255, 255, 255);
-    pdf.setFontSize(9);
-    pdf.text('OUTCOME', startX + boxWidth/2, y + 8, { align: 'center' });
-    pdf.setFontSize(12);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text(outcomeText, startX + boxWidth/2, y + 18, { align: 'center' });
-    
-    // Duration box
-    pdf.setFillColor(59, 130, 246); // Blue
-    pdf.roundedRect(startX + boxWidth + boxGap, y, boxWidth, boxHeight, 3, 3, 'F');
-    pdf.setFontSize(9);
-    pdf.setFont('helvetica', 'normal');
-    pdf.text('DURATION', startX + boxWidth + boxGap + boxWidth/2, y + 8, { align: 'center' });
-    pdf.setFontSize(12);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text(formatTime(timerState.totalElapsed), startX + boxWidth + boxGap + boxWidth/2, y + 18, { align: 'center' });
-    
-    // CPR Fraction box
-    pdf.setFillColor(139, 92, 246); // Purple
-    pdf.roundedRect(startX + 2*(boxWidth + boxGap), y, boxWidth, boxHeight, 3, 3, 'F');
-    pdf.setFontSize(9);
-    pdf.setFont('helvetica', 'normal');
-    pdf.text('CPR FRACTION', startX + 2*(boxWidth + boxGap) + boxWidth/2, y + 8, { align: 'center' });
-    pdf.setFontSize(12);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text(`${cprFraction}%`, startX + 2*(boxWidth + boxGap) + boxWidth/2, y + 18, { align: 'center' });
-    
-    // Shocks box
-    pdf.setFillColor(249, 115, 22); // Orange
-    pdf.roundedRect(startX + 3*(boxWidth + boxGap), y, boxWidth, boxHeight, 3, 3, 'F');
-    pdf.setFontSize(9);
-    pdf.setFont('helvetica', 'normal');
-    pdf.text('SHOCKS', startX + 3*(boxWidth + boxGap) + boxWidth/2, y + 8, { align: 'center' });
-    pdf.setFontSize(12);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text(String(session.shockCount), startX + 3*(boxWidth + boxGap) + boxWidth/2, y + 18, { align: 'center' });
-    
-    // Reset text color
-    pdf.setTextColor(0, 0, 0);
-    
-    // Summary section
-    y = 80;
-    pdf.setFillColor(245, 245, 245);
-    pdf.roundedRect(15, y, 180, 40, 3, 3, 'F');
-    pdf.setFontSize(11);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('Session Summary', 20, y + 10);
-    pdf.setFontSize(10);
-    pdf.setFont('helvetica', 'normal');
-    
-    // Left column
-    pdf.text(`Final Rhythm: ${rhythmText}`, 20, y + 20);
-    pdf.text(`CPR Time: ${formatTime(timerState.totalCPRTime)}`, 20, y + 28);
-    pdf.text(`Airway: ${airwayText}`, 20, y + 36);
-    
-    // Right column
-    pdf.text(`Epinephrine: ${session.epinephrineCount} dose(s)`, 110, y + 20);
-    pdf.text(`Amiodarone: ${session.amiodaroneCount} dose(s)`, 110, y + 28);
-    pdf.text(`Lidocaine: ${session.lidocaineCount} dose(s)`, 110, y + 36);
-    
-    // Interventions Timeline
-    y = 130;
-    pdf.setFontSize(11);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('Interventions Timeline', 15, y);
-    
-    // Table header
-    y += 8;
-    pdf.setFillColor(75, 85, 99);
-    pdf.rect(15, y - 5, 180, 8, 'F');
-    pdf.setTextColor(255, 255, 255);
-    pdf.setFontSize(9);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('Time', 20, y);
-    pdf.text('Code +', 50, y);
-    pdf.text('Event', 80, y);
-    
-    pdf.setTextColor(0, 0, 0);
-    pdf.setFont('helvetica', 'normal');
-    y += 6;
-    
-    let isOddRow = false;
-    session.interventions.forEach((intervention) => {
-      if (y > 270) {
-        pdf.addPage();
-        y = 20;
-        // Repeat header on new page
-        pdf.setFillColor(75, 85, 99);
-        pdf.rect(15, y - 5, 180, 8, 'F');
-        pdf.setTextColor(255, 255, 255);
-        pdf.setFontSize(9);
-        pdf.setFont('helvetica', 'bold');
-        pdf.text('Time', 20, y);
-        pdf.text('Code +', 50, y);
-        pdf.text('Event', 80, y);
-        pdf.setTextColor(0, 0, 0);
-        pdf.setFont('helvetica', 'normal');
-        y += 6;
-        isOddRow = false;
-      }
-      
-      // Alternating row colors
-      if (isOddRow) {
-        pdf.setFillColor(249, 250, 251);
-        pdf.rect(15, y - 4, 180, 7, 'F');
-      }
-      isOddRow = !isOddRow;
-      
-      const relativeTime = intervention.timestamp - session.startTime;
-      pdf.setFontSize(9);
-      pdf.text(formatDeviceTime(intervention.timestamp), 20, y);
-      pdf.text(formatTime(relativeTime), 50, y);
-      
-      // Truncate long details
-      let eventText = intervention.details || intervention.type;
-      if (eventText.length > 60) {
-        eventText = eventText.substring(0, 57) + '...';
-      }
-      pdf.text(eventText, 80, y);
-      y += 7;
-    });
-    
-    // Footer
-    pdf.setFillColor(245, 245, 245);
-    pdf.rect(0, 280, 210, 17, 'F');
-    pdf.setFontSize(8);
-    pdf.setTextColor(107, 114, 128);
-    pdf.text(`Generated: ${new Date().toLocaleString()} | ResusBuddy`, 105, 288, { align: 'center' });
-    
-    pdf.save(`resusbuddy-code-${startDate.toISOString().split('T')[0]}-${formatDeviceTime(session.startTime).replace(/:/g, '')}.pdf`);
+    exportSessionToPDF(storedSession);
   }, [session, timerState.totalCPRTime, timerState.totalElapsed]);
 
   const saveSessionLocally = useCallback(async () => {

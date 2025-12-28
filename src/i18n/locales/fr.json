@@ -174,7 +174,8 @@
     "readings": "Mesures",
     "postRoscCare": "Soins Post-RACS",
     "actionsDone": "Effectuées",
-    "actionsNotDone": "Non Effectuées"
+    "actionsNotDone": "Non Effectuées",
+    "pdfExported": "PDF exporté avec succès"
   },
   "settings": {
     "title": "Paramètres",

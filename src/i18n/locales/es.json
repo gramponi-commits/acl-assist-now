@@ -174,7 +174,8 @@
     "readings": "Lecturas",
     "postRoscCare": "Atención Post-RCE",
     "actionsDone": "Realizadas",
-    "actionsNotDone": "No Realizadas"
+    "actionsNotDone": "No Realizadas",
+    "pdfExported": "PDF exportado exitosamente"
   },
   "settings": {
     "title": "Configuración",

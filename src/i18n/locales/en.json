@@ -174,7 +174,8 @@
     "readings": "Readings",
     "postRoscCare": "Post-ROSC Care",
     "actionsDone": "Completed",
-    "actionsNotDone": "Not Completed"
+    "actionsNotDone": "Not Completed",
+    "pdfExported": "PDF exported successfully"
   },
   "settings": {
     "title": "Settings",

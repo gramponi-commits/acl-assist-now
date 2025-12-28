@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getAllSessions, deleteSession, StoredSession } from '@/lib/sessionStorage';
+import { exportSessionToPDF } from '@/lib/pdfExport';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Trash2, Heart, XCircle, Clock, Zap, Syringe, ChevronDown, ChevronUp, Activity, AlertTriangle, User, Baby, Filter } from 'lucide-react';
+import { Trash2, Heart, XCircle, Clock, Zap, Syringe, ChevronDown, ChevronUp, Activity, AlertTriangle, User, Baby, Filter, Download } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -143,11 +144,11 @@ export default function SessionHistory() {
           </Button>
           <Button
             size="sm"
-            variant={filterMode === 'adult' ? 'default' : 'outline'}
+            variant="outline"
             onClick={() => setFilterMode('adult')}
             className={cn(
               "gap-1",
-              filterMode === 'adult' && "bg-acls-adult hover:bg-acls-adult/90"
+              filterMode === 'adult' && "bg-acls-adult text-white border-acls-adult hover:bg-acls-adult/90 hover:text-white"
             )}
           >
             <User className="h-3 w-3" />
@@ -155,11 +156,11 @@ export default function SessionHistory() {
           </Button>
           <Button
             size="sm"
-            variant={filterMode === 'pediatric' ? 'default' : 'outline'}
+            variant="outline"
             onClick={() => setFilterMode('pediatric')}
             className={cn(
               "gap-1",
-              filterMode === 'pediatric' && "bg-acls-pediatric hover:bg-acls-pediatric/90"
+              filterMode === 'pediatric' && "bg-acls-pediatric text-white border-acls-pediatric hover:bg-acls-pediatric/90 hover:text-white"
             )}
           >
             <Baby className="h-3 w-3" />
@@ -245,17 +246,31 @@ export default function SessionHistory() {
                             : t('history.unknown')}
                         </div>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-destructive hover:bg-destructive/10"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(session.id);
-                        }}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <div className="flex gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-primary hover:bg-primary/10"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            exportSessionToPDF(session);
+                            toast.success(t('history.pdfExported'));
+                          }}
+                        >
+                          <Download className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-destructive hover:bg-destructive/10"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(session.id);
+                          }}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
 
                     {/* Summary Stats */}
