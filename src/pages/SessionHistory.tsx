@@ -3,14 +3,20 @@ import { useTranslation } from 'react-i18next';
 import { getAllSessions, deleteSession, StoredSession } from '@/lib/sessionStorage';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Trash2, Heart, XCircle, Clock, Zap, Syringe } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Trash2, Heart, XCircle, Clock, Zap, Syringe, ChevronDown, ChevronUp, Activity, AlertTriangle, User, Baby, Filter } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+
+type FilterMode = 'all' | 'adult' | 'pediatric';
 
 export default function SessionHistory() {
   const { t } = useTranslation();
   const [sessions, setSessions] = useState<StoredSession[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [filterMode, setFilterMode] = useState<FilterMode>('all');
 
   useEffect(() => {
     loadSessions();
@@ -33,9 +39,9 @@ export default function SessionHistory() {
     try {
       await deleteSession(id);
       setSessions(sessions.filter(s => s.id !== id));
-      toast.success('Session deleted');
+      toast.success(t('history.sessionDeleted'));
     } catch (error) {
-      toast.error('Failed to delete session');
+      toast.error(t('history.deleteFailed'));
     }
   };
 
@@ -43,6 +49,13 @@ export default function SessionHistory() {
     const min = Math.floor(ms / 60000);
     const sec = Math.floor((ms % 60000) / 1000);
     return `${min}:${sec.toString().padStart(2, '0')}`;
+  };
+
+  const formatTime = (timestamp: number, startTime: number) => {
+    const elapsed = timestamp - startTime;
+    const min = Math.floor(elapsed / 60000);
+    const sec = Math.floor((elapsed % 60000) / 1000);
+    return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
   };
 
   const formatDate = (timestamp: number) => {
@@ -55,6 +68,55 @@ export default function SessionHistory() {
     });
   };
 
+  const getHsTsChecked = (hsAndTs: StoredSession['hsAndTs']) => {
+    if (!hsAndTs) return [];
+    const checked: string[] = [];
+    if (hsAndTs.hypovolemia) checked.push(t('hsTs.hypovolemia'));
+    if (hsAndTs.hypoxia) checked.push(t('hsTs.hypoxia'));
+    if (hsAndTs.hydrogenIon) checked.push(t('hsTs.hydrogenIon'));
+    if (hsAndTs.hypoHyperkalemia) checked.push(t('hsTs.hypoHyperkalemia'));
+    if (hsAndTs.hypothermia) checked.push(t('hsTs.hypothermia'));
+    if (hsAndTs.tensionPneumothorax) checked.push(t('hsTs.tensionPneumo'));
+    if (hsAndTs.tamponade) checked.push(t('hsTs.tamponade'));
+    if (hsAndTs.toxins) checked.push(t('hsTs.toxins'));
+    if (hsAndTs.thrombosisPulmonary) checked.push(t('hsTs.thrombosisPulm'));
+    if (hsAndTs.thrombosisCoronary) checked.push(t('hsTs.thrombosisCoro'));
+    return checked;
+  };
+
+  const getPostROSCActions = (checklist: StoredSession['postROSCChecklist']) => {
+    if (!checklist) return { done: [], notDone: [] };
+    const done: string[] = [];
+    const notDone: string[] = [];
+    
+    const items = [
+      { key: 'airwaySecured', label: t('postRosc.airwaySecured') },
+      { key: 'ventilationOptimized', label: t('postRosc.ventilationOptimized') },
+      { key: 'hemodynamicsOptimized', label: t('postRosc.hemodynamicsOptimized') },
+      { key: 'twelveLeadECG', label: t('postRosc.twelveLeadECG') },
+      { key: 'labsOrdered', label: t('postRosc.labsOrdered') },
+      { key: 'temperatureManagement', label: t('postRosc.temperatureManagement') },
+      { key: 'neurologicalAssessment', label: t('postRosc.neurologicalAssessment') },
+    ];
+
+    items.forEach(item => {
+      if (checklist[item.key as keyof typeof checklist] === true) {
+        done.push(item.label);
+      } else {
+        notDone.push(item.label);
+      }
+    });
+
+    return { done, notDone };
+  };
+
+  const filteredSessions = sessions.filter(session => {
+    if (filterMode === 'all') return true;
+    // Handle old sessions without pathwayMode
+    const mode = session.pathwayMode || 'adult';
+    return mode === filterMode;
+  });
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -66,14 +128,51 @@ export default function SessionHistory() {
   return (
     <div className="min-h-screen bg-background">
       <div className="p-4 border-b border-border">
-        <h1 className="text-2xl font-bold text-foreground">{t('history.title')}</h1>
+        <h1 className="text-2xl font-bold text-foreground mb-3">{t('history.title')}</h1>
+        
+        {/* Filter buttons */}
+        <div className="flex gap-2">
+          <Button
+            size="sm"
+            variant={filterMode === 'all' ? 'default' : 'outline'}
+            onClick={() => setFilterMode('all')}
+            className="gap-1"
+          >
+            <Filter className="h-3 w-3" />
+            {t('history.all')}
+          </Button>
+          <Button
+            size="sm"
+            variant={filterMode === 'adult' ? 'default' : 'outline'}
+            onClick={() => setFilterMode('adult')}
+            className={cn(
+              "gap-1",
+              filterMode === 'adult' && "bg-acls-adult hover:bg-acls-adult/90"
+            )}
+          >
+            <User className="h-3 w-3" />
+            ACLS
+          </Button>
+          <Button
+            size="sm"
+            variant={filterMode === 'pediatric' ? 'default' : 'outline'}
+            onClick={() => setFilterMode('pediatric')}
+            className={cn(
+              "gap-1",
+              filterMode === 'pediatric' && "bg-acls-pediatric hover:bg-acls-pediatric/90"
+            )}
+          >
+            <Baby className="h-3 w-3" />
+            PALS
+          </Button>
+        </div>
       </div>
 
-      <ScrollArea className="h-[calc(100vh-73px)]">
+      <ScrollArea className="h-[calc(100vh-140px)]">
         <div className="p-4 space-y-4 max-w-2xl mx-auto">
-          {sessions.length === 0 ? (
+          {filteredSessions.length === 0 ? (
             <div className="text-center py-12">
-              <History className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <HistoryIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
               <h2 className="text-xl font-semibold text-foreground mb-2">
                 {t('history.noSessions')}
               </h2>
@@ -82,76 +181,246 @@ export default function SessionHistory() {
               </p>
             </div>
           ) : (
-            sessions.map((session) => (
-              <div
-                key={session.id}
-                className="bg-card rounded-lg border border-border p-4 space-y-3"
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <div className="text-sm text-muted-foreground">
-                      {formatDate(session.startTime)}
+            filteredSessions.map((session) => {
+              const isExpanded = expandedId === session.id;
+              const hsTsChecked = getHsTsChecked(session.hsAndTs);
+              const postROSCActions = getPostROSCActions(session.postROSCChecklist);
+              const pathwayMode = session.pathwayMode || 'adult';
+              
+              return (
+                <Collapsible
+                  key={session.id}
+                  open={isExpanded}
+                  onOpenChange={() => setExpandedId(isExpanded ? null : session.id)}
+                >
+                  <div className={cn(
+                    "bg-card rounded-lg border p-4 space-y-3",
+                    pathwayMode === 'adult' ? 'border-acls-adult/30' : 'border-acls-pediatric/30'
+                  )}>
+                    {/* Header */}
+                    <div className="flex items-start justify-between">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <Badge
+                            variant="outline"
+                            className={cn(
+                              "text-xs",
+                              pathwayMode === 'adult' 
+                                ? 'border-acls-adult text-acls-adult' 
+                                : 'border-acls-pediatric text-acls-pediatric'
+                            )}
+                          >
+                            {pathwayMode === 'adult' ? (
+                              <><User className="h-3 w-3 mr-1" />ACLS</>
+                            ) : (
+                              <><Baby className="h-3 w-3 mr-1" />PALS</>
+                            )}
+                          </Badge>
+                          {pathwayMode === 'pediatric' && session.patientWeight && (
+                            <span className="text-xs text-muted-foreground">
+                              {session.patientWeight}kg
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          {formatDate(session.startTime)}
+                        </div>
+                        <div className={cn(
+                          'inline-flex items-center gap-1.5 mt-1 px-2 py-1 rounded-full text-sm font-medium',
+                          session.outcome === 'rosc' 
+                            ? 'bg-acls-success/20 text-acls-success'
+                            : session.outcome === 'deceased'
+                            ? 'bg-destructive/20 text-destructive'
+                            : 'bg-muted text-muted-foreground'
+                        )}>
+                          {session.outcome === 'rosc' ? (
+                            <Heart className="h-4 w-4" />
+                          ) : session.outcome === 'deceased' ? (
+                            <XCircle className="h-4 w-4" />
+                          ) : null}
+                          {session.outcome === 'rosc' 
+                            ? t('history.rosc')
+                            : session.outcome === 'deceased'
+                            ? t('history.deceased')
+                            : t('history.unknown')}
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-destructive hover:bg-destructive/10"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(session.id);
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </div>
-                    <div className={cn(
-                      'inline-flex items-center gap-1.5 mt-1 px-2 py-1 rounded-full text-sm font-medium',
-                      session.outcome === 'rosc' 
-                        ? 'bg-acls-success/20 text-acls-success'
-                        : session.outcome === 'deceased'
-                        ? 'bg-destructive/20 text-destructive'
-                        : 'bg-muted text-muted-foreground'
-                    )}>
-                      {session.outcome === 'rosc' ? (
-                        <Heart className="h-4 w-4" />
-                      ) : session.outcome === 'deceased' ? (
-                        <XCircle className="h-4 w-4" />
-                      ) : null}
-                      {session.outcome === 'rosc' 
-                        ? t('history.rosc')
-                        : session.outcome === 'deceased'
-                        ? t('history.deceased')
-                        : t('history.unknown')}
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-destructive hover:bg-destructive/10"
-                    onClick={() => handleDelete(session.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
 
-                <div className="grid grid-cols-3 gap-3 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    <div>
-                      <div className="text-muted-foreground">{t('codeEnded.duration')}</div>
-                      <div className="font-semibold">{formatDuration(session.duration)}</div>
+                    {/* Summary Stats */}
+                    <div className="grid grid-cols-3 gap-3 text-sm">
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        <div>
+                          <div className="text-muted-foreground">{t('codeEnded.duration')}</div>
+                          <div className="font-semibold">{formatDuration(session.duration)}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Zap className="h-4 w-4 text-acls-shockable" />
+                        <div>
+                          <div className="text-muted-foreground">{t('codeEnded.shocks')}</div>
+                          <div className="font-semibold">{session.shockCount}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Syringe className="h-4 w-4 text-acls-warning" />
+                        <div>
+                          <div className="text-muted-foreground">Epi</div>
+                          <div className="font-semibold">{session.epinephrineCount}</div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Zap className="h-4 w-4 text-acls-shockable" />
-                    <div>
-                      <div className="text-muted-foreground">{t('codeEnded.shocks')}</div>
-                      <div className="font-semibold">{session.shockCount}</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Syringe className="h-4 w-4 text-acls-warning" />
-                    <div>
-                      <div className="text-muted-foreground">Epi</div>
-                      <div className="font-semibold">{session.epinephrineCount}</div>
-                    </div>
-                  </div>
-                </div>
 
-                <div className="flex items-center justify-between text-sm pt-2 border-t border-border">
-                  <span className="text-muted-foreground">{t('codeEnded.cprFraction')}</span>
-                  <span className="font-semibold">{session.cprFraction.toFixed(1)}%</span>
-                </div>
-              </div>
-            ))
+                    {/* CPR Fraction */}
+                    <div className="flex items-center justify-between text-sm pt-2 border-t border-border">
+                      <span className="text-muted-foreground">{t('codeEnded.cprFraction')}</span>
+                      <span className="font-semibold">{session.cprFraction.toFixed(1)}%</span>
+                    </div>
+
+                    {/* Expand button */}
+                    <CollapsibleTrigger asChild>
+                      <Button variant="ghost" size="sm" className="w-full gap-2">
+                        {isExpanded ? (
+                          <>
+                            <ChevronUp className="h-4 w-4" />
+                            {t('history.showLess')}
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="h-4 w-4" />
+                            {t('history.showMore')}
+                          </>
+                        )}
+                      </Button>
+                    </CollapsibleTrigger>
+
+                    {/* Expanded Details */}
+                    <CollapsibleContent className="space-y-4">
+                      {/* EtCO2 Readings */}
+                      {session.etco2Readings && session.etco2Readings.length > 0 && (
+                        <div className="bg-muted/50 rounded-lg p-3">
+                          <h4 className="text-sm font-semibold flex items-center gap-2 mb-2">
+                            <Activity className="h-4 w-4 text-primary" />
+                            ETCO₂ {t('history.readings')}
+                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {session.etco2Readings.map((reading, idx) => (
+                              <Badge key={idx} variant="secondary" className="font-mono">
+                                {formatTime(reading.timestamp, session.startTime)}: {reading.value} mmHg
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* H's & T's */}
+                      {hsTsChecked.length > 0 && (
+                        <div className="bg-muted/50 rounded-lg p-3">
+                          <h4 className="text-sm font-semibold flex items-center gap-2 mb-2">
+                            <AlertTriangle className="h-4 w-4 text-acls-warning" />
+                            {t('hsTs.title')}
+                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {hsTsChecked.map((item, idx) => (
+                              <Badge key={idx} variant="outline" className="text-xs">
+                                {item}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Full Timeline */}
+                      {session.interventions && session.interventions.length > 0 && (
+                        <div className="bg-muted/50 rounded-lg p-3">
+                          <h4 className="text-sm font-semibold mb-2">
+                            {t('timeline.title')} ({session.interventions.length} {t('timeline.events')})
+                          </h4>
+                          <div className="space-y-1 max-h-48 overflow-y-auto">
+                            {session.interventions.map((intervention, idx) => (
+                              <div key={idx} className="flex items-start gap-2 text-xs">
+                                <span className="font-mono text-muted-foreground whitespace-nowrap">
+                                  {formatTime(intervention.timestamp, session.startTime)}
+                                </span>
+                                <span className="text-foreground">{intervention.details}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Post-ROSC Section */}
+                      {session.outcome === 'rosc' && session.postROSCChecklist && (
+                        <div className="bg-acls-success/10 rounded-lg p-3 border border-acls-success/30">
+                          <h4 className="text-sm font-semibold flex items-center gap-2 mb-2 text-acls-success">
+                            <Heart className="h-4 w-4" />
+                            {t('history.postRoscCare')}
+                          </h4>
+                          
+                          {/* Vitals */}
+                          {session.postROSCVitals && (
+                            <div className="mb-3">
+                              <p className="text-xs text-muted-foreground mb-1">{t('postRosc.vitalTargets')}:</p>
+                              <div className="flex flex-wrap gap-2">
+                                {session.postROSCVitals.spo2 && (
+                                  <Badge variant="secondary" className="text-xs">SpO₂: {session.postROSCVitals.spo2}%</Badge>
+                                )}
+                                {session.postROSCVitals.map && (
+                                  <Badge variant="secondary" className="text-xs">MAP: {session.postROSCVitals.map} mmHg</Badge>
+                                )}
+                                {session.postROSCVitals.temperature && (
+                                  <Badge variant="secondary" className="text-xs">Temp: {session.postROSCVitals.temperature}°C</Badge>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Actions done */}
+                          {postROSCActions.done.length > 0 && (
+                            <div className="mb-2">
+                              <p className="text-xs text-muted-foreground mb-1">{t('history.actionsDone')}:</p>
+                              <div className="flex flex-wrap gap-1">
+                                {postROSCActions.done.map((action, idx) => (
+                                  <Badge key={idx} className="text-xs bg-acls-success/20 text-acls-success border-0">
+                                    ✓ {action}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Actions not done */}
+                          {postROSCActions.notDone.length > 0 && (
+                            <div>
+                              <p className="text-xs text-muted-foreground mb-1">{t('history.actionsNotDone')}:</p>
+                              <div className="flex flex-wrap gap-1">
+                                {postROSCActions.notDone.map((action, idx) => (
+                                  <Badge key={idx} variant="outline" className="text-xs text-muted-foreground">
+                                    ✗ {action}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </CollapsibleContent>
+                  </div>
+                </Collapsible>
+              );
+            })
           )}
         </div>
       </ScrollArea>
@@ -159,7 +428,7 @@ export default function SessionHistory() {
   );
 }
 
-function History(props: React.SVGProps<SVGSVGElement>) {
+function HistoryIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

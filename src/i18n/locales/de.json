@@ -165,7 +165,16 @@
     "deceased": "Verstorben",
     "unknown": "Unbekannt",
     "delete": "Löschen",
-    "confirmDelete": "Sind Sie sicher, dass Sie diese Sitzung löschen möchten?"
+    "confirmDelete": "Sind Sie sicher, dass Sie diese Sitzung löschen möchten?",
+    "sessionDeleted": "Sitzung gelöscht",
+    "deleteFailed": "Löschen fehlgeschlagen",
+    "all": "Alle",
+    "showMore": "Details Anzeigen",
+    "showLess": "Details Ausblenden",
+    "readings": "Messwerte",
+    "postRoscCare": "Post-ROSC-Versorgung",
+    "actionsDone": "Durchgeführt",
+    "actionsNotDone": "Nicht Durchgeführt"
   },
   "settings": {
     "title": "Einstellungen",
@@ -340,7 +349,7 @@
     "usageLocalData": "Alle Daten nur lokal auf Ihrem Gerät gespeichert",
     "usageOffline": "Funktioniert vollständig offline",
     "referencesTitle": "Referenzen",
-    "referencesPALS": "Basierend auf AHA 2025 Pädiatrischer Herzstillstand-Algorithmus (PALS)",
+    "referencesAHA": "Basierend auf AHA 2025 Algorithmen für Erwachsenen- (ACLS) und Pädiatrischen (PALS) Herzstillstand",
     "version": "Version",
     "shareTitle": "Teilen",
     "shareDesc": "Teilen Sie diese App mit Kollegen für Training",

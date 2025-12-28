@@ -165,7 +165,16 @@
     "deceased": "Décédé",
     "unknown": "Inconnu",
     "delete": "Supprimer",
-    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette session ?"
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette session ?",
+    "sessionDeleted": "Session supprimée",
+    "deleteFailed": "Échec de la suppression",
+    "all": "Tous",
+    "showMore": "Afficher Détails",
+    "showLess": "Masquer Détails",
+    "readings": "Mesures",
+    "postRoscCare": "Soins Post-RACS",
+    "actionsDone": "Effectuées",
+    "actionsNotDone": "Non Effectuées"
   },
   "settings": {
     "title": "Paramètres",
@@ -340,7 +349,7 @@
     "usageLocalData": "Toutes les données sauvegardées localement sur votre appareil uniquement",
     "usageOffline": "Fonctionne entièrement hors ligne",
     "referencesTitle": "Références",
-    "referencesPALS": "Basé sur les Recommandations AHA 2025 de l'Algorithme d'Arrêt Cardiaque Pédiatrique (PALS)",
+    "referencesAHA": "Basé sur les Algorithmes AHA 2025 d'Arrêt Cardiaque Adulte (ACLS) et Pédiatrique (PALS)",
     "version": "Version",
     "shareTitle": "Partager",
     "shareDesc": "Partagez cette app avec vos collègues pour la formation",

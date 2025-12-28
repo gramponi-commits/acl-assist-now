@@ -165,7 +165,16 @@
     "deceased": "Fallecido",
     "unknown": "Desconocido",
     "delete": "Eliminar",
-    "confirmDelete": "¿Está seguro de que desea eliminar esta sesión?"
+    "confirmDelete": "¿Está seguro de que desea eliminar esta sesión?",
+    "sessionDeleted": "Sesión eliminada",
+    "deleteFailed": "Error al eliminar",
+    "all": "Todos",
+    "showMore": "Mostrar Detalles",
+    "showLess": "Ocultar Detalles",
+    "readings": "Lecturas",
+    "postRoscCare": "Atención Post-RCE",
+    "actionsDone": "Realizadas",
+    "actionsNotDone": "No Realizadas"
   },
   "settings": {
     "title": "Configuración",
@@ -340,7 +349,7 @@
     "usageLocalData": "Todos los datos guardados localmente solo en su dispositivo",
     "usageOffline": "Funciona completamente sin conexión",
     "referencesTitle": "Referencias",
-    "referencesPALS": "Basado en las Guías AHA 2025 del Algoritmo de Paro Cardíaco Pediátrico (PALS)",
+    "referencesAHA": "Basado en los Algoritmos AHA 2025 de Paro Cardíaco Adulto (ACLS) y Pediátrico (PALS)",
     "version": "Versión",
     "shareTitle": "Compartir",
     "shareDesc": "Comparta esta app con colegas para entrenamiento",
