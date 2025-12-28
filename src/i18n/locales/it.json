@@ -174,7 +174,8 @@
     "readings": "Letture",
     "postRoscCare": "Gestione Post-ROSC",
     "actionsDone": "Effettuate",
-    "actionsNotDone": "Non Effettuate"
+    "actionsNotDone": "Non Effettuate",
+    "pdfExported": "PDF esportato con successo"
   },
   "settings": {
     "title": "Impostazioni",

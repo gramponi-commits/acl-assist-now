@@ -174,7 +174,8 @@
     "readings": "Messwerte",
     "postRoscCare": "Post-ROSC-Versorgung",
     "actionsDone": "Durchgeführt",
-    "actionsNotDone": "Nicht Durchgeführt"
+    "actionsNotDone": "Nicht Durchgeführt",
+    "pdfExported": "PDF erfolgreich exportiert"
   },
   "settings": {
     "title": "Einstellungen",

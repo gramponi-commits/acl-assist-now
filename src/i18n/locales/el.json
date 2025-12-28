@@ -174,7 +174,8 @@
     "readings": "Μετρήσεις",
     "postRoscCare": "Φροντίδα Μετά-ROSC",
     "actionsDone": "Ολοκληρωμένες",
-    "actionsNotDone": "Μη Ολοκληρωμένες"
+    "actionsNotDone": "Μη Ολοκληρωμένες",
+    "pdfExported": "Το PDF εξήχθη επιτυχώς"
   },
   "settings": {
     "title": "Ρυθμίσεις",
