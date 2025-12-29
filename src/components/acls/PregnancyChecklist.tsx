@@ -34,24 +34,22 @@ export function PregnancyChecklist({
   const [isOpen, setIsOpen] = useState(false);
   const [deliveryAlertTime, setDeliveryAlertTime] = useState<number | null>(null);
 
-  // Calculate time since pregnancy was activated
+  // Calculate time since CPR started (not pregnancy activation)
+  const [timeElapsed, setTimeElapsed] = useState<number>(0);
+  const deliveryAlertActive = pregnancyActive && timeElapsed >= FIVE_MINUTES_MS;
+
   useEffect(() => {
-    if (!pregnancyActive || !pregnancyStartTime) {
-      setDeliveryAlertTime(null);
+    if (!cprStartTime) {
+      setTimeElapsed(0);
       return;
     }
 
     const interval = setInterval(() => {
-      const elapsed = Date.now() - pregnancyStartTime;
-      if (elapsed >= FIVE_MINUTES_MS) {
-        setDeliveryAlertTime(elapsed);
-      } else {
-        setDeliveryAlertTime(null);
-      }
+      setTimeElapsed(Date.now() - cprStartTime);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [pregnancyActive, pregnancyStartTime]);
+  }, [cprStartTime]);
 
   const handleTogglePregnancy = (checked: boolean) => {
     onTogglePregnancy(checked);
@@ -118,7 +116,7 @@ export function PregnancyChecklist({
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {pregnancyActive && deliveryAlertTime && (
+            {pregnancyActive && deliveryAlertActive && (
               <Badge variant="destructive" className="animate-pulse gap-1">
                 <AlertTriangle className="h-3 w-3" />
                 {t('pregnancy.deliveryAlert')}
@@ -145,16 +143,16 @@ export function PregnancyChecklist({
               <div className="font-semibold text-pink-400">{t('pregnancy.activatePregnancy')}</div>
               <div className="text-xs text-muted-foreground">{t('pregnancy.activateDesc')}</div>
             </div>
-            {pregnancyActive && pregnancyStartTime && (
+            {pregnancyActive && (
               <div className="flex items-center gap-1 text-xs text-pink-400">
                 <Clock className="h-3 w-3" />
-                {formatTime(Date.now() - pregnancyStartTime)}
+                {formatTime(timeElapsed)}
               </div>
             )}
           </label>
 
           {/* 5-minute Delivery Alert */}
-          {pregnancyActive && deliveryAlertTime && (
+          {pregnancyActive && deliveryAlertActive && (
             <div className="bg-destructive/20 border-2 border-destructive rounded-lg p-4 animate-pulse">
               <div className="flex items-center gap-2 text-destructive font-bold text-lg">
                 <AlertTriangle className="h-6 w-6" />
