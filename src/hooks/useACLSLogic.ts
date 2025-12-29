@@ -463,6 +463,9 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       postROSCChecklist: session.phase === 'post_rosc' || session.outcome === 'rosc' ? session.postROSCChecklist : null,
       postROSCVitals: session.phase === 'post_rosc' || session.outcome === 'rosc' ? session.postROSCVitals : null,
       airwayStatus: session.airwayStatus,
+      pregnancyActive: session.pregnancyActive,
+      pregnancyCauses: session.pregnancyActive ? session.pregnancyCauses : undefined,
+      pregnancyInterventions: session.pregnancyActive ? session.pregnancyInterventions : undefined,
     };
     
     exportSessionToPDF(storedSession);
@@ -502,6 +505,9 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       postROSCChecklist: session.phase === 'post_rosc' || session.outcome === 'rosc' ? session.postROSCChecklist : null,
       postROSCVitals: session.phase === 'post_rosc' || session.outcome === 'rosc' ? session.postROSCVitals : null,
       airwayStatus: session.airwayStatus,
+      pregnancyActive: session.pregnancyActive,
+      pregnancyCauses: session.pregnancyActive ? session.pregnancyCauses : undefined,
+      pregnancyInterventions: session.pregnancyActive ? session.pregnancyInterventions : undefined,
     };
 
     await saveToIndexedDB(storedSession);

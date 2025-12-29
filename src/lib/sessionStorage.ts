@@ -1,9 +1,9 @@
 // IndexedDB helper for storing ACLS session reports locally
 
-import { HsAndTs, PostROSCChecklist, PostROSCVitals, PathwayMode } from '@/types/acls';
+import { HsAndTs, PostROSCChecklist, PostROSCVitals, PathwayMode, PregnancyCauses, PregnancyInterventions } from '@/types/acls';
 
 const DB_NAME = 'acls_sessions';
-const DB_VERSION = 2; // Bump version for schema update
+const DB_VERSION = 3; // Bump version for pregnancy schema update
 const STORE_NAME = 'sessions';
 
 export interface StoredSession {
@@ -42,6 +42,10 @@ export interface StoredSession {
   postROSCVitals: PostROSCVitals | null;
   // Airway status
   airwayStatus: 'ambu' | 'sga' | 'ett';
+  // Pregnancy data (Adult only)
+  pregnancyActive?: boolean;
+  pregnancyCauses?: PregnancyCauses;
+  pregnancyInterventions?: PregnancyInterventions;
 }
 
 function openDB(): Promise<IDBDatabase> {

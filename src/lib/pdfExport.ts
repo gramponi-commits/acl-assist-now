@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf';
 import { StoredSession } from './sessionStorage';
-import { HsAndTs, PostROSCChecklist, PostROSCVitals } from '@/types/acls';
+import { HsAndTs, PostROSCChecklist, PostROSCVitals, PregnancyCauses, PregnancyInterventions } from '@/types/acls';
 
 const formatTime = (ms: number) => {
   const totalSec = Math.floor(ms / 1000);
@@ -54,6 +54,30 @@ const getPostROSCNotDone = (checklist: PostROSCChecklist): string[] => {
   if (!checklist.temperatureManagement) notDone.push('Temperature Management');
   if (!checklist.neurologicalAssessment) notDone.push('Neurological Assessment');
   return notDone;
+};
+
+const getPregnancyInterventionsChecked = (interventions: PregnancyInterventions): string[] => {
+  const checked: string[] = [];
+  if (interventions.leftUterineDisplacement) checked.push('Left Uterine Displacement');
+  if (interventions.earlyAirway) checked.push('Early Airway');
+  if (interventions.ivAboveDiaphragm) checked.push('IV Above Diaphragm');
+  if (interventions.stopMagnesiumGiveCalcium) checked.push('Stop Mg/Give Ca');
+  if (interventions.detachFetalMonitors) checked.push('Detach Fetal Monitors');
+  if (interventions.massiveTransfusion) checked.push('Massive Transfusion');
+  return checked;
+};
+
+const getPregnancyCausesChecked = (causes: PregnancyCauses): string[] => {
+  const checked: string[] = [];
+  if (causes.anestheticComplications) checked.push('A - Anesthetic');
+  if (causes.bleeding) checked.push('B - Bleeding');
+  if (causes.cardiovascular) checked.push('C - Cardiovascular');
+  if (causes.drugs) checked.push('D - Drugs');
+  if (causes.embolic) checked.push('E - Embolic');
+  if (causes.fever) checked.push('F - Fever');
+  if (causes.generalCauses) checked.push('G - General (H&T)');
+  if (causes.hypertension) checked.push('H - Hypertension');
+  return checked;
 };
 
 export function exportSessionToPDF(session: StoredSession): void {
@@ -183,6 +207,47 @@ export function exportSessionToPDF(session: StoredSession): void {
     ).join(' | ');
     pdf.text(etco2Text, 15, y, { maxWidth: 180 });
     y += 10;
+  }
+  
+  // Pregnancy Section (if active)
+  if (session.pregnancyActive && isAdult) {
+    y += 3;
+    pdf.setFillColor(236, 72, 153); // Pink
+    pdf.roundedRect(15, y - 5, 180, 8, 2, 2, 'F');
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('OBSTETRIC CARDIAC ARREST', 20, y + 1);
+    pdf.setTextColor(0, 0, 0);
+    y += 10;
+    
+    // Pregnancy interventions
+    if (session.pregnancyInterventions) {
+      const pregInterventions = getPregnancyInterventionsChecked(session.pregnancyInterventions);
+      if (pregInterventions.length > 0) {
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Interventions: ', 15, y);
+        pdf.setFont('helvetica', 'normal');
+        const pregInterText = pregInterventions.join(', ');
+        pdf.text(pregInterText, 42, y, { maxWidth: 150 });
+        y += Math.ceil(pregInterText.length / 65) * 5 + 5;
+      }
+    }
+    
+    // Pregnancy causes (A-H)
+    if (session.pregnancyCauses) {
+      const pregCauses = getPregnancyCausesChecked(session.pregnancyCauses);
+      if (pregCauses.length > 0) {
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Suspected Causes: ', 15, y);
+        pdf.setFont('helvetica', 'normal');
+        const pregCausesText = pregCauses.join(', ');
+        pdf.text(pregCausesText, 48, y, { maxWidth: 145 });
+        y += Math.ceil(pregCausesText.length / 60) * 5 + 5;
+      }
+    }
   }
   
   // Post-ROSC Section (if applicable)
