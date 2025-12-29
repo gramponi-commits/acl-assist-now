@@ -6,6 +6,7 @@ import { ActionButtons } from './ActionButtons';
 import { CycleTimers, CodeTimers } from './TimerDisplay';
 import { CPRQualityPanel } from './CPRQualityPanel';
 import { HsAndTsChecklist } from './HsAndTsChecklist';
+import { PregnancyChecklist } from './PregnancyChecklist';
 import { CodeTimeline } from './CodeTimeline';
 import { PostROSCScreen } from './PostROSCScreen';
 import { RhythmCheckModal } from './RhythmCheckModal';
@@ -340,6 +341,20 @@ export function CodeScreen() {
                 onUpdate={actions.updateHsAndTs}
               />
 
+              {/* Pregnancy Checklist - Adult only */}
+              {session.pathwayMode === 'adult' && (
+                <PregnancyChecklist
+                  pregnancyActive={session.pregnancyActive}
+                  pregnancyCauses={session.pregnancyCauses}
+                  pregnancyInterventions={session.pregnancyInterventions}
+                  pregnancyStartTime={session.pregnancyStartTime}
+                  cprStartTime={session.startTime}
+                  onTogglePregnancy={actions.togglePregnancy}
+                  onUpdateCauses={actions.updatePregnancyCauses}
+                  onUpdateInterventions={actions.updatePregnancyInterventions}
+                />
+              )}
+
               {/* Code Timeline */}
               <CodeTimeline
                 interventions={session.interventions}
@@ -449,6 +464,20 @@ export function CodeScreen() {
                 hsAndTs={session.hsAndTs}
                 onUpdate={actions.updateHsAndTs}
               />
+
+              {/* Pregnancy Checklist - Adult only */}
+              {session.pathwayMode === 'adult' && (
+                <PregnancyChecklist
+                  pregnancyActive={session.pregnancyActive}
+                  pregnancyCauses={session.pregnancyCauses}
+                  pregnancyInterventions={session.pregnancyInterventions}
+                  pregnancyStartTime={session.pregnancyStartTime}
+                  cprStartTime={session.startTime}
+                  onTogglePregnancy={actions.togglePregnancy}
+                  onUpdateCauses={actions.updatePregnancyCauses}
+                  onUpdateInterventions={actions.updatePregnancyInterventions}
+                />
+              )}
 
               {/* Code Timers - Total & CPR */}
               <CodeTimers

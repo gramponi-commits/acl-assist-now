@@ -52,6 +52,48 @@ export interface HsAndTs {
   thrombosisCoronary: boolean;
 }
 
+// Pregnancy-specific causes (A-H for obstetric cardiac arrest)
+export interface PregnancyCauses {
+  anestheticComplications: boolean;
+  bleeding: boolean;
+  cardiovascular: boolean;
+  drugs: boolean;
+  embolic: boolean;
+  fever: boolean;
+  generalCauses: boolean;
+  hypertension: boolean;
+}
+
+// Pregnancy-specific interventions
+export interface PregnancyInterventions {
+  leftUterineDisplacement: boolean;
+  earlyAirway: boolean;
+  ivAboveDiaphragm: boolean;
+  stopMagnesiumGiveCalcium: boolean;
+  detachFetalMonitors: boolean;
+  massiveTransfusion: boolean;
+}
+
+export const DEFAULT_PREGNANCY_CAUSES: PregnancyCauses = {
+  anestheticComplications: false,
+  bleeding: false,
+  cardiovascular: false,
+  drugs: false,
+  embolic: false,
+  fever: false,
+  generalCauses: false,
+  hypertension: false,
+};
+
+export const DEFAULT_PREGNANCY_INTERVENTIONS: PregnancyInterventions = {
+  leftUterineDisplacement: false,
+  earlyAirway: false,
+  ivAboveDiaphragm: false,
+  stopMagnesiumGiveCalcium: false,
+  detachFetalMonitors: false,
+  massiveTransfusion: false,
+};
+
 export interface PostROSCChecklist {
   airwaySecured: boolean;
   ventilationOptimized: boolean;
@@ -105,6 +147,11 @@ export interface ACLSSession {
   cprRatio: CPRRatio;
   // Pathway mode
   pathwayMode: PathwayMode;
+  // Pregnancy-specific fields (adult only)
+  pregnancyActive: boolean;
+  pregnancyCauses: PregnancyCauses;
+  pregnancyInterventions: PregnancyInterventions;
+  pregnancyStartTime: number | null;
 }
 
 export interface ACLSConfig {
@@ -195,5 +242,9 @@ export function createInitialSession(): ACLSSession {
     patientWeight: null,
     cprRatio: '15:2', // Default to 2-rescuer pediatric ratio (will be ignored for adult)
     pathwayMode: 'adult', // Default, will be set by pathway selector
+    pregnancyActive: false,
+    pregnancyCauses: { ...DEFAULT_PREGNANCY_CAUSES },
+    pregnancyInterventions: { ...DEFAULT_PREGNANCY_INTERVENTIONS },
+    pregnancyStartTime: null,
   };
 }

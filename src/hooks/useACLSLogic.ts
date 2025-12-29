@@ -13,6 +13,8 @@ import {
   CodeOutcome,
   CPRRatio,
   PathwayMode,
+  PregnancyCauses,
+  PregnancyInterventions,
   createInitialSession,
 } from '@/types/acls';
 import { saveSession as saveToIndexedDB, StoredSession } from '@/lib/sessionStorage';
@@ -662,6 +664,32 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
     addIntervention('note', t('interventions.noteAdded', { note }));
   }, [addIntervention, t]);
 
+  // Pregnancy-related actions
+  const togglePregnancy = useCallback((active: boolean) => {
+    setSession(prev => ({
+      ...prev,
+      pregnancyActive: active,
+      pregnancyStartTime: active ? Date.now() : null,
+    }));
+    if (active) {
+      addIntervention('note', 'Pregnancy protocol activated');
+    }
+  }, [addIntervention]);
+
+  const updatePregnancyCauses = useCallback((updates: Partial<PregnancyCauses>) => {
+    setSession(prev => ({
+      ...prev,
+      pregnancyCauses: { ...prev.pregnancyCauses, ...updates },
+    }));
+  }, []);
+
+  const updatePregnancyInterventions = useCallback((updates: Partial<PregnancyInterventions>) => {
+    setSession(prev => ({
+      ...prev,
+      pregnancyInterventions: { ...prev.pregnancyInterventions, ...updates },
+    }));
+  }, []);
+
   // Allow external control of rhythm analysis state (for initial rhythm selection)
   const setRhythmAnalysisActive = useCallback((active: boolean) => {
     setIsInRhythmCheck(active);
@@ -729,6 +757,9 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       setPatientWeight,
       setCPRRatio,
       setPathwayMode,
+      togglePregnancy,
+      updatePregnancyCauses,
+      updatePregnancyInterventions,
     },
     buttonStates: {
       canGiveEpinephrine,

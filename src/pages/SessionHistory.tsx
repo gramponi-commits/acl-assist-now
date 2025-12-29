@@ -144,11 +144,11 @@ export default function SessionHistory() {
           </Button>
           <Button
             size="sm"
-            variant="outline"
+            variant={filterMode === 'adult' ? 'default' : 'outline'}
             onClick={() => setFilterMode('adult')}
             className={cn(
               "gap-1",
-              filterMode === 'adult' && "bg-acls-adult text-white border-acls-adult hover:bg-acls-adult/90 hover:text-white"
+              filterMode === 'adult' && "bg-acls-adult text-white border-acls-adult hover:bg-acls-adult/90"
             )}
           >
             <User className="h-3 w-3" />
@@ -156,11 +156,11 @@ export default function SessionHistory() {
           </Button>
           <Button
             size="sm"
-            variant="outline"
+            variant={filterMode === 'pediatric' ? 'default' : 'outline'}
             onClick={() => setFilterMode('pediatric')}
             className={cn(
               "gap-1",
-              filterMode === 'pediatric' && "bg-acls-pediatric text-white border-acls-pediatric hover:bg-acls-pediatric/90 hover:text-white"
+              filterMode === 'pediatric' && "bg-acls-pediatric text-white border-acls-pediatric hover:bg-acls-pediatric/90"
             )}
           >
             <Baby className="h-3 w-3" />
