@@ -404,20 +404,6 @@ export function CodeScreen() {
                 </>
               )}
 
-              {/* Current Rhythm Indicator */}
-              <div className={cn(
-                'rounded-lg p-3 text-center font-bold text-lg',
-                session.currentRhythm === 'vf_pvt' 
-                  ? 'bg-acls-shockable/20 text-acls-shockable border-2 border-acls-shockable' 
-                  : session.currentRhythm === 'asystole'
-                  ? 'bg-acls-non-shockable/20 text-acls-non-shockable border-2 border-acls-non-shockable'
-                  : 'bg-acls-pea/20 text-acls-pea border-2 border-acls-pea'
-              )}>
-                {session.currentRhythm === 'vf_pvt' && `${t('rhythm.vfPvt')} - ${t('rhythm.shockable')} | Shock #${session.shockCount}`}
-                {session.currentRhythm === 'asystole' && `${t('rhythm.asystole')} - ${t('rhythm.nonShockable')}`}
-                {session.currentRhythm === 'pea' && `${t('rhythm.pea')} - ${t('rhythm.nonShockable')}`}
-              </div>
-
               {/* Action Buttons */}
               <ActionButtons
                 canGiveEpinephrine={buttonStates.canGiveEpinephrine}

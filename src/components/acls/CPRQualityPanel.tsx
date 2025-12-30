@@ -140,7 +140,7 @@ export function CPRQualityPanel({
               <button
                 onClick={() => onCPRRatioChange?.('15:2')}
                 className={cn(
-                  'flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-md border transition-all',
+                  'flex flex-col items-center justify-center py-1.5 px-2 rounded-md border transition-all',
                   cprRatio === '15:2' 
                     ? 'bg-primary text-primary-foreground border-primary' 
                     : 'border-border hover:bg-accent'
@@ -148,14 +148,14 @@ export function CPRQualityPanel({
               >
                 <span className="font-bold text-sm">15:2</span>
                 <span className={cn(
-                  'text-[10px]',
+                  'text-[10px] leading-tight',
                   cprRatio === '15:2' ? 'text-primary-foreground/80' : 'text-muted-foreground'
-                )}>({t('cpr.twoRescuers')})</span>
+                )}>{t('cpr.twoRescuers')}</span>
               </button>
               <button
                 onClick={() => onCPRRatioChange?.('30:2')}
                 className={cn(
-                  'flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-md border transition-all',
+                  'flex flex-col items-center justify-center py-1.5 px-2 rounded-md border transition-all',
                   cprRatio === '30:2' 
                     ? 'bg-primary text-primary-foreground border-primary' 
                     : 'border-border hover:bg-accent'
@@ -163,9 +163,9 @@ export function CPRQualityPanel({
               >
                 <span className="font-bold text-sm">30:2</span>
                 <span className={cn(
-                  'text-[10px]',
+                  'text-[10px] leading-tight',
                   cprRatio === '30:2' ? 'text-primary-foreground/80' : 'text-muted-foreground'
-                )}>({t('cpr.oneRescuer')})</span>
+                )}>{t('cpr.oneRescuer')}</span>
               </button>
             </div>
           </div>
