@@ -17,7 +17,7 @@ import {
   PregnancyInterventions,
   createInitialSession,
 } from '@/types/acls';
-import { saveSession as saveToIndexedDB, StoredSession } from '@/lib/sessionStorage';
+import { StoredSession } from '@/lib/sessionStorage';
 import { exportSessionToPDF } from '@/lib/pdfExport';
 import {
   calculateEpinephrineDose,
@@ -576,49 +576,6 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
     exportSessionToPDF(storedSession);
   }, [session, timerState.totalCPRTime, timerState.totalElapsed]);
 
-  const saveSessionLocally = useCallback(async () => {
-    const cprFraction = timerState.totalElapsed > 0 
-      ? (timerState.totalCPRTime / timerState.totalElapsed) * 100
-      : 0;
-
-    const storedSession: StoredSession = {
-      id: session.id,
-      savedAt: Date.now(),
-      startTime: session.startTime,
-      endTime: session.endTime,
-      roscTime: session.roscTime,
-      outcome: session.outcome,
-      duration: timerState.totalElapsed,
-      totalCPRTime: timerState.totalCPRTime,
-      cprFraction,
-      shockCount: session.shockCount,
-      epinephrineCount: session.epinephrineCount,
-      amiodaroneCount: session.amiodaroneCount,
-      lidocaineCount: session.lidocaineCount,
-      pathwayMode: session.pathwayMode,
-      patientWeight: session.patientWeight,
-      interventions: session.interventions.map(i => ({
-        timestamp: i.timestamp,
-        type: i.type,
-        details: i.details,
-        value: i.value,
-      })),
-      etco2Readings: session.vitalReadings
-        .filter(v => v.etco2 !== undefined)
-        .map(v => ({ timestamp: v.timestamp, value: v.etco2! })),
-      hsAndTs: session.hsAndTs,
-      postROSCChecklist: session.phase === 'post_rosc' || session.outcome === 'rosc' ? session.postROSCChecklist : null,
-      postROSCVitals: session.phase === 'post_rosc' || session.outcome === 'rosc' ? session.postROSCVitals : null,
-      airwayStatus: session.airwayStatus,
-      pregnancyActive: session.pregnancyActive,
-      pregnancyCauses: session.pregnancyActive ? session.pregnancyCauses : undefined,
-      pregnancyInterventions: session.pregnancyActive ? session.pregnancyInterventions : undefined,
-    };
-
-    await saveToIndexedDB(storedSession);
-    return storedSession;
-  }, [session, timerState.totalCPRTime, timerState.totalElapsed]);
-
   // Command banner logic
   const getCommandBanner = useCallback((): CommandBanner => {
     const { phase, currentRhythm, shockCount, epinephrineCount, lastEpinephrineTime, amiodaroneCount, pregnancyActive, startTime } = session;
@@ -871,7 +828,6 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       resetSession,
       resumeSession,
       exportSession,
-      saveSessionLocally,
       addIntervention,
       addNote,
       setRhythmAnalysisActive,
