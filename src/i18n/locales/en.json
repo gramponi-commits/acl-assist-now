@@ -44,7 +44,7 @@
     "nonShockable": "Non-Shockable",
     "pea": "PEA"
   },
-"actions": {
+  "actions": {
     "title": "Actions",
     "shock": "SHOCK",
     "epinephrine": "EPINEPHRINE",
@@ -214,7 +214,13 @@
     "generalCauses": "General Causes (H's & T's)",
     "generalCausesDesc": "Standard reversible causes apply",
     "hypertension": "Hypertension",
-    "hypertensionDesc": "Preeclampsia, eclampsia, HELLP syndrome"
+    "hypertensionDesc": "Preeclampsia, eclampsia, HELLP syndrome",
+    "interventions": "Interventions",
+    "leftUterineDisplacement": "Left Uterine Displacement",
+    "ivAboveDiaphragm": "IV Above Diaphragm",
+    "detachMonitors": "Detach Fetal Monitors",
+    "causesConsidered": "Causes Considered",
+    "generalHsTs": "General Causes (H's & T's)"
   },
   "timeline": {
     "title": "Code Timeline",
@@ -371,7 +377,8 @@
     "codeEnded": "Code ended: {{outcome}}",
     "noteAdded": "Note: {{note}}",
     "etco2Recorded": "ETCO₂: {{value}} mmHg",
-    "weightSet": "Patient weight set: {{weight}} kg"
+    "weightSet": "Patient weight set: {{weight}} kg",
+    "pregnancyActivated": "Pregnancy protocol activated"
   },
   "install": {
     "title": "Install App",

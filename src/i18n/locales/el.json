@@ -212,7 +212,15 @@
     "generalCauses": "Γενικές Αιτίες (H's & T's)",
     "generalCausesDesc": "Ισχύουν οι τυπικές αναστρέψιμες αιτίες",
     "hypertension": "Υπέρταση",
-    "hypertensionDesc": "Προεκλαμψία, εκλαμψία, σύνδρομο HELLP"
+    "hypertensionDesc": "Προεκλαμψία, εκλαμψία, σύνδρομο HELLP",
+    "interventions": "Παρεμβάσεις",
+    "leftUterineDisplacement": "Αριστερή Μετατόπιση Μήτρας",
+    "ivAboveDiaphragm": "IV Πάνω από το Διάφραγμα",
+    "detachMonitors": "Αποσύνδεση Εμβρυϊκών Οθονών",
+    "causesConsidered": "Αιτίες που Εξετάστηκαν",
+    "generalHsTs": "Γενικές Αιτίες (H's & T's)",
+    "protocolActive": "Μαιευτικό Πρωτόκολλο Ενεργό",
+    "cannotDeactivate": "Το πρωτόκολλο δεν μπορεί να απενεργοποιηθεί αφού ξεκινήσει"
   },
   "timeline": {
     "title": "Χρονολόγιο Κωδικού",
@@ -351,7 +359,8 @@
     "hsTsChecked": "Ελέγχθηκαν H's & T's: {{items}}",
     "codeEnded": "Τέλος κωδικού: {{outcome}}",
     "noteAdded": "Σημείωση: {{note}}",
-    "etco2Recorded": "ETCO₂: {{value}} mmHg"
+    "etco2Recorded": "ETCO₂: {{value}} mmHg",
+    "pregnancyActivated": "Πρωτόκολλο εγκυμοσύνης ενεργοποιήθηκε"
   },
   "notes": {
     "addNote": "Προσθήκη Σημείωσης",

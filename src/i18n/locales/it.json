@@ -44,7 +44,7 @@
     "nonShockable": "Non Defibrillabile",
     "pea": "P.E.A."
   },
-"actions": {
+  "actions": {
     "title": "Azioni",
     "shock": "SHOCK",
     "epinephrine": "ADRENALINA",
@@ -214,7 +214,13 @@
     "generalCauses": "Cause Generali (H's & T's)",
     "generalCausesDesc": "Si applicano le cause reversibili standard",
     "hypertension": "Ipertensione",
-    "hypertensionDesc": "Preeclampsia, eclampsia, sindrome HELLP"
+    "hypertensionDesc": "Preeclampsia, eclampsia, sindrome HELLP",
+    "interventions": "Interventi",
+    "leftUterineDisplacement": "Dislocazione Uterina Sinistra",
+    "ivAboveDiaphragm": "IV Sopra il Diaframma",
+    "detachMonitors": "Stacca Monitor Fetali",
+    "causesConsidered": "Cause Considerate",
+    "generalHsTs": "Cause Generali (H's & T's)"
   },
   "timeline": {
     "title": "Cronologia Codice",
@@ -371,7 +377,8 @@
     "codeEnded": "Codice terminato: {{outcome}}",
     "noteAdded": "Nota: {{note}}",
     "etco2Recorded": "ETCO₂: {{value}} mmHg",
-    "weightSet": "Peso paziente impostato: {{weight}} kg"
+    "weightSet": "Peso paziente impostato: {{weight}} kg",
+    "pregnancyActivated": "Protocollo gravidanza attivato"
   },
   "install": {
     "title": "Installa App",
