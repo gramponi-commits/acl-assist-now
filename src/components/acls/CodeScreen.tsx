@@ -21,7 +21,7 @@ import { useMetronome } from '@/hooks/useMetronome';
 import { useVoiceAnnouncements } from '@/hooks/useVoiceAnnouncements';
 import { useSettings } from '@/hooks/useSettings';
 import { Button } from '@/components/ui/button';
-import { Download, RotateCcw, Save, CheckCircle, XCircle, StickyNote, Heart, Activity, Stethoscope, Scale } from 'lucide-react';
+import { Download, RotateCcw, StickyNote, Heart, Activity, Stethoscope, Scale } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
@@ -46,7 +46,7 @@ export function CodeScreen() {
     enabled: settings.metronomeEnabled 
   });
   
-  const [isSaved, setIsSaved] = useState(false);
+
   const [showResumeDialog, setShowResumeDialog] = useState(false);
   const [showNoteDialog, setShowNoteDialog] = useState(false);
   const [showRhythmSelector, setShowRhythmSelector] = useState(false);
@@ -184,18 +184,9 @@ export function CodeScreen() {
     toast.success(t('notes.addNote'));
   };
 
-  const handleSaveSession = async () => {
-    try {
-      await actions.saveSessionLocally();
-      setIsSaved(true);
-      toast.success(t('actions.saved'));
-    } catch (error) {
-      toast.error(t('actions.saveFailed'));
-    }
-  };
+
 
   const handleNewCode = () => {
-    setIsSaved(false);
     setShowRhythmSelector(false);
     clearActiveSession();
     actions.resetSession();
@@ -546,8 +537,6 @@ export function CodeScreen() {
                 onVitalsUpdate={actions.updatePostROSCVitals}
                 onExport={actions.exportSession}
                 onNewCode={handleNewCode}
-                onSave={handleSaveSession}
-                isSaved={isSaved}
               />
             </>
           )}
@@ -605,29 +594,6 @@ export function CodeScreen() {
 
               {/* Actions */}
               <div className="space-y-3 pt-2">
-                <Button
-                  onClick={handleSaveSession}
-                  disabled={isSaved}
-                  className={cn(
-                    'w-full h-14 text-lg font-semibold gap-2',
-                    isSaved 
-                      ? 'bg-acls-success hover:bg-acls-success text-white' 
-                      : 'bg-primary hover:bg-primary/90'
-                  )}
-                >
-                  {isSaved ? (
-                    <>
-                      <CheckCircle className="h-5 w-5" />
-                      {t('actions.saved')}
-                    </>
-                  ) : (
-                    <>
-                      <Save className="h-5 w-5" />
-                      {t('actions.save')}
-                    </>
-                  )}
-                </Button>
-
                 <div className="grid grid-cols-2 gap-3">
                   <Button
                     onClick={actions.exportSession}

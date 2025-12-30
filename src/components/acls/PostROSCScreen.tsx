@@ -13,8 +13,6 @@ interface PostROSCScreenProps {
   onVitalsUpdate: (updates: Partial<PostROSCVitals>) => void;
   onExport: () => void;
   onNewCode: () => void;
-  onSave?: () => void;
-  isSaved?: boolean;
 }
 
 function VitalInput({ 
@@ -267,30 +265,6 @@ export function PostROSCScreen({
 
       {/* Action Buttons */}
       <div className="space-y-3 pt-4">
-        {onSave && (
-          <Button
-            onClick={onSave}
-            disabled={isSaved}
-            className={cn(
-              'w-full h-14 text-lg font-semibold gap-2',
-              isSaved 
-                ? 'bg-acls-success hover:bg-acls-success text-white' 
-                : 'bg-primary hover:bg-primary/90'
-            )}
-          >
-            {isSaved ? (
-              <>
-                <CheckCircle className="h-5 w-5" />
-                {t('actions.saved')}
-              </>
-            ) : (
-              <>
-                <Save className="h-5 w-5" />
-                {t('actions.save')}
-              </>
-            )}
-          </Button>
-        )}
         <div className="grid grid-cols-2 gap-3">
           <Button
             onClick={onExport}
