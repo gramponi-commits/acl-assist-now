@@ -4,12 +4,12 @@ import { Button } from '@/components/ui/button';
 import { User, Baby, Activity } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { WeightInput } from '../WeightInput';
-import { BradyTachySession } from '@/types/acls';
-import { PathwayMode } from '@/types/acls';
+import { BradyTachySession, PathwayMode } from '@/types/acls';
+import { BradyTachyActions } from '@/hooks/useBradyTachyLogic';
 
 interface BradyTachyPatientSelectorProps {
   session: BradyTachySession;
-  actions: any;
+  actions: BradyTachyActions;
 }
 
 export function BradyTachyPatientSelector({ session, actions }: BradyTachyPatientSelectorProps) {

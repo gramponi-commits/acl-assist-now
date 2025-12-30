@@ -5,6 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { BradyTachySession } from '@/types/acls';
+import { BradyTachyActions } from '@/hooks/useBradyTachyLogic';
 import { SinusVsSVTSelector } from './SinusVsSVTSelector';
 import {
   calculatePedsTachyAdenosine,
@@ -19,7 +20,7 @@ import { Zap, AlertCircle, Activity } from 'lucide-react';
 
 interface TachycardiaScreenProps {
   session: BradyTachySession;
-  actions: any;
+  actions: BradyTachyActions;
 }
 
 export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) {

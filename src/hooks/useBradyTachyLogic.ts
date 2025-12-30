@@ -132,7 +132,7 @@ export function useBradyTachyLogic() {
   }, [addIntervention]);
 
   // Set pediatric sinus vs SVT choice
-  const setPedsSinusVsSVT = useCallback((choice: PedsSinusVsSVT, criteria?: any) => {
+  const setPedsSinusVsSVT = useCallback((choice: PedsSinusVsSVT, criteria?: Record<string, boolean>) => {
     setSession(prev => ({
       ...prev,
       phase: 'tachycardia_treatment',
@@ -255,3 +255,5 @@ export function useBradyTachyLogic() {
     },
   };
 }
+
+export type BradyTachyActions = ReturnType<typeof useBradyTachyLogic>['actions'];

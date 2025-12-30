@@ -5,11 +5,12 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { BradyTachySession } from '@/types/acls';
+import { BradyTachyActions } from '@/hooks/useBradyTachyLogic';
 import { Activity, Zap } from 'lucide-react';
 
 interface SinusVsSVTSelectorProps {
   session: BradyTachySession;
-  actions: any;
+  actions: BradyTachyActions;
 }
 
 export function SinusVsSVTSelector({ session, actions }: SinusVsSVTSelectorProps) {
