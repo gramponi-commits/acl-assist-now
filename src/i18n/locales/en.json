@@ -170,7 +170,7 @@
     "thrombosisPulmManagement": "If PE is strongly suspected/known, consider thrombolysis or embolectomy pathways per local capability; prolonged CPR after thrombolysis may be appropriate before termination decisions.",
     "thrombosisCoro": "Thrombosis (Coronary)",
     "thrombosisCoroDesc": "PCI, thrombolytics",
-    "thrombosisCoroDiagnostic": "Clues include VF/pVT presentation and ischemic prodrome; confirm post-ROSC with 12‑lead ECG (e.g., STEMI).",
+    "thrombosisCoroDiagnostic": "Clues include VF/pVT presentation and ischemic prodrome; confirm post-ROSC with 12-lead ECG (e.g., STEMI).",
     "thrombosisCoroManagement": "After ROSC with STEMI, prioritize urgent coronary angiography/PCI based on system pathways."
   },
   "pregnancy": {
