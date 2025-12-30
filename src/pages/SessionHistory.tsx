@@ -357,6 +357,79 @@ export default function SessionHistory() {
                         </div>
                       )}
 
+                      {/* Obstetric Cardiac Arrest */}
+                      {session.pregnancyActive && (
+                        <div className="bg-pink-500/10 rounded-lg p-3 border border-pink-500/30">
+                          <h4 className="text-sm font-semibold flex items-center gap-2 mb-2 text-pink-400">
+                            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                              <ellipse cx="12" cy="14" rx="6" ry="7" />
+                              <circle cx="12" cy="6" r="3" />
+                            </svg>
+                            {t('pregnancy.title')}
+                          </h4>
+                          
+                          {/* Interventions Done */}
+                          {session.pregnancyInterventions && (
+                            <div className="mb-2">
+                              <p className="text-xs text-muted-foreground mb-1">{t('pregnancy.interventions')}:</p>
+                              <div className="flex flex-wrap gap-1">
+                                {session.pregnancyInterventions.leftUterineDisplacement && (
+                                  <Badge className="text-xs bg-pink-500/20 text-pink-400 border-0">✓ {t('pregnancy.leftUterineDisplacement')}</Badge>
+                                )}
+                                {session.pregnancyInterventions.earlyAirway && (
+                                  <Badge className="text-xs bg-pink-500/20 text-pink-400 border-0">✓ {t('pregnancy.earlyAirway')}</Badge>
+                                )}
+                                {session.pregnancyInterventions.ivAboveDiaphragm && (
+                                  <Badge className="text-xs bg-pink-500/20 text-pink-400 border-0">✓ {t('pregnancy.ivAboveDiaphragm')}</Badge>
+                                )}
+                                {session.pregnancyInterventions.stopMagnesiumGiveCalcium && (
+                                  <Badge className="text-xs bg-pink-500/20 text-pink-400 border-0">✓ {t('pregnancy.stopMagnesium')}</Badge>
+                                )}
+                                {session.pregnancyInterventions.detachFetalMonitors && (
+                                  <Badge className="text-xs bg-pink-500/20 text-pink-400 border-0">✓ {t('pregnancy.detachMonitors')}</Badge>
+                                )}
+                                {session.pregnancyInterventions.massiveTransfusion && (
+                                  <Badge className="text-xs bg-pink-500/20 text-pink-400 border-0">✓ {t('pregnancy.massiveTransfusion')}</Badge>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                          
+                          {/* Causes Considered */}
+                          {session.pregnancyCauses && (
+                            <div>
+                              <p className="text-xs text-muted-foreground mb-1">{t('pregnancy.causesConsidered')}:</p>
+                              <div className="flex flex-wrap gap-1">
+                                {session.pregnancyCauses.anestheticComplications && (
+                                  <Badge variant="outline" className="text-xs text-pink-400 border-pink-400/30">A - {t('pregnancy.anesthetic')}</Badge>
+                                )}
+                                {session.pregnancyCauses.bleeding && (
+                                  <Badge variant="outline" className="text-xs text-pink-400 border-pink-400/30">B - {t('pregnancy.bleeding')}</Badge>
+                                )}
+                                {session.pregnancyCauses.cardiovascular && (
+                                  <Badge variant="outline" className="text-xs text-pink-400 border-pink-400/30">C - {t('pregnancy.cardiovascular')}</Badge>
+                                )}
+                                {session.pregnancyCauses.drugs && (
+                                  <Badge variant="outline" className="text-xs text-pink-400 border-pink-400/30">D - {t('pregnancy.drugs')}</Badge>
+                                )}
+                                {session.pregnancyCauses.embolic && (
+                                  <Badge variant="outline" className="text-xs text-pink-400 border-pink-400/30">E - {t('pregnancy.embolic')}</Badge>
+                                )}
+                                {session.pregnancyCauses.fever && (
+                                  <Badge variant="outline" className="text-xs text-pink-400 border-pink-400/30">F - {t('pregnancy.fever')}</Badge>
+                                )}
+                                {session.pregnancyCauses.generalCauses && (
+                                  <Badge variant="outline" className="text-xs text-pink-400 border-pink-400/30">G - {t('pregnancy.generalHsTs')}</Badge>
+                                )}
+                                {session.pregnancyCauses.hypertension && (
+                                  <Badge variant="outline" className="text-xs text-pink-400 border-pink-400/30">H - {t('pregnancy.hypertension')}</Badge>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
                       {/* Full Timeline */}
                       {session.interventions && session.interventions.length > 0 && (
                         <div className="bg-muted/50 rounded-lg p-3">
