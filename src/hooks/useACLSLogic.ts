@@ -138,6 +138,14 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
   // Auto-save session when code ends (ROSC or death)
   const hasAutoSavedRef = useRef(false);
   const autoSaveTimeoutRef = useRef<number | null>(null);
+  const sessionRef = useRef(session);
+  const timerRef = useRef(timerState);
+  
+  // Keep refs updated with latest values
+  useEffect(() => {
+    sessionRef.current = session;
+    timerRef.current = timerState;
+  }, [session, timerState]);
   
   useEffect(() => {
     // Check if we should trigger auto-save
@@ -148,13 +156,13 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
     if (shouldAutoSave) {
       hasAutoSavedRef.current = true;
       
-      // Capture current session and timer state for the async save
-      const sessionSnapshot = session;
-      const timerSnapshot = timerState;
-      
       // Use a longer delay to ensure all state updates complete
       autoSaveTimeoutRef.current = window.setTimeout(async () => {
         try {
+          // Use refs to get latest values at save time
+          const sessionSnapshot = sessionRef.current;
+          const timerSnapshot = timerRef.current;
+          
           const cprFraction = timerSnapshot.totalElapsed > 0 
             ? (timerSnapshot.totalCPRTime / timerSnapshot.totalElapsed) * 100
             : 0;
@@ -198,15 +206,15 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
         } catch (error) {
           console.error('Failed to auto-save session:', error);
         }
-      }, 1000); // 1 second delay to ensure all state updates complete
+      }, 1000);
     }
     
     return () => {
-      if (autoSaveTimeoutRef.current) {
+      if (autoSaveTimeoutRef.current !== null) {
         clearTimeout(autoSaveTimeoutRef.current);
       }
     };
-  }, [session, timerState]); // Depend on session and timerState to get latest values
+  }, [session.phase, session.endTime]); // Only depend on phase and endTime to trigger save
 
   // Reset auto-save flag when starting a new session
   useEffect(() => {
