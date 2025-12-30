@@ -153,8 +153,17 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
     const hasEndTime = session.endTime !== null;
     const shouldAutoSave = isTerminalPhase && hasEndTime && !hasAutoSavedRef.current;
     
+    console.log('Auto-save check:', {
+      phase: session.phase,
+      isTerminalPhase,
+      hasEndTime,
+      hasAutoSaved: hasAutoSavedRef.current,
+      shouldAutoSave
+    });
+    
     if (shouldAutoSave) {
       hasAutoSavedRef.current = true;
+      console.log('Auto-save triggered - will save in 1 second');
       
       // Use a longer delay to ensure all state updates complete
       autoSaveTimeoutRef.current = window.setTimeout(async () => {
@@ -202,9 +211,14 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
           };
 
           await saveToIndexedDB(storedSession);
-          console.log('Session auto-saved successfully', storedSession.id);
+          console.log('✅ Session auto-saved successfully!', {
+            id: storedSession.id,
+            outcome: storedSession.outcome,
+            duration: storedSession.duration,
+            interventions: storedSession.interventions.length
+          });
         } catch (error) {
-          console.error('Failed to auto-save session:', error);
+          console.error('❌ Failed to auto-save session:', error);
         }
       }, 1000);
     }
@@ -218,8 +232,11 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
 
   // Reset auto-save flag when starting a new session
   useEffect(() => {
-    if (session.phase === 'initial' || session.phase === 'rhythm_selection' || session.phase === 'pathway_selection') {
-      hasAutoSavedRef.current = false;
+    if (session.phase === 'initial' || session.phase === 'rhythm_selection' || session.phase === 'pathway_selection' || session.phase === 'cpr_pending_rhythm') {
+      if (hasAutoSavedRef.current) {
+        console.log('Resetting auto-save flag - new session started');
+        hasAutoSavedRef.current = false;
+      }
     }
   }, [session.phase]);
 
