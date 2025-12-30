@@ -42,7 +42,7 @@
     "shockable": "Ritmo Defibrillabile",
     "asystole": "Asistolia",
     "nonShockable": "Non Defibrillabile",
-    "pea": "PEA"
+    "pea": "P.E.A."
   },
 "actions": {
     "title": "Azioni",
@@ -300,7 +300,7 @@
   },
   "banner": {
     "emergencyDelivery": "🚨 PARTO D'EMERGENZA",
-    "emergencyDeliverySub": "Esegui isterotomia rianimatoria - 5 minuti raggiunti",
+    "emergencyDeliverySub": "Esegui isterotomia",
     "startCPR": "INIZIA RCP",
     "startCPRSub": "Premi il pulsante per iniziare le compressioni toraciche",
     "cprInProgress": "RCP IN CORSO",
@@ -326,7 +326,7 @@
     "rhythmCheckIn": "Controllo ritmo tra {{seconds}}s",
     "giveEpiNow": "SOMMINISTRA ADRENALINA 1mg IV/IO ORA",
     "asystoleEpi": "Asistolia - Adrenalina subito",
-    "peaEpi": "PEA - Adrenalina subito",
+    "peaEpi": "P.E.A. - Adrenalina subito",
     "considerHsTs": "Controllo ritmo tra {{seconds}}s | Considera H's & T's",
     "aclsInProgress": "ACLS IN CORSO"
   },
