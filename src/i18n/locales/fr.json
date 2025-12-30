@@ -282,6 +282,8 @@
     "depthPediatric": "Profondeur : ≥⅓ du diamètre thoracique"
   },
   "banner": {
+    "emergencyDelivery": "🚨 ACCOUCHEMENT D'URGENCE",
+    "emergencyDeliverySub": "Effectuer hystérotomie de réanimation - 5 minutes atteintes",
     "startCPR": "DÉMARRER RCP",
     "startCPRSub": "Appuyez sur le bouton pour commencer les compressions thoraciques",
     "cprInProgress": "RCP EN COURS",
@@ -339,6 +341,7 @@
     "add": "Ajouter"
   },
   "voice": {
+    "emergencyDelivery": "Accouchement d'urgence. Effectuer hystérotomie de réanimation maintenant.",
     "rhythmCheck": "Analyse du rythme",
     "preCharge": "15 secondes, charger défibrillateur",
     "epiDue": "Adrénaline",

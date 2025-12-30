@@ -1,10 +1,11 @@
 import { useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-type AnnouncementType = 'rhythmCheck' | 'preCharge' | 'epiDue' | 'resumeCPR' | 'rosc' | 'amiodaroneDue' | 'lidocaineDue' | 'shock' | 'noShock';
+type AnnouncementType = 'rhythmCheck' | 'preCharge' | 'epiDue' | 'resumeCPR' | 'rosc' | 'amiodaroneDue' | 'lidocaineDue' | 'shock' | 'noShock' | 'emergencyDelivery';
 
 // Priority order: lower number = higher priority
 const ANNOUNCEMENT_PRIORITY: Record<AnnouncementType, number> = {
+  emergencyDelivery: 0,
   rhythmCheck: 1,
   preCharge: 2,
   shock: 3,
@@ -44,6 +45,7 @@ export function useVoiceAnnouncements() {
     lastAnnouncedRef.current.add(type);
 
     const announcements: Record<AnnouncementType, string> = {
+      emergencyDelivery: t('voice.emergencyDelivery'),
       rhythmCheck: t('voice.rhythmCheck'),
       preCharge: t('voice.preCharge'),
       epiDue: t('voice.epiDue'),

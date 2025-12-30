@@ -282,6 +282,8 @@
     "depthPediatric": "Tiefe: ≥⅓ des Thoraxdurchmessers"
   },
   "banner": {
+    "emergencyDelivery": "🚨 NOTFALL-ENTBINDUNG",
+    "emergencyDeliverySub": "Perimortem-Kaiserschnitt durchführen - 5 Minuten erreicht",
     "startCPR": "HLW STARTEN",
     "startCPRSub": "Drücken Sie den Button, um mit Thoraxkompressionen zu beginnen",
     "cprInProgress": "HLW LÄUFT",
@@ -339,6 +341,7 @@
     "add": "Hinzufügen"
   },
   "voice": {
+    "emergencyDelivery": "Notfall-Entbindung. Perimortem-Kaiserschnitt jetzt durchführen.",
     "rhythmCheck": "Rhythmusanalyse",
     "preCharge": "15 Sekunden, Defibrillator laden",
     "epiDue": "Adrenalin",

@@ -158,6 +158,8 @@
     "itemsChecked": "{{count}} item(s) checked",
     "activatePregnancy": "Pregnant Patient",
     "activateDesc": "Activate obstetric cardiac arrest protocol",
+    "protocolActive": "Obstetric Protocol Active",
+    "cannotDeactivate": "Protocol cannot be deactivated once started",
     "deliveryAlert": "5 MIN - DELIVERY",
     "emergencyDelivery": "CONSIDER EMERGENCY DELIVERY",
     "emergencyDeliveryDesc": "Resuscitative hysterotomy should ideally be performed by 5 minutes if no ROSC, when fundal height is at or above umbilicus",
@@ -285,6 +287,7 @@
     "add": "Add"
   },
   "voice": {
+    "emergencyDelivery": "Emergency delivery. Perform resuscitative hysterotomy now.",
     "rhythmCheck": "Rhythm check",
     "preCharge": "15 seconds, charge defibrillator",
     "epiDue": "Epinephrine",
@@ -296,6 +299,8 @@
     "noShock": "No shock, resume CPR"
   },
   "banner": {
+    "emergencyDelivery": "🚨 EMERGENCY DELIVERY",
+    "emergencyDeliverySub": "Perform resuscitative hysterotomy - 5 minutes reached",
     "startCPR": "START CPR",
     "startCPRSub": "Press the button to begin chest compressions",
     "cprInProgress": "CPR IN PROGRESS",

@@ -1,11 +1,20 @@
 import { useTranslation } from 'react-i18next';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { PregnancyCauses, PregnancyInterventions } from '@/types/acls';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { ChevronDown, Baby, AlertTriangle, Clock } from 'lucide-react';
+import { ChevronDown, AlertTriangle, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
+
+// Pregnant belly silhouette icon
+function PregnantIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2C10.34 2 9 3.34 9 5C9 6.66 10.34 8 12 8C13.66 8 15 6.66 15 5C15 3.34 13.66 2 12 2ZM15.5 9H8.5C7.67 9 7 9.67 7 10.5V11C7 11.55 7.45 12 8 12H8.5V14C8.5 15.38 9.22 16.59 10.27 17.3C9.03 18.08 8.5 19.54 8.5 21C8.5 21.55 8.95 22 9.5 22H14.5C15.05 22 15.5 21.55 15.5 21C15.5 19.54 14.97 18.08 13.73 17.3C14.78 16.59 15.5 15.38 15.5 14V12H16C16.55 12 17 11.55 17 11V10.5C17 9.67 16.33 9 15.5 9Z"/>
+    </svg>
+  );
+}
 
 interface PregnancyChecklistProps {
   pregnancyActive: boolean;
@@ -16,6 +25,7 @@ interface PregnancyChecklistProps {
   onTogglePregnancy: (active: boolean) => void;
   onUpdateCauses: (updates: Partial<PregnancyCauses>) => void;
   onUpdateInterventions: (updates: Partial<PregnancyInterventions>) => void;
+  onDeliveryAlert?: () => void;
 }
 
 const FIVE_MINUTES_MS = 5 * 60 * 1000;
@@ -29,10 +39,11 @@ export function PregnancyChecklist({
   onTogglePregnancy,
   onUpdateCauses,
   onUpdateInterventions,
+  onDeliveryAlert,
 }: PregnancyChecklistProps) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const [deliveryAlertTime, setDeliveryAlertTime] = useState<number | null>(null);
+  const alertFiredRef = useRef(false);
 
   // Calculate time since CPR started (not pregnancy activation)
   const [timeElapsed, setTimeElapsed] = useState<number>(0);
@@ -41,6 +52,7 @@ export function PregnancyChecklist({
   useEffect(() => {
     if (!cprStartTime) {
       setTimeElapsed(0);
+      alertFiredRef.current = false;
       return;
     }
 
@@ -51,7 +63,17 @@ export function PregnancyChecklist({
     return () => clearInterval(interval);
   }, [cprStartTime]);
 
+  // Fire delivery alert callback once when 5 min reached
+  useEffect(() => {
+    if (deliveryAlertActive && !alertFiredRef.current && onDeliveryAlert) {
+      alertFiredRef.current = true;
+      onDeliveryAlert();
+    }
+  }, [deliveryAlertActive, onDeliveryAlert]);
+
   const handleTogglePregnancy = (checked: boolean) => {
+    // Once activated, cannot be deactivated
+    if (pregnancyActive) return;
     onTogglePregnancy(checked);
     if (checked) {
       setIsOpen(true);
@@ -102,7 +124,7 @@ export function PregnancyChecklist({
               "p-1.5 rounded-full",
               pregnancyActive ? "bg-pink-500/30" : "bg-pink-400/20"
             )}>
-              <Baby className="h-5 w-5 text-pink-400" />
+              <PregnantIcon className="h-5 w-5 text-pink-400" />
             </div>
             <div className="text-left">
               <div className="font-semibold text-foreground">{t('pregnancy.title')}</div>
@@ -133,15 +155,23 @@ export function PregnancyChecklist({
       <CollapsibleContent>
         <div className="mt-3 space-y-4 p-4 bg-card rounded-lg border border-pink-400/30">
           {/* Pregnancy Toggle */}
-          <label className="flex items-center gap-3 cursor-pointer p-3 rounded-lg bg-pink-500/10 border border-pink-400/30">
+          <label className={cn(
+            "flex items-center gap-3 p-3 rounded-lg bg-pink-500/10 border border-pink-400/30",
+            pregnancyActive ? "cursor-default" : "cursor-pointer"
+          )}>
             <Checkbox
               checked={pregnancyActive}
               onCheckedChange={handleTogglePregnancy}
+              disabled={pregnancyActive}
               className="border-pink-400 data-[state=checked]:bg-pink-500 data-[state=checked]:border-pink-500"
             />
             <div className="flex-1">
-              <div className="font-semibold text-pink-400">{t('pregnancy.activatePregnancy')}</div>
-              <div className="text-xs text-muted-foreground">{t('pregnancy.activateDesc')}</div>
+              <div className="font-semibold text-pink-400">
+                {pregnancyActive ? t('pregnancy.protocolActive') : t('pregnancy.activatePregnancy')}
+              </div>
+              <div className="text-xs text-muted-foreground">
+                {pregnancyActive ? t('pregnancy.cannotDeactivate') : t('pregnancy.activateDesc')}
+              </div>
             </div>
             {pregnancyActive && (
               <div className="flex items-center gap-1 text-xs text-pink-400">
