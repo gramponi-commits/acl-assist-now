@@ -340,7 +340,8 @@
     "hsTsChecked": "H's y T's verificados: {{items}}",
     "codeEnded": "Código terminado: {{outcome}}",
     "noteAdded": "Nota: {{note}}",
-    "etco2Recorded": "ETCO₂: {{value}} mmHg"
+    "etco2Recorded": "ETCO₂: {{value}} mmHg",
+    "pregnancyActivated": "Protocolo de embarazo activado"
   },
   "notes": {
     "addNote": "Añadir Nota",

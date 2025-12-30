@@ -355,7 +355,8 @@
     "codeEnded": "Code ended: {{outcome}}",
     "noteAdded": "Note: {{note}}",
     "etco2Recorded": "ETCO₂: {{value}} mmHg",
-    "weightSet": "Patient weight set: {{weight}} kg"
+    "weightSet": "Patient weight set: {{weight}} kg",
+    "pregnancyActivated": "Pregnancy protocol activated"
   },
   "install": {
     "title": "Install App",

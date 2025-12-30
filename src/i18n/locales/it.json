@@ -355,7 +355,8 @@
     "codeEnded": "Codice terminato: {{outcome}}",
     "noteAdded": "Nota: {{note}}",
     "etco2Recorded": "ETCO₂: {{value}} mmHg",
-    "weightSet": "Peso paziente impostato: {{weight}} kg"
+    "weightSet": "Peso paziente impostato: {{weight}} kg",
+    "pregnancyActivated": "Protocollo gravidanza attivato"
   },
   "install": {
     "title": "Installa App",
