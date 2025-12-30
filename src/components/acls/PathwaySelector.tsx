@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { User, Baby, Scale, ArrowRight } from 'lucide-react';
+import { User, Baby, Scale, ArrowRight, Activity } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { WeightInput } from './WeightInput';
 
@@ -12,6 +12,7 @@ interface PathwaySelectorProps {
   onStartCPR: () => void;
   onSetWeight: (weight: number | null) => void;
   currentWeight: number | null;
+  onSelectBradyTachy?: () => void;
 }
 
 type SelectionPhase = 'pathway' | 'pediatric_weight';
@@ -20,7 +21,8 @@ export function PathwaySelector({
   onSelectPathway, 
   onStartCPR, 
   onSetWeight,
-  currentWeight 
+  currentWeight,
+  onSelectBradyTachy 
 }: PathwaySelectorProps) {
   const { t } = useTranslation();
   const [phase, setPhase] = useState<SelectionPhase>('pathway');
@@ -93,6 +95,24 @@ export function PathwaySelector({
               <div className="text-sm opacity-90">{t('pathway.pediatricPALS')}</div>
             </div>
           </Button>
+
+          {/* Bradycardia / Tachycardia (With Pulse) Button */}
+          {onSelectBradyTachy && (
+            <Button
+              onClick={onSelectBradyTachy}
+              className={cn(
+                'w-full h-28 flex flex-col items-center justify-center gap-2',
+                'bg-yellow-500 hover:bg-yellow-600 text-black',
+                'shadow-lg shadow-yellow-500/30 transition-all',
+                'border-2 border-yellow-600'
+              )}
+            >
+              <Activity className="h-10 w-10" />
+              <div className="text-center">
+                <div className="text-xl font-bold">{t('bradyTachy.moduleTitle')}</div>
+              </div>
+            </Button>
+          )}
         </div>
 
         <div className="text-center text-xs text-muted-foreground max-w-xs mt-4">

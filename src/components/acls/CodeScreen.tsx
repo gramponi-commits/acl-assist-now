@@ -14,6 +14,7 @@ import { ResumeSessionDialog } from './ResumeSessionDialog';
 import { AddNoteDialog } from './AddNoteDialog';
 import { WeightInput, WeightDisplay } from './WeightInput';
 import { PathwaySelector, PathwayMode } from './PathwaySelector';
+import { BradyTachyModule } from './bradytachy/BradyTachyModule';
 import { useACLSLogic } from '@/hooks/useACLSLogic';
 import { useWakeLock } from '@/hooks/useWakeLock';
 import { useAudioAlerts } from '@/hooks/useAudioAlerts';
@@ -46,6 +47,8 @@ export function CodeScreen() {
     enabled: settings.metronomeEnabled 
   });
   
+  // Brady/Tachy module state
+  const [showBradyTachyModule, setShowBradyTachyModule] = useState(false);
 
   const [showResumeDialog, setShowResumeDialog] = useState(false);
   const [showNoteDialog, setShowNoteDialog] = useState(false);
@@ -206,11 +209,40 @@ export function CodeScreen() {
     setPendingResumeSession(null);
   };
 
+  // Brady/Tachy handlers
+  const handleOpenBradyTachy = () => {
+    setShowBradyTachyModule(true);
+  };
+
+  const handleCloseBradyTachy = () => {
+    setShowBradyTachyModule(false);
+  };
+
+  const handleSwitchToArrestFromBradyTachy = (patientGroup: 'adult' | 'pediatric') => {
+    // Switch from brady/tachy to arrest mode
+    setShowBradyTachyModule(false);
+    actions.setPathwayMode(patientGroup);
+    actions.startCPR();
+    toast.success('Switched to cardiac arrest protocol');
+  };
+
   const formatDuration = (ms: number) => {
     const min = Math.floor(ms / 60000);
     const sec = Math.floor((ms % 60000) / 1000);
     return `${min}:${sec.toString().padStart(2, '0')}`;
   };
+
+  // If Brady/Tachy module is active, show it instead of normal CODE screen
+  if (showBradyTachyModule) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col">
+        <BradyTachyModule
+          onSwitchToArrest={handleSwitchToArrestFromBradyTachy}
+          onExit={handleCloseBradyTachy}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -247,6 +279,7 @@ export function CodeScreen() {
               onStartCPR={actions.startCPR}
               onSetWeight={actions.setPatientWeight}
               currentWeight={session.patientWeight}
+              onSelectBradyTachy={handleOpenBradyTachy}
             />
           )}
 
