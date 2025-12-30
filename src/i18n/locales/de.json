@@ -190,7 +190,15 @@
     "generalCauses": "Allgemeine Ursachen (H's & T's)",
     "generalCausesDesc": "Standard reversible Ursachen gelten",
     "hypertension": "Hypertonie",
-    "hypertensionDesc": "Präeklampsie, Eklampsie, HELLP-Syndrom"
+    "hypertensionDesc": "Präeklampsie, Eklampsie, HELLP-Syndrom",
+    "interventions": "Interventionen",
+    "leftUterineDisplacement": "Linke Uterusverschiebung",
+    "ivAboveDiaphragm": "IV Oberhalb des Zwerchfells",
+    "detachMonitors": "Fetale Monitore Entfernen",
+    "causesConsidered": "Betrachtete Ursachen",
+    "generalHsTs": "Allgemeine Ursachen (H's & T's)",
+    "protocolActive": "Geburtshilfliches Protokoll Aktiv",
+    "cannotDeactivate": "Protokoll kann nach Start nicht mehr deaktiviert werden"
   },
   "timeline": {
     "title": "Code-Chronologie",

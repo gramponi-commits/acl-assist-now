@@ -190,7 +190,15 @@
     "generalCauses": "Causas Generales (H's & T's)",
     "generalCausesDesc": "Se aplican las causas reversibles estándar",
     "hypertension": "Hipertensión",
-    "hypertensionDesc": "Preeclampsia, eclampsia, síndrome HELLP"
+    "hypertensionDesc": "Preeclampsia, eclampsia, síndrome HELLP",
+    "interventions": "Intervenciones",
+    "leftUterineDisplacement": "Desplazamiento Uterino Izquierdo",
+    "ivAboveDiaphragm": "IV Por Encima del Diafragma",
+    "detachMonitors": "Desconectar Monitores Fetales",
+    "causesConsidered": "Causas Consideradas",
+    "generalHsTs": "Causas Generales (H's & T's)",
+    "protocolActive": "Protocolo Obstétrico Activo",
+    "cannotDeactivate": "El protocolo no puede desactivarse una vez iniciado"
   },
   "timeline": {
     "title": "Cronología del Código",
