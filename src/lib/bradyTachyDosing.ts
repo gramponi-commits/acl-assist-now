@@ -179,9 +179,12 @@ export function getAdultTachyAdenosine(doseNumber: 1 | 2): DoseResult {
  * OR use maximum energy setting if dose is not known
  */
 export function getAdultTachyCardioversion(deviceEnergy: number): DoseResult {
+  // Validate energy is within reasonable medical range (50-360J for biphasic)
+  const validatedEnergy = Math.min(Math.max(deviceEnergy, 50), 360);
+  
   return {
-    value: deviceEnergy,
-    display: `${deviceEnergy} J (or max energy)`,
+    value: validatedEnergy,
+    display: `${validatedEnergy} J (or max energy)`,
     unit: 'J',
   };
 }

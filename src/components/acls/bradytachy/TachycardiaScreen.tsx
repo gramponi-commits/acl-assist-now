@@ -288,7 +288,7 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
                 onClick={() => actions.setQRSWidth('narrow')}
                 className="h-16 text-lg font-bold"
               >
-                {t('bradyTachy.tachyNarrowQRS')} (&lt;0.12 s)
+                {t('bradyTachy.tachyNarrowQRS')} ({'<'}0.12 s)
               </Button>
               <Button
                 onClick={() => actions.setQRSWidth('wide')}
