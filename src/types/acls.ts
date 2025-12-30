@@ -24,7 +24,8 @@ export type AirwayStatus = 'ambu' | 'sga' | 'ett';
 export interface Intervention {
   id: string;
   timestamp: number;
-  type: 'shock' | 'epinephrine' | 'amiodarone' | 'lidocaine' | 'rhythm_change' | 'rosc' | 'airway' | 'cpr_start' | 'note' | 'hs_ts_check' | 'etco2';
+  type: 'shock' | 'epinephrine' | 'amiodarone' | 'lidocaine' | 'rhythm_change' | 'rosc' | 'airway' | 'cpr_start' | 'note' | 'hs_ts_check' | 'etco2' | 
+        'atropine' | 'adenosine' | 'cardioversion' | 'dopamine' | 'epi_infusion' | 'beta_blocker' | 'calcium_blocker' | 'procainamide' | 'vagal_maneuver';
   details: string;
   value?: number | string;
 }
@@ -246,5 +247,99 @@ export function createInitialSession(): ACLSSession {
     pregnancyCauses: { ...DEFAULT_PREGNANCY_CAUSES },
     pregnancyInterventions: { ...DEFAULT_PREGNANCY_INTERVENTIONS },
     pregnancyStartTime: null,
+  };
+}
+
+// ==================== BRADYCARDIA/TACHYCARDIA MODULE TYPES ====================
+// New module for managing symptomatic bradycardia and tachycardia (with pulse)
+
+export type BradyTachyPhase =
+  | 'patient_selection'
+  | 'branch_selection'
+  | 'bradycardia_assessment'
+  | 'bradycardia_treatment'
+  | 'tachycardia_assessment'
+  | 'tachycardia_sinus_vs_svt'
+  | 'tachycardia_treatment'
+  | 'session_ended';
+
+export type BradyTachyBranch = 'bradycardia' | 'tachycardia' | null;
+
+export type StabilityStatus = 'stable' | 'unstable' | null;
+
+export type QRSWidth = 'narrow' | 'wide' | null;
+
+export type RhythmRegularity = 'regular' | 'irregular' | null;
+
+export type PedsSinusVsSVT = 'probable_sinus' | 'probable_svt' | null;
+
+// Decision context for enhanced logging
+export interface BradyTachyDecisionContext {
+  patientGroup: PathwayMode;
+  weightKg: number | null;
+  branch: BradyTachyBranch;
+  stability: StabilityStatus;
+  qrsWidth: QRSWidth;
+  rhythmRegular: RhythmRegularity;
+  monomorphic: boolean | null;
+  pedsSinusVsSVTChoice: PedsSinusVsSVT;
+  // Criteria tracking for pediatric SVT/Sinus distinction
+  sinusTachyCriteria?: {
+    pWavesPresent: boolean;
+    variableRR: boolean;
+    appropriateRate: boolean;
+  };
+  svtCriteria?: {
+    pWavesAbnormal: boolean;
+    fixedRR: boolean;
+    inappropriateRate: boolean;
+    abruptRateChange: boolean;
+  };
+}
+
+// Intervention specific to brady/tachy module
+export interface BradyTachyIntervention {
+  id: string;
+  timestamp: number;
+  type: 'atropine' | 'adenosine' | 'cardioversion' | 'dopamine' | 'epi_infusion' | 
+        'beta_blocker' | 'calcium_blocker' | 'procainamide' | 'amiodarone' | 'vagal_maneuver' |
+        'switch_to_arrest' | 'note' | 'assessment' | 'decision';
+  details: string;
+  value?: number | string;
+  doseStep?: number; // e.g., adenosine dose 1 vs dose 2
+  calculatedDose?: string; // calculated dose if weight present
+  decisionContext?: Partial<BradyTachyDecisionContext>; // capture decision at time of intervention
+}
+
+export interface BradyTachySession {
+  id: string;
+  startTime: number;
+  endTime: number | null;
+  phase: BradyTachyPhase;
+  decisionContext: BradyTachyDecisionContext;
+  interventions: BradyTachyIntervention[];
+  outcome: 'resolved' | 'switched_to_arrest' | 'transferred' | null;
+  switchedToArrestTime: number | null;
+}
+
+export function createInitialBradyTachySession(): BradyTachySession {
+  return {
+    id: crypto.randomUUID(),
+    startTime: Date.now(),
+    endTime: null,
+    phase: 'patient_selection',
+    decisionContext: {
+      patientGroup: 'adult',
+      weightKg: null,
+      branch: null,
+      stability: null,
+      qrsWidth: null,
+      rhythmRegular: null,
+      monomorphic: null,
+      pedsSinusVsSVTChoice: null,
+    },
+    interventions: [],
+    outcome: null,
+    switchedToArrestTime: null,
   };
 }
