@@ -283,14 +283,6 @@ export function CodeScreen() {
                 />
               )}
 
-              {/* CPR Active Indicator */}
-              <div className="bg-acls-warning/20 border-2 border-acls-warning rounded-lg p-4 text-center">
-                <div className="flex items-center justify-center gap-2 text-acls-warning font-bold text-lg">
-                  <Heart className="h-6 w-6" />
-                  {t('banner.cprActive')}
-                </div>
-              </div>
-
               {/* Analyze Rhythm Button or Rhythm Selector */}
               {!showRhythmSelector ? (
                 <>
@@ -352,6 +344,11 @@ export function CodeScreen() {
                   onTogglePregnancy={actions.togglePregnancy}
                   onUpdateCauses={actions.updatePregnancyCauses}
                   onUpdateInterventions={actions.updatePregnancyInterventions}
+                  onDeliveryAlert={() => {
+                    playAlert('rhythmCheck');
+                    announce('emergencyDelivery');
+                    if (settings.vibrationEnabled) vibrate([500, 200, 500, 200, 500]);
+                  }}
                 />
               )}
 
@@ -476,6 +473,11 @@ export function CodeScreen() {
                   onTogglePregnancy={actions.togglePregnancy}
                   onUpdateCauses={actions.updatePregnancyCauses}
                   onUpdateInterventions={actions.updatePregnancyInterventions}
+                  onDeliveryAlert={() => {
+                    playAlert('rhythmCheck');
+                    announce('emergencyDelivery');
+                    if (settings.vibrationEnabled) vibrate([500, 200, 500, 200, 500]);
+                  }}
                 />
               )}
 

@@ -50,141 +50,127 @@ export function CPRQualityPanel({
     <div className="space-y-3">
       <h2 className="text-lg font-semibold text-foreground">{t('cpr.title')}</h2>
       
-      {/* ETCO2 */}
-      <div className="bg-card rounded-lg p-4 border border-border">
-        <div className="flex items-center gap-2 mb-2">
-          <Activity className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-medium">ETCO₂ (mmHg)</span>
+      {/* ETCO2 and Airway - Side by side */}
+      <div className="grid grid-cols-2 gap-2">
+        {/* ETCO2 */}
+        <div className="bg-card rounded-lg p-3 border border-border">
+          <div className="flex items-center gap-1.5 mb-1.5">
+            <Activity className="h-3.5 w-3.5 text-muted-foreground" />
+            <span className="text-xs font-medium">ETCO₂</span>
+            {etco2Status && (
+              <span className={cn(
+                'ml-auto px-1.5 py-0.5 rounded text-[10px] font-medium',
+                etco2Status === 'good' ? 'bg-acls-success/20 text-acls-success' : 'bg-acls-critical/20 text-acls-critical'
+              )}>
+                {etco2Status === 'good' ? '≥10✓' : '<10⚠'}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Input
+              type="number"
+              placeholder="mmHg"
+              value={etco2}
+              onChange={(e) => setEtco2(e.target.value)}
+              onKeyDown={handleETCO2KeyDown}
+              className="h-9 text-sm font-mono flex-1"
+            />
+            <Button
+              onClick={handleETCO2Submit}
+              disabled={!etco2 || isNaN(parseInt(etco2)) || parseInt(etco2) <= 0}
+              size="sm"
+              className="h-9 px-2"
+            >
+              {t('cpr.record')}
+            </Button>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Input
-            type="number"
-            placeholder="ETCO₂"
-            value={etco2}
-            onChange={(e) => setEtco2(e.target.value)}
-            onKeyDown={handleETCO2KeyDown}
-            className="h-12 text-lg font-mono flex-1"
-          />
-          <Button
-            onClick={handleETCO2Submit}
-            disabled={!etco2 || isNaN(parseInt(etco2)) || parseInt(etco2) <= 0}
-            className="h-12 px-4"
-          >
-            {t('cpr.record')}
-          </Button>
-          {etco2Status && (
-            <div className={cn(
-              'px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap',
-              etco2Status === 'good' ? 'bg-acls-success/20 text-acls-success' : 'bg-acls-critical/20 text-acls-critical'
-            )}>
-              {etco2Status === 'good' ? '≥10 ✓' : '<10 ⚠'}
-            </div>
-          )}
+
+        {/* Airway Status */}
+        <div className="bg-card rounded-lg p-3 border border-border">
+          <div className="flex items-center gap-1.5 mb-1.5">
+            <Wind className="h-3.5 w-3.5 text-muted-foreground" />
+            <span className="text-xs font-medium">{t('airway.title')}</span>
+          </div>
+          <div className="grid grid-cols-3 gap-1">
+            <button
+              onClick={() => onAirwayChange('ambu')}
+              className={cn(
+                'flex flex-col items-center justify-center p-1.5 rounded border transition-all',
+                airwayStatus === 'ambu' 
+                  ? 'bg-primary text-primary-foreground border-primary' 
+                  : 'border-border hover:bg-accent'
+              )}
+            >
+              <span className="font-semibold text-xs">{t('airway.ambu')}</span>
+            </button>
+            <button
+              onClick={() => onAirwayChange('sga')}
+              className={cn(
+                'flex flex-col items-center justify-center p-1.5 rounded border transition-all',
+                airwayStatus === 'sga' 
+                  ? 'bg-acls-warning text-white border-acls-warning' 
+                  : 'border-border hover:bg-accent'
+              )}
+            >
+              <span className="font-semibold text-xs">{t('airway.sga')}</span>
+            </button>
+            <button
+              onClick={() => onAirwayChange('ett')}
+              className={cn(
+                'flex flex-col items-center justify-center p-1.5 rounded border transition-all',
+                airwayStatus === 'ett' 
+                  ? 'bg-acls-success text-white border-acls-success' 
+                  : 'border-border hover:bg-accent'
+              )}
+            >
+              <span className="font-semibold text-xs">{t('airway.ett')}</span>
+            </button>
+          </div>
         </div>
-        <p className="text-xs text-muted-foreground mt-2">
-          {t('postRosc.target')}: ≥10 mmHg
-        </p>
       </div>
 
-      {/* CPR Ratio - Only show for Pediatric mode OR when advanced airway is placed */}
+      {/* CPR Ratio - Only show for Pediatric mode */}
       {!isAdult && (
-        <div className="bg-card rounded-lg p-4 border border-border">
-          <div className="flex items-center gap-2 mb-3">
+        <div className="bg-card rounded-lg p-3 border border-border">
+          <div className="flex items-center gap-2">
             <Users className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm font-medium">{t('cpr.ratio')}</span>
+            <div className="flex-1 grid grid-cols-2 gap-2 ml-2">
+              <button
+                onClick={() => onCPRRatioChange?.('15:2')}
+                className={cn(
+                  'flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-md border transition-all',
+                  cprRatio === '15:2' 
+                    ? 'bg-primary text-primary-foreground border-primary' 
+                    : 'border-border hover:bg-accent'
+                )}
+              >
+                <span className="font-bold text-sm">15:2</span>
+                <span className={cn(
+                  'text-[10px]',
+                  cprRatio === '15:2' ? 'text-primary-foreground/80' : 'text-muted-foreground'
+                )}>({t('cpr.twoRescuers')})</span>
+              </button>
+              <button
+                onClick={() => onCPRRatioChange?.('30:2')}
+                className={cn(
+                  'flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-md border transition-all',
+                  cprRatio === '30:2' 
+                    ? 'bg-primary text-primary-foreground border-primary' 
+                    : 'border-border hover:bg-accent'
+                )}
+              >
+                <span className="font-bold text-sm">30:2</span>
+                <span className={cn(
+                  'text-[10px]',
+                  cprRatio === '30:2' ? 'text-primary-foreground/80' : 'text-muted-foreground'
+                )}>({t('cpr.oneRescuer')})</span>
+              </button>
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              onClick={() => onCPRRatioChange?.('15:2')}
-              className={cn(
-                'flex flex-col items-center justify-center p-3 rounded-md border transition-all',
-                cprRatio === '15:2' 
-                  ? 'bg-primary text-primary-foreground border-primary' 
-                  : 'border-border hover:bg-accent'
-              )}
-            >
-              <span className="font-bold text-lg">15:2</span>
-              <span className={cn(
-                'text-xs text-center',
-                cprRatio === '15:2' ? 'text-primary-foreground/80' : 'text-muted-foreground'
-              )}>{t('cpr.twoRescuers')}</span>
-            </button>
-            <button
-              onClick={() => onCPRRatioChange?.('30:2')}
-              className={cn(
-                'flex flex-col items-center justify-center p-3 rounded-md border transition-all',
-                cprRatio === '30:2' 
-                  ? 'bg-primary text-primary-foreground border-primary' 
-                  : 'border-border hover:bg-accent'
-              )}
-            >
-              <span className="font-bold text-lg">30:2</span>
-              <span className={cn(
-                'text-xs text-center',
-                cprRatio === '30:2' ? 'text-primary-foreground/80' : 'text-muted-foreground'
-              )}>{t('cpr.oneRescuer')}</span>
-            </button>
-          </div>
-          <p className="text-xs text-muted-foreground mt-2">
-            {t('cpr.depthPediatric')}
-          </p>
         </div>
       )}
-
-      {/* Airway Status */}
-      <div className="bg-card rounded-lg p-4 border border-border">
-        <div className="flex items-center gap-2 mb-3">
-          <Wind className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-medium">{t('airway.title')}</span>
-        </div>
-        <div className="grid grid-cols-3 gap-2">
-          <button
-            onClick={() => onAirwayChange('ambu')}
-            className={cn(
-              'flex flex-col items-center justify-center p-2 rounded-md border transition-all min-h-[60px]',
-              airwayStatus === 'ambu' 
-                ? 'bg-primary text-primary-foreground border-primary' 
-                : 'border-border hover:bg-accent'
-            )}
-          >
-            <span className="font-semibold text-sm">{t('airway.ambu')}</span>
-            <span className={cn(
-              'text-[10px] leading-tight text-center',
-              airwayStatus === 'ambu' ? 'text-primary-foreground/80' : 'text-muted-foreground'
-            )}>{t('airway.ambuDesc')}</span>
-          </button>
-          <button
-            onClick={() => onAirwayChange('sga')}
-            className={cn(
-              'flex flex-col items-center justify-center p-2 rounded-md border transition-all min-h-[60px]',
-              airwayStatus === 'sga' 
-                ? 'bg-acls-warning text-white border-acls-warning' 
-                : 'border-border hover:bg-accent'
-            )}
-          >
-            <span className="font-semibold text-sm">{t('airway.sga')}</span>
-            <span className={cn(
-              'text-[10px] leading-tight text-center',
-              airwayStatus === 'sga' ? 'text-white/80' : 'text-muted-foreground'
-            )}>{t('airway.sgaDesc')}</span>
-          </button>
-          <button
-            onClick={() => onAirwayChange('ett')}
-            className={cn(
-              'flex flex-col items-center justify-center p-2 rounded-md border transition-all min-h-[60px]',
-              airwayStatus === 'ett' 
-                ? 'bg-acls-success text-white border-acls-success' 
-                : 'border-border hover:bg-accent'
-            )}
-          >
-            <span className="font-semibold text-sm">{t('airway.ett')}</span>
-            <span className={cn(
-              'text-[10px] leading-tight text-center',
-              airwayStatus === 'ett' ? 'text-white/80' : 'text-muted-foreground'
-            )}>{t('airway.ettDesc')}</span>
-          </button>
-        </div>
-      </div>
     </div>
   );
 }

@@ -158,6 +158,8 @@
     "itemsChecked": "{{count}} elemento/i selezionato/i",
     "activatePregnancy": "Paziente Gravida",
     "activateDesc": "Attiva protocollo arresto cardiaco ostetrico",
+    "protocolActive": "Protocollo Ostetrico Attivo",
+    "cannotDeactivate": "Il protocollo non può essere disattivato una volta avviato",
     "deliveryAlert": "5 MIN - PARTO",
     "emergencyDelivery": "CONSIDERARE PARTO D'EMERGENZA",
     "emergencyDeliveryDesc": "L'isterotomia rianimatoria dovrebbe essere eseguita idealmente entro 5 minuti se non c'è ROSC, quando l'altezza del fondo è all'ombelico o sopra",
@@ -285,6 +287,7 @@
     "add": "Aggiungi"
   },
   "voice": {
+    "emergencyDelivery": "Parto d'emergenza. Esegui isterotomia rianimatoria ora.",
     "rhythmCheck": "Controllo ritmo",
     "preCharge": "15 secondi, carica defibrillatore",
     "epiDue": "Adrenalina",
@@ -296,6 +299,8 @@
     "noShock": "Nessuno shock, ricomincia RCP"
   },
   "banner": {
+    "emergencyDelivery": "🚨 PARTO D'EMERGENZA",
+    "emergencyDeliverySub": "Esegui isterotomia rianimatoria - 5 minuti raggiunti",
     "startCPR": "INIZIA RCP",
     "startCPRSub": "Premi il pulsante per iniziare le compressioni toraciche",
     "cprInProgress": "RCP IN CORSO",

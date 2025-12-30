@@ -282,6 +282,8 @@
     "depthPediatric": "Profundidad: ≥⅓ del diámetro torácico"
   },
   "banner": {
+    "emergencyDelivery": "🚨 PARTO DE EMERGENCIA",
+    "emergencyDeliverySub": "Realizar histerotomía de reanimación - 5 minutos alcanzados",
     "startCPR": "INICIAR RCP",
     "startCPRSub": "Presione el botón para comenzar compresiones torácicas",
     "cprInProgress": "RCP EN PROGRESO",
@@ -339,6 +341,7 @@
     "add": "Añadir"
   },
   "voice": {
+    "emergencyDelivery": "Parto de emergencia. Realizar histerotomía de reanimación ahora.",
     "rhythmCheck": "Análisis de ritmo",
     "preCharge": "15 segundos, cargar desfibrilador",
     "epiDue": "Adrenalina",

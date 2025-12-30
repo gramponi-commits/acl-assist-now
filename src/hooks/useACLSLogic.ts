@@ -516,9 +516,20 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
 
   // Command banner logic
   const getCommandBanner = useCallback((): CommandBanner => {
-    const { phase, currentRhythm, shockCount, epinephrineCount, lastEpinephrineTime, amiodaroneCount } = session;
+    const { phase, currentRhythm, shockCount, epinephrineCount, lastEpinephrineTime, amiodaroneCount, pregnancyActive, startTime } = session;
     const now = Date.now();
     const seconds = Math.ceil(timerState.cprCycleRemaining / 1000);
+
+    // Emergency delivery alert - highest priority for obstetric arrest
+    const FIVE_MINUTES_MS = 5 * 60 * 1000;
+    const timeElapsed = startTime ? now - startTime : 0;
+    if (pregnancyActive && timeElapsed >= FIVE_MINUTES_MS && phase !== 'post_rosc' && phase !== 'code_ended') {
+      return {
+        message: t('banner.emergencyDelivery'),
+        priority: 'critical',
+        subMessage: t('banner.emergencyDeliverySub'),
+      };
+    }
 
     if (phase === 'initial' || phase === 'rhythm_selection') {
       return {
