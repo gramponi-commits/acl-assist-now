@@ -194,7 +194,12 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
 
       return () => clearTimeout(timeoutId);
     }
-  }, [session.phase, session.endTime, session, timerState]);
+  }, [session.phase, session.endTime, session.id, session.startTime, session.roscTime, session.outcome, 
+      session.shockCount, session.epinephrineCount, session.amiodaroneCount, session.lidocaineCount,
+      session.pathwayMode, session.patientWeight, session.interventions, session.vitalReadings,
+      session.hsAndTs, session.postROSCChecklist, session.postROSCVitals, session.airwayStatus,
+      session.pregnancyActive, session.pregnancyCauses, session.pregnancyInterventions,
+      timerState.totalElapsed, timerState.totalCPRTime]);
 
   // Reset auto-save flag when starting a new session
   useEffect(() => {
