@@ -48,6 +48,8 @@ export function PregnancyChecklist({
   // Calculate time since CPR started (not pregnancy activation)
   const [timeElapsed, setTimeElapsed] = useState<number>(0);
   const deliveryAlertActive = pregnancyActive && timeElapsed >= FIVE_MINUTES_MS;
+  // Calculate remaining time for countdown (5 minutes - elapsed time)
+  const timeRemaining = Math.max(0, FIVE_MINUTES_MS - timeElapsed);
 
   useEffect(() => {
     if (!cprStartTime) {
@@ -176,7 +178,7 @@ export function PregnancyChecklist({
             {pregnancyActive && (
               <div className="flex items-center gap-1 text-xs text-pink-400">
                 <Clock className="h-3 w-3" />
-                {formatTime(timeElapsed)}
+                {formatTime(timeRemaining)}
               </div>
             )}
           </label>
