@@ -137,69 +137,76 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
 
   // Auto-save session when code ends (ROSC or death)
   const hasAutoSavedRef = useRef(false);
+  const autoSaveTimeoutRef = useRef<number | null>(null);
+  
   useEffect(() => {
-    const shouldAutoSave = (session.phase === 'post_rosc' || session.phase === 'code_ended') && 
-                          session.endTime !== null && 
-                          !hasAutoSavedRef.current;
+    // Check if we should trigger auto-save
+    const isTerminalPhase = session.phase === 'post_rosc' || session.phase === 'code_ended';
+    const hasEndTime = session.endTime !== null;
+    const shouldAutoSave = isTerminalPhase && hasEndTime && !hasAutoSavedRef.current;
     
     if (shouldAutoSave) {
       hasAutoSavedRef.current = true;
-      // Delay to ensure state is fully updated
-      const timeoutId = setTimeout(async () => {
+      
+      // Capture current session and timer state for the async save
+      const sessionSnapshot = session;
+      const timerSnapshot = timerState;
+      
+      // Use a longer delay to ensure all state updates complete
+      autoSaveTimeoutRef.current = window.setTimeout(async () => {
         try {
-          const cprFraction = timerState.totalElapsed > 0 
-            ? (timerState.totalCPRTime / timerState.totalElapsed) * 100
+          const cprFraction = timerSnapshot.totalElapsed > 0 
+            ? (timerSnapshot.totalCPRTime / timerSnapshot.totalElapsed) * 100
             : 0;
 
           const storedSession: StoredSession = {
-            id: session.id,
+            id: sessionSnapshot.id,
             savedAt: Date.now(),
-            startTime: session.startTime,
-            endTime: session.endTime,
-            roscTime: session.roscTime,
-            outcome: session.outcome,
-            duration: timerState.totalElapsed,
-            totalCPRTime: timerState.totalCPRTime,
+            startTime: sessionSnapshot.startTime,
+            endTime: sessionSnapshot.endTime,
+            roscTime: sessionSnapshot.roscTime,
+            outcome: sessionSnapshot.outcome,
+            duration: timerSnapshot.totalElapsed,
+            totalCPRTime: timerSnapshot.totalCPRTime,
             cprFraction,
-            shockCount: session.shockCount,
-            epinephrineCount: session.epinephrineCount,
-            amiodaroneCount: session.amiodaroneCount,
-            lidocaineCount: session.lidocaineCount,
-            pathwayMode: session.pathwayMode,
-            patientWeight: session.patientWeight,
-            interventions: session.interventions.map(i => ({
+            shockCount: sessionSnapshot.shockCount,
+            epinephrineCount: sessionSnapshot.epinephrineCount,
+            amiodaroneCount: sessionSnapshot.amiodaroneCount,
+            lidocaineCount: sessionSnapshot.lidocaineCount,
+            pathwayMode: sessionSnapshot.pathwayMode,
+            patientWeight: sessionSnapshot.patientWeight,
+            interventions: sessionSnapshot.interventions.map(i => ({
               timestamp: i.timestamp,
               type: i.type,
               details: i.details,
               value: i.value,
             })),
-            etco2Readings: session.vitalReadings
+            etco2Readings: sessionSnapshot.vitalReadings
               .filter(v => v.etco2 !== undefined)
               .map(v => ({ timestamp: v.timestamp, value: v.etco2! })),
-            hsAndTs: session.hsAndTs,
-            postROSCChecklist: session.phase === 'post_rosc' || session.outcome === 'rosc' ? session.postROSCChecklist : null,
-            postROSCVitals: session.phase === 'post_rosc' || session.outcome === 'rosc' ? session.postROSCVitals : null,
-            airwayStatus: session.airwayStatus,
-            pregnancyActive: session.pregnancyActive,
-            pregnancyCauses: session.pregnancyActive ? session.pregnancyCauses : undefined,
-            pregnancyInterventions: session.pregnancyActive ? session.pregnancyInterventions : undefined,
+            hsAndTs: sessionSnapshot.hsAndTs,
+            postROSCChecklist: sessionSnapshot.phase === 'post_rosc' || sessionSnapshot.outcome === 'rosc' ? sessionSnapshot.postROSCChecklist : null,
+            postROSCVitals: sessionSnapshot.phase === 'post_rosc' || sessionSnapshot.outcome === 'rosc' ? sessionSnapshot.postROSCVitals : null,
+            airwayStatus: sessionSnapshot.airwayStatus,
+            pregnancyActive: sessionSnapshot.pregnancyActive,
+            pregnancyCauses: sessionSnapshot.pregnancyActive ? sessionSnapshot.pregnancyCauses : undefined,
+            pregnancyInterventions: sessionSnapshot.pregnancyActive ? sessionSnapshot.pregnancyInterventions : undefined,
           };
 
           await saveToIndexedDB(storedSession);
-          console.log('Session auto-saved successfully');
+          console.log('Session auto-saved successfully', storedSession.id);
         } catch (error) {
           console.error('Failed to auto-save session:', error);
         }
-      }, 500); // Small delay to ensure all state updates are complete
-
-      return () => clearTimeout(timeoutId);
+      }, 1000); // 1 second delay to ensure all state updates complete
     }
-  }, [session.phase, session.endTime, session.id, session.startTime, session.roscTime, session.outcome, 
-      session.shockCount, session.epinephrineCount, session.amiodaroneCount, session.lidocaineCount,
-      session.pathwayMode, session.patientWeight, session.interventions, session.vitalReadings,
-      session.hsAndTs, session.postROSCChecklist, session.postROSCVitals, session.airwayStatus,
-      session.pregnancyActive, session.pregnancyCauses, session.pregnancyInterventions,
-      timerState.totalElapsed, timerState.totalCPRTime]);
+    
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+    };
+  }, [session, timerState]); // Depend on session and timerState to get latest values
 
   // Reset auto-save flag when starting a new session
   useEffect(() => {
