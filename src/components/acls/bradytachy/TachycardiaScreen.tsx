@@ -7,6 +7,8 @@ import { cn } from '@/lib/utils';
 import { BradyTachySession } from '@/types/acls';
 import { BradyTachyActions } from '@/hooks/useBradyTachyLogic';
 import { SinusVsSVTSelector } from './SinusVsSVTSelector';
+import { SinusEvaluationScreen } from './SinusEvaluationScreen';
+import { CompromiseAssessmentScreen } from './CompromiseAssessmentScreen';
 import {
   calculatePedsTachyAdenosine,
   calculatePedsTachyCardioversion,
@@ -30,14 +32,14 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
   const [adenosineDoses, setAdenosineDoses] = useState(0);
   const [cardioversionAttempts, setCardioversionAttempts] = useState(0);
 
-  // Pediatric: Sinus vs SVT decision screen
-  if (isPediatric && session.phase === 'tachycardia_assessment' && pedsSinusVsSVTChoice === null) {
-    return (
-      <SinusVsSVTSelector
-        session={session}
-        actions={actions}
-      />
-    );
+  // Pediatric: First show sinus evaluation screen (NEW FLOW)
+  if (isPediatric && session.phase === 'tachycardia_assessment') {
+    return <SinusEvaluationScreen session={session} actions={actions} />;
+  }
+
+  // Pediatric: Then cardiopulmonary compromise assessment (NEW FLOW)
+  if (isPediatric && session.phase === 'tachycardia_compromise_assessment') {
+    return <CompromiseAssessmentScreen session={session} actions={actions} />;
   }
 
   // If pediatric sinus tachycardia selected, show "treat cause" guidance
@@ -72,9 +74,8 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
     );
   }
 
-  // Initial assessment (both adult and pediatric SVT)
-  if (session.phase === 'tachycardia_assessment' || 
-      (isPediatric && session.phase === 'tachycardia_sinus_vs_svt')) {
+  // Adult initial assessment (unchanged)
+  if (!isPediatric && session.phase === 'tachycardia_assessment') {
     return (
       <ScrollArea className="h-full">
         <div className="p-6 space-y-6 max-w-3xl mx-auto">

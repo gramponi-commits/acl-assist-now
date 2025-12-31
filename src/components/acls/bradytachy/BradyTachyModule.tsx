@@ -61,6 +61,8 @@ export function BradyTachyModule({ onSwitchToArrest, onExit }: BradyTachyModuleP
         );
 
       case 'tachycardia_assessment':
+      case 'tachycardia_sinus_evaluation':
+      case 'tachycardia_compromise_assessment':
       case 'tachycardia_sinus_vs_svt':
       case 'tachycardia_treatment':
         return (

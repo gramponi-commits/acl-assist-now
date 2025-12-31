@@ -171,6 +171,27 @@ export function useBradyTachyLogic() {
     addIntervention('decision', `Pediatric rhythm: ${choice}`);
   }, [addIntervention]);
 
+  // New: Select pediatric sinus tachycardia (treat cause pathway)
+  const selectPediatricSinusTachy = useCallback(() => {
+    setSession(prev => ({
+      ...prev,
+      decisionContext: {
+        ...prev.decisionContext,
+        pedsSinusVsSVTChoice: 'probable_sinus',
+      },
+    }));
+    addIntervention('decision', 'Pediatric sinus tachycardia identified - treat cause');
+  }, [addIntervention]);
+
+  // New: Advance to compromise assessment phase
+  const advanceToCompromiseAssessment = useCallback(() => {
+    setSession(prev => ({
+      ...prev,
+      phase: 'tachycardia_compromise_assessment',
+    }));
+    addIntervention('decision', 'Concerning rhythm - proceeding to compromise assessment');
+  }, [addIntervention]);
+
   // Treatment actions
   const giveAtropine = useCallback((dose: string, doseNumber: number) => {
     addIntervention('atropine', t('bradyTachy.treatmentGiven', { treatment: 'Atropine' }), dose, doseNumber, dose);
@@ -265,6 +286,8 @@ export function useBradyTachyLogic() {
       setRhythmRegular,
       setMonomorphic,
       setPedsSinusVsSVT,
+      selectPediatricSinusTachy,
+      advanceToCompromiseAssessment,
       giveAtropine,
       giveAdenosine,
       giveCardioversion,
