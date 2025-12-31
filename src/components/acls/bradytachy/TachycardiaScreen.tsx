@@ -273,7 +273,7 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
                 <div className="space-y-2">
                   <Button
                     onClick={() => {
-                      setCardioversionAttempts(1);
+                      setCardioversionAttempts(prev => prev + 1);
                       setShowSyncReminder(false);
                       const energy = calculatePedsTachyCardioversion(weightKg, 1);
                       actions.giveCardioversion(energy.display);
@@ -288,7 +288,7 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
                   {cardioversionAttempts >= 1 && (
                     <Button
                       onClick={() => {
-                        setCardioversionAttempts(2);
+                        setCardioversionAttempts(prev => prev + 1);
                         const energy = calculatePedsTachyCardioversion(weightKg, 2);
                         actions.giveCardioversion(energy.display);
                       }}

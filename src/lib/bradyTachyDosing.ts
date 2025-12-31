@@ -188,7 +188,7 @@ export function getAdultTachyCardioversion(rhythmType?: CardioversionRhythmType)
     aflutter: 200,       // Atrial flutter: 200J
     narrow: 100,         // Narrow-complex tachycardia: 100J
     monomorphic_vt: 100, // Monomorphic VT: 100J
-    polymorphic_vt: null, // Polymorphic VT: null indicates defibrillation (unsynchronized) should be used
+    polymorphic_vt: null, // Polymorphic VT: requires defibrillation (unsynchronized) instead of cardioversion
   };
 
   if (!rhythmType) {
