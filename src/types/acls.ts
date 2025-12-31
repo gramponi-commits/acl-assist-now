@@ -17,13 +17,7 @@ export type ACLSPhase =
   | 'shockable_pathway'
   | 'non_shockable_pathway'
   | 'post_rosc'
-  | 'code_ended'
-  // Brady/Tachy phases integrated into unified session
-  | 'bradytachy_patient_selection'
-  | 'bradytachy_branch_selection'
-  | 'bradytachy_assessment'
-  | 'bradytachy_treatment'
-  | 'bradytachy_ended';
+  | 'code_ended';
 
 export type AirwayStatus = 'ambu' | 'sga' | 'ett';
 
@@ -31,24 +25,9 @@ export interface Intervention {
   id: string;
   timestamp: number;
   type: 'shock' | 'epinephrine' | 'amiodarone' | 'lidocaine' | 'rhythm_change' | 'rosc' | 'airway' | 'cpr_start' | 'note' | 'hs_ts_check' | 'etco2' | 
-        'atropine' | 'adenosine' | 'cardioversion' | 'dopamine' | 'epi_infusion' | 'beta_blocker' | 'calcium_blocker' | 'procainamide' | 'vagal_maneuver' |
-        'switch_to_arrest' | 'assessment' | 'decision' | 'medication' | 'pacing';
+        'atropine' | 'adenosine' | 'cardioversion' | 'dopamine' | 'epi_infusion' | 'beta_blocker' | 'calcium_blocker' | 'procainamide' | 'vagal_maneuver';
   details: string;
   value?: number | string;
-  // Brady/Tachy module integration
-  module?: 'acls' | 'pals' | 'bradytachy';
-  bradyTachyContext?: {
-    branch?: 'brady' | 'tachy';
-    stability?: 'stable' | 'unstable';
-    qrsWidth?: 'narrow' | 'wide';
-    rhythmRegular?: boolean;
-    monomorphic?: boolean;
-    pedsSinusVsSVT?: string;
-    actionLabelKey?: string;
-    doseStep?: number;
-    displayedDoseText?: string;
-    calculatedDose?: string | null;
-  };
 }
 
 export interface VitalReading {
@@ -140,7 +119,7 @@ export interface PostROSCVitals {
   glucose: number | null; // Target 70-180 mg/dL
 }
 
-export type CodeOutcome = 'rosc' | 'deceased' | 'resolved' | 'transferred' | null;
+export type CodeOutcome = 'rosc' | 'deceased' | null;
 
 export interface ACLSSession {
   id: string;
@@ -273,8 +252,6 @@ export function createInitialSession(): ACLSSession {
 
 // ==================== BRADYCARDIA/TACHYCARDIA MODULE TYPES ====================
 // New module for managing symptomatic bradycardia and tachycardia (with pulse)
-// NOTE: Brady/Tachy now uses the unified ACLSSession for data persistence
-// These types are kept for UI state management only
 
 export type BradyTachyPhase =
   | 'patient_selection'
@@ -298,7 +275,7 @@ export type RhythmRegularity = 'regular' | 'irregular' | null;
 
 export type PedsSinusVsSVT = 'probable_sinus' | 'probable_svt' | null;
 
-// Decision context for enhanced logging - now stored in Intervention.bradyTachyContext
+// Decision context for enhanced logging
 export interface BradyTachyDecisionContext {
   patientGroup: PathwayMode;
   weightKg: number | null;
@@ -319,5 +296,52 @@ export interface BradyTachyDecisionContext {
     fixedRR: boolean;
     inappropriateRate: boolean;
     abruptRateChange: boolean;
+  };
+}
+
+// Intervention specific to brady/tachy module
+export interface BradyTachyIntervention {
+  id: string;
+  timestamp: number;
+  type: 'atropine' | 'adenosine' | 'cardioversion' | 'dopamine' | 'epi_infusion' | 
+        'beta_blocker' | 'calcium_blocker' | 'procainamide' | 'amiodarone' | 'vagal_maneuver' |
+        'switch_to_arrest' | 'note' | 'assessment' | 'decision';
+  details: string;
+  value?: number | string;
+  doseStep?: number; // e.g., adenosine dose 1 vs dose 2
+  calculatedDose?: string; // calculated dose if weight present
+  decisionContext?: Partial<BradyTachyDecisionContext>; // capture decision at time of intervention
+}
+
+export interface BradyTachySession {
+  id: string;
+  startTime: number;
+  endTime: number | null;
+  phase: BradyTachyPhase;
+  decisionContext: BradyTachyDecisionContext;
+  interventions: BradyTachyIntervention[];
+  outcome: 'resolved' | 'switched_to_arrest' | 'transferred' | null;
+  switchedToArrestTime: number | null;
+}
+
+export function createInitialBradyTachySession(): BradyTachySession {
+  return {
+    id: crypto.randomUUID(),
+    startTime: Date.now(),
+    endTime: null,
+    phase: 'patient_selection',
+    decisionContext: {
+      patientGroup: 'adult',
+      weightKg: null,
+      branch: null,
+      stability: null,
+      qrsWidth: null,
+      rhythmRegular: null,
+      monomorphic: null,
+      pedsSinusVsSVTChoice: null,
+    },
+    interventions: [],
+    outcome: null,
+    switchedToArrestTime: null,
   };
 }

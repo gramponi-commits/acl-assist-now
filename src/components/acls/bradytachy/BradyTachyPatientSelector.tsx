@@ -4,23 +4,21 @@ import { Button } from '@/components/ui/button';
 import { User, Baby, Activity } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { WeightInput } from '../WeightInput';
-import { PathwayMode, BradyTachyDecisionContext } from '@/types/acls';
+import { BradyTachySession, PathwayMode } from '@/types/acls';
 import { BradyTachyActions } from '@/hooks/useBradyTachyLogic';
 
 interface BradyTachyPatientSelectorProps {
-  decisionContext: BradyTachyDecisionContext;
+  session: BradyTachySession;
   actions: BradyTachyActions;
 }
 
-export function BradyTachyPatientSelector({ decisionContext, actions }: BradyTachyPatientSelectorProps) {
+export function BradyTachyPatientSelector({ session, actions }: BradyTachyPatientSelectorProps) {
   const { t } = useTranslation();
   const [showWeightDialog, setShowWeightDialog] = useState(false);
-  const [selectedGroup, setSelectedGroup] = useState<PathwayMode | null>(decisionContext.patientGroup || null);
-  const patientGroup = decisionContext.patientGroup;
-  const currentWeight = decisionContext.weightKg;
+  const patientGroup = session.decisionContext.patientGroup;
+  const currentWeight = session.decisionContext.weightKg;
 
   const handlePatientGroupSelect = (group: PathwayMode) => {
-    setSelectedGroup(group);
     actions.setPatientGroup(group);
     if (group === 'pediatric') {
       // For pediatric, show weight input option
@@ -41,7 +39,7 @@ export function BradyTachyPatientSelector({ decisionContext, actions }: BradyTac
   };
 
   // Patient selection phase
-  if (!selectedGroup || !decisionContext.branch) {
+  if (session.phase === 'patient_selection') {
     return (
       <div className="flex flex-col items-center justify-center pt-16 pb-8 space-y-6 px-4">
         <div className="text-center mb-4">

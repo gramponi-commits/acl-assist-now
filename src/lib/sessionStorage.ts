@@ -29,19 +29,6 @@ export interface StoredSession {
     type: string;
     details: string;
     value?: number | string;
-    module?: 'acls' | 'pals' | 'bradytachy';
-    bradyTachyContext?: {
-      branch?: 'brady' | 'tachy';
-      stability?: 'stable' | 'unstable';
-      qrsWidth?: 'narrow' | 'wide';
-      rhythmRegular?: boolean;
-      monomorphic?: boolean;
-      pedsSinusVsSVT?: string;
-      actionLabelKey?: string;
-      doseStep?: number;
-      displayedDoseText?: string;
-      calculatedDose?: string | null;
-    };
   }>;
   // EtCO2 readings
   etco2Readings: Array<{

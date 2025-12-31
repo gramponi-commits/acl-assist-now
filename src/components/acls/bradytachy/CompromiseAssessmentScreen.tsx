@@ -3,17 +3,16 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { BradyTachyDecisionContext } from '@/types/acls';
+import { BradyTachySession } from '@/types/acls';
 import { BradyTachyActions } from '@/hooks/useBradyTachyLogic';
 import { AlertCircle, Activity } from 'lucide-react';
 
 interface CompromiseAssessmentScreenProps {
-  decisionContext: BradyTachyDecisionContext;
+  session: BradyTachySession;
   actions: BradyTachyActions;
-  onComplete: () => void;
 }
 
-export function CompromiseAssessmentScreen({ decisionContext, actions, onComplete }: CompromiseAssessmentScreenProps) {
+export function CompromiseAssessmentScreen({ session, actions }: CompromiseAssessmentScreenProps) {
   const { t } = useTranslation();
 
   return (

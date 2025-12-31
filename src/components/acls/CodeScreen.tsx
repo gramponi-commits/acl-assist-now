@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CommandBanner } from './CommandBanner';
 import { RhythmSelector } from './RhythmSelector';
@@ -28,12 +28,13 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { calculateShockEnergy } from '@/lib/palsDosing';
 import { getAdultShockEnergy } from '@/lib/aclsDosing';
-import { ACLSSession, CPRRatio } from '@/types/acls';
+import { CPRRatio } from '@/types/acls';
 import { 
   saveActiveSession, 
   getActiveSession, 
   clearActiveSession 
 } from '@/lib/activeSessionStorage';
+import { getBradyTachySession, clearBradyTachySession } from '@/lib/bradyTachyStorage';
 
 export function CodeScreen() {
   const { t } = useTranslation();
@@ -209,12 +210,6 @@ export function CodeScreen() {
     setPendingResumeSession(null);
   };
 
-  // Update session callback for Brady/Tachy
-  const handleUpdateBradyTachySession = useCallback((updatedSession: ACLSSession) => {
-    // Update the main session state
-    actions.updateSession(updatedSession);
-  }, [actions]);
-
   // Brady/Tachy handlers
   const handleOpenBradyTachy = () => {
     setShowBradyTachyModule(true);
@@ -224,15 +219,38 @@ export function CodeScreen() {
     setShowBradyTachyModule(false);
   };
 
-  const handleSwitchToArrestFromBradyTachy = (bradyTachySession: ACLSSession) => {
-    // The session already contains all Brady/Tachy interventions
+  const handleSwitchToArrestFromBradyTachy = (patientGroup: 'adult' | 'pediatric') => {
+    // Get the Brady/Tachy session data
+    const bradyTachySession = getBradyTachySession();
+    
     // Switch from brady/tachy to arrest mode
     setShowBradyTachyModule(false);
+    actions.setPathwayMode(patientGroup);
     
-    // Start CPR with the existing session
+    // Merge the Brady/Tachy interventions into the CODE session
+    if (bradyTachySession && bradyTachySession.interventions.length > 0) {
+      // Add a marker intervention
+      actions.addIntervention('note', t('bradyTachy.switchedToArrest'));
+      
+      // Import all Brady/Tachy interventions into the CODE timeline
+      bradyTachySession.interventions.forEach(intervention => {
+        // Map the intervention details to a note
+        actions.addIntervention('note', intervention.details, intervention.value);
+      });
+      
+      // If weight was set in Brady/Tachy, carry it over
+      if (bradyTachySession.weightKg && patientGroup === 'pediatric') {
+        actions.setPatientWeight(bradyTachySession.weightKg);
+      }
+    }
+    
+    // Clear the Brady/Tachy session now that it's merged
+    clearBradyTachySession();
+    
+    // Start CPR
     actions.startCPR();
     
-    toast.success(t('bradyTachy.switchedToArrest'));
+    toast.success(t('bradyTachy.switchedToArrest') + ' - ' + t('timeline.title') + ' merged');
   };
 
   const formatDuration = (ms: number) => {
@@ -246,8 +264,6 @@ export function CodeScreen() {
     return (
       <div className="min-h-screen bg-background flex flex-col">
         <BradyTachyModule
-          session={session}
-          onUpdateSession={handleUpdateBradyTachySession}
           onSwitchToArrest={handleSwitchToArrestFromBradyTachy}
           onExit={handleCloseBradyTachy}
         />

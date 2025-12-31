@@ -1,7 +1,7 @@
-import { useCallback, useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  ACLSSession,
+  BradyTachySession,
   BradyTachyPhase,
   BradyTachyBranch,
   PathwayMode,
@@ -9,266 +9,274 @@ import {
   QRSWidth,
   RhythmRegularity,
   PedsSinusVsSVT,
-  BradyTachyDecisionContext,
-  Intervention,
+  BradyTachyIntervention,
+  createInitialBradyTachySession,
 } from '@/types/acls';
+import { saveBradyTachySession, clearBradyTachySession, StoredBradyTachySession } from '@/lib/bradyTachyStorage';
 
-interface UseBradyTachyLogicProps {
-  session: ACLSSession;
-  onUpdateSession: (session: ACLSSession) => void;
-}
-
-export function useBradyTachyLogic({ session, onUpdateSession }: UseBradyTachyLogicProps) {
+export function useBradyTachyLogic() {
   const { t } = useTranslation();
-  
-  // UI-only state for Brady/Tachy phase navigation
-  const [uiPhase, setUiPhase] = useState<BradyTachyPhase>('patient_selection');
-  
-  // Decision context stored in UI state (will be included in interventions)
-  const [decisionContext, setDecisionContext] = useState<BradyTachyDecisionContext>({
-    patientGroup: session.pathwayMode,
-    weightKg: session.patientWeight,
-    branch: null,
-    stability: null,
-    qrsWidth: null,
-    rhythmRegular: null,
-    monomorphic: null,
-    pedsSinusVsSVTChoice: null,
-  });
+  const [session, setSession] = useState<BradyTachySession>(createInitialBradyTachySession);
 
-  // Add intervention with Brady/Tachy metadata
+  // Add intervention with enhanced logging
   const addIntervention = useCallback((
-    type: Intervention['type'],
+    type: BradyTachyIntervention['type'],
     details: string,
     value?: number | string,
-    actionLabelKey?: string,
     doseStep?: number,
-    displayedDoseText?: string,
-    calculatedDose?: string | null
+    calculatedDose?: string
   ) => {
-    const intervention: Intervention = {
+    const intervention: BradyTachyIntervention = {
       id: crypto.randomUUID(),
       timestamp: Date.now(),
       type,
       details,
       value,
-      module: 'bradytachy',
-      bradyTachyContext: {
-        branch: decisionContext.branch === 'bradycardia' ? 'brady' : decisionContext.branch === 'tachycardia' ? 'tachy' : undefined,
-        stability: decisionContext.stability || undefined,
-        qrsWidth: decisionContext.qrsWidth || undefined,
-        rhythmRegular: decisionContext.rhythmRegular !== null ? decisionContext.rhythmRegular : undefined,
-        monomorphic: decisionContext.monomorphic !== null ? decisionContext.monomorphic : undefined,
-        pedsSinusVsSVT: decisionContext.pedsSinusVsSVTChoice || undefined,
-        actionLabelKey,
-        doseStep,
-        displayedDoseText,
-        calculatedDose,
-      },
+      doseStep,
+      calculatedDose,
+      decisionContext: { ...session.decisionContext },
     };
 
-    const updatedSession = {
-      ...session,
-      interventions: [...session.interventions, intervention],
-    };
-    
-    onUpdateSession(updatedSession);
-  }, [session, decisionContext, onUpdateSession]);
+    setSession(prev => {
+      const updated = {
+        ...prev,
+        interventions: [...prev.interventions, intervention],
+      };
+
+      // Persist to localStorage
+      saveBradyTachySession({
+        id: updated.id,
+        startTime: updated.startTime,
+        endTime: updated.endTime,
+        patientGroup: updated.decisionContext.patientGroup,
+        weightKg: updated.decisionContext.weightKg,
+        branch: updated.decisionContext.branch,
+        interventions: updated.interventions.map(i => ({
+          timestamp: i.timestamp,
+          type: i.type,
+          details: i.details,
+          value: i.value,
+          doseStep: i.doseStep,
+          calculatedDose: i.calculatedDose,
+          decisionContext: i.decisionContext,
+        })),
+        outcome: updated.outcome,
+      });
+
+      return updated;
+    });
+  }, [session.decisionContext]);
 
   // Set patient group (adult/pediatric)
   const setPatientGroup = useCallback((group: PathwayMode) => {
-    setDecisionContext(prev => ({
+    setSession(prev => ({
       ...prev,
-      patientGroup: group,
+      decisionContext: {
+        ...prev.decisionContext,
+        patientGroup: group,
+      },
     }));
-    
-    const updatedSession = {
-      ...session,
-      pathwayMode: group,
-    };
-    onUpdateSession(updatedSession);
-  }, [session, onUpdateSession]);
+  }, []);
 
   // Set patient weight
   const setPatientWeight = useCallback((weight: number | null) => {
-    setDecisionContext(prev => ({
+    setSession(prev => ({
       ...prev,
-      weightKg: weight,
+      decisionContext: {
+        ...prev.decisionContext,
+        weightKg: weight,
+      },
     }));
-    
-    const updatedSession = {
-      ...session,
-      patientWeight: weight,
-    };
-    onUpdateSession(updatedSession);
-    
     if (weight) {
       addIntervention('note', t('interventions.weightSet', { weight }));
     }
-  }, [session, onUpdateSession, addIntervention, t]);
+  }, [addIntervention, t]);
 
   // Set branch (brady/tachy)
   const setBranch = useCallback((branch: BradyTachyBranch) => {
-    setUiPhase(branch === 'bradycardia' ? 'bradycardia_assessment' : 'tachycardia_assessment');
-    setDecisionContext(prev => ({
+    setSession(prev => ({
       ...prev,
-      branch,
+      phase: branch === 'bradycardia' ? 'bradycardia_assessment' : 'tachycardia_assessment',
+      decisionContext: {
+        ...prev.decisionContext,
+        branch,
+      },
     }));
     addIntervention('decision', `Branch selected: ${branch}`);
   }, [addIntervention]);
 
   // Set stability status
   const setStability = useCallback((stability: StabilityStatus) => {
-    setUiPhase(decisionContext.branch === 'bradycardia' 
-      ? 'bradycardia_treatment' 
-      : 'tachycardia_treatment');
-    setDecisionContext(prev => ({
+    setSession(prev => ({
       ...prev,
-      stability,
+      phase: prev.decisionContext.branch === 'bradycardia' 
+        ? 'bradycardia_treatment' 
+        : 'tachycardia_treatment',
+      decisionContext: {
+        ...prev.decisionContext,
+        stability,
+      },
     }));
     addIntervention('assessment', `Stability: ${stability}`);
-  }, [decisionContext.branch, addIntervention]);
+  }, [addIntervention]);
 
   // Set QRS width
   const setQRSWidth = useCallback((qrsWidth: QRSWidth) => {
-    setDecisionContext(prev => ({
+    setSession(prev => ({
       ...prev,
-      qrsWidth,
+      decisionContext: {
+        ...prev.decisionContext,
+        qrsWidth,
+      },
     }));
     addIntervention('assessment', `QRS: ${qrsWidth}`);
   }, [addIntervention]);
 
   // Set rhythm regularity
   const setRhythmRegular = useCallback((regular: RhythmRegularity) => {
-    setDecisionContext(prev => ({
+    setSession(prev => ({
       ...prev,
-      rhythmRegular: regular === 'regular',
+      decisionContext: {
+        ...prev.decisionContext,
+        rhythmRegular: regular,
+      },
     }));
     addIntervention('assessment', `Rhythm: ${regular}`);
   }, [addIntervention]);
 
   // Set monomorphic status
   const setMonomorphic = useCallback((monomorphic: boolean) => {
-    setDecisionContext(prev => ({
+    setSession(prev => ({
       ...prev,
-      monomorphic,
+      decisionContext: {
+        ...prev.decisionContext,
+        monomorphic,
+      },
     }));
     addIntervention('assessment', `Monomorphic: ${monomorphic ? 'yes' : 'no'}`);
   }, [addIntervention]);
 
   // Set pediatric sinus vs SVT choice
-  const setPedsSinusVsSVT = useCallback((choice: PedsSinusVsSVT) => {
-    setUiPhase('tachycardia_treatment');
-    setDecisionContext(prev => ({
+  const setPedsSinusVsSVT = useCallback((choice: PedsSinusVsSVT, criteria?: { pWavesPresent: boolean; variableRR: boolean; appropriateRate: boolean } | { pWavesAbnormal: boolean; fixedRR: boolean; inappropriateRate: boolean; abruptRateChange: boolean }) => {
+    setSession(prev => ({
       ...prev,
-      pedsSinusVsSVTChoice: choice,
+      phase: 'tachycardia_treatment',
+      decisionContext: {
+        ...prev.decisionContext,
+        pedsSinusVsSVTChoice: choice,
+        ...(choice === 'probable_sinus' && criteria ? { sinusTachyCriteria: criteria as { pWavesPresent: boolean; variableRR: boolean; appropriateRate: boolean } } : {}),
+        ...(choice === 'probable_svt' && criteria ? { svtCriteria: criteria as { pWavesAbnormal: boolean; fixedRR: boolean; inappropriateRate: boolean; abruptRateChange: boolean } } : {}),
+      },
     }));
     addIntervention('decision', `Pediatric rhythm: ${choice}`);
   }, [addIntervention]);
 
-  // Select pediatric sinus tachycardia
+  // New: Select pediatric sinus tachycardia (treat cause pathway)
   const selectPediatricSinusTachy = useCallback(() => {
-    setDecisionContext(prev => ({
+    setSession(prev => ({
       ...prev,
-      pedsSinusVsSVTChoice: 'probable_sinus',
+      decisionContext: {
+        ...prev.decisionContext,
+        pedsSinusVsSVTChoice: 'probable_sinus',
+      },
     }));
     addIntervention('decision', 'Pediatric sinus tachycardia identified - treat cause');
   }, [addIntervention]);
 
-  // Advance to compromise assessment phase
+  // New: Advance to compromise assessment phase
   const advanceToCompromiseAssessment = useCallback(() => {
-    setUiPhase('tachycardia_compromise_assessment');
+    setSession(prev => ({
+      ...prev,
+      phase: 'tachycardia_compromise_assessment',
+    }));
     addIntervention('decision', 'Concerning rhythm - proceeding to compromise assessment');
   }, [addIntervention]);
 
   // Treatment actions
   const giveAtropine = useCallback((dose: string, doseNumber: number) => {
-    addIntervention('atropine', t('bradyTachy.treatmentGiven', { treatment: 'Atropine' }), dose, 'atropine', doseNumber, dose);
+    addIntervention('atropine', t('bradyTachy.treatmentGiven', { treatment: 'Atropine' }), dose, doseNumber, dose);
   }, [addIntervention, t]);
 
   const giveAdenosine = useCallback((dose: string, doseNumber: 1 | 2) => {
-    addIntervention('adenosine', t('bradyTachy.treatmentGiven', { treatment: `Adenosine (dose ${doseNumber})` }), dose, 'adenosine', doseNumber, dose);
+    addIntervention('adenosine', t('bradyTachy.treatmentGiven', { treatment: `Adenosine (dose ${doseNumber})` }), dose, doseNumber, dose);
   }, [addIntervention, t]);
 
   const giveCardioversion = useCallback((energy: string) => {
-    addIntervention('cardioversion', t('bradyTachy.treatmentGiven', { treatment: 'Cardioversion' }), energy, 'cardioversion', undefined, energy);
+    addIntervention('cardioversion', t('bradyTachy.treatmentGiven', { treatment: 'Cardioversion' }), energy, undefined, energy);
   }, [addIntervention, t]);
 
   const giveDopamine = useCallback((dose: string) => {
-    addIntervention('dopamine', t('bradyTachy.treatmentGiven', { treatment: 'Dopamine infusion' }), dose, 'dopamine', undefined, dose);
+    addIntervention('dopamine', t('bradyTachy.treatmentGiven', { treatment: 'Dopamine infusion' }), dose, undefined, dose);
   }, [addIntervention, t]);
 
   const giveEpinephrineInfusion = useCallback((dose: string) => {
-    addIntervention('epi_infusion', t('bradyTachy.treatmentGiven', { treatment: 'Epinephrine infusion' }), dose, 'epi_infusion', undefined, dose);
+    addIntervention('epi_infusion', t('bradyTachy.treatmentGiven', { treatment: 'Epinephrine infusion' }), dose, undefined, dose);
   }, [addIntervention, t]);
 
   const giveBetaBlocker = useCallback(() => {
-    addIntervention('beta_blocker', t('bradyTachy.treatmentGiven', { treatment: 'Beta-blocker' }), undefined, 'beta_blocker');
+    addIntervention('beta_blocker', t('bradyTachy.treatmentGiven', { treatment: 'Beta-blocker' }));
   }, [addIntervention, t]);
 
   const giveCalciumBlocker = useCallback(() => {
-    addIntervention('calcium_blocker', t('bradyTachy.treatmentGiven', { treatment: 'Calcium channel blocker' }), undefined, 'calcium_blocker');
+    addIntervention('calcium_blocker', t('bradyTachy.treatmentGiven', { treatment: 'Calcium channel blocker' }));
   }, [addIntervention, t]);
 
   const giveProcainamide = useCallback((dose: string) => {
-    addIntervention('procainamide', t('bradyTachy.treatmentGiven', { treatment: 'Procainamide' }), dose, 'procainamide', undefined, dose);
+    addIntervention('procainamide', t('bradyTachy.treatmentGiven', { treatment: 'Procainamide' }), dose, undefined, dose);
   }, [addIntervention, t]);
 
   const giveAmiodarone = useCallback((dose: string) => {
-    addIntervention('amiodarone', t('bradyTachy.treatmentGiven', { treatment: 'Amiodarone' }), dose, 'amiodarone', undefined, dose);
+    addIntervention('amiodarone', t('bradyTachy.treatmentGiven', { treatment: 'Amiodarone' }), dose, undefined, dose);
   }, [addIntervention, t]);
 
   const performVagalManeuver = useCallback(() => {
-    addIntervention('vagal_maneuver', t('bradyTachy.treatmentGiven', { treatment: 'Vagal maneuvers' }), undefined, 'vagal_maneuver');
+    addIntervention('vagal_maneuver', t('bradyTachy.treatmentGiven', { treatment: 'Vagal maneuvers' }));
   }, [addIntervention, t]);
 
-  // Switch to cardiac arrest - returns the current session for continuation
-  const switchToArrest = useCallback((): ACLSSession => {
+  // Switch to cardiac arrest
+  const switchToArrest = useCallback(() => {
+    const now = Date.now();
+    setSession(prev => ({
+      ...prev,
+      outcome: 'switched_to_arrest',
+      switchedToArrestTime: now,
+      endTime: now,
+      phase: 'session_ended',
+    }));
     addIntervention('switch_to_arrest', t('bradyTachy.switchedToArrest'));
-    setUiPhase('session_ended');
-    
-    // Return the current session for continuation in arrest mode
-    return session;
-  }, [session, addIntervention, t]);
+    // Note: We do NOT clear the session here - it will be cleared after merging in CodeScreen
+    return true; // Signal to parent to switch to arrest mode
+  }, [addIntervention, t]);
 
   // End session
   const endSession = useCallback((outcome: 'resolved' | 'transferred') => {
-    const updatedSession = {
-      ...session,
+    const now = Date.now();
+    setSession(prev => ({
+      ...prev,
       outcome,
-      endTime: Date.now(),
-      phase: 'bradytachy_ended' as const,
-    };
-    onUpdateSession(updatedSession);
+      endTime: now,
+      phase: 'session_ended',
+    }));
     addIntervention('note', `Session ended: ${outcome}`);
-    setUiPhase('session_ended');
-  }, [session, onUpdateSession, addIntervention]);
+    // Clear the persisted session
+    clearBradyTachySession();
+  }, [addIntervention]);
 
-  // Reset session (for UI navigation)
+  // Reset session
   const resetSession = useCallback(() => {
-    setUiPhase('patient_selection');
-    setDecisionContext({
-      patientGroup: 'adult',
-      weightKg: null,
-      branch: null,
-      stability: null,
-      qrsWidth: null,
-      rhythmRegular: null,
-      monomorphic: null,
-      pedsSinusVsSVTChoice: null,
-    });
+    setSession(createInitialBradyTachySession());
   }, []);
 
   // Move to next phase
   const setPhase = useCallback((phase: BradyTachyPhase) => {
-    setUiPhase(phase);
+    setSession(prev => ({
+      ...prev,
+      phase,
+    }));
   }, []);
 
   return {
-    // Expose UI phase and decision context
-    uiPhase,
-    decisionContext,
-    // Actions
+    session,
     actions: {
       setPatientGroup,
       setPatientWeight,
