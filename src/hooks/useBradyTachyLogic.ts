@@ -65,7 +65,7 @@ export function useBradyTachyLogic() {
 
       return updated;
     });
-  }, [session.decisionContext, session.id, session.startTime, session.endTime, session.outcome]);
+  }, [session.decisionContext]);
 
   // Set patient group (adult/pediatric)
   const setPatientGroup = useCallback((group: PathwayMode) => {

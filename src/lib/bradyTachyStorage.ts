@@ -16,7 +16,7 @@ export interface StoredBradyTachySession {
     value?: number | string;
     doseStep?: number;
     calculatedDose?: string;
-    decisionContext?: any;
+    decisionContext?: Record<string, unknown>;
   }>;
   outcome: 'resolved' | 'switched_to_arrest' | 'transferred' | null;
 }
