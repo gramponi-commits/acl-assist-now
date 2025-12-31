@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { BradyTachySession } from '@/types/acls';
+import { BradyTachyDecisionContext } from '@/types/acls';
 import { BradyTachyActions } from '@/hooks/useBradyTachyLogic';
 import {
   calculatePedsBradyEpinephrine,
@@ -16,18 +16,20 @@ import {
 import { Heart, AlertCircle, Activity } from 'lucide-react';
 
 interface BradycardiaScreenProps {
-  session: BradyTachySession;
+  decisionContext: BradyTachyDecisionContext;
   actions: BradyTachyActions;
+  patientWeight: number | null;
 }
 
-export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) {
+export function BradycardiaScreen({ decisionContext, actions, patientWeight }: BradycardiaScreenProps) {
   const { t } = useTranslation();
-  const { patientGroup, weightKg, stability } = session.decisionContext;
+  const { patientGroup, weightKg, stability } = decisionContext;
   const isPediatric = patientGroup === 'pediatric';
   const [atropineDoses, setAtropineDoses] = useState(0);
+  const [showAssessment, setShowAssessment] = useState(stability === null);
 
   // Assessment phase
-  if (session.phase === 'bradycardia_assessment') {
+  if (showAssessment) {
     return (
       <ScrollArea className="h-full">
         <div className="p-6 space-y-6 max-w-3xl mx-auto">

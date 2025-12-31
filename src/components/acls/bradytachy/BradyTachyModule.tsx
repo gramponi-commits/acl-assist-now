@@ -7,23 +7,24 @@ import { useBradyTachyLogic } from '@/hooks/useBradyTachyLogic';
 import { BradyTachyPatientSelector } from './BradyTachyPatientSelector';
 import { BradycardiaScreen } from './BradycardiaScreen';
 import { TachycardiaScreen } from './TachycardiaScreen';
+import { ACLSSession } from '@/types/acls';
+import { CodeTimeline } from '../CodeTimeline';
 
 interface BradyTachyModuleProps {
-  onSwitchToArrest: (patientGroup: 'adult' | 'pediatric') => void;
+  session: ACLSSession;
+  onUpdateSession: (session: ACLSSession) => void;
+  onSwitchToArrest: (session: ACLSSession) => void;
   onExit: () => void;
 }
 
-export function BradyTachyModule({ onSwitchToArrest, onExit }: BradyTachyModuleProps) {
+export function BradyTachyModule({ session, onUpdateSession, onSwitchToArrest, onExit }: BradyTachyModuleProps) {
   const { t } = useTranslation();
-  const { session, actions } = useBradyTachyLogic();
+  const { uiPhase, decisionContext, actions } = useBradyTachyLogic({ session, onUpdateSession });
   const [showExitConfirm, setShowExitConfirm] = useState(false);
 
   const handleSwitchToArrest = () => {
-    const shouldSwitch = actions.switchToArrest();
-    if (shouldSwitch) {
-      // Pass patient group to parent
-      onSwitchToArrest(session.decisionContext.patientGroup);
-    }
+    const updatedSession = actions.switchToArrest();
+    onSwitchToArrest(updatedSession);
   };
 
   const handleExit = () => {
@@ -39,14 +40,14 @@ export function BradyTachyModule({ onSwitchToArrest, onExit }: BradyTachyModuleP
     onExit();
   };
 
-  // Render appropriate screen based on phase
+  // Render appropriate screen based on UI phase
   const renderContent = () => {
-    switch (session.phase) {
+    switch (uiPhase) {
       case 'patient_selection':
       case 'branch_selection':
         return (
           <BradyTachyPatientSelector
-            session={session}
+            decisionContext={decisionContext}
             actions={actions}
           />
         );
@@ -55,8 +56,9 @@ export function BradyTachyModule({ onSwitchToArrest, onExit }: BradyTachyModuleP
       case 'bradycardia_treatment':
         return (
           <BradycardiaScreen
-            session={session}
+            decisionContext={decisionContext}
             actions={actions}
+            patientWeight={session.patientWeight}
           />
         );
 
@@ -67,8 +69,9 @@ export function BradyTachyModule({ onSwitchToArrest, onExit }: BradyTachyModuleP
       case 'tachycardia_treatment':
         return (
           <TachycardiaScreen
-            session={session}
+            decisionContext={decisionContext}
             actions={actions}
+            patientWeight={session.patientWeight}
           />
         );
 
@@ -89,10 +92,15 @@ export function BradyTachyModule({ onSwitchToArrest, onExit }: BradyTachyModuleP
     }
   };
 
+  // Filter interventions to show only Brady/Tachy events
+  const bradyTachyInterventions = session.interventions.filter(
+    i => i.module === 'bradytachy'
+  );
+
   return (
     <div className="flex flex-col h-full">
       {/* Red "NO PULSE / START CPR" Button - Always at top */}
-      {session.phase !== 'session_ended' && (
+      {uiPhase !== 'session_ended' && (
         <div className="p-4 border-b border-border bg-background sticky top-0 z-10">
           <Button
             onClick={handleSwitchToArrest}
@@ -110,8 +118,18 @@ export function BradyTachyModule({ onSwitchToArrest, onExit }: BradyTachyModuleP
       )}
 
       {/* Main Content */}
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto p-4 space-y-4">
         {renderContent()}
+        
+        {/* Timeline - show if there are Brady/Tachy interventions */}
+        {bradyTachyInterventions.length > 0 && uiPhase !== 'session_ended' && (
+          <div className="mt-4">
+            <CodeTimeline 
+              interventions={bradyTachyInterventions} 
+              startTime={session.startTime} 
+            />
+          </div>
+        )}
       </div>
 
       {/* Exit Confirmation Dialog */}

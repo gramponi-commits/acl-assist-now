@@ -2,26 +2,29 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { BradyTachySession } from '@/types/acls';
+import { BradyTachyDecisionContext } from '@/types/acls';
 import { BradyTachyActions } from '@/hooks/useBradyTachyLogic';
 import { Activity, AlertCircle } from 'lucide-react';
 
 interface SinusEvaluationScreenProps {
-  session: BradyTachySession;
+  decisionContext: BradyTachyDecisionContext;
   actions: BradyTachyActions;
+  onComplete: () => void;
 }
 
-export function SinusEvaluationScreen({ session, actions }: SinusEvaluationScreenProps) {
+export function SinusEvaluationScreen({ decisionContext, actions, onComplete }: SinusEvaluationScreenProps) {
   const { t } = useTranslation();
 
   const handleProbableSinus = () => {
     // This will end the session with "treat cause" guidance
     actions.selectPediatricSinusTachy();
+    onComplete();
   };
 
   const handleConcerningRhythm = () => {
     // This will advance to compromise assessment
     actions.advanceToCompromiseAssessment();
+    onComplete();
   };
 
   return (

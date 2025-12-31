@@ -821,6 +821,11 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
     }));
   }, []);
 
+  // Update session directly (used by Brady/Tachy)
+  const updateSession = useCallback((updatedSession: ACLSSession) => {
+    setSession(updatedSession);
+  }, []);
+
   return {
     session,
     timerState,
@@ -856,6 +861,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       togglePregnancy,
       updatePregnancyCauses,
       updatePregnancyInterventions,
+      updateSession,
     },
     buttonStates: {
       canGiveEpinephrine,
