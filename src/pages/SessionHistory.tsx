@@ -494,14 +494,20 @@ export default function SessionHistory() {
                             {t('timeline.title')} ({session.interventions.length} {t('timeline.events')})
                           </h4>
                           <div className="space-y-1 max-h-48 overflow-y-auto">
-                            {session.interventions.map((intervention, idx) => (
-                              <div key={idx} className="flex items-start gap-2 text-xs">
-                                <span className="font-mono text-muted-foreground whitespace-nowrap">
-                                  {formatTime(intervention.timestamp, session.startTime)}
-                                </span>
-                                <span className="text-foreground">{intervention.details}</span>
-                              </div>
-                            ))}
+                            {session.interventions.map((intervention, idx) => {
+                              const displayText = intervention.translationKey
+                                ? t(intervention.translationKey, intervention.translationParams || {})
+                                : intervention.details;
+
+                              return (
+                                <div key={idx} className="flex items-start gap-2 text-xs">
+                                  <span className="font-mono text-muted-foreground whitespace-nowrap">
+                                    {formatTime(intervention.timestamp, session.startTime)}
+                                  </span>
+                                  <span className="text-foreground">{displayText}</span>
+                                </div>
+                              );
+                            })}
                           </div>
                         </div>
                       )}

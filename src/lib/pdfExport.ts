@@ -80,442 +80,368 @@ const getPregnancyCausesChecked = (causes: PregnancyCauses): string[] => {
   return checked;
 };
 
-function exportBradyTachySessionToPDF(pdf: jsPDF, session: StoredSession, startDate: Date, isAdult: boolean): void {
+// Compact header for all PDF types
+function drawCompactHeader(pdf: jsPDF, session: StoredSession, startDate: Date, isAdult: boolean) {
   const protocolText = isAdult ? 'ACLS' : 'PALS';
-  const pathwayText = 'Bradycardia/Tachycardia';
-  const outcomeText = session.outcome === 'resolved' ? 'Resolved' : session.outcome === 'rosc' ? 'ROSC' : 'Switched to Arrest';
+  const sessionTypeText = session.sessionType === 'bradytachy'
+    ? 'Rhythm Disturbance'
+    : session.sessionType === 'bradytachy-arrest'
+    ? 'Rhythm → Cardiac Arrest'
+    : 'Cardiac Arrest';
 
-  // Header
+  // Slim header bar (18mm height instead of 40mm)
   const headerColor = isAdult ? [220, 38, 38] : [59, 130, 246];
   pdf.setFillColor(headerColor[0], headerColor[1], headerColor[2]);
-  pdf.rect(0, 0, 210, 40, 'F');
+  pdf.rect(0, 0, 210, 18, 'F');
+
+  // Protocol badge
   pdf.setTextColor(255, 255, 255);
-
-  // Protocol name
-  pdf.setFontSize(20);
+  pdf.setFontSize(11);
   pdf.setFont('helvetica', 'bold');
-  pdf.text(protocolText, 105, 15, { align: 'center' });
+  pdf.text(protocolText, 15, 8);
 
-  // Pathway type
-  pdf.setFontSize(14);
+  // Session type
+  pdf.setFontSize(9);
   pdf.setFont('helvetica', 'normal');
-  pdf.text(pathwayText, 105, 24, { align: 'center' });
+  pdf.text(sessionTypeText, 15, 13);
 
-  // Session date and weight
-  pdf.setFontSize(10);
-  const patientInfo = session.patientWeight ? ` • Weight: ${session.patientWeight}kg` : '';
-  pdf.text(`${startDate.toLocaleDateString()} - ${formatDeviceTime(session.startTime)}${patientInfo}`, 105, 33, { align: 'center' });
+  // Date and time - right aligned
+  pdf.setFontSize(8);
+  const dateText = `${startDate.toLocaleDateString()} ${formatDeviceTime(session.startTime)}`;
+  const weightText = session.patientWeight ? ` • ${session.patientWeight}kg` : '';
+  pdf.text(dateText + weightText, 195, 8, { align: 'right' });
+
+  // ResusBuddy branding - right aligned
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('ResusBuddy', 195, 13, { align: 'right' });
 
   pdf.setTextColor(0, 0, 0);
+  return 18; // Return header height
+}
 
-  // Key metrics boxes (2 boxes only)
-  let y = 50;
-  const boxWidth = 87;
-  const boxHeight = 25;
-  const boxGap = 6;
-  const startX = 15;
+function exportBradyTachySessionToPDF(pdf: jsPDF, session: StoredSession, startDate: Date, isAdult: boolean): void {
+  let y = drawCompactHeader(pdf, session, startDate, isAdult);
 
-  // Outcome box
-  const outcomeColor = session.outcome === 'resolved' ? [34, 197, 94] : session.outcome === 'rosc' ? [34, 197, 94] : [249, 115, 22];
+  const outcomeText = session.outcome === 'resolved' ? 'Resolved' : session.outcome === 'rosc' ? 'ROSC' : 'Switched to Arrest';
+  const outcomeColor = session.outcome === 'resolved' || session.outcome === 'rosc'
+    ? [34, 197, 94]
+    : [249, 115, 22];
+
+  // Compact summary bar
+  y += 6;
+  pdf.setFillColor(248, 250, 252);
+  pdf.rect(15, y, 180, 14, 'F');
+  pdf.setDrawColor(226, 232, 240);
+  pdf.rect(15, y, 180, 14, 'S');
+
+  // Outcome indicator (small colored circle)
   pdf.setFillColor(outcomeColor[0], outcomeColor[1], outcomeColor[2]);
-  pdf.roundedRect(startX, y, boxWidth, boxHeight, 3, 3, 'F');
-  pdf.setTextColor(255, 255, 255);
-  pdf.setFontSize(10);
-  pdf.setFont('helvetica', 'normal');
-  pdf.text('OUTCOME', startX + boxWidth/2, y + 10, { align: 'center' });
-  pdf.setFontSize(14);
-  pdf.setFont('helvetica', 'bold');
-  pdf.text(outcomeText, startX + boxWidth/2, y + 20, { align: 'center' });
+  pdf.circle(20, y + 7, 3, 'F');
 
-  // Duration box
-  pdf.setFillColor(59, 130, 246);
-  pdf.roundedRect(startX + boxWidth + boxGap, y, boxWidth, boxHeight, 3, 3, 'F');
-  pdf.setFontSize(10);
-  pdf.setFont('helvetica', 'normal');
-  pdf.text('SESSION DURATION', startX + boxWidth + boxGap + boxWidth/2, y + 10, { align: 'center' });
-  pdf.setFontSize(14);
-  pdf.setFont('helvetica', 'bold');
-  pdf.text(formatTime(session.duration), startX + boxWidth + boxGap + boxWidth/2, y + 20, { align: 'center' });
-
-  pdf.setTextColor(0, 0, 0);
-
-  // Interventions Timeline
-  y = 85;
-  pdf.setFontSize(12);
-  pdf.setFont('helvetica', 'bold');
-  pdf.text('Treatment Timeline', 15, y);
-
-  // Timeline table header
-  y += 8;
-  pdf.setFillColor(75, 85, 99);
-  pdf.rect(15, y - 5, 180, 8, 'F');
-  pdf.setTextColor(255, 255, 255);
   pdf.setFontSize(9);
   pdf.setFont('helvetica', 'bold');
-  pdf.text('Time', 20, y);
-  pdf.text('Elapsed', 50, y);
-  pdf.text('Intervention / Assessment', 85, y);
+  pdf.text('OUTCOME:', 26, y + 8);
+  pdf.setFont('helvetica', 'normal');
+  pdf.text(outcomeText, 50, y + 8);
+
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('DURATION:', 100, y + 8);
+  pdf.setFont('helvetica', 'normal');
+  pdf.text(formatTime(session.duration), 130, y + 8);
+
+  // Treatment timeline
+  y += 22;
+  pdf.setFontSize(10);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('TREATMENT TIMELINE', 15, y);
+
+  y += 6;
+  // Table header
+  pdf.setFillColor(71, 85, 105);
+  pdf.rect(15, y, 180, 7, 'F');
+  pdf.setTextColor(255, 255, 255);
+  pdf.setFontSize(8);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('Time', 18, y + 4.5);
+  pdf.text('Elapsed', 45, y + 4.5);
+  pdf.text('Event', 75, y + 4.5);
 
   pdf.setTextColor(0, 0, 0);
   pdf.setFont('helvetica', 'normal');
-  y += 6;
+  y += 7;
 
   let isOddRow = false;
   session.interventions.forEach((intervention) => {
-    if (y > 270) {
+    if (y > 275) {
       pdf.addPage();
-      y = 20;
-      // Repeat header
-      pdf.setFillColor(75, 85, 99);
-      pdf.rect(15, y - 5, 180, 8, 'F');
+      y = 15;
+      // Repeat header on new page
+      pdf.setFillColor(71, 85, 105);
+      pdf.rect(15, y, 180, 7, 'F');
       pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(9);
+      pdf.setFontSize(8);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('Time', 20, y);
-      pdf.text('Elapsed', 50, y);
-      pdf.text('Intervention / Assessment', 85, y);
+      pdf.text('Time', 18, y + 4.5);
+      pdf.text('Elapsed', 45, y + 4.5);
+      pdf.text('Event', 75, y + 4.5);
       pdf.setTextColor(0, 0, 0);
       pdf.setFont('helvetica', 'normal');
-      y += 6;
+      y += 7;
       isOddRow = false;
     }
 
     if (isOddRow) {
-      pdf.setFillColor(249, 250, 251);
-      pdf.rect(15, y - 4, 180, 7, 'F');
+      pdf.setFillColor(248, 250, 252);
+      pdf.rect(15, y, 180, 6, 'F');
     }
     isOddRow = !isOddRow;
 
     const relativeTime = intervention.timestamp - session.startTime;
-    pdf.setFontSize(9);
-    pdf.text(formatDeviceTime(intervention.timestamp), 20, y);
-    pdf.text(formatTime(relativeTime), 50, y);
+    pdf.setFontSize(8);
+    pdf.text(formatDeviceTime(intervention.timestamp), 18, y + 4);
+    pdf.text(formatTime(relativeTime), 45, y + 4);
 
     let eventText = intervention.details || intervention.type;
-    if (eventText.length > 55) {
-      eventText = eventText.substring(0, 52) + '...';
+    if (eventText.length > 70) {
+      eventText = eventText.substring(0, 67) + '...';
     }
-    pdf.text(eventText, 85, y);
-    y += 7;
+    pdf.text(eventText, 75, y + 4);
+    y += 6;
   });
 }
 
 function exportCardiacArrestSessionToPDF(pdf: jsPDF, session: StoredSession, startDate: Date, isAdult: boolean): void {
+  let y = drawCompactHeader(pdf, session, startDate, isAdult);
+
   const cprFraction = session.duration > 0 ? session.cprFraction.toFixed(1) : 'N/A';
-
-  // Determine title
-  let protocolText: string;
-  let subtitleText: string;
-
-  if (session.sessionType === 'bradytachy-arrest') {
-    protocolText = isAdult ? 'ACLS' : 'PALS';
-    subtitleText = 'Cardiac Arrest (from BradyTachy)';
-  } else {
-    protocolText = isAdult ? 'ACLS' : 'PALS';
-    subtitleText = 'Cardiac Arrest';
-  }
-
   const outcomeText = session.outcome === 'rosc' ? 'ROSC' : session.outcome === 'deceased' ? 'Deceased' : 'Unknown';
+  const outcomeColor = session.outcome === 'rosc'
+    ? [34, 197, 94]
+    : session.outcome === 'deceased'
+    ? [107, 114, 128]
+    : [234, 179, 8];
 
-  // Header
-  const headerColor = isAdult ? [220, 38, 38] : [59, 130, 246];
-  pdf.setFillColor(headerColor[0], headerColor[1], headerColor[2]);
-  pdf.rect(0, 0, 210, 40, 'F');
-  pdf.setTextColor(255, 255, 255);
+  // Compact metrics bar
+  y += 6;
+  const metricsStartY = y;
 
-  // Protocol name
-  pdf.setFontSize(20);
-  pdf.setFont('helvetica', 'bold');
-  pdf.text(protocolText, 105, 15, { align: 'center' });
+  // Draw metrics in a single compact row
+  const metricWidth = 42;
+  const metricGap = 3;
+  let metricX = 15;
 
-  // Subtitle
-  pdf.setFontSize(14);
-  pdf.setFont('helvetica', 'normal');
-  pdf.text(subtitleText, 105, 24, { align: 'center' });
-
-  // Session info
-  pdf.setFontSize(10);
-  const patientInfo = session.patientWeight ? ` • Weight: ${session.patientWeight}kg` : '';
-  pdf.text(`${startDate.toLocaleDateString()} - ${formatDeviceTime(session.startTime)}${patientInfo}`, 105, 33, { align: 'center' });
-
-  pdf.setTextColor(0, 0, 0);
-
-  // Key metrics boxes
-  let y = 50;
-  const boxWidth = 42;
-  const boxHeight = 25;
-  const boxGap = 5;
-  const startX = 15;
-
-  // Outcome box
-  const outcomeColor = session.outcome === 'rosc' ? [34, 197, 94] : session.outcome === 'deceased' ? [107, 114, 128] : [234, 179, 8];
-  pdf.setFillColor(outcomeColor[0], outcomeColor[1], outcomeColor[2]);
-  pdf.roundedRect(startX, y, boxWidth, boxHeight, 3, 3, 'F');
-  pdf.setTextColor(255, 255, 255);
-  pdf.setFontSize(9);
-  pdf.setFont('helvetica', 'normal');
-  pdf.text('OUTCOME', startX + boxWidth/2, y + 9, { align: 'center' });
-  pdf.setFontSize(12);
-  pdf.setFont('helvetica', 'bold');
-  pdf.text(outcomeText, startX + boxWidth/2, y + 18, { align: 'center' });
-
-  // Duration box
-  pdf.setFillColor(59, 130, 246);
-  pdf.roundedRect(startX + boxWidth + boxGap, y, boxWidth, boxHeight, 3, 3, 'F');
-  pdf.setFontSize(9);
-  pdf.setFont('helvetica', 'normal');
-  pdf.text('DURATION', startX + boxWidth + boxGap + boxWidth/2, y + 9, { align: 'center' });
-  pdf.setFontSize(12);
-  pdf.setFont('helvetica', 'bold');
-  pdf.text(formatTime(session.duration), startX + boxWidth + boxGap + boxWidth/2, y + 18, { align: 'center' });
-
-  // CPR Fraction box
-  pdf.setFillColor(139, 92, 246);
-  pdf.roundedRect(startX + 2*(boxWidth + boxGap), y, boxWidth, boxHeight, 3, 3, 'F');
-  pdf.setFontSize(9);
-  pdf.setFont('helvetica', 'normal');
-  pdf.text('CPR FRACTION', startX + 2*(boxWidth + boxGap) + boxWidth/2, y + 9, { align: 'center' });
-  pdf.setFontSize(12);
-  pdf.setFont('helvetica', 'bold');
-  pdf.text(`${cprFraction}%`, startX + 2*(boxWidth + boxGap) + boxWidth/2, y + 18, { align: 'center' });
-
-  // Shocks box
-  pdf.setFillColor(249, 115, 22);
-  pdf.roundedRect(startX + 3*(boxWidth + boxGap), y, boxWidth, boxHeight, 3, 3, 'F');
-  pdf.setFontSize(9);
-  pdf.setFont('helvetica', 'normal');
-  pdf.text('SHOCKS', startX + 3*(boxWidth + boxGap) + boxWidth/2, y + 9, { align: 'center' });
-  pdf.setFontSize(12);
-  pdf.setFont('helvetica', 'bold');
-  pdf.text(String(session.shockCount), startX + 3*(boxWidth + boxGap) + boxWidth/2, y + 18, { align: 'center' });
-
-  pdf.setTextColor(0, 0, 0);
-
-  // Resuscitation Summary
-  y = 85;
-  pdf.setFillColor(245, 245, 245);
-  pdf.roundedRect(15, y, 180, 40, 3, 3, 'F');
-  pdf.setFontSize(11);
-  pdf.setFont('helvetica', 'bold');
-  pdf.text('Resuscitation Summary', 20, y + 10);
-  pdf.setFontSize(9);
-  pdf.setFont('helvetica', 'normal');
-
-  // CPR metrics
-  pdf.text(`CPR Time: ${formatTime(session.totalCPRTime)}`, 20, y + 20);
-  pdf.text(`Airway: ${session.airwayStatus.toUpperCase()}`, 20, y + 28);
-
-  // Medications
-  pdf.text(`Epinephrine: ${session.epinephrineCount} dose(s)`, 105, y + 20);
-  pdf.text(`Amiodarone: ${session.amiodaroneCount} dose(s)`, 105, y + 28);
-  pdf.text(`Lidocaine: ${session.lidocaineCount} dose(s)`, 105, y + 36);
-
-  y = 135;
-
-  // H's & T's Section
-  const hsTsChecked = getHsTsChecked(session.hsAndTs);
-  if (hsTsChecked.length > 0) {
-    pdf.setFontSize(11);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text("H's & T's Identified", 15, y);
-    y += 6;
-    pdf.setFontSize(9);
-    pdf.setFont('helvetica', 'normal');
-    pdf.text(hsTsChecked.join(', '), 15, y, { maxWidth: 180 });
-    y += Math.ceil(hsTsChecked.join(', ').length / 80) * 5 + 8;
-  }
-
-  // EtCO2 Readings
-  if (session.etco2Readings && session.etco2Readings.length > 0) {
-    pdf.setFontSize(11);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('ETCO₂ Readings', 15, y);
-    y += 6;
-    pdf.setFontSize(9);
-    pdf.setFont('helvetica', 'normal');
-    const etco2Text = session.etco2Readings.map(r =>
-      `${formatTime(r.timestamp - session.startTime)}: ${r.value} mmHg`
-    ).join(' | ');
-    pdf.text(etco2Text, 15, y, { maxWidth: 180 });
-    y += 10;
-  }
-
-  // Pregnancy Section
-  if (session.pregnancyActive && isAdult) {
-    y += 3;
-    pdf.setFillColor(236, 72, 153);
-    pdf.roundedRect(15, y - 5, 180, 8, 2, 2, 'F');
+  // Helper function to draw a metric box
+  const drawMetric = (label: string, value: string, color: number[]) => {
+    pdf.setFillColor(color[0], color[1], color[2]);
+    pdf.roundedRect(metricX, y, metricWidth, 11, 1.5, 1.5, 'F');
     pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(7);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(label, metricX + metricWidth/2, y + 4, { align: 'center' });
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('OBSTETRIC CARDIAC ARREST', 20, y + 1);
+    pdf.text(value, metricX + metricWidth/2, y + 9, { align: 'center' });
+    metricX += metricWidth + metricGap;
+  };
+
+  drawMetric('OUTCOME', outcomeText, outcomeColor);
+  drawMetric('DURATION', formatTime(session.duration), [59, 130, 246]);
+  drawMetric('CPR FRACTION', `${cprFraction}%`, [139, 92, 246]);
+  drawMetric('SHOCKS', String(session.shockCount), [249, 115, 22]);
+
+  pdf.setTextColor(0, 0, 0);
+  y += 14;
+
+  // Compact summary section
+  pdf.setFillColor(248, 250, 252);
+  pdf.roundedRect(15, y, 180, 18, 2, 2, 'F');
+
+  pdf.setFontSize(9);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('RESUSCITATION SUMMARY', 20, y + 6);
+
+  pdf.setFontSize(8);
+  pdf.setFont('helvetica', 'normal');
+  pdf.text(`CPR Time: ${formatTime(session.totalCPRTime)} • Airway: ${session.airwayStatus.toUpperCase()}`, 20, y + 11);
+  pdf.text(`Epinephrine: ${session.epinephrineCount} • Amiodarone: ${session.amiodaroneCount} • Lidocaine: ${session.lidocaineCount}`, 20, y + 15);
+
+  y += 22;
+
+  // H's & T's - more compact
+  const hsTsChecked = getHsTsChecked(session.hsAndTs);
+  if (hsTsChecked.length > 0) {
+    pdf.setFontSize(8);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text("H's & T's:", 15, y);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(hsTsChecked.join(', '), 35, y, { maxWidth: 160 });
+    y += Math.ceil(hsTsChecked.join(', ').length / 95) * 4 + 4;
+  }
+
+  // EtCO2 - more compact
+  if (session.etco2Readings && session.etco2Readings.length > 0) {
+    pdf.setFontSize(8);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('ETCO₂:', 15, y);
+    pdf.setFont('helvetica', 'normal');
+    const etco2Text = session.etco2Readings.map(r =>
+      `${formatTime(r.timestamp - session.startTime)}:${r.value}`
+    ).join(' | ');
+    pdf.text(etco2Text, 35, y, { maxWidth: 160 });
+    y += 6;
+  }
+
+  // Pregnancy section - compact
+  if (session.pregnancyActive && isAdult) {
+    pdf.setFillColor(252, 231, 243);
+    pdf.roundedRect(15, y, 180, 2, 1, 1, 'F');
+    y += 4;
+
+    pdf.setFontSize(8);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(219, 39, 119);
+    pdf.text('OBSTETRIC CARDIAC ARREST', 15, y);
     pdf.setTextColor(0, 0, 0);
-    y += 10;
+    y += 5;
 
     if (session.pregnancyInterventions) {
       const pregInterventions = getPregnancyInterventionsChecked(session.pregnancyInterventions);
       if (pregInterventions.length > 0) {
-        pdf.setFontSize(9);
         pdf.setFont('helvetica', 'bold');
-        pdf.text('Interventions: ', 15, y);
+        pdf.text('Interventions:', 15, y);
         pdf.setFont('helvetica', 'normal');
-        const pregInterText = pregInterventions.join(', ');
-        pdf.text(pregInterText, 42, y, { maxWidth: 150 });
-        y += Math.ceil(pregInterText.length / 65) * 5 + 5;
+        pdf.text(pregInterventions.join(', '), 40, y, { maxWidth: 155 });
+        y += Math.ceil(pregInterventions.join(', ').length / 85) * 4 + 3;
       }
     }
 
     if (session.pregnancyCauses) {
       const pregCauses = getPregnancyCausesChecked(session.pregnancyCauses);
       if (pregCauses.length > 0) {
-        pdf.setFontSize(9);
         pdf.setFont('helvetica', 'bold');
-        pdf.text('Suspected Causes: ', 15, y);
+        pdf.text('Causes:', 15, y);
         pdf.setFont('helvetica', 'normal');
-        const pregCausesText = pregCauses.join(', ');
-        pdf.text(pregCausesText, 48, y, { maxWidth: 145 });
-        y += Math.ceil(pregCausesText.length / 60) * 5 + 5;
+        pdf.text(pregCauses.join(', '), 35, y, { maxWidth: 160 });
+        y += Math.ceil(pregCauses.join(', ').length / 90) * 4 + 4;
       }
     }
   }
 
-  // Post-ROSC Section
+  // Post-ROSC section - compact
   if (session.outcome === 'rosc' && session.postROSCChecklist) {
-    y += 5;
-    pdf.setFillColor(34, 197, 94);
-    pdf.roundedRect(15, y - 5, 180, 8, 2, 2, 'F');
-    pdf.setTextColor(255, 255, 255);
-    pdf.setFontSize(10);
+    pdf.setFillColor(220, 252, 231);
+    pdf.roundedRect(15, y, 180, 2, 1, 1, 'F');
+    y += 4;
+
+    pdf.setFontSize(8);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('POST-ROSC CARE', 20, y + 1);
+    pdf.setTextColor(22, 163, 74);
+    pdf.text('POST-ROSC CARE', 15, y);
     pdf.setTextColor(0, 0, 0);
-    y += 10;
+    y += 5;
 
     if (session.postROSCVitals) {
       const vitals = session.postROSCVitals;
       const vitalsText: string[] = [];
-      if (vitals.spo2) vitalsText.push(`SpO₂: ${vitals.spo2}%`);
-      if (vitals.paco2) vitalsText.push(`PaCO₂: ${vitals.paco2} mmHg`);
-      if (vitals.map) vitalsText.push(`MAP: ${vitals.map} mmHg`);
-      if (vitals.temperature) vitalsText.push(`Temp: ${vitals.temperature}°C`);
-      if (vitals.glucose) vitalsText.push(`Glucose: ${vitals.glucose} mg/dL`);
+      if (vitals.spo2) vitalsText.push(`SpO₂:${vitals.spo2}%`);
+      if (vitals.paco2) vitalsText.push(`PaCO₂:${vitals.paco2}`);
+      if (vitals.map) vitalsText.push(`MAP:${vitals.map}`);
+      if (vitals.temperature) vitalsText.push(`Temp:${vitals.temperature}°C`);
+      if (vitals.glucose) vitalsText.push(`Glucose:${vitals.glucose}`);
 
       if (vitalsText.length > 0) {
-        pdf.setFontSize(9);
         pdf.setFont('helvetica', 'bold');
-        pdf.text('Vitals: ', 15, y);
+        pdf.text('Vitals:', 15, y);
         pdf.setFont('helvetica', 'normal');
-        pdf.text(vitalsText.join(' | '), 32, y);
-        y += 7;
+        pdf.text(vitalsText.join(' • '), 30, y);
+        y += 5;
       }
     }
 
     const done = getPostROSCDone(session.postROSCChecklist);
     if (done.length > 0) {
-      pdf.setFontSize(9);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('Completed: ', 15, y);
+      pdf.text('Completed:', 15, y);
       pdf.setFont('helvetica', 'normal');
       const doneText = done.join(', ');
-      pdf.text(doneText, 38, y, { maxWidth: 155 });
-      y += Math.ceil(doneText.length / 70) * 5 + 5;
+      pdf.text(doneText, 38, y, { maxWidth: 157 });
+      y += Math.ceil(doneText.length / 90) * 4 + 3;
     }
 
     const notDone = getPostROSCNotDone(session.postROSCChecklist);
     if (notDone.length > 0) {
-      pdf.setFontSize(9);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('Not completed: ', 15, y);
+      pdf.text('Pending:', 15, y);
+      pdf.setTextColor(120, 120, 120);
       pdf.setFont('helvetica', 'normal');
-      pdf.setTextColor(150, 150, 150);
       const notDoneText = notDone.join(', ');
-      pdf.text(notDoneText, 43, y, { maxWidth: 150 });
+      pdf.text(notDoneText, 33, y, { maxWidth: 162 });
       pdf.setTextColor(0, 0, 0);
-      y += Math.ceil(notDoneText.length / 65) * 5 + 5;
-    }
-
-    const checklist = session.postROSCChecklist;
-    const assessments: string[] = [];
-    if (checklist.followingCommands !== null) {
-      assessments.push(`Following commands: ${checklist.followingCommands ? 'Yes' : 'No'}`);
-    }
-    if (checklist.stElevation !== null) {
-      assessments.push(`ST Elevation: ${checklist.stElevation ? 'Yes' : 'No'}`);
-    }
-    if (checklist.cardiogenicShock !== null) {
-      assessments.push(`Cardiogenic Shock: ${checklist.cardiogenicShock ? 'Yes' : 'No'}`);
-    }
-    if (assessments.length > 0) {
-      pdf.setFontSize(9);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('Assessments: ', 15, y);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text(assessments.join(' | '), 40, y);
-      y += 8;
+      y += Math.ceil(notDoneText.length / 95) * 4 + 4;
     }
   }
 
-  // Interventions Timeline
-  y += 5;
-  if (y > 200) {
+  // Timeline
+  y += 3;
+  if (y > 220) {
     pdf.addPage();
-    y = 20;
+    y = 15;
   }
 
-  pdf.setFontSize(12);
+  pdf.setFontSize(10);
   pdf.setFont('helvetica', 'bold');
-  pdf.text('Code Timeline', 15, y);
+  pdf.text('CODE TIMELINE', 15, y);
 
-  y += 8;
-  pdf.setFillColor(75, 85, 99);
-  pdf.rect(15, y - 5, 180, 8, 'F');
+  y += 6;
+  pdf.setFillColor(71, 85, 105);
+  pdf.rect(15, y, 180, 7, 'F');
   pdf.setTextColor(255, 255, 255);
-  pdf.setFontSize(9);
+  pdf.setFontSize(8);
   pdf.setFont('helvetica', 'bold');
-  pdf.text('Time', 20, y);
-  pdf.text('Code +', 50, y);
-  pdf.text('Event', 80, y);
+  pdf.text('Time', 18, y + 4.5);
+  pdf.text('Code +', 45, y + 4.5);
+  pdf.text('Event', 75, y + 4.5);
 
   pdf.setTextColor(0, 0, 0);
   pdf.setFont('helvetica', 'normal');
-  y += 6;
+  y += 7;
 
   let isOddRow = false;
   session.interventions.forEach((intervention) => {
-    if (y > 270) {
+    if (y > 275) {
       pdf.addPage();
-      y = 20;
-      pdf.setFillColor(75, 85, 99);
-      pdf.rect(15, y - 5, 180, 8, 'F');
+      y = 15;
+      pdf.setFillColor(71, 85, 105);
+      pdf.rect(15, y, 180, 7, 'F');
       pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(9);
+      pdf.setFontSize(8);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('Time', 20, y);
-      pdf.text('Code +', 50, y);
-      pdf.text('Event', 80, y);
+      pdf.text('Time', 18, y + 4.5);
+      pdf.text('Code +', 45, y + 4.5);
+      pdf.text('Event', 75, y + 4.5);
       pdf.setTextColor(0, 0, 0);
       pdf.setFont('helvetica', 'normal');
-      y += 6;
+      y += 7;
       isOddRow = false;
     }
 
     if (isOddRow) {
-      pdf.setFillColor(249, 250, 251);
-      pdf.rect(15, y - 4, 180, 7, 'F');
+      pdf.setFillColor(248, 250, 252);
+      pdf.rect(15, y, 180, 6, 'F');
     }
     isOddRow = !isOddRow;
 
     const relativeTime = intervention.timestamp - session.startTime;
-    pdf.setFontSize(9);
-    pdf.text(formatDeviceTime(intervention.timestamp), 20, y);
-    pdf.text(formatTime(relativeTime), 50, y);
+    pdf.setFontSize(8);
+    pdf.text(formatDeviceTime(intervention.timestamp), 18, y + 4);
+    pdf.text(formatTime(relativeTime), 45, y + 4);
 
     let eventText = intervention.details || intervention.type;
-    if (eventText.length > 60) {
-      eventText = eventText.substring(0, 57) + '...';
+    if (eventText.length > 70) {
+      eventText = eventText.substring(0, 67) + '...';
     }
-    pdf.text(eventText, 80, y);
-    y += 7;
+    pdf.text(eventText, 75, y + 4);
+    y += 6;
   });
 }
 
@@ -532,15 +458,14 @@ export function exportSessionToPDF(session: StoredSession): void {
     exportCardiacArrestSessionToPDF(pdf, session, startDate, isAdult);
   }
 
-  // Footer for all pages
+  // Slim footer for all pages
   const pageCount = pdf.getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
     pdf.setPage(i);
-    pdf.setFillColor(245, 245, 245);
-    pdf.rect(0, 280, 210, 17, 'F');
-    pdf.setFontSize(8);
-    pdf.setTextColor(107, 114, 128);
-    pdf.text(`Generated: ${new Date().toLocaleString()} | ResusBuddy | Page ${i}/${pageCount}`, 105, 288, { align: 'center' });
+    pdf.setFontSize(7);
+    pdf.setTextColor(156, 163, 175);
+    pdf.text(`Generated ${new Date().toLocaleString()}`, 15, 290);
+    pdf.text(`Page ${i}/${pageCount}`, 195, 290, { align: 'right' });
   }
 
   // Generate filename
