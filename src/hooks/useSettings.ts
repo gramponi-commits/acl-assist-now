@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { logger } from '@/utils/logger';
 
 export type ThemeMode = 'dark' | 'light';
 export type AdultDefibrillatorEnergy = 120 | 150 | 200 | 360;
@@ -10,7 +11,6 @@ export interface AppSettings {
   metronomeBPM: number;
   voiceAnnouncementsEnabled: boolean;
   preferLidocaine: boolean;
-  defibrillatorEnergy: number;
   theme: ThemeMode;
   adultDefibrillatorEnergy: AdultDefibrillatorEnergy;
 }
@@ -24,7 +24,6 @@ const DEFAULT_SETTINGS: AppSettings = {
   metronomeBPM: 110,
   voiceAnnouncementsEnabled: false,
   preferLidocaine: false,
-  defibrillatorEnergy: 200,
   theme: 'dark',
   adultDefibrillatorEnergy: 200,
 };
@@ -34,10 +33,33 @@ export function useSettings() {
     try {
       const stored = localStorage.getItem(SETTINGS_KEY);
       if (stored) {
-        return { ...DEFAULT_SETTINGS, ...JSON.parse(stored) };
+        const parsed = JSON.parse(stored);
+
+        // Migration: Remove deprecated defibrillatorEnergy field
+        if ('defibrillatorEnergy' in parsed) {
+          logger.warn('Migrating deprecated defibrillatorEnergy setting');
+          delete parsed.defibrillatorEnergy;
+        }
+
+        // Validate metronome BPM range
+        if (parsed.metronomeBPM && (parsed.metronomeBPM < 80 || parsed.metronomeBPM > 140)) {
+          logger.warn('Invalid metronome BPM, resetting to default', { bpm: parsed.metronomeBPM });
+          parsed.metronomeBPM = DEFAULT_SETTINGS.metronomeBPM;
+        }
+
+        // Validate defibrillator energy
+        const validEnergies: AdultDefibrillatorEnergy[] = [120, 150, 200, 360];
+        if (parsed.adultDefibrillatorEnergy && !validEnergies.includes(parsed.adultDefibrillatorEnergy)) {
+          logger.warn('Invalid defibrillator energy, resetting to default', {
+            energy: parsed.adultDefibrillatorEnergy
+          });
+          parsed.adultDefibrillatorEnergy = DEFAULT_SETTINGS.adultDefibrillatorEnergy;
+        }
+
+        return { ...DEFAULT_SETTINGS, ...parsed };
       }
     } catch (e) {
-      console.error('Failed to load settings:', e);
+      logger.error('Failed to load settings', e);
     }
     return DEFAULT_SETTINGS;
   });
@@ -45,8 +67,9 @@ export function useSettings() {
   useEffect(() => {
     try {
       localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+      logger.debug('Settings saved');
     } catch (e) {
-      console.error('Failed to save settings:', e);
+      logger.error('Failed to save settings', e);
     }
   }, [settings]);
 

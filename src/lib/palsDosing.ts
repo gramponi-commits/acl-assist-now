@@ -1,6 +1,8 @@
 // PALS Pediatric Weight-Based Dosing Calculations
 // Based on AHA 2025 PALS Cardiac Arrest Algorithm
 
+import { logger } from '@/utils/logger';
+
 export interface PALSDose {
   value: number | null;
   display: string;
@@ -40,7 +42,8 @@ const MAX_SHOCK_JOULES = 360; // Adult max
  * Dose: 0.01 mg/kg IV/IO (max 1mg)
  */
 export function calculateEpinephrineDose(weightKg: number | null): PALSDose {
-  if (weightKg === null || weightKg <= 0) {
+  if (weightKg === null) {
+    logger.warn('Epinephrine dose calculation: weight is null');
     return {
       value: null,
       display: '0.01 mg/kg',
@@ -48,9 +51,23 @@ export function calculateEpinephrineDose(weightKg: number | null): PALSDose {
     };
   }
 
+  if (weightKg <= 0) {
+    logger.error('Epinephrine dose calculation: invalid weight', { weightKg });
+    return {
+      value: null,
+      display: '0.01 mg/kg',
+      unit: 'mg/kg',
+    };
+  }
+
+  if (weightKg > 100) {
+    logger.warn('Epinephrine dose calculation: unusually high weight for pediatric patient', { weightKg });
+  }
+
   const calculatedDose = weightKg * DEFAULT_PALS_CONFIG.epinephrineDosePerKg;
   const dose = Math.min(calculatedDose, MAX_EPINEPHRINE_MG);
-  
+  logger.medicalEvent('Epinephrine dose calculated', { weightKg, dose });
+
   return {
     value: dose,
     display: `${dose.toFixed(2)} mg`,

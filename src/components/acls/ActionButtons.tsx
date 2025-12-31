@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Syringe, Pill, Stethoscope } from 'lucide-react';
+import { Syringe, Pill, Stethoscope, Check, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   calculateEpinephrineDose,
@@ -51,6 +53,53 @@ export function ActionButtons({
 }: ActionButtonsProps) {
   const { t } = useTranslation();
 
+  // Loading and success states
+  const [loadingState, setLoadingState] = useState<{
+    epi: boolean;
+    antiarrhythmic: boolean;
+    rhythmCheck: boolean;
+  }>({
+    epi: false,
+    antiarrhythmic: false,
+    rhythmCheck: false,
+  });
+
+  const [successState, setSuccessState] = useState<{
+    epi: boolean;
+    antiarrhythmic: boolean;
+    rhythmCheck: boolean;
+  }>({
+    epi: false,
+    antiarrhythmic: false,
+    rhythmCheck: false,
+  });
+
+  // Handle button clicks with loading and success animations
+  const handleEpinephrine = async () => {
+    setLoadingState(prev => ({ ...prev, epi: true }));
+    await new Promise(resolve => setTimeout(resolve, 200)); // Brief loading state
+    onEpinephrine();
+    setLoadingState(prev => ({ ...prev, epi: false }));
+    setSuccessState(prev => ({ ...prev, epi: true }));
+    setTimeout(() => setSuccessState(prev => ({ ...prev, epi: false })), 1500);
+  };
+
+  const handleAntiarrhythmic = async () => {
+    setLoadingState(prev => ({ ...prev, antiarrhythmic: true }));
+    await new Promise(resolve => setTimeout(resolve, 200));
+    showLidocaine ? onLidocaine() : onAmiodarone();
+    setLoadingState(prev => ({ ...prev, antiarrhythmic: false }));
+    setSuccessState(prev => ({ ...prev, antiarrhythmic: true }));
+    setTimeout(() => setSuccessState(prev => ({ ...prev, antiarrhythmic: false })), 1500);
+  };
+
+  const handleRhythmCheck = async () => {
+    setLoadingState(prev => ({ ...prev, rhythmCheck: true }));
+    await new Promise(resolve => setTimeout(resolve, 200));
+    onRhythmCheck();
+    setLoadingState(prev => ({ ...prev, rhythmCheck: false }));
+  };
+
   // Calculate doses based on pathway mode
   const epiDose = pathwayMode === 'pediatric' 
     ? calculateEpinephrineDose(patientWeight)
@@ -75,63 +124,121 @@ export function ActionButtons({
   const isAdult = pathwayMode === 'adult';
 
   return (
-    <div className="space-y-3">
-      <h2 className="text-lg font-semibold text-foreground">{t('actions.title')}</h2>
-      
-      {/* Rhythm Check Button - Most prominent when due */}
-      <Button
-        onClick={onRhythmCheck}
-        className={cn(
-          'w-full h-16 text-lg font-bold gap-3 transition-all',
-          rhythmCheckDue
-            ? 'bg-acls-critical hover:bg-acls-critical/90 text-white animate-pulse shadow-lg shadow-acls-critical/30'
-            : isAdult
-            ? 'bg-acls-critical/80 hover:bg-acls-critical/70 text-white'
-            : 'bg-acls-info hover:bg-acls-info/90 text-white'
-        )}
-      >
-        <Stethoscope className="h-6 w-6" />
-        <span>{rhythmCheckDue ? t('actions.rhythmCheckNow') : t('actions.rhythmCheck')}</span>
-      </Button>
+    <div className="space-y-2 sm:space-y-3">
+      <h2 className="text-clinical-base sm:text-clinical-lg font-semibold text-foreground">
+        {t('actions.title')}
+      </h2>
 
-      <div className="grid grid-cols-2 gap-3">
-        {/* Epinephrine Button */}
+      {/* Rhythm Check Button - Most prominent when due */}
+      <motion.div
+        whileTap={{ scale: 0.98 }}
+        whileHover={{ scale: 1.01 }}
+      >
         <Button
-          onClick={onEpinephrine}
-          disabled={!canGiveEpinephrine}
+          onClick={handleRhythmCheck}
+          disabled={loadingState.rhythmCheck}
           className={cn(
-            'h-20 flex-col gap-1 text-base font-bold transition-all',
-            epiDue && canGiveEpinephrine
-              ? 'bg-acls-critical hover:bg-acls-critical/90 text-white animate-pulse shadow-lg shadow-acls-critical/30'
-              : canGiveEpinephrine
-              ? 'bg-acls-medication hover:bg-acls-medication/90 text-white'
-              : 'bg-muted text-muted-foreground'
+            'w-full h-14 sm:h-16 text-base sm:text-lg font-bold gap-2 sm:gap-3 transition-all touch-target interactive-active',
+            rhythmCheckDue
+              ? 'bg-acls-critical hover:bg-acls-critical/90 text-white pulse-critical shadow-lg'
+              : isAdult
+              ? 'bg-acls-critical/80 hover:bg-acls-critical/70 text-white'
+              : 'bg-acls-info hover:bg-acls-info/90 text-white'
           )}
+          aria-label={rhythmCheckDue ? t('actions.rhythmCheckNow') : t('actions.rhythmCheck')}
+          aria-live="polite"
         >
-          <Syringe className="h-6 w-6" />
-          <span>{t('actions.epinephrine')}</span>
-          <span className="text-xs font-normal">
-            {epiDose.display} IV/IO (#{epinephrineCount + 1})
-          </span>
+          {loadingState.rhythmCheck ? (
+            <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
+          ) : (
+            <Stethoscope className="h-5 w-5 sm:h-6 sm:w-6" />
+          )}
+          <span>{rhythmCheckDue ? t('actions.rhythmCheckNow') : t('actions.rhythmCheck')}</span>
         </Button>
+      </motion.div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+        {/* Epinephrine Button */}
+        <motion.div
+          whileTap={{ scale: 0.95 }}
+          animate={successState.epi ? { scale: [1, 1.05, 1] } : {}}
+          transition={{ duration: 0.3 }}
+        >
+          <Button
+            onClick={handleEpinephrine}
+            disabled={!canGiveEpinephrine || loadingState.epi}
+            className={cn(
+              'w-full h-20 sm:h-24 flex-col gap-0.5 sm:gap-1 text-sm sm:text-base font-bold transition-all touch-target interactive-active',
+              epiDue && canGiveEpinephrine
+                ? 'bg-acls-critical hover:bg-acls-critical/90 text-white pulse-critical shadow-lg'
+                : canGiveEpinephrine
+                ? 'bg-acls-medication hover:bg-acls-medication/90 text-white'
+                : 'bg-muted text-muted-foreground'
+            )}
+            aria-label={`${t('actions.epinephrine')} ${epiDose.display}`}
+            aria-live="polite"
+            aria-disabled={!canGiveEpinephrine}
+          >
+            {loadingState.epi ? (
+              <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
+            ) : successState.epi ? (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: 'spring', stiffness: 200 }}
+              >
+                <Check className="h-5 w-5 sm:h-6 sm:w-6" />
+              </motion.div>
+            ) : (
+              <Syringe className="h-5 w-5 sm:h-6 sm:w-6" />
+            )}
+            <span className="text-clinical-sm sm:text-clinical-base">{t('actions.epinephrine')}</span>
+            <span className="text-clinical-xs font-normal">
+              {epiDose.display} IV/IO (#{epinephrineCount + 1})
+            </span>
+          </Button>
+        </motion.div>
 
         {/* Amiodarone/Lidocaine Button */}
-        <Button
-          onClick={onAntiarrhythmic}
-          disabled={!canGiveAntiarrhythmic}
-          className={cn(
-            'h-20 flex-col gap-1 text-base font-bold transition-all',
-            canGiveAntiarrhythmic
-              ? 'bg-acls-medication hover:bg-acls-medication/90 text-white'
-              : 'bg-muted text-muted-foreground'
-          )}
+        <motion.div
+          whileTap={{ scale: 0.95 }}
+          animate={successState.antiarrhythmic ? { scale: [1, 1.05, 1] } : {}}
+          transition={{ duration: 0.3 }}
         >
-          <Pill className="h-6 w-6" />
-          <span>{showLidocaine ? t('actions.lidocaine') : t('actions.amiodarone')}</span>
-          <span className="text-xs font-normal">
-            {antiarrhythmicDose.display} (#{antiarrhythmicCount + 1})
-          </span>
-        </Button>
+          <Button
+            onClick={handleAntiarrhythmic}
+            disabled={!canGiveAntiarrhythmic || loadingState.antiarrhythmic}
+            className={cn(
+              'w-full h-20 sm:h-24 flex-col gap-0.5 sm:gap-1 text-sm sm:text-base font-bold transition-all touch-target interactive-active',
+              canGiveAntiarrhythmic
+                ? 'bg-acls-medication hover:bg-acls-medication/90 text-white'
+                : 'bg-muted text-muted-foreground'
+            )}
+            aria-label={`${showLidocaine ? t('actions.lidocaine') : t('actions.amiodarone')} ${antiarrhythmicDose.display}`}
+            aria-live="polite"
+            aria-disabled={!canGiveAntiarrhythmic}
+          >
+            {loadingState.antiarrhythmic ? (
+              <Loader2 className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
+            ) : successState.antiarrhythmic ? (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: 'spring', stiffness: 200 }}
+              >
+                <Check className="h-5 w-5 sm:h-6 sm:w-6" />
+              </motion.div>
+            ) : (
+              <Pill className="h-5 w-5 sm:h-6 sm:w-6" />
+            )}
+            <span className="text-clinical-sm sm:text-clinical-base">
+              {showLidocaine ? t('actions.lidocaine') : t('actions.amiodarone')}
+            </span>
+            <span className="text-clinical-xs font-normal">
+              {antiarrhythmicDose.display} (#{antiarrhythmicCount + 1})
+            </span>
+          </Button>
+        </motion.div>
       </div>
     </div>
   );
