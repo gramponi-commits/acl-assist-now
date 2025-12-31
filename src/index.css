@@ -81,34 +81,34 @@
   }
 
   .dark {
-    /* Dark/Black theme */
-    --background: 0 0% 5%;
+    /* Medical-grade Dark theme - optimized for reduced eye strain */
+    --background: 222 47% 11%;
     --foreground: 210 40% 98%;
 
-    --card: 0 0% 8%;
+    --card: 217 33% 17%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 10%;
+    --popover: 217 33% 17%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 5%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222 47% 11%;
 
-    --secondary: 0 0% 15%;
+    --secondary: 215 20% 25%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 215 20% 25%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 0 0% 18%;
+    --accent: 217 33% 22%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 15%;
-    --ring: 0 0% 80%;
+    --border: 215 20% 25%;
+    --input: 217 33% 17%;
+    --ring: 217 91% 60%;
 
     /* ACLS/PALS Clinical Colors - Dark Mode */
     --acls-primary: 0 84% 55%;
@@ -136,14 +136,14 @@
     --acls-tachycardia: 25 95% 60%;
     --acls-tachycardia-foreground: 0 0% 100%;
 
-    --sidebar-background: 0 0% 8%;
-    --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 0 0% 98%;
-    --sidebar-primary-foreground: 0 0% 5%;
-    --sidebar-accent: 0 0% 15%;
-    --sidebar-accent-foreground: 0 0% 90%;
-    --sidebar-border: 0 0% 20%;
-    --sidebar-ring: 0 0% 80%;
+    --sidebar-background: 217 33% 17%;
+    --sidebar-foreground: 210 40% 90%;
+    --sidebar-primary: 210 40% 98%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent: 217 33% 22%;
+    --sidebar-accent-foreground: 210 40% 90%;
+    --sidebar-border: 215 20% 25%;
+    --sidebar-ring: 217 91% 60%;
   }
 }
 
@@ -162,5 +162,126 @@
   .touch-target {
     min-height: 48px;
     min-width: 48px;
+  }
+
+  /* Clinical typography scale - responsive */
+  .text-clinical-xs {
+    @apply text-[0.7rem] sm:text-xs;
+  }
+
+  .text-clinical-sm {
+    @apply text-xs sm:text-sm;
+  }
+
+  .text-clinical-base {
+    @apply text-sm sm:text-base;
+  }
+
+  .text-clinical-lg {
+    @apply text-base sm:text-lg;
+  }
+
+  .text-clinical-xl {
+    @apply text-lg sm:text-xl;
+  }
+
+  .text-clinical-2xl {
+    @apply text-xl sm:text-2xl;
+  }
+
+  .text-clinical-3xl {
+    @apply text-2xl sm:text-3xl;
+  }
+
+  .text-clinical-display {
+    @apply text-3xl sm:text-4xl md:text-5xl;
+  }
+
+  /* Elevation system for visual hierarchy */
+  .surface-0 {
+    @apply bg-background;
+  }
+
+  .surface-1 {
+    @apply bg-card shadow-sm;
+  }
+
+  .surface-2 {
+    @apply bg-card shadow-md;
+  }
+
+  .surface-3 {
+    @apply bg-card shadow-lg;
+  }
+
+  .surface-overlay {
+    @apply bg-popover shadow-2xl;
+  }
+
+  /* Border utilities */
+  .border-subtle {
+    @apply border-border/50;
+  }
+
+  .border-moderate {
+    @apply border-border;
+  }
+
+  .border-strong {
+    @apply border-border dark:border-border/80;
+  }
+
+  /* Interactive states */
+  .interactive-default {
+    @apply transition-colors duration-200;
+  }
+
+  .interactive-hover {
+    @apply hover:bg-accent/50 hover:scale-[1.02] transition-all duration-200;
+  }
+
+  .interactive-active {
+    @apply active:scale-[0.98] transition-transform duration-100;
+  }
+
+  /* Pulse animation for critical alerts (dark mode optimized) */
+  .pulse-critical {
+    @apply animate-pulse;
+  }
+
+  .dark .pulse-critical {
+    animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      opacity: 1;
+      box-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+    }
+    50% {
+      opacity: 0.8;
+      box-shadow: 0 0 30px rgba(220, 38, 38, 0.8);
+    }
+  }
+
+  /* Loading shimmer effect */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
   }
 }
