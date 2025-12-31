@@ -34,6 +34,7 @@ import {
   getActiveSession, 
   clearActiveSession 
 } from '@/lib/activeSessionStorage';
+import { getBradyTachySession, clearBradyTachySession } from '@/lib/bradyTachyStorage';
 
 export function CodeScreen() {
   const { t } = useTranslation();
@@ -219,11 +220,37 @@ export function CodeScreen() {
   };
 
   const handleSwitchToArrestFromBradyTachy = (patientGroup: 'adult' | 'pediatric') => {
+    // Get the Brady/Tachy session data
+    const bradyTachySession = getBradyTachySession();
+    
     // Switch from brady/tachy to arrest mode
     setShowBradyTachyModule(false);
     actions.setPathwayMode(patientGroup);
+    
+    // Merge the Brady/Tachy interventions into the CODE session
+    if (bradyTachySession && bradyTachySession.interventions.length > 0) {
+      // Add a marker intervention
+      actions.addIntervention('note', t('bradyTachy.switchedToArrest'));
+      
+      // Import all Brady/Tachy interventions into the CODE timeline
+      bradyTachySession.interventions.forEach(intervention => {
+        // Map the intervention details to a note
+        actions.addIntervention('note', intervention.details, intervention.value);
+      });
+      
+      // If weight was set in Brady/Tachy, carry it over
+      if (bradyTachySession.weightKg && patientGroup === 'pediatric') {
+        actions.setPatientWeight(bradyTachySession.weightKg);
+      }
+    }
+    
+    // Clear the Brady/Tachy session now that it's merged
+    clearBradyTachySession();
+    
+    // Start CPR
     actions.startCPR();
-    toast.success('Switched to cardiac arrest protocol');
+    
+    toast.success(t('bradyTachy.switchedToArrest') + ' - ' + t('timeline.title') + ' merged');
   };
 
   const formatDuration = (ms: number) => {

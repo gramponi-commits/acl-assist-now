@@ -12,6 +12,7 @@ import {
   BradyTachyIntervention,
   createInitialBradyTachySession,
 } from '@/types/acls';
+import { saveBradyTachySession, clearBradyTachySession, StoredBradyTachySession } from '@/lib/bradyTachyStorage';
 
 export function useBradyTachyLogic() {
   const { t } = useTranslation();
@@ -36,11 +37,35 @@ export function useBradyTachyLogic() {
       decisionContext: { ...session.decisionContext },
     };
 
-    setSession(prev => ({
-      ...prev,
-      interventions: [...prev.interventions, intervention],
-    }));
-  }, [session.decisionContext]);
+    setSession(prev => {
+      const updated = {
+        ...prev,
+        interventions: [...prev.interventions, intervention],
+      };
+
+      // Persist to localStorage
+      saveBradyTachySession({
+        id: updated.id,
+        startTime: updated.startTime,
+        endTime: updated.endTime,
+        patientGroup: updated.decisionContext.patientGroup,
+        weightKg: updated.decisionContext.weightKg,
+        branch: updated.decisionContext.branch,
+        interventions: updated.interventions.map(i => ({
+          timestamp: i.timestamp,
+          type: i.type,
+          details: i.details,
+          value: i.value,
+          doseStep: i.doseStep,
+          calculatedDose: i.calculatedDose,
+          decisionContext: i.decisionContext,
+        })),
+        outcome: updated.outcome,
+      });
+
+      return updated;
+    });
+  }, [session.decisionContext, session.id, session.startTime, session.endTime, session.outcome]);
 
   // Set patient group (adult/pediatric)
   const setPatientGroup = useCallback((group: PathwayMode) => {
@@ -198,6 +223,7 @@ export function useBradyTachyLogic() {
       phase: 'session_ended',
     }));
     addIntervention('switch_to_arrest', t('bradyTachy.switchedToArrest'));
+    // Note: We do NOT clear the session here - it will be cleared after merging in CodeScreen
     return true; // Signal to parent to switch to arrest mode
   }, [addIntervention, t]);
 
@@ -211,6 +237,8 @@ export function useBradyTachyLogic() {
       phase: 'session_ended',
     }));
     addIntervention('note', `Session ended: ${outcome}`);
+    // Clear the persisted session
+    clearBradyTachySession();
   }, [addIntervention]);
 
   // Reset session
