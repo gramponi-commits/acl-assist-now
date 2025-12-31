@@ -10,7 +10,7 @@ import { Trash2, Heart, XCircle, Clock, Zap, Syringe, ChevronDown, ChevronUp, Ac
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
-type FilterMode = 'all' | 'adult' | 'pediatric';
+type FilterMode = 'all' | 'adult' | 'pediatric' | 'rhythm';
 
 export default function SessionHistory() {
   const { t } = useTranslation();
@@ -113,9 +113,19 @@ export default function SessionHistory() {
 
   const filteredSessions = sessions.filter(session => {
     if (filterMode === 'all') return true;
-    // Handle old sessions without pathwayMode
+
+    // Rhythm filter: show bradytachy and bradytachy-arrest sessions
+    if (filterMode === 'rhythm') {
+      return session.sessionType === 'bradytachy' || session.sessionType === 'bradytachy-arrest';
+    }
+
+    // ACLS/PALS filters: show cardiac-arrest sessions + bradytachy-arrest (hybrid)
     const mode = session.pathwayMode || 'adult';
-    return mode === filterMode;
+    if (mode === filterMode) {
+      return session.sessionType === 'cardiac-arrest' || session.sessionType === 'bradytachy-arrest';
+    }
+
+    return false;
   });
 
   if (loading) {
@@ -166,6 +176,18 @@ export default function SessionHistory() {
             <Baby className="h-3 w-3" />
             PALS
           </Button>
+          <Button
+            size="sm"
+            variant={filterMode === 'rhythm' ? 'default' : 'outline'}
+            onClick={() => setFilterMode('rhythm')}
+            className={cn(
+              "gap-1",
+              filterMode === 'rhythm' && "bg-acls-warning text-white border-acls-warning hover:bg-acls-warning/90"
+            )}
+          >
+            <Activity className="h-3 w-3" />
+            Rhythm
+          </Button>
         </div>
       </div>
 
@@ -187,7 +209,9 @@ export default function SessionHistory() {
               const hsTsChecked = getHsTsChecked(session.hsAndTs);
               const postROSCActions = getPostROSCActions(session.postROSCChecklist);
               const pathwayMode = session.pathwayMode || 'adult';
-              
+              // Default to 'cardiac-arrest' for old sessions without sessionType
+              const sessionType = session.sessionType || 'cardiac-arrest';
+
               return (
                 <Collapsible
                   key={session.id}
@@ -202,21 +226,34 @@ export default function SessionHistory() {
                     <div className="flex items-start justify-between">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <Badge
-                            variant="outline"
-                            className={cn(
-                              "text-xs",
-                              pathwayMode === 'adult' 
-                                ? 'border-acls-adult text-acls-adult' 
-                                : 'border-acls-pediatric text-acls-pediatric'
-                            )}
-                          >
-                            {pathwayMode === 'adult' ? (
-                              <><User className="h-3 w-3 mr-1" />ACLS</>
-                            ) : (
-                              <><Baby className="h-3 w-3 mr-1" />PALS</>
-                            )}
-                          </Badge>
+                          {/* Show Rhythm badge for bradytachy sessions */}
+                          {(sessionType === 'bradytachy' || sessionType === 'bradytachy-arrest') && (
+                            <Badge
+                              variant="outline"
+                              className="text-xs border-acls-warning text-acls-warning"
+                            >
+                              <Activity className="h-3 w-3 mr-1" />
+                              Rhythm
+                            </Badge>
+                          )}
+                          {/* Show ACLS/PALS badge for cardiac arrest sessions (including hybrid) */}
+                          {(sessionType === 'cardiac-arrest' || sessionType === 'bradytachy-arrest') && (
+                            <Badge
+                              variant="outline"
+                              className={cn(
+                                "text-xs",
+                                pathwayMode === 'adult'
+                                  ? 'border-acls-adult text-acls-adult'
+                                  : 'border-acls-pediatric text-acls-pediatric'
+                              )}
+                            >
+                              {pathwayMode === 'adult' ? (
+                                <><User className="h-3 w-3 mr-1" />ACLS</>
+                              ) : (
+                                <><Baby className="h-3 w-3 mr-1" />PALS</>
+                              )}
+                            </Badge>
+                          )}
                           {pathwayMode === 'pediatric' && session.patientWeight && (
                             <span className="text-xs text-muted-foreground">
                               {session.patientWeight}kg
@@ -228,7 +265,9 @@ export default function SessionHistory() {
                         </div>
                         <div className={cn(
                           'inline-flex items-center gap-1.5 mt-1 px-2 py-1 rounded-full text-sm font-medium',
-                          session.outcome === 'rosc' 
+                          session.outcome === 'rosc'
+                            ? 'bg-acls-success/20 text-acls-success'
+                            : session.outcome === 'resolved'
                             ? 'bg-acls-success/20 text-acls-success'
                             : session.outcome === 'deceased'
                             ? 'bg-destructive/20 text-destructive'
@@ -236,11 +275,15 @@ export default function SessionHistory() {
                         )}>
                           {session.outcome === 'rosc' ? (
                             <Heart className="h-4 w-4" />
+                          ) : session.outcome === 'resolved' ? (
+                            <Activity className="h-4 w-4" />
                           ) : session.outcome === 'deceased' ? (
                             <XCircle className="h-4 w-4" />
                           ) : null}
-                          {session.outcome === 'rosc' 
+                          {session.outcome === 'rosc'
                             ? t('history.rosc')
+                            : session.outcome === 'resolved'
+                            ? 'Resolved'
                             : session.outcome === 'deceased'
                             ? t('history.deceased')
                             : t('history.unknown')}
@@ -274,35 +317,49 @@ export default function SessionHistory() {
                     </div>
 
                     {/* Summary Stats */}
-                    <div className="grid grid-cols-3 gap-3 text-sm">
-                      <div className="flex items-center gap-2">
+                    {sessionType === 'bradytachy' ? (
+                      /* Bradytachy-only sessions: show only duration */
+                      <div className="flex items-center gap-2 text-sm">
                         <Clock className="h-4 w-4 text-muted-foreground" />
                         <div>
                           <div className="text-muted-foreground">{t('codeEnded.duration')}</div>
                           <div className="font-semibold">{formatDuration(session.duration)}</div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Zap className="h-4 w-4 text-acls-shockable" />
-                        <div>
-                          <div className="text-muted-foreground">{t('codeEnded.shocks')}</div>
-                          <div className="font-semibold">{session.shockCount}</div>
+                    ) : (
+                      /* Cardiac arrest and hybrid sessions: show full stats */
+                      <>
+                        <div className="grid grid-cols-3 gap-3 text-sm">
+                          <div className="flex items-center gap-2">
+                            <Clock className="h-4 w-4 text-muted-foreground" />
+                            <div>
+                              <div className="text-muted-foreground">{t('codeEnded.duration')}</div>
+                              <div className="font-semibold">{formatDuration(session.duration)}</div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Zap className="h-4 w-4 text-acls-shockable" />
+                            <div>
+                              <div className="text-muted-foreground">{t('codeEnded.shocks')}</div>
+                              <div className="font-semibold">{session.shockCount}</div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Syringe className="h-4 w-4 text-acls-warning" />
+                            <div>
+                              <div className="text-muted-foreground">Epi</div>
+                              <div className="font-semibold">{session.epinephrineCount}</div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Syringe className="h-4 w-4 text-acls-warning" />
-                        <div>
-                          <div className="text-muted-foreground">Epi</div>
-                          <div className="font-semibold">{session.epinephrineCount}</div>
-                        </div>
-                      </div>
-                    </div>
 
-                    {/* CPR Fraction */}
-                    <div className="flex items-center justify-between text-sm pt-2 border-t border-border">
-                      <span className="text-muted-foreground">{t('codeEnded.cprFraction')}</span>
-                      <span className="font-semibold">{session.cprFraction.toFixed(1)}%</span>
-                    </div>
+                        {/* CPR Fraction */}
+                        <div className="flex items-center justify-between text-sm pt-2 border-t border-border">
+                          <span className="text-muted-foreground">{t('codeEnded.cprFraction')}</span>
+                          <span className="font-semibold">{session.cprFraction.toFixed(1)}%</span>
+                        </div>
+                      </>
+                    )}
 
                     {/* Expand button */}
                     <CollapsibleTrigger asChild>
