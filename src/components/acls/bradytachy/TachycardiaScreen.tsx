@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
-import { BradyTachySession } from '@/types/acls';
+import { BradyTachySession, CardioversionRhythmType } from '@/types/acls';
 import { BradyTachyActions } from '@/hooks/useBradyTachyLogic';
 import { SinusVsSVTSelector } from './SinusVsSVTSelector';
 import { SinusEvaluationScreen } from './SinusEvaluationScreen';
@@ -17,8 +18,12 @@ import {
   getAdultTachyProcainamide,
   getAdultTachyAmiodarone,
   getAdultTachyRateControl,
+  getAdultTachyDiltiazem,
+  getAdultTachyVerapamil,
+  getAdultTachyMetoprolol,
+  getAdultTachyEsmolol,
 } from '@/lib/bradyTachyDosing';
-import { Zap, AlertCircle, Activity } from 'lucide-react';
+import { Zap, AlertCircle, Activity, AlertTriangle } from 'lucide-react';
 
 interface TachycardiaScreenProps {
   session: BradyTachySession;
@@ -27,10 +32,11 @@ interface TachycardiaScreenProps {
 
 export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) {
   const { t } = useTranslation();
-  const { patientGroup, weightKg, stability, qrsWidth, rhythmRegular, pedsSinusVsSVTChoice } = session.decisionContext;
+  const { patientGroup, weightKg, stability, qrsWidth, rhythmRegular, pedsSinusVsSVTChoice, cardioversionRhythmType } = session.decisionContext;
   const isPediatric = patientGroup === 'pediatric';
   const [adenosineDoses, setAdenosineDoses] = useState(0);
   const [cardioversionAttempts, setCardioversionAttempts] = useState(0);
+  const [showSyncReminder, setShowSyncReminder] = useState(true);
 
   // If pediatric sinus tachycardia selected, show "treat cause" guidance
   // This check must come BEFORE the assessment phase check
@@ -179,70 +185,146 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
             <h1 className="text-2xl font-bold">{t('bradyTachy.treatment')}</h1>
           </div>
 
-          {/* Cardioversion */}
-          <div className={cn(
-            "bg-card rounded-lg p-4 border-2",
-            isPediatric ? "border-pals-primary" : "border-acls-critical"
-          )}>
-            <h3 className="font-bold text-lg mb-2">{t('bradyTachy.tachySyncCardioversion')}</h3>
-            <div className="space-y-1 text-sm mb-3">
-              <p>{t('bradyTachy.tachyConsiderSedation')}</p>
-              <p>{t('bradyTachy.tachyIfRegularNarrow')}</p>
-              {isPediatric ? (
-                <p className="font-bold mt-2">
-                  {t('bradyTachy.pedsTachyCardioversionInitial')}
-                </p>
-              ) : (
-                <p className="font-bold mt-2">
-                  {t('bradyTachy.tachyCardioversionEnergy')}
-                </p>
-              )}
-            </div>
-            
-            {isPediatric ? (
+          {/* SYNC Mode Reminder Banner */}
+          {showSyncReminder && (
+            <Alert className="border-red-600 bg-red-600/10">
+              <AlertTriangle className="h-5 w-5 text-red-600" />
+              <AlertDescription className="text-sm">
+                <div className="font-bold text-red-600 mb-2">{t('bradyTachy.syncModeReminder')}</div>
+                <div className="space-y-1">
+                  <p>• {t('bradyTachy.enableSyncMode')}</p>
+                  <p className="font-medium">• {t('bradyTachy.recheckSync')}</p>
+                  <p className="text-xs text-muted-foreground">{t('bradyTachy.recheckSyncDetail')}</p>
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {/* Rhythm Selection for Cardioversion (Adult only) */}
+          {!isPediatric && !cardioversionRhythmType && (
+            <div className="bg-card rounded-lg p-4 border-2 border-acls-critical">
+              <h3 className="font-bold text-lg mb-3">{t('bradyTachy.selectRhythmForCardioversion')}</h3>
               <div className="space-y-2">
                 <Button
+                  onClick={() => actions.setCardioversionRhythmType('afib')}
+                  variant="outline"
+                  className="w-full h-12 justify-start"
+                >
+                  {t('bradyTachy.rhythmAtrialFib')} - 200 J
+                </Button>
+                <Button
+                  onClick={() => actions.setCardioversionRhythmType('aflutter')}
+                  variant="outline"
+                  className="w-full h-12 justify-start"
+                >
+                  {t('bradyTachy.rhythmAtrialFlutter')} - 200 J
+                </Button>
+                <Button
+                  onClick={() => actions.setCardioversionRhythmType('narrow')}
+                  variant="outline"
+                  className="w-full h-12 justify-start"
+                >
+                  {t('bradyTachy.rhythmNarrowComplex')} - 100 J
+                </Button>
+                <Button
+                  onClick={() => actions.setCardioversionRhythmType('monomorphic_vt')}
+                  variant="outline"
+                  className="w-full h-12 justify-start"
+                >
+                  {t('bradyTachy.rhythmMonomorphicVT')} - 100 J
+                </Button>
+                <Button
+                  onClick={() => actions.setCardioversionRhythmType('polymorphic_vt')}
+                  variant="outline"
+                  className="w-full h-12 justify-start text-red-600"
+                >
+                  {t('bradyTachy.rhythmPolymorphicVT')}
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Cardioversion */}
+          {(isPediatric || cardioversionRhythmType) && (
+            <div className={cn(
+              "bg-card rounded-lg p-4 border-2",
+              isPediatric ? "border-pals-primary" : "border-acls-critical"
+            )}>
+              <h3 className="font-bold text-lg mb-2">{t('bradyTachy.tachySyncCardioversion')}</h3>
+              <div className="space-y-1 text-sm mb-3">
+                <p>{t('bradyTachy.tachyConsiderSedation')}</p>
+                <p>{t('bradyTachy.tachyIfRegularNarrow')}</p>
+                {isPediatric ? (
+                  <p className="font-bold mt-2">
+                    {t('bradyTachy.pedsTachyCardioversionInitial')}
+                  </p>
+                ) : cardioversionRhythmType === 'polymorphic_vt' ? (
+                  <p className="font-bold mt-2 text-red-600">
+                    Polymorphic VT: Use DEFIBRILLATION (NOT synchronized)
+                  </p>
+                ) : (
+                  <p className="font-bold mt-2">
+                    Energy: {getAdultTachyCardioversion(cardioversionRhythmType).display}
+                  </p>
+                )}
+              </div>
+              
+              {isPediatric ? (
+                <div className="space-y-2">
+                  <Button
+                    onClick={() => {
+                      setCardioversionAttempts(1);
+                      const energy = calculatePedsTachyCardioversion(weightKg, 1);
+                      actions.giveCardioversion(energy.display);
+                    }}
+                    className={cn(
+                      "w-full h-12",
+                      "bg-pals-primary hover:bg-pals-primary/90"
+                    )}
+                  >
+                    {t('bradyTachy.giveCardioversion')} - {calculatePedsTachyCardioversion(weightKg, 1).display}
+                  </Button>
+                  {cardioversionAttempts >= 1 && (
+                    <Button
+                      onClick={() => {
+                        setCardioversionAttempts(2);
+                        const energy = calculatePedsTachyCardioversion(weightKg, 2);
+                        actions.giveCardioversion(energy.display);
+                      }}
+                      variant="outline"
+                      className="w-full h-12"
+                    >
+                      {t('bradyTachy.giveCardioversion')} (Higher) - {calculatePedsTachyCardioversion(weightKg, 2).display}
+                    </Button>
+                  )}
+                </div>
+              ) : cardioversionRhythmType !== 'polymorphic_vt' ? (
+                <Button
                   onClick={() => {
-                    setCardioversionAttempts(1);
-                    const energy = calculatePedsTachyCardioversion(weightKg, 1);
+                    const energy = getAdultTachyCardioversion(cardioversionRhythmType);
                     actions.giveCardioversion(energy.display);
+                    setCardioversionAttempts(prev => prev + 1);
                   }}
                   className={cn(
                     "w-full h-12",
-                    "bg-pals-primary hover:bg-pals-primary/90"
+                    "bg-acls-critical hover:bg-acls-critical/90"
                   )}
                 >
-                  {t('bradyTachy.giveCardioversion')} - {calculatePedsTachyCardioversion(weightKg, 1).display}
+                  {t('bradyTachy.giveCardioversion')} - {getAdultTachyCardioversion(cardioversionRhythmType).display}
                 </Button>
-                {cardioversionAttempts >= 1 && (
-                  <Button
-                    onClick={() => {
-                      setCardioversionAttempts(2);
-                      const energy = calculatePedsTachyCardioversion(weightKg, 2);
-                      actions.giveCardioversion(energy.display);
-                    }}
-                    variant="outline"
-                    className="w-full h-12"
-                  >
-                    {t('bradyTachy.giveCardioversion')} (Higher) - {calculatePedsTachyCardioversion(weightKg, 2).display}
-                  </Button>
-                )}
-              </div>
-            ) : (
-              <Button
-                onClick={() => {
-                  const energy = getAdultTachyCardioversion(200);
-                  actions.giveCardioversion(energy.display);
-                }}
-                className={cn(
-                  "w-full h-12",
-                  "bg-acls-critical hover:bg-acls-critical/90"
-                )}
-              >
-                {t('bradyTachy.giveCardioversion')}
-              </Button>
-            )}
-          </div>
+              ) : (
+                <Button
+                  onClick={() => {
+                    actions.giveCardioversion('Defibrillation (unsynchronized)');
+                    setCardioversionAttempts(prev => prev + 1);
+                  }}
+                  className="w-full h-12 bg-red-600 hover:bg-red-700"
+                >
+                  Deliver DEFIBRILLATION (Unsynchronized)
+                </Button>
+              )}
+            </div>
+          )}
 
           {/* If Refractory */}
           <div className="bg-card rounded-lg p-4 border-2 border-border">
@@ -404,25 +486,97 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
             )}
           </div>
 
-          {/* Beta-blocker / Calcium blocker (adult only) */}
+          {/* Beta-blocker / Calcium blocker (adult only) - Second-line medications */}
           {!isPediatric && (
-            <div className="bg-card rounded-lg p-4 border-2 border-border">
-              <h3 className="font-bold text-lg mb-2">{t('bradyTachy.tachyBetaBlocker')}</h3>
-              <div className="space-y-2">
-                <Button
-                  onClick={() => actions.giveBetaBlocker()}
-                  variant="outline"
-                  className="w-full h-10"
-                >
-                  {t('bradyTachy.giveBetaBlocker')}
-                </Button>
-                <Button
-                  onClick={() => actions.giveCalciumBlocker()}
-                  variant="outline"
-                  className="w-full h-10"
-                >
-                  {t('bradyTachy.giveCalciumBlocker')}
-                </Button>
+            <div className="bg-card rounded-lg p-4 border-2 border-border space-y-4">
+              <div>
+                <h3 className="font-bold text-lg mb-2">{t('bradyTachy.secondLineMedications')}</h3>
+                <p className="text-sm text-muted-foreground mb-3">{t('bradyTachy.eitherOrInstruction')}</p>
+              </div>
+
+              {/* Calcium Channel Blockers */}
+              <div className="space-y-3">
+                <h4 className="font-semibold text-md">{t('bradyTachy.calciumChannelBlockers')}</h4>
+                
+                {/* Diltiazem */}
+                <div className="bg-muted/50 rounded p-3 space-y-2">
+                  <div className="font-medium">{t('bradyTachy.diltiazem')}</div>
+                  <div className="text-sm space-y-1">
+                    <p>• <span className="font-medium">{t('bradyTachy.diltiazemBolus')}</span></p>
+                    <p>• {t('bradyTachy.diltiazemMaint')}</p>
+                  </div>
+                  <Button
+                    onClick={() => {
+                      const dose = getAdultTachyDiltiazem();
+                      actions.giveDiltiazem(`${dose.loading.display}; ${dose.maintenance.display}`);
+                    }}
+                    variant="outline"
+                    className="w-full h-10"
+                  >
+                    {t('bradyTachy.giveDiltiazem')}
+                  </Button>
+                </div>
+
+                {/* Verapamil */}
+                <div className="bg-muted/50 rounded p-3 space-y-2">
+                  <div className="font-medium">{t('bradyTachy.verapamil')}</div>
+                  <div className="text-sm space-y-1">
+                    <p>• <span className="font-medium">{t('bradyTachy.verapamilInitial')}</span></p>
+                    <p>• {t('bradyTachy.verapamilRepeat')}</p>
+                  </div>
+                  <Button
+                    onClick={() => {
+                      const dose = getAdultTachyVerapamil();
+                      actions.giveVerapamil(`${dose.initial.display}; ${dose.repeat.display}`);
+                    }}
+                    variant="outline"
+                    className="w-full h-10"
+                  >
+                    {t('bradyTachy.giveVerapamil')}
+                  </Button>
+                </div>
+              </div>
+
+              {/* Beta-Blockers */}
+              <div className="space-y-3">
+                <h4 className="font-semibold text-md">{t('bradyTachy.betaBlockers')}</h4>
+                
+                {/* Metoprolol */}
+                <div className="bg-muted/50 rounded p-3 space-y-2">
+                  <div className="font-medium">{t('bradyTachy.metoprolol')}</div>
+                  <div className="text-sm">
+                    <p>• <span className="font-medium">{t('bradyTachy.metoprololDose')}</span></p>
+                  </div>
+                  <Button
+                    onClick={() => {
+                      const dose = getAdultTachyMetoprolol();
+                      actions.giveMetoprolol(dose.display);
+                    }}
+                    variant="outline"
+                    className="w-full h-10"
+                  >
+                    {t('bradyTachy.giveMetoprolol')}
+                  </Button>
+                </div>
+
+                {/* Esmolol */}
+                <div className="bg-muted/50 rounded p-3 space-y-2">
+                  <div className="font-medium">{t('bradyTachy.esmolol')}</div>
+                  <div className="text-sm space-y-1">
+                    <p>• <span className="font-medium">{t('bradyTachy.esmololLoad')}</span></p>
+                    <p>• {t('bradyTachy.esmololMaint')}</p>
+                  </div>
+                  <Button
+                    onClick={() => {
+                      const dose = getAdultTachyEsmolol();
+                      actions.giveEsmolol(`${dose.loading.display}; ${dose.maintenance.display}`);
+                    }}
+                    variant="outline"
+                    className="w-full h-10"
+                  >
+                    {t('bradyTachy.giveEsmolol')}
+                  </Button>
+                </div>
               </div>
             </div>
           )}

@@ -277,6 +277,8 @@ export type RhythmRegularity = 'regular' | 'irregular' | null;
 
 export type PedsSinusVsSVT = 'probable_sinus' | 'probable_svt' | null;
 
+export type CardioversionRhythmType = 'afib' | 'aflutter' | 'narrow' | 'monomorphic_vt' | 'polymorphic_vt' | null;
+
 // Decision context for enhanced logging
 export interface BradyTachyDecisionContext {
   patientGroup: PathwayMode;
@@ -287,6 +289,7 @@ export interface BradyTachyDecisionContext {
   rhythmRegular: RhythmRegularity;
   monomorphic: boolean | null;
   pedsSinusVsSVTChoice: PedsSinusVsSVT;
+  cardioversionRhythmType: CardioversionRhythmType;
   // Criteria tracking for pediatric SVT/Sinus distinction
   sinusTachyCriteria?: {
     pWavesPresent: boolean;
@@ -307,6 +310,7 @@ export interface BradyTachyIntervention {
   timestamp: number;
   type: 'atropine' | 'adenosine' | 'cardioversion' | 'dopamine' | 'epi_infusion' |
         'beta_blocker' | 'calcium_blocker' | 'procainamide' | 'amiodarone' | 'vagal_maneuver' |
+        'diltiazem' | 'verapamil' | 'metoprolol' | 'esmolol' |
         'switch_to_arrest' | 'note' | 'assessment' | 'decision';
   details: string;
   value?: number | string;
@@ -343,6 +347,7 @@ export function createInitialBradyTachySession(): BradyTachySession {
       rhythmRegular: null,
       monomorphic: null,
       pedsSinusVsSVTChoice: null,
+      cardioversionRhythmType: null,
     },
     interventions: [],
     outcome: null,

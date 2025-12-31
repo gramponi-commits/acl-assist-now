@@ -9,6 +9,7 @@ import {
   QRSWidth,
   RhythmRegularity,
   PedsSinusVsSVT,
+  CardioversionRhythmType,
   BradyTachyIntervention,
   createInitialBradyTachySession,
 } from '@/types/acls';
@@ -239,6 +240,37 @@ export function useBradyTachyLogic() {
     addIntervention('vagal_maneuver', t('bradyTachy.treatmentGiven', { treatment: 'Vagal maneuvers' }), undefined, undefined, undefined, 'bradyTachy.treatmentGiven', { treatment: 'Vagal maneuvers' });
   }, [addIntervention, t]);
 
+  // Specific medication actions for second-line narrow-complex tachycardia
+  const giveDiltiazem = useCallback((dose: string) => {
+    addIntervention('diltiazem', t('bradyTachy.treatmentGiven', { treatment: 'Diltiazem' }), dose, undefined, dose, 'bradyTachy.treatmentGiven', { treatment: 'Diltiazem' });
+  }, [addIntervention, t]);
+
+  const giveVerapamil = useCallback((dose: string) => {
+    addIntervention('verapamil', t('bradyTachy.treatmentGiven', { treatment: 'Verapamil' }), dose, undefined, dose, 'bradyTachy.treatmentGiven', { treatment: 'Verapamil' });
+  }, [addIntervention, t]);
+
+  const giveMetoprolol = useCallback((dose: string) => {
+    addIntervention('metoprolol', t('bradyTachy.treatmentGiven', { treatment: 'Metoprolol' }), dose, undefined, dose, 'bradyTachy.treatmentGiven', { treatment: 'Metoprolol' });
+  }, [addIntervention, t]);
+
+  const giveEsmolol = useCallback((dose: string) => {
+    addIntervention('esmolol', t('bradyTachy.treatmentGiven', { treatment: 'Esmolol' }), dose, undefined, dose, 'bradyTachy.treatmentGiven', { treatment: 'Esmolol' });
+  }, [addIntervention, t]);
+
+  // Set cardioversion rhythm type
+  const setCardioversionRhythmType = useCallback((rhythmType: CardioversionRhythmType) => {
+    setSession(prev => ({
+      ...prev,
+      decisionContext: {
+        ...prev.decisionContext,
+        cardioversionRhythmType: rhythmType,
+      },
+    }));
+    if (rhythmType) {
+      addIntervention('decision', t('bradyTachy.rhythmTypeSelected', { rhythm: rhythmType }), rhythmType, undefined, undefined, 'bradyTachy.rhythmTypeSelected', { rhythm: rhythmType });
+    }
+  }, [addIntervention, t]);
+
   // Switch to cardiac arrest
   const switchToArrest = useCallback(async () => {
     const now = Date.now();
@@ -372,6 +404,11 @@ export function useBradyTachyLogic() {
       giveProcainamide,
       giveAmiodarone,
       performVagalManeuver,
+      giveDiltiazem,
+      giveVerapamil,
+      giveMetoprolol,
+      giveEsmolol,
+      setCardioversionRhythmType,
       switchToArrest,
       endSession,
       resetSession,
