@@ -63,6 +63,10 @@ export default {
           "primary-foreground": "hsl(var(--pals-primary-foreground))",
         },
         acls: {
+          adult: "hsl(var(--acls-primary))",
+          "adult-foreground": "hsl(var(--acls-primary-foreground))",
+          pediatric: "hsl(var(--pals-primary))",
+          "pediatric-foreground": "hsl(var(--pals-primary-foreground))",
           shockable: "hsl(var(--acls-shockable))",
           "shockable-foreground": "hsl(var(--acls-shockable-foreground))",
           "non-shockable": "hsl(var(--acls-non-shockable))",
@@ -79,6 +83,10 @@ export default {
           "info-foreground": "hsl(var(--acls-info-foreground))",
           medication: "hsl(var(--acls-medication))",
           "medication-foreground": "hsl(var(--acls-medication-foreground))",
+          bradycardia: "hsl(var(--acls-bradycardia))",
+          "bradycardia-foreground": "hsl(var(--acls-bradycardia-foreground))",
+          tachycardia: "hsl(var(--acls-tachycardia))",
+          "tachycardia-foreground": "hsl(var(--acls-tachycardia-foreground))",
         },
       },
       borderRadius: {
