@@ -152,13 +152,14 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
   useEffect(() => {
     const isPostROSC = session.phase === 'post_rosc';
     const isCodeEnded = session.phase === 'code_ended';
-    const isTerminalPhase = isPostROSC || isCodeEnded;
+    const isBradyTachyEnded = session.phase === 'bradytachy_ended';
+    const isTerminalPhase = isPostROSC || isCodeEnded || isBradyTachyEnded;
     const hasEndTime = session.endTime !== null;
     
     if (isTerminalPhase && hasEndTime) {
-      // For code_ended: save once
+      // For code_ended/bradytachy_ended: save once
       // For post_rosc: save on every update with debouncing
-      const shouldSaveOnce = isCodeEnded && !hasAutoSavedRef.current;
+      const shouldSaveOnce = (isCodeEnded || isBradyTachyEnded) && !hasAutoSavedRef.current;
       const shouldSaveContinuously = isPostROSC;
       
       if (shouldSaveOnce) {
@@ -203,6 +204,8 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
                 type: i.type,
                 details: i.details,
                 value: i.value,
+                module: i.module,
+                bradyTachyContext: i.bradyTachyContext,
               })),
               etco2Readings: sessionSnapshot.vitalReadings
                 .filter(v => v.etco2 !== undefined)
@@ -247,7 +250,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
 
   // Reset auto-save flag when starting a new session
   useEffect(() => {
-    if (session.phase === 'initial' || session.phase === 'rhythm_selection' || session.phase === 'pathway_selection' || session.phase === 'cpr_pending_rhythm') {
+    if (session.phase === 'initial' || session.phase === 'rhythm_selection' || session.phase === 'pathway_selection' || session.phase === 'cpr_pending_rhythm' || session.phase === 'bradytachy_patient_selection') {
       if (hasAutoSavedRef.current) {
         console.log('Resetting auto-save flag - new session started');
         hasAutoSavedRef.current = false;
