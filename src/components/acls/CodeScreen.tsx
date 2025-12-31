@@ -22,7 +22,7 @@ import { useMetronome } from '@/hooks/useMetronome';
 import { useVoiceAnnouncements } from '@/hooks/useVoiceAnnouncements';
 import { useSettings } from '@/hooks/useSettings';
 import { Button } from '@/components/ui/button';
-import { Download, RotateCcw, StickyNote, Heart, Activity, Stethoscope, Scale } from 'lucide-react';
+import { Download, RotateCcw, StickyNote, Heart, Activity, Stethoscope, Scale, XCircle } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';

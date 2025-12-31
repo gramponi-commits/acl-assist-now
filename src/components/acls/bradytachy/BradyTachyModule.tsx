@@ -75,11 +75,8 @@ export function BradyTachyModule({ onSwitchToArrest, onExit }: BradyTachyModuleP
           <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
             <h2 className="text-2xl font-bold">{t('bradyTachy.sessionEnded')}</h2>
             <div className="space-y-2">
-              <Button onClick={actions.resetSession} size="lg">
+              <Button onClick={onExit} size="lg">
                 {t('actions.reset')}
-              </Button>
-              <Button onClick={onExit} variant="outline" size="lg">
-                Exit
               </Button>
             </div>
           </div>
