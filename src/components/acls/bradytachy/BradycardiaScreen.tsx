@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -27,13 +27,6 @@ export function BradycardiaScreen({ decisionContext, actions, patientWeight }: B
   const isPediatric = patientGroup === 'pediatric';
   const [atropineDoses, setAtropineDoses] = useState(0);
   const [showAssessment, setShowAssessment] = useState(stability === null);
-
-  // Sync with stability changes
-  useEffect(() => {
-    if (stability !== null) {
-      setShowAssessment(false);
-    }
-  }, [stability]);
 
   // Assessment phase
   if (showAssessment) {
