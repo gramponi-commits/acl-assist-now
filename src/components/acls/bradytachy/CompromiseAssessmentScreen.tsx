@@ -3,16 +3,17 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { BradyTachySession } from '@/types/acls';
+import { BradyTachyDecisionContext } from '@/types/acls';
 import { BradyTachyActions } from '@/hooks/useBradyTachyLogic';
 import { AlertCircle, Activity } from 'lucide-react';
 
 interface CompromiseAssessmentScreenProps {
-  session: BradyTachySession;
+  decisionContext: BradyTachyDecisionContext;
   actions: BradyTachyActions;
+  onComplete: () => void;
 }
 
-export function CompromiseAssessmentScreen({ session, actions }: CompromiseAssessmentScreenProps) {
+export function CompromiseAssessmentScreen({ decisionContext, actions, onComplete }: CompromiseAssessmentScreenProps) {
   const { t } = useTranslation();
 
   return (
@@ -49,7 +50,10 @@ export function CompromiseAssessmentScreen({ session, actions }: CompromiseAsses
 
           <div className="grid grid-cols-1 gap-3 mt-4">
             <Button
-              onClick={() => actions.setStability('unstable')}
+              onClick={() => {
+                actions.setStability('unstable');
+                onComplete();
+              }}
               className={cn(
                 "h-16 text-lg font-bold",
                 "bg-red-600 hover:bg-red-700 text-white",
@@ -60,7 +64,10 @@ export function CompromiseAssessmentScreen({ session, actions }: CompromiseAsses
               {t('bradyTachy.pedsCompromiseYes')}
             </Button>
             <Button
-              onClick={() => actions.setStability('stable')}
+              onClick={() => {
+                actions.setStability('stable');
+                onComplete();
+              }}
               variant="outline"
               className="h-16 text-lg font-bold"
             >

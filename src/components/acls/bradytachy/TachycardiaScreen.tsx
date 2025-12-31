@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { BradyTachySession } from '@/types/acls';
+import { BradyTachyDecisionContext } from '@/types/acls';
 import { BradyTachyActions } from '@/hooks/useBradyTachyLogic';
 import { SinusVsSVTSelector } from './SinusVsSVTSelector';
 import { SinusEvaluationScreen } from './SinusEvaluationScreen';
@@ -21,25 +21,36 @@ import {
 import { Zap, AlertCircle, Activity } from 'lucide-react';
 
 interface TachycardiaScreenProps {
-  session: BradyTachySession;
+  decisionContext: BradyTachyDecisionContext;
   actions: BradyTachyActions;
+  patientWeight: number | null;
 }
 
-export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) {
+export function TachycardiaScreen({ decisionContext, actions, patientWeight }: TachycardiaScreenProps) {
   const { t } = useTranslation();
-  const { patientGroup, weightKg, stability, qrsWidth, rhythmRegular, pedsSinusVsSVTChoice } = session.decisionContext;
+  const { patientGroup, weightKg, stability, qrsWidth, rhythmRegular, pedsSinusVsSVTChoice } = decisionContext;
   const isPediatric = patientGroup === 'pediatric';
   const [adenosineDoses, setAdenosineDoses] = useState(0);
   const [cardioversionAttempts, setCardioversionAttempts] = useState(0);
+  const [showSinusEval, setShowSinusEval] = useState(isPediatric && !stability);
+  const [showCompromiseAssess, setShowCompromiseAssess] = useState(false);
 
   // Pediatric: First show sinus evaluation screen (NEW FLOW)
-  if (isPediatric && session.phase === 'tachycardia_assessment') {
-    return <SinusEvaluationScreen session={session} actions={actions} />;
+  if (isPediatric && showSinusEval) {
+    return <SinusEvaluationScreen 
+      decisionContext={decisionContext} 
+      actions={actions} 
+      onComplete={() => setShowSinusEval(false)}
+      onAdvanceToCompromise={() => {
+        setShowSinusEval(false);
+        setShowCompromiseAssess(true);
+      }}
+    />;
   }
 
   // Pediatric: Then cardiopulmonary compromise assessment (NEW FLOW)
-  if (isPediatric && session.phase === 'tachycardia_compromise_assessment') {
-    return <CompromiseAssessmentScreen session={session} actions={actions} />;
+  if (isPediatric && showCompromiseAssess) {
+    return <CompromiseAssessmentScreen decisionContext={decisionContext} actions={actions} onComplete={() => setShowCompromiseAssess(false)} />;
   }
 
   // If pediatric sinus tachycardia selected, show "treat cause" guidance
@@ -75,7 +86,7 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
   }
 
   // Adult initial assessment (unchanged)
-  if (!isPediatric && session.phase === 'tachycardia_assessment') {
+  if (!isPediatric && !stability) {
     return (
       <ScrollArea className="h-full">
         <div className="p-6 space-y-6 max-w-3xl mx-auto">

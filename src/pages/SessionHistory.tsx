@@ -69,6 +69,23 @@ export default function SessionHistory() {
     });
   };
 
+  // Helper to detect Brady/Tachy session type
+  const getBradyTachyInfo = (session: StoredSession) => {
+    const hasBradyTachyInterventions = session.interventions.some(i => i.module === 'bradytachy');
+    const hasSwitchToArrest = session.interventions.some(i => i.type === 'switch_to_arrest');
+    const hasArrestInterventions = session.interventions.some(i => 
+      i.module !== 'bradytachy' && ['shock', 'epinephrine', 'cpr_start'].includes(i.type)
+    );
+
+    if (hasBradyTachyInterventions) {
+      if (hasSwitchToArrest || hasArrestInterventions) {
+        return { type: 'merged' as const, label: 'Brady/Tachy → Arrest' };
+      }
+      return { type: 'standalone' as const, label: 'Brady/Tachy Only' };
+    }
+    return { type: 'none' as const, label: null };
+  };
+
   const getHsTsChecked = (hsAndTs: StoredSession['hsAndTs']) => {
     if (!hsAndTs) return [];
     const checked: string[] = [];
@@ -187,6 +204,7 @@ export default function SessionHistory() {
               const hsTsChecked = getHsTsChecked(session.hsAndTs);
               const postROSCActions = getPostROSCActions(session.postROSCChecklist);
               const pathwayMode = session.pathwayMode || 'adult';
+              const bradyTachyInfo = getBradyTachyInfo(session);
               
               return (
                 <Collapsible
@@ -201,7 +219,7 @@ export default function SessionHistory() {
                     {/* Header */}
                     <div className="flex items-start justify-between">
                       <div className="space-y-1">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <Badge
                             variant="outline"
                             className={cn(
@@ -217,6 +235,20 @@ export default function SessionHistory() {
                               <><Baby className="h-3 w-3 mr-1" />PALS</>
                             )}
                           </Badge>
+                          {bradyTachyInfo.label && (
+                            <Badge
+                              variant="outline"
+                              className={cn(
+                                "text-xs",
+                                bradyTachyInfo.type === 'merged'
+                                  ? 'border-blue-600 text-blue-600'
+                                  : 'border-blue-400 text-blue-400'
+                              )}
+                            >
+                              <Activity className="h-3 w-3 mr-1" />
+                              {bradyTachyInfo.label}
+                            </Badge>
+                          )}
                           {pathwayMode === 'pediatric' && session.patientWeight && (
                             <span className="text-xs text-muted-foreground">
                               {session.patientWeight}kg
@@ -238,11 +270,19 @@ export default function SessionHistory() {
                             <Heart className="h-4 w-4" />
                           ) : session.outcome === 'deceased' ? (
                             <XCircle className="h-4 w-4" />
+                          ) : session.outcome === 'resolved' ? (
+                            <Heart className="h-4 w-4" />
+                          ) : session.outcome === 'transferred' ? (
+                            <Activity className="h-4 w-4" />
                           ) : null}
                           {session.outcome === 'rosc' 
                             ? t('history.rosc')
                             : session.outcome === 'deceased'
                             ? t('history.deceased')
+                            : session.outcome === 'resolved'
+                            ? t('history.resolved')
+                            : session.outcome === 'transferred'
+                            ? t('history.transferred')
                             : t('history.unknown')}
                         </div>
                       </div>
