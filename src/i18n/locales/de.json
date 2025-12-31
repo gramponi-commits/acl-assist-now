@@ -599,6 +599,11 @@
     "exitSessionWarning": "Sie haben eine aktive Sitzung. Sind Sie sicher, dass Sie beenden möchten?",
     "exit": "Beenden",
     "pedsCompromiseQuestion": "Kardiopulmonale Kompromittierung?",
-    "pedsCompromiseCriteria": "Akut veränderter Geisteszustand, Schockzeichen oder Hypotonie"
+    "pedsCompromiseCriteria": "Akut veränderter Geisteszustand, Schockzeichen oder Hypotonie",
+    "pedsCompromiseYes": "JA - Kompromittierung vorhanden",
+    "pedsCompromiseNo": "NEIN - Keine Kompromittierung",
+    "pedsBradyHR60Instructions": "Wenn Herzfrequenz <60/min mit schlechter Perfusion trotz adäquater Sauerstoffzufuhr und Beatmung, CPR starten (roten Knopf oben verwenden).",
+    "notSinusConcerningRhythm": "Kein Sinusrhythmus / Besorgniserregender Rhythmus",
+    "continueToCompromiseAssessment": "Weiter zur Kompromittierungsbewertung"
   }
 }

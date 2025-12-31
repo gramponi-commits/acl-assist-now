@@ -79,7 +79,7 @@ export function SinusEvaluationScreen({ session, actions }: SinusEvaluationScree
           <div className="flex items-center gap-2 mb-3">
             <AlertCircle className="h-5 w-5 text-orange-600" />
             <h3 className="font-bold text-lg text-orange-600">
-              Not Sinus / Concerning Rhythm
+              {t('bradyTachy.notSinusConcerningRhythm')}
             </h3>
           </div>
 
@@ -100,7 +100,7 @@ export function SinusEvaluationScreen({ session, actions }: SinusEvaluationScree
               "bg-orange-600 hover:bg-orange-700 text-white"
             )}
           >
-            Continue to Compromise Assessment
+            {t('bradyTachy.continueToCompromiseAssessment')}
           </Button>
         </div>
       </div>

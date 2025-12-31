@@ -12,7 +12,7 @@ import {
   BradyTachyIntervention,
   createInitialBradyTachySession,
 } from '@/types/acls';
-import { saveBradyTachySession, clearBradyTachySession, StoredBradyTachySession } from '@/lib/bradyTachyStorage';
+import { saveBradyTachySession, clearBradyTachySession, StoredBradyTachySession, saveBradyTachyToHistory } from '@/lib/bradyTachyStorage';
 
 export function useBradyTachyLogic() {
   const { t } = useTranslation();
@@ -234,32 +234,98 @@ export function useBradyTachyLogic() {
   }, [addIntervention, t]);
 
   // Switch to cardiac arrest
-  const switchToArrest = useCallback(() => {
+  const switchToArrest = useCallback(async () => {
     const now = Date.now();
-    setSession(prev => ({
-      ...prev,
-      outcome: 'switched_to_arrest',
+    
+    // Create the final session state before switching
+    const finalSession = {
+      ...session,
+      outcome: 'switched_to_arrest' as const,
       switchedToArrestTime: now,
       endTime: now,
-      phase: 'session_ended',
-    }));
+      phase: 'session_ended' as const,
+    };
+    
+    // Save to history before switching
+    const sessionForHistory: StoredBradyTachySession = {
+      id: finalSession.id,
+      startTime: finalSession.startTime,
+      endTime: finalSession.endTime,
+      patientGroup: finalSession.decisionContext.patientGroup,
+      weightKg: finalSession.decisionContext.weightKg,
+      branch: finalSession.decisionContext.branch,
+      interventions: finalSession.interventions.map(i => ({
+        timestamp: i.timestamp,
+        type: i.type,
+        details: i.details,
+        value: i.value,
+        doseStep: i.doseStep,
+        calculatedDose: i.calculatedDose,
+        decisionContext: i.decisionContext,
+      })),
+      outcome: finalSession.outcome,
+    };
+    
+    // Save to history (async)
+    try {
+      await saveBradyTachyToHistory(sessionForHistory);
+    } catch (err) {
+      console.error('Failed to save session to history before arrest switch:', err);
+    }
+    
+    // Update the session state
+    setSession(finalSession);
     addIntervention('switch_to_arrest', t('bradyTachy.switchedToArrest'));
+    
     // Note: We do NOT clear the session here - it will be cleared after merging in CodeScreen
     return true; // Signal to parent to switch to arrest mode
-  }, [addIntervention, t]);
+  }, [session, addIntervention, t]);
 
   // End session
-  const endSession = useCallback((outcome: 'resolved' | 'transferred') => {
+  const endSession = useCallback(async (outcome: 'resolved' | 'transferred') => {
     const now = Date.now();
-    setSession(prev => ({
-      ...prev,
-      outcome,
-      endTime: now,
-      phase: 'session_ended',
-    }));
+    setSession(prev => {
+      const updated = {
+        ...prev,
+        outcome,
+        endTime: now,
+        phase: 'session_ended' as const,
+      };
+      
+      // Save to history before clearing
+      const sessionForHistory: StoredBradyTachySession = {
+        id: updated.id,
+        startTime: updated.startTime,
+        endTime: updated.endTime,
+        patientGroup: updated.decisionContext.patientGroup,
+        weightKg: updated.decisionContext.weightKg,
+        branch: updated.decisionContext.branch,
+        interventions: updated.interventions.map(i => ({
+          timestamp: i.timestamp,
+          type: i.type,
+          details: i.details,
+          value: i.value,
+          doseStep: i.doseStep,
+          calculatedDose: i.calculatedDose,
+          decisionContext: i.decisionContext,
+        })),
+        outcome: updated.outcome,
+      };
+      
+      // Save to history (async, but don't wait)
+      saveBradyTachyToHistory(sessionForHistory).catch(err => {
+        console.error('Failed to save session to history:', err);
+      });
+      
+      return updated;
+    });
+    
     addIntervention('note', `Session ended: ${outcome}`);
-    // Clear the persisted session
-    clearBradyTachySession();
+    
+    // Clear the persisted active session after a brief delay to ensure intervention is saved
+    setTimeout(() => {
+      clearBradyTachySession();
+    }, 100);
   }, [addIntervention]);
 
   // Reset session

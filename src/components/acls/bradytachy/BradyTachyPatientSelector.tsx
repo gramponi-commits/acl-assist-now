@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { User, Baby, Activity } from 'lucide-react';
+import { User, Baby, Scale } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { WeightInput } from '../WeightInput';
 import { BradyTachySession, PathwayMode } from '@/types/acls';
@@ -117,7 +117,7 @@ export function BradyTachyPatientSelector({ session, actions }: BradyTachyPatien
               'border-2 border-pals-primary text-pals-primary hover:bg-pals-primary/10'
             )}
           >
-            <Activity className="h-6 w-6" />
+            <Scale className="h-6 w-6" />
             <div className="text-left">
               <div className="text-lg font-bold">
                 {currentWeight ? `${currentWeight} kg` : t('bradyTachy.optionalWeight')}

@@ -67,8 +67,7 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
                 {t('bradyTachy.pedsBradyHR60StartCPR')}
               </div>
               <p className="text-sm text-muted-foreground">
-                If heart rate &lt;60/min with poor perfusion despite adequate oxygenation and ventilation,
-                start CPR (use red button at top).
+                {t('bradyTachy.pedsBradyHR60Instructions')}
               </p>
             </div>
           )}

@@ -595,6 +595,11 @@
     "exitSessionWarning": "You have an active session. Are you sure you want to exit?",
     "exit": "Exit",
     "pedsCompromiseQuestion": "Cardiopulmonary Compromise?",
-    "pedsCompromiseCriteria": "Acutely altered mental status, signs of shock, or hypotension"
+    "pedsCompromiseCriteria": "Acutely altered mental status, signs of shock, or hypotension",
+    "pedsCompromiseYes": "YES - Compromise Present",
+    "pedsCompromiseNo": "NO - No Compromise",
+    "pedsBradyHR60Instructions": "If heart rate <60/min with poor perfusion despite adequate oxygenation and ventilation, start CPR (use red button at top).",
+    "notSinusConcerningRhythm": "Not Sinus / Concerning Rhythm",
+    "continueToCompromiseAssessment": "Continue to Compromise Assessment"
   }
 }
