@@ -144,7 +144,7 @@ export function BradyTachyPatientSelector({ session, actions }: BradyTachyPatien
             'w-full h-24 flex flex-col items-center justify-center gap-2',
             'bg-acls-bradycardia hover:bg-acls-bradycardia/90 text-white',
             'shadow-lg shadow-acls-bradycardia/30 transition-all',
-            'text-xl font-bold'
+            'text-xl font-bold border-0'
           )}
         >
           {t('bradyTachy.bradycardia')}
@@ -157,7 +157,7 @@ export function BradyTachyPatientSelector({ session, actions }: BradyTachyPatien
             'w-full h-24 flex flex-col items-center justify-center gap-2',
             'bg-acls-tachycardia hover:bg-acls-tachycardia/90 text-white',
             'shadow-lg shadow-acls-tachycardia/30 transition-all',
-            'text-xl font-bold'
+            'text-xl font-bold border-0'
           )}
         >
           {t('bradyTachy.tachycardia')}

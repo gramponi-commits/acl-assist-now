@@ -28,9 +28,10 @@ import { Zap, AlertCircle, Activity, AlertTriangle } from 'lucide-react';
 interface TachycardiaScreenProps {
   session: BradyTachySession;
   actions: BradyTachyActions;
+  onSwitchToArrest: () => void;
 }
 
-export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) {
+export function TachycardiaScreen({ session, actions, onSwitchToArrest }: TachycardiaScreenProps) {
   const { t } = useTranslation();
   const { patientGroup, weightKg, stability, qrsWidth, rhythmRegular, pedsSinusVsSVTChoice, cardioversionRhythmType } = session.decisionContext;
   const isPediatric = patientGroup === 'pediatric';
@@ -274,7 +275,6 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
                   <Button
                     onClick={() => {
                       setCardioversionAttempts(prev => prev + 1);
-                      setShowSyncReminder(false);
                       const energy = calculatePedsTachyCardioversion(weightKg, 1);
                       actions.giveCardioversion(energy.display);
                     }}
@@ -305,7 +305,6 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
                     const energy = getAdultTachyCardioversion(cardioversionRhythmType);
                     actions.giveCardioversion(energy.display);
                     setCardioversionAttempts(prev => prev + 1);
-                    setShowSyncReminder(false);
                   }}
                   className={cn(
                     "w-full h-12",
@@ -319,7 +318,10 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
                   onClick={() => {
                     actions.giveCardioversion(t('bradyTachy.defibrillationUnsynchronized'));
                     setCardioversionAttempts(prev => prev + 1);
-                    setShowSyncReminder(false);
+                    // Redirect to ACLS CPR after defibrillation for polymorphic VT
+                    setTimeout(() => {
+                      onSwitchToArrest();
+                    }, 100);
                   }}
                   className="w-full h-12 bg-red-600 hover:bg-red-700"
                 >

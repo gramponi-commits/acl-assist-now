@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Intervention } from '@/types/acls';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { ChevronDown, Clock, Zap, Syringe, Pill, Heart, Activity, Wind, FileText, Gauge } from 'lucide-react';
+import { ChevronDown, Clock, Zap, Syringe, Pill, Heart, Activity, Wind, FileText, Gauge, Droplets, HandHeart } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -27,11 +27,26 @@ function getInterventionIcon(type: Intervention['type']) {
   switch (type) {
     case 'shock':
       return <Zap className="h-4 w-4 text-acls-shockable" />;
+    case 'cardioversion':
+      return <Zap className="h-4 w-4 text-acls-tachycardia" />;
     case 'epinephrine':
       return <Syringe className="h-4 w-4 text-acls-medication" />;
+    case 'atropine':
+      return <Syringe className="h-4 w-4 text-acls-bradycardia" />;
+    case 'adenosine':
+      return <Syringe className="h-4 w-4 text-acls-tachycardia" />;
     case 'amiodarone':
     case 'lidocaine':
       return <Pill className="h-4 w-4 text-acls-medication" />;
+    case 'beta_blocker':
+    case 'calcium_blocker':
+    case 'procainamide':
+      return <Pill className="h-4 w-4 text-acls-tachycardia" />;
+    case 'dopamine':
+    case 'epi_infusion':
+      return <Droplets className="h-4 w-4 text-acls-bradycardia" />;
+    case 'vagal_maneuver':
+      return <HandHeart className="h-4 w-4 text-acls-tachycardia" />;
     case 'rosc':
       return <Heart className="h-4 w-4 text-acls-success" />;
     case 'rhythm_change':
