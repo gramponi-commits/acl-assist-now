@@ -80,25 +80,31 @@ export function BradyTachyTimeline({ interventions, startTime }: BradyTachyTimel
                 {t('timeline.noInterventions')}
               </p>
             ) : (
-              sortedInterventions.map((intervention) => (
-                <div
-                  key={intervention.id}
-                  className="flex items-start gap-3 p-2 rounded bg-muted/30"
-                >
-                  <div className="font-mono text-xs text-muted-foreground whitespace-nowrap pt-0.5">
-                    {formatTimestamp(intervention.timestamp, startTime)}
+              sortedInterventions.map((intervention) => {
+                const displayText = intervention.translationKey
+                  ? t(intervention.translationKey, intervention.translationParams || {})
+                  : intervention.details;
+
+                return (
+                  <div
+                    key={intervention.id}
+                    className="flex items-start gap-3 p-2 rounded bg-muted/30"
+                  >
+                    <div className="font-mono text-xs text-muted-foreground whitespace-nowrap pt-0.5">
+                      {formatTimestamp(intervention.timestamp, startTime)}
+                    </div>
+                    <div className="pt-0.5">
+                      {getInterventionIcon(intervention.type)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-foreground">{displayText}</p>
+                      {intervention.calculatedDose && (
+                        <p className="text-xs text-muted-foreground mt-0.5">{intervention.calculatedDose}</p>
+                      )}
+                    </div>
                   </div>
-                  <div className="pt-0.5">
-                    {getInterventionIcon(intervention.type)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-foreground">{intervention.details}</p>
-                    {intervention.calculatedDose && (
-                      <p className="text-xs text-muted-foreground mt-0.5">{intervention.calculatedDose}</p>
-                    )}
-                  </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </ScrollArea>

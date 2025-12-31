@@ -33,6 +33,8 @@ export interface StoredSession {
     type: string;
     details: string;
     value?: number | string;
+    translationKey?: string;
+    translationParams?: Record<string, string | number>;
   }>;
   // EtCO2 readings
   etco2Readings: Array<{
