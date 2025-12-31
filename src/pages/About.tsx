@@ -152,15 +152,26 @@ const About = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <a 
-            href="https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines/algorithms" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-primary flex items-center gap-2 transition-colors"
-          >
-            {t('about.referencesAHA')}
-            <ExternalLink className="h-4 w-4" />
-          </a>
+          <div className="space-y-3">
+            <a
+              href="https://www.ahajournals.org/doi/10.1161/CIR.0000000000001376"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary flex items-center gap-2 transition-colors"
+            >
+              {t('about.referencesAdult')}
+              <ExternalLink className="h-4 w-4" />
+            </a>
+            <a
+              href="https://www.ahajournals.org/doi/epdf/10.1161/CIR.0000000000001368"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary flex items-center gap-2 transition-colors"
+            >
+              {t('about.referencesPediatric')}
+              <ExternalLink className="h-4 w-4" />
+            </a>
+          </div>
         </CardContent>
       </Card>
 

@@ -93,8 +93,25 @@ export function CodeScreen() {
       logger.sessionEvent('Found active session, prompting user to resume');
       setPendingResumeSession(activeSession);
       setShowResumeDialog(true);
+    } else {
+      // Show disclaimer notification on first load when no active session
+      const disclaimerToast = toast.warning(t('about.disclaimerNotification'), {
+        duration: Infinity,
+        id: 'disclaimer-toast',
+      });
+
+      // Store the toast dismiss function for later
+      sessionStorage.setItem('disclaimerToastShown', 'true');
     }
-  }, []);
+  }, [t]);
+
+  // Dismiss disclaimer toast when pathway is selected
+  useEffect(() => {
+    if (session.pathwayMode && sessionStorage.getItem('disclaimerToastShown') === 'true') {
+      toast.dismiss('disclaimer-toast');
+      sessionStorage.removeItem('disclaimerToastShown');
+    }
+  }, [session.pathwayMode]);
 
   // Enable audio alerts based on settings
   useEffect(() => {
