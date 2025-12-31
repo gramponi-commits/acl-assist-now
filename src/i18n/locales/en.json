@@ -585,6 +585,16 @@
     "switchedToArrest": "Switched to cardiac arrest protocol",
     "treatmentGiven": "{{treatment}} given",
     "decisionLogged": "Decision: {{decision}}",
-    "assessmentLogged": "Assessment: {{assessment}}"
+    "assessmentLogged": "Assessment: {{assessment}}",
+    "sinusTachyDescription": "Probable sinus tachycardia - identify and treat underlying cause (fever, pain, hypovolemia, etc.)",
+    "qrsWidthDesc": "QRS ≥0.12 s is considered wide",
+    "differentiateRhythmDesc": "Differentiate between sinus tachycardia and SVT",
+    "searchCausesDesc": "Search for underlying causes: fever, pain, hypovolemia, anxiety, etc.",
+    "checkCriteriaThenSelect": "Check the criteria that apply, then select the most likely diagnosis.",
+    "exitSessionQuestion": "Exit Session?",
+    "exitSessionWarning": "You have an active session. Are you sure you want to exit?",
+    "exit": "Exit",
+    "pedsCompromiseQuestion": "Cardiopulmonary Compromise?",
+    "pedsCompromiseCriteria": "Acutely altered mental status, signs of shock, or hypotension"
   }
 }

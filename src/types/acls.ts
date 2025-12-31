@@ -259,6 +259,8 @@ export type BradyTachyPhase =
   | 'bradycardia_assessment'
   | 'bradycardia_treatment'
   | 'tachycardia_assessment'
+  | 'tachycardia_sinus_evaluation'      // NEW: first decision for pediatric
+  | 'tachycardia_compromise_assessment' // NEW: cardiopulmonary compromise check
   | 'tachycardia_sinus_vs_svt'
   | 'tachycardia_treatment'
   | 'session_ended';

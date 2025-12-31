@@ -12,6 +12,7 @@ import {
   BradyTachyIntervention,
   createInitialBradyTachySession,
 } from '@/types/acls';
+import { saveBradyTachySession, clearBradyTachySession, StoredBradyTachySession } from '@/lib/bradyTachyStorage';
 
 export function useBradyTachyLogic() {
   const { t } = useTranslation();
@@ -36,10 +37,34 @@ export function useBradyTachyLogic() {
       decisionContext: { ...session.decisionContext },
     };
 
-    setSession(prev => ({
-      ...prev,
-      interventions: [...prev.interventions, intervention],
-    }));
+    setSession(prev => {
+      const updated = {
+        ...prev,
+        interventions: [...prev.interventions, intervention],
+      };
+
+      // Persist to localStorage
+      saveBradyTachySession({
+        id: updated.id,
+        startTime: updated.startTime,
+        endTime: updated.endTime,
+        patientGroup: updated.decisionContext.patientGroup,
+        weightKg: updated.decisionContext.weightKg,
+        branch: updated.decisionContext.branch,
+        interventions: updated.interventions.map(i => ({
+          timestamp: i.timestamp,
+          type: i.type,
+          details: i.details,
+          value: i.value,
+          doseStep: i.doseStep,
+          calculatedDose: i.calculatedDose,
+          decisionContext: i.decisionContext,
+        })),
+        outcome: updated.outcome,
+      });
+
+      return updated;
+    });
   }, [session.decisionContext]);
 
   // Set patient group (adult/pediatric)
@@ -146,6 +171,27 @@ export function useBradyTachyLogic() {
     addIntervention('decision', `Pediatric rhythm: ${choice}`);
   }, [addIntervention]);
 
+  // New: Select pediatric sinus tachycardia (treat cause pathway)
+  const selectPediatricSinusTachy = useCallback(() => {
+    setSession(prev => ({
+      ...prev,
+      decisionContext: {
+        ...prev.decisionContext,
+        pedsSinusVsSVTChoice: 'probable_sinus',
+      },
+    }));
+    addIntervention('decision', 'Pediatric sinus tachycardia identified - treat cause');
+  }, [addIntervention]);
+
+  // New: Advance to compromise assessment phase
+  const advanceToCompromiseAssessment = useCallback(() => {
+    setSession(prev => ({
+      ...prev,
+      phase: 'tachycardia_compromise_assessment',
+    }));
+    addIntervention('decision', 'Concerning rhythm - proceeding to compromise assessment');
+  }, [addIntervention]);
+
   // Treatment actions
   const giveAtropine = useCallback((dose: string, doseNumber: number) => {
     addIntervention('atropine', t('bradyTachy.treatmentGiven', { treatment: 'Atropine' }), dose, doseNumber, dose);
@@ -198,6 +244,7 @@ export function useBradyTachyLogic() {
       phase: 'session_ended',
     }));
     addIntervention('switch_to_arrest', t('bradyTachy.switchedToArrest'));
+    // Note: We do NOT clear the session here - it will be cleared after merging in CodeScreen
     return true; // Signal to parent to switch to arrest mode
   }, [addIntervention, t]);
 
@@ -211,6 +258,8 @@ export function useBradyTachyLogic() {
       phase: 'session_ended',
     }));
     addIntervention('note', `Session ended: ${outcome}`);
+    // Clear the persisted session
+    clearBradyTachySession();
   }, [addIntervention]);
 
   // Reset session
@@ -237,6 +286,8 @@ export function useBradyTachyLogic() {
       setRhythmRegular,
       setMonomorphic,
       setPedsSinusVsSVT,
+      selectPediatricSinusTachy,
+      advanceToCompromiseAssessment,
       giveAtropine,
       giveAdenosine,
       giveCardioversion,

@@ -586,9 +586,19 @@
     "endSession": "End Session",
     "sessionEnded": "Session Ended",
     "exportSession": "Export Session",
-    "switchedToArrest": "Switched to cardiac arrest protocol",
-    "treatmentGiven": "{{treatment}} given",
-    "decisionLogged": "Decision: {{decision}}",
-    "assessmentLogged": "Assessment: {{assessment}}"
+    "switchedToArrest": "Cambiado al protocolo de paro cardíaco",
+    "treatmentGiven": "{{treatment}} administrado",
+    "decisionLogged": "Decisión: {{decision}}",
+    "assessmentLogged": "Evaluación: {{assessment}}",
+    "sinusTachyDescription": "Probable taquicardia sinusal - identificar y tratar la causa subyacente (fiebre, dolor, hipovolemia, etc.)",
+    "qrsWidthDesc": "QRS ≥0,12 s se considera ancho",
+    "differentiateRhythmDesc": "Diferenciar entre taquicardia sinusal y TSV",
+    "searchCausesDesc": "Buscar causas subyacentes: fiebre, dolor, hipovolemia, ansiedad, etc.",
+    "checkCriteriaThenSelect": "Marcar los criterios que aplican, luego seleccionar el diagnóstico más probable.",
+    "exitSessionQuestion": "¿Salir de la Sesión?",
+    "exitSessionWarning": "Tienes una sesión activa. ¿Estás seguro de que quieres salir?",
+    "exit": "Salir",
+    "pedsCompromiseQuestion": "¿Compromiso Cardiopulmonar?",
+    "pedsCompromiseCriteria": "Estado mental agudamente alterado, signos de shock o hipotensión"
   }
 }
