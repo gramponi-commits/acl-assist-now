@@ -186,7 +186,7 @@ export default function SessionHistory() {
             )}
           >
             <Activity className="h-3 w-3" />
-            Rhythm
+            {t('history.rhythm')}
           </Button>
         </div>
       </div>
@@ -233,7 +233,7 @@ export default function SessionHistory() {
                               className="text-xs border-acls-warning text-acls-warning"
                             >
                               <Activity className="h-3 w-3 mr-1" />
-                              Rhythm
+                              {t('history.rhythm')}
                             </Badge>
                           )}
                           {/* Show ACLS/PALS badge for cardiac arrest sessions (including hybrid) */}
@@ -283,7 +283,7 @@ export default function SessionHistory() {
                           {session.outcome === 'rosc'
                             ? t('history.rosc')
                             : session.outcome === 'resolved'
-                            ? 'Resolved'
+                            ? t('history.resolved')
                             : session.outcome === 'deceased'
                             ? t('history.deceased')
                             : t('history.unknown')}
