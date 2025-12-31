@@ -55,7 +55,7 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
 
           <div className="bg-card rounded-lg p-4 border-2 border-border">
             <p className="text-sm">
-              Probable sinus tachycardia - identify and treat underlying cause (fever, pain, hypovolemia, etc.)
+              {t('bradyTachy.sinusTachyDescription')}
             </p>
           </div>
 
@@ -281,7 +281,7 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
 
           <div className="bg-card rounded-lg p-4 border-2 border-border">
             <p className="text-sm text-muted-foreground mb-4">
-              QRS ≥0.12 s is considered wide
+              {t('bradyTachy.qrsWidthDesc')}
             </p>
             <div className="grid grid-cols-1 gap-3">
               <Button

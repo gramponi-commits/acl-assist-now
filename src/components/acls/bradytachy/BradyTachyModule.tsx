@@ -116,9 +116,9 @@ export function BradyTachyModule({ onSwitchToArrest, onExit }: BradyTachyModuleP
       {showExitConfirm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-background rounded-lg p-6 max-w-md w-full space-y-4">
-            <h3 className="text-lg font-bold">Exit Session?</h3>
+            <h3 className="text-lg font-bold">{t('bradyTachy.exitSessionQuestion')}</h3>
             <p className="text-sm text-muted-foreground">
-              You have an active session. Are you sure you want to exit?
+              {t('bradyTachy.exitSessionWarning')}
             </p>
             <div className="flex gap-2">
               <Button
@@ -126,14 +126,14 @@ export function BradyTachyModule({ onSwitchToArrest, onExit }: BradyTachyModuleP
                 variant="destructive"
                 className="flex-1"
               >
-                Exit
+                {t('bradyTachy.exit')}
               </Button>
               <Button
                 onClick={() => setShowExitConfirm(false)}
                 variant="outline"
                 className="flex-1"
               >
-                Cancel
+                {t('common.cancel')}
               </Button>
             </div>
           </div>

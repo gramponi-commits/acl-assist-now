@@ -50,7 +50,7 @@ export function SinusVsSVTSelector({ session, actions }: SinusVsSVTSelectorProps
           </div>
           <h1 className="text-2xl font-bold">{t('bradyTachy.pedsSinusVsSVT')}</h1>
           <p className="text-sm text-muted-foreground mt-2">
-            Differentiate between sinus tachycardia and SVT
+            {t('bradyTachy.differentiateRhythmDesc')}
           </p>
         </div>
 
@@ -103,7 +103,7 @@ export function SinusVsSVTSelector({ session, actions }: SinusVsSVTSelectorProps
           <div className="bg-muted rounded p-3 mb-3 text-sm">
             <p className="font-medium mb-1">{t('bradyTachy.pedsSinusTreatCause')}</p>
             <p className="text-xs text-muted-foreground">
-              Search for underlying causes: fever, pain, hypovolemia, anxiety, etc.
+              {t('bradyTachy.searchCausesDesc')}
             </p>
           </div>
 
@@ -193,7 +193,7 @@ export function SinusVsSVTSelector({ session, actions }: SinusVsSVTSelectorProps
 
         {/* Helper note */}
         <div className="text-center text-xs text-muted-foreground">
-          <p>Check the criteria that apply, then select the most likely diagnosis.</p>
+          <p>{t('bradyTachy.checkCriteriaThenSelect')}</p>
         </div>
       </div>
     </ScrollArea>

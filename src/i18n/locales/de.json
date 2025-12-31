@@ -586,9 +586,19 @@
     "endSession": "End Session",
     "sessionEnded": "Session Ended",
     "exportSession": "Export Session",
-    "switchedToArrest": "Switched to cardiac arrest protocol",
-    "treatmentGiven": "{{treatment}} given",
-    "decisionLogged": "Decision: {{decision}}",
-    "assessmentLogged": "Assessment: {{assessment}}"
+    "switchedToArrest": "Zum Herzstillstand-Protokoll gewechselt",
+    "treatmentGiven": "{{treatment}} verabreicht",
+    "decisionLogged": "Entscheidung: {{decision}}",
+    "assessmentLogged": "Beurteilung: {{assessment}}",
+    "sinusTachyDescription": "Wahrscheinlich Sinustachykardie - Ursache identifizieren und behandeln (Fieber, Schmerz, Hypovolämie, usw.)",
+    "qrsWidthDesc": "QRS ≥0,12 s gilt als breit",
+    "differentiateRhythmDesc": "Unterscheiden zwischen Sinustachykardie und SVT",
+    "searchCausesDesc": "Suche nach zugrunde liegenden Ursachen: Fieber, Schmerz, Hypovolämie, Angst, usw.",
+    "checkCriteriaThenSelect": "Zutreffende Kriterien ankreuzen, dann wahrscheinlichste Diagnose wählen.",
+    "exitSessionQuestion": "Sitzung beenden?",
+    "exitSessionWarning": "Sie haben eine aktive Sitzung. Sind Sie sicher, dass Sie beenden möchten?",
+    "exit": "Beenden",
+    "pedsCompromiseQuestion": "Kardiopulmonale Kompromittierung?",
+    "pedsCompromiseCriteria": "Akut veränderter Geisteszustand, Schockzeichen oder Hypotonie"
   }
 }

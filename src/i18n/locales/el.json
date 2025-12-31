@@ -583,9 +583,19 @@
     "endSession": "End Session",
     "sessionEnded": "Session Ended",
     "exportSession": "Export Session",
-    "switchedToArrest": "Switched to cardiac arrest protocol",
-    "treatmentGiven": "{{treatment}} given",
-    "decisionLogged": "Decision: {{decision}}",
-    "assessmentLogged": "Assessment: {{assessment}}"
+    "switchedToArrest": "Αλλαγή σε πρωτόκολλο καρδιακής ανακοπής",
+    "treatmentGiven": "{{treatment}} χορηγήθηκε",
+    "decisionLogged": "Απόφαση: {{decision}}",
+    "assessmentLogged": "Αξιολόγηση: {{assessment}}",
+    "sinusTachyDescription": "Πιθανή φλεβοκομβική ταχυκαρδία - εντοπισμός και θεραπεία υποκείμενης αιτίας (πυρετός, πόνος, υποογκαιμία, κλπ.)",
+    "qrsWidthDesc": "QRS ≥0,12 s θεωρείται ευρύ",
+    "differentiateRhythmDesc": "Διαφοροδιάγνωση μεταξύ φλεβοκομβικής ταχυκαρδίας και υπερκοιλιακής ταχυκαρδίας",
+    "searchCausesDesc": "Αναζήτηση υποκείμενων αιτιών: πυρετός, πόνος, υποογκαιμία, άγχος, κλπ.",
+    "checkCriteriaThenSelect": "Επιλέξτε τα κριτήρια που ισχύουν, στη συνέχεια επιλέξτε την πιο πιθανή διάγνωση.",
+    "exitSessionQuestion": "Έξοδος από τη Συνεδρία;",
+    "exitSessionWarning": "Έχετε μια ενεργή συνεδρία. Είστε σίγουροι ότι θέλετε να αποχωρήσετε;",
+    "exit": "Έξοδος",
+    "pedsCompromiseQuestion": "Καρδιοαναπνευστικός Συμβιβασμός;",
+    "pedsCompromiseCriteria": "Οξεία μεταβολή ψυχικής κατάστασης, σημεία σοκ ή υπότασης"
   }
 }
