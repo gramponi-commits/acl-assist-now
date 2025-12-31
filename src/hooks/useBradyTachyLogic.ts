@@ -132,15 +132,15 @@ export function useBradyTachyLogic() {
   }, [addIntervention]);
 
   // Set pediatric sinus vs SVT choice
-  const setPedsSinusVsSVT = useCallback((choice: PedsSinusVsSVT, criteria?: Record<string, boolean>) => {
+  const setPedsSinusVsSVT = useCallback((choice: PedsSinusVsSVT, criteria?: { pWavesPresent: boolean; variableRR: boolean; appropriateRate: boolean } | { pWavesAbnormal: boolean; fixedRR: boolean; inappropriateRate: boolean; abruptRateChange: boolean }) => {
     setSession(prev => ({
       ...prev,
       phase: 'tachycardia_treatment',
       decisionContext: {
         ...prev.decisionContext,
         pedsSinusVsSVTChoice: choice,
-        ...(choice === 'probable_sinus' && criteria ? { sinusTachyCriteria: criteria } : {}),
-        ...(choice === 'probable_svt' && criteria ? { svtCriteria: criteria } : {}),
+        ...(choice === 'probable_sinus' && criteria ? { sinusTachyCriteria: criteria as { pWavesPresent: boolean; variableRR: boolean; appropriateRate: boolean } } : {}),
+        ...(choice === 'probable_svt' && criteria ? { svtCriteria: criteria as { pWavesAbnormal: boolean; fixedRR: boolean; inappropriateRate: boolean; abruptRateChange: boolean } } : {}),
       },
     }));
     addIntervention('decision', `Pediatric rhythm: ${choice}`);

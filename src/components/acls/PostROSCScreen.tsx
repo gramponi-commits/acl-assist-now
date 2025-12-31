@@ -13,6 +13,8 @@ interface PostROSCScreenProps {
   onVitalsUpdate: (updates: Partial<PostROSCVitals>) => void;
   onExport: () => void;
   onNewCode: () => void;
+  onSave?: () => void;
+  isSaved?: boolean;
 }
 
 function VitalInput({ 

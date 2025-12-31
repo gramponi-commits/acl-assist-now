@@ -261,6 +261,9 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
                 {/* Pacing */}
                 <div>
                   <p className="text-sm font-medium mb-2">{t('bradyTachy.bradyPacing')}</p>
+                  <p className="text-xs text-muted-foreground mb-2 italic">
+                    {t('bradyTachy.bradyPacingInstructions')}
+                  </p>
                   <Button
                     onClick={() => {
                       actions.addIntervention('note', 'Transcutaneous pacing initiated');

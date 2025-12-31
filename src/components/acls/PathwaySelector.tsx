@@ -74,8 +74,7 @@ export function PathwaySelector({
           >
             <User className="h-10 w-10" />
             <div className="text-center">
-              <div className="text-xl font-bold">{t('pathway.adult')}</div>
-              <div className="text-sm opacity-90">{t('pathway.adultACLS')}</div>
+              <div className="text-xl font-bold">{t('pathway.adultACLS')}</div>
             </div>
           </Button>
 
@@ -91,8 +90,7 @@ export function PathwaySelector({
           >
             <Baby className="h-10 w-10" />
             <div className="text-center">
-              <div className="text-xl font-bold">{t('pathway.pediatric')}</div>
-              <div className="text-sm opacity-90">{t('pathway.pediatricPALS')}</div>
+              <div className="text-xl font-bold">{t('pathway.pediatricPALS')}</div>
             </div>
           </Button>
 
