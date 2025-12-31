@@ -336,21 +336,16 @@ export function CodeScreen() {
 
               {/* Analyze Rhythm Button or Rhythm Selector */}
               {!showRhythmSelector ? (
-                <>
-                  <div className="text-center text-muted-foreground text-sm">
-                    {t('banner.analyzeRhythmWhenReady')}
-                  </div>
-                  <Button
-                    onClick={() => {
-                      setShowRhythmSelector(true);
-                      actions.setRhythmAnalysisActive(true);
-                    }}
-                    className="h-16 w-full text-xl font-bold bg-acls-info hover:bg-acls-info/90 text-white"
-                  >
-                    <Stethoscope className="h-6 w-6 mr-3" />
-                    {t('actions.analyzeRhythm')}
-                  </Button>
-                </>
+                <Button
+                  onClick={() => {
+                    setShowRhythmSelector(true);
+                    actions.setRhythmAnalysisActive(true);
+                  }}
+                  className="h-16 w-full text-xl font-bold bg-acls-info hover:bg-acls-info/90 text-white"
+                >
+                  <Stethoscope className="h-6 w-6 mr-3" />
+                  {t('actions.analyzeRhythm')}
+                </Button>
               ) : (
                 <RhythmSelector
                   currentRhythm={session.currentRhythm}
