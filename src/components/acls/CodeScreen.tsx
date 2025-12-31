@@ -1,73 +1,84 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ErrorBoundary, CodeErrorFallback } from '../ErrorBoundary';
 import { CommandBanner } from './CommandBanner';
-import { RhythmSelector } from './RhythmSelector';
-import { ActionButtons } from './ActionButtons';
-import { CycleTimers, CodeTimers } from './TimerDisplay';
-import { CPRQualityPanel } from './CPRQualityPanel';
-import { HsAndTsChecklist } from './HsAndTsChecklist';
-import { PregnancyChecklist } from './PregnancyChecklist';
-import { CodeTimeline } from './CodeTimeline';
-import { PostROSCScreen } from './PostROSCScreen';
 import { RhythmCheckModal } from './RhythmCheckModal';
 import { ResumeSessionDialog } from './ResumeSessionDialog';
 import { AddNoteDialog } from './AddNoteDialog';
-import { WeightInput, WeightDisplay } from './WeightInput';
-import { PathwaySelector, PathwayMode } from './PathwaySelector';
-import { BradyTachyModule } from './bradytachy/BradyTachyModule';
+import { FooterStatsBar } from './FooterStatsBar';
+import { PathwaySelectionView } from './views/PathwaySelectionView';
+import { CPRPendingRhythmView } from './views/CPRPendingRhythmView';
+import { ActiveCodeView } from './views/ActiveCodeView';
+import { CodeEndedView } from './views/CodeEndedView';
+import { PostROSCScreen } from './PostROSCScreen';
+import { CodeTimeline } from './CodeTimeline';
 import { useACLSLogic } from '@/hooks/useACLSLogic';
+import { usePrevious } from '@/hooks/usePrevious';
 import { useWakeLock } from '@/hooks/useWakeLock';
 import { useAudioAlerts } from '@/hooks/useAudioAlerts';
 import { useMetronome } from '@/hooks/useMetronome';
 import { useVoiceAnnouncements } from '@/hooks/useVoiceAnnouncements';
 import { useSettings } from '@/hooks/useSettings';
-import { Button } from '@/components/ui/button';
-import { Download, RotateCcw, StickyNote, Heart, Activity, Stethoscope, Scale, XCircle } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { cn } from '@/lib/utils';
+import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import { calculateShockEnergy } from '@/lib/palsDosing';
 import { getAdultShockEnergy } from '@/lib/aclsDosing';
-import { CPRRatio } from '@/types/acls';
-import { 
-  saveActiveSession, 
-  getActiveSession, 
-  clearActiveSession 
+import {
+  saveActiveSession,
+  getActiveSession,
+  clearActiveSession,
 } from '@/lib/activeSessionStorage';
 import { getBradyTachySession, clearBradyTachySession } from '@/lib/bradyTachyStorage';
+import { logger } from '@/utils/logger';
 
+// Lazy load BradyTachy module for better initial load performance
+const BradyTachyModule = lazy(() =>
+  import('./bradytachy/BradyTachyModule').then((module) => ({
+    default: module.BradyTachyModule,
+  }))
+);
+
+/**
+ * CodeScreen - Main orchestrator for ACLS/PALS decision support
+ * Refactored for better maintainability with focused view components
+ */
 export function CodeScreen() {
   const { t } = useTranslation();
   const { settings } = useSettings();
-  const { session, timerState, isInRhythmCheck, commandBanner, actions, buttonStates } = useACLSLogic(undefined, settings.defibrillatorEnergy);
+  const { session, timerState, isInRhythmCheck, commandBanner, actions, buttonStates } =
+    useACLSLogic(undefined, settings.adultDefibrillatorEnergy);
   const { requestWakeLock, releaseWakeLock } = useWakeLock();
   const { playAlert, setEnabled: setAudioEnabled, vibrate } = useAudioAlerts();
   const { announce, setEnabled: setVoiceEnabled } = useVoiceAnnouncements();
-  const { start: startMetronome, stop: stopMetronome } = useMetronome({ 
-    bpm: settings.metronomeBPM, 
-    enabled: settings.metronomeEnabled 
+  const { start: startMetronome, stop: stopMetronome } = useMetronome({
+    bpm: settings.metronomeBPM,
+    enabled: settings.metronomeEnabled,
   });
-  
-  // Brady/Tachy module state
-  const [showBradyTachyModule, setShowBradyTachyModule] = useState(false);
 
+  // Local state
+  const [showBradyTachyModule, setShowBradyTachyModule] = useState(false);
   const [showResumeDialog, setShowResumeDialog] = useState(false);
   const [showNoteDialog, setShowNoteDialog] = useState(false);
-  const [showRhythmSelector, setShowRhythmSelector] = useState(false);
-  const [showWeightDialog, setShowWeightDialog] = useState(false);
-  const [pendingResumeSession, setPendingResumeSession] = useState<ReturnType<typeof getActiveSession>>(null);
-  
-  // Calculate shock energy based on pathway mode and patient weight
-  const shockEnergy = session.pathwayMode === 'pediatric' 
-    ? calculateShockEnergy(session.patientWeight, session.shockCount)
-    : getAdultShockEnergy(session.shockCount, settings.defibrillatorEnergy);
-  
-  // Track previous states for alert triggers
-  const prevRhythmCheckDue = useRef(false);
-  const prevPreShockAlert = useRef(false);
-  const prevEpiDue = useRef(false);
-  const prevAntiarrhythmicDue = useRef(false);
+  const [pendingResumeSession, setPendingResumeSession] = useState<ReturnType<
+    typeof getActiveSession
+  >>(null);
 
+  // Calculate shock energy based on pathway mode and patient weight
+  const shockEnergy =
+    session.pathwayMode === 'pediatric'
+      ? calculateShockEnergy(session.patientWeight, session.shockCount)
+      : getAdultShockEnergy(session.shockCount, settings.adultDefibrillatorEnergy);
+
+  // Track previous states for alert triggers using usePrevious hook
+  const prevRhythmCheckDue = usePrevious(timerState.rhythmCheckDue);
+  const prevPreShockAlert = usePrevious(timerState.preShockAlert);
+  const prevEpiDue = usePrevious(buttonStates.epiDue);
+  const prevAntiarrhythmicDue = usePrevious(
+    session.shockCount >= 3 && (buttonStates.canGiveAmiodarone || buttonStates.canGiveLidocaine)
+  );
+
+  // Phase flags
   const isActive = session.phase === 'shockable_pathway' || session.phase === 'non_shockable_pathway';
   const isCPRPendingRhythm = session.phase === 'cpr_pending_rhythm';
   const isPostROSC = session.phase === 'post_rosc';
@@ -79,6 +90,7 @@ export function CodeScreen() {
   useEffect(() => {
     const activeSession = getActiveSession();
     if (activeSession) {
+      logger.sessionEvent('Found active session, prompting user to resume');
       setPendingResumeSession(activeSession);
       setShowResumeDialog(true);
     }
@@ -94,7 +106,7 @@ export function CodeScreen() {
     setVoiceEnabled(settings.voiceAnnouncementsEnabled);
   }, [settings.voiceAnnouncementsEnabled, setVoiceEnabled]);
 
-  // Wake lock during active code (including cpr_pending_rhythm)
+  // Wake lock during active code
   useEffect(() => {
     if ((isActive || isCPRPendingRhythm) && !isInRhythmCheck) {
       requestWakeLock();
@@ -103,7 +115,7 @@ export function CodeScreen() {
     }
   }, [isActive, isCPRPendingRhythm, isInRhythmCheck, isCodeEnded, isPostROSC, requestWakeLock, releaseWakeLock]);
 
-  // Metronome control during active CPR (including cpr_pending_rhythm)
+  // Metronome control during active CPR
   useEffect(() => {
     if ((isActive || isCPRPendingRhythm) && !isInRhythmCheck && settings.metronomeEnabled) {
       startMetronome();
@@ -123,8 +135,9 @@ export function CodeScreen() {
           totalCPRTime: timerState.totalCPRTime,
           savedAt: Date.now(),
         });
-      }, 5000); // Save every 5 seconds
-      
+        logger.sessionEvent('Auto-saved active session');
+      }, 5000);
+
       return () => clearInterval(interval);
     }
   }, [isActive, isCPRPendingRhythm, session, timerState]);
@@ -133,46 +146,66 @@ export function CodeScreen() {
   useEffect(() => {
     if (isCodeEnded || isPostROSC) {
       clearActiveSession();
+      logger.sessionEvent('Cleared active session storage');
     }
   }, [isCodeEnded, isPostROSC]);
 
   // Audio alerts for state changes
   useEffect(() => {
     // Rhythm check due alert
-    if (timerState.rhythmCheckDue && !prevRhythmCheckDue.current) {
+    if (timerState.rhythmCheckDue && !prevRhythmCheckDue) {
       playAlert('rhythmCheck');
       announce('rhythmCheck');
       if (settings.vibrationEnabled) vibrate([200, 100, 200, 100, 200]);
+      logger.medicalEvent('Rhythm check due alert triggered');
     }
-    prevRhythmCheckDue.current = timerState.rhythmCheckDue;
 
     // Pre-shock alert
-    if (timerState.preShockAlert && !prevPreShockAlert.current) {
+    if (timerState.preShockAlert && !prevPreShockAlert) {
       playAlert('preCharge');
       announce('preCharge');
       if (settings.vibrationEnabled) vibrate([150, 75, 150]);
+      logger.medicalEvent('Pre-shock alert triggered');
     }
-    prevPreShockAlert.current = timerState.preShockAlert;
 
     // Epi due alert
-    if (buttonStates.epiDue && !prevEpiDue.current) {
+    if (buttonStates.epiDue && !prevEpiDue) {
       playAlert('epiDue');
       announce('epiDue');
       if (settings.vibrationEnabled) vibrate([300, 150, 300]);
+      logger.medicalEvent('Epinephrine due alert triggered');
     }
-    prevEpiDue.current = buttonStates.epiDue;
 
     // Antiarrhythmic due alert (after shock #3)
-    const antiarrhythmicDue = session.shockCount >= 3 && (buttonStates.canGiveAmiodarone || buttonStates.canGiveLidocaine);
-    if (antiarrhythmicDue && !prevAntiarrhythmicDue.current) {
+    const antiarrhythmicDue =
+      session.shockCount >= 3 && (buttonStates.canGiveAmiodarone || buttonStates.canGiveLidocaine);
+    if (antiarrhythmicDue && !prevAntiarrhythmicDue) {
       if (settings.preferLidocaine) {
         announce('lidocaineDue');
       } else {
         announce('amiodaroneDue');
       }
+      logger.medicalEvent('Antiarrhythmic due alert triggered', {
+        preferLidocaine: settings.preferLidocaine,
+      });
     }
-    prevAntiarrhythmicDue.current = antiarrhythmicDue;
-  }, [timerState.rhythmCheckDue, timerState.preShockAlert, buttonStates.epiDue, buttonStates.canGiveAmiodarone, buttonStates.canGiveLidocaine, session.shockCount, playAlert, announce, vibrate, settings.vibrationEnabled, settings.preferLidocaine]);
+  }, [
+    timerState.rhythmCheckDue,
+    timerState.preShockAlert,
+    buttonStates.epiDue,
+    buttonStates.canGiveAmiodarone,
+    buttonStates.canGiveLidocaine,
+    session.shockCount,
+    prevRhythmCheckDue,
+    prevPreShockAlert,
+    prevEpiDue,
+    prevAntiarrhythmicDue,
+    playAlert,
+    announce,
+    vibrate,
+    settings.vibrationEnabled,
+    settings.preferLidocaine,
+  ]);
 
   // ROSC alert
   useEffect(() => {
@@ -180,25 +213,27 @@ export function CodeScreen() {
       playAlert('rosc');
       announce('rosc');
       if (settings.vibrationEnabled) vibrate(500);
+      logger.medicalEvent('ROSC achieved');
     }
   }, [isPostROSC, playAlert, announce, vibrate, settings.vibrationEnabled]);
 
+  // Handlers
   const handleAddNote = (note: string) => {
     actions.addNote(note);
     toast.success(t('notes.addNote'));
+    logger.sessionEvent('Note added', { note });
   };
 
-
-
   const handleNewCode = () => {
-    setShowRhythmSelector(false);
     clearActiveSession();
     actions.resetSession();
+    logger.sessionEvent('Session reset');
   };
 
   const handleResumeSession = () => {
     if (pendingResumeSession) {
       actions.resumeSession(pendingResumeSession.session, pendingResumeSession.timerState);
+      logger.sessionEvent('Session resumed');
     }
     setShowResumeDialog(false);
     setPendingResumeSession(null);
@@ -208,49 +243,49 @@ export function CodeScreen() {
     clearActiveSession();
     setShowResumeDialog(false);
     setPendingResumeSession(null);
+    logger.sessionEvent('Session discarded');
   };
 
-  // Brady/Tachy handlers
   const handleOpenBradyTachy = () => {
     setShowBradyTachyModule(true);
+    logger.sessionEvent('Brady/Tachy module opened');
   };
 
   const handleCloseBradyTachy = () => {
     setShowBradyTachyModule(false);
+    logger.sessionEvent('Brady/Tachy module closed');
   };
 
   const handleSwitchToArrestFromBradyTachy = (patientGroup: 'adult' | 'pediatric') => {
-    // Get the Brady/Tachy session data
     const bradyTachySession = getBradyTachySession();
-    
-    // Switch from brady/tachy to arrest mode
+
     setShowBradyTachyModule(false);
     actions.setPathwayMode(patientGroup);
-    
-    // Merge the Brady/Tachy interventions into the CODE session
+
+    // Merge Brady/Tachy interventions into CODE session
     if (bradyTachySession && bradyTachySession.interventions.length > 0) {
-      // Add a marker intervention
       actions.addIntervention('note', t('bradyTachy.switchedToArrest'));
-      
-      // Import all Brady/Tachy interventions into the CODE timeline
-      bradyTachySession.interventions.forEach(intervention => {
-        // Map the intervention details to a note
+
+      bradyTachySession.interventions.forEach((intervention) => {
         actions.addIntervention('note', intervention.details, intervention.value);
       });
-      
-      // If weight was set in Brady/Tachy, carry it over
+
       if (bradyTachySession.weightKg && patientGroup === 'pediatric') {
         actions.setPatientWeight(bradyTachySession.weightKg);
       }
     }
-    
-    // Clear the Brady/Tachy session now that it's merged
+
     clearBradyTachySession();
-    
-    // Start CPR
     actions.startCPR();
-    
     toast.success(t('bradyTachy.switchedToArrest') + ' - ' + t('timeline.title') + ' merged');
+    logger.medicalEvent('Switched from Brady/Tachy to arrest mode', { patientGroup });
+  };
+
+  const handleDeliveryAlert = () => {
+    playAlert('rhythmCheck');
+    announce('emergencyDelivery');
+    if (settings.vibrationEnabled) vibrate([500, 200, 500, 200, 500]);
+    logger.medicalEvent('Emergency delivery alert');
   };
 
   const formatDuration = (ms: number) => {
@@ -263,439 +298,208 @@ export function CodeScreen() {
   if (showBradyTachyModule) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
-        <BradyTachyModule
-          onSwitchToArrest={handleSwitchToArrestFromBradyTachy}
-          onExit={handleCloseBradyTachy}
-        />
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center min-h-screen">
+              <Skeleton className="h-64 w-full max-w-lg" />
+            </div>
+          }
+        >
+          <BradyTachyModule
+            onSwitchToArrest={handleSwitchToArrestFromBradyTachy}
+            onExit={handleCloseBradyTachy}
+          />
+        </Suspense>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Resume Session Dialog */}
-      <ResumeSessionDialog
-        open={showResumeDialog}
-        onResume={handleResumeSession}
-        onDiscard={handleDiscardSession}
-        sessionDuration={pendingResumeSession ? formatDuration(pendingResumeSession.timerState.totalElapsed) : '0:00'}
-      />
-      
-      {/* Add Note Dialog */}
-      <AddNoteDialog
-        open={showNoteDialog}
-        onOpenChange={setShowNoteDialog}
-        onAddNote={handleAddNote}
-      />
-
-      {/* Command Banner - Hidden on pathway selection and initial screen */}
-      {!isInitial && !isPathwaySelection && (
-        <CommandBanner
-          message={commandBanner.message}
-          priority={commandBanner.priority}
-          subMessage={commandBanner.subMessage}
+    <ErrorBoundary fallback={<CodeErrorFallback onRecover={handleResumeSession} />}>
+      <div className="min-h-screen bg-background flex flex-col">
+        {/* Resume Session Dialog */}
+        <ResumeSessionDialog
+          open={showResumeDialog}
+          onResume={handleResumeSession}
+          onDiscard={handleDiscardSession}
+          sessionDuration={
+            pendingResumeSession ? formatDuration(pendingResumeSession.timerState.totalElapsed) : '0:00'
+          }
         />
-      )}
 
-      <ScrollArea className="flex-1">
-        <div className="p-4 space-y-4 max-w-lg mx-auto">
-          {/* Pathway Selection Screen */}
-          {isPathwaySelection && (
-            <PathwaySelector 
-              onSelectPathway={actions.setPathwayMode}
-              onStartCPR={actions.startCPR}
-              onSetWeight={actions.setPatientWeight}
-              currentWeight={session.patientWeight}
-              onSelectBradyTachy={handleOpenBradyTachy}
-            />
-          )}
+        {/* Add Note Dialog */}
+        <AddNoteDialog open={showNoteDialog} onOpenChange={setShowNoteDialog} onAddNote={handleAddNote} />
 
-          {/* Active CPR Pending Rhythm - Only show weight for pediatric */}
-          {isCPRPendingRhythm && (
-            <>
-              {/* Weight Display + Edit Button - Only for Pediatric */}
-              {session.pathwayMode === 'pediatric' && (
-                <div className="flex items-center justify-center gap-3">
-                  <WeightDisplay 
-                    weight={session.patientWeight} 
-                    onEdit={() => setShowWeightDialog(true)} 
-                  />
-                </div>
-              )}
+        {/* Command Banner - Hidden on pathway selection and initial screen */}
+        {!isInitial && !isPathwaySelection && (
+          <CommandBanner
+            message={commandBanner.message}
+            priority={commandBanner.priority}
+            subMessage={commandBanner.subMessage}
+          />
+        )}
 
-              {/* Weight Input Dialog - only for pediatric */}
-              {session.pathwayMode === 'pediatric' && (
-                <WeightInput
-                  currentWeight={session.patientWeight}
-                  onWeightChange={actions.setPatientWeight}
-                  isOpen={showWeightDialog}
-                  onOpenChange={setShowWeightDialog}
-                  showTrigger={false}
-                />
-              )}
+        <ScrollArea className="flex-1">
+          <div className="p-3 sm:p-4 space-y-3 sm:space-y-4 max-w-lg mx-auto">
+            {/* Pathway Selection Screen */}
+            {isPathwaySelection && (
+              <PathwaySelectionView
+                onSelectPathway={actions.setPathwayMode}
+                onStartCPR={actions.startCPR}
+                onSetWeight={actions.setPatientWeight}
+                currentWeight={session.patientWeight}
+                onSelectBradyTachy={handleOpenBradyTachy}
+              />
+            )}
 
-              {/* Analyze Rhythm Button or Rhythm Selector */}
-              {!showRhythmSelector ? (
-                <Button
-                  onClick={() => {
-                    setShowRhythmSelector(true);
-                    actions.setRhythmAnalysisActive(true);
-                  }}
-                  className="h-16 w-full text-xl font-bold bg-acls-info hover:bg-acls-info/90 text-white"
-                >
-                  <Stethoscope className="h-6 w-6 mr-3" />
-                  {t('actions.analyzeRhythm')}
-                </Button>
-              ) : (
-                <RhythmSelector
-                  currentRhythm={session.currentRhythm}
-                  onSelectRhythm={(rhythm) => {
-                    actions.setRhythmAnalysisActive(false);
-                    actions.selectRhythm(rhythm);
-                  }}
-                  isInitial={false}
-                />
-              )}
-
-              {/* Code Timers - Total & CPR */}
-              <CodeTimers
+            {/* CPR Pending Rhythm View */}
+            {isCPRPendingRhythm && (
+              <CPRPendingRhythmView
+                pathwayMode={session.pathwayMode}
+                patientWeight={session.patientWeight}
+                currentRhythm={session.currentRhythm}
                 totalElapsed={timerState.totalElapsed}
                 totalCPRTime={timerState.totalCPRTime}
-              />
-
-              {/* CPR Quality */}
-              <CPRQualityPanel
                 airwayStatus={session.airwayStatus}
-                onAirwayChange={actions.setAirway}
-                onETCO2Record={actions.recordETCO2}
                 cprRatio={session.cprRatio}
-                onCPRRatioChange={actions.setCPRRatio}
-                pathwayMode={session.pathwayMode}
-              />
-
-              {/* H's & T's */}
-              <HsAndTsChecklist
                 hsAndTs={session.hsAndTs}
-                onUpdate={actions.updateHsAndTs}
-              />
-
-              {/* Pregnancy Checklist - Adult only */}
-              {session.pathwayMode === 'adult' && (
-                <PregnancyChecklist
-                  pregnancyActive={session.pregnancyActive}
-                  pregnancyCauses={session.pregnancyCauses}
-                  pregnancyInterventions={session.pregnancyInterventions}
-                  pregnancyStartTime={session.pregnancyStartTime}
-                  cprStartTime={session.startTime}
-                  onTogglePregnancy={actions.togglePregnancy}
-                  onUpdateCauses={actions.updatePregnancyCauses}
-                  onUpdateInterventions={actions.updatePregnancyInterventions}
-                  onDeliveryAlert={() => {
-                    playAlert('rhythmCheck');
-                    announce('emergencyDelivery');
-                    if (settings.vibrationEnabled) vibrate([500, 200, 500, 200, 500]);
-                  }}
-                />
-              )}
-
-              {/* Code Timeline */}
-              <CodeTimeline
                 interventions={session.interventions}
                 startTime={session.startTime}
+                pregnancyActive={session.pregnancyActive}
+                pregnancyCauses={session.pregnancyCauses}
+                pregnancyInterventions={session.pregnancyInterventions}
+                pregnancyStartTime={session.pregnancyStartTime}
+                vibrationEnabled={settings.vibrationEnabled}
+                onSetWeight={actions.setPatientWeight}
+                onSelectRhythm={actions.selectRhythm}
+                onSetRhythmAnalysisActive={actions.setRhythmAnalysisActive}
+                onAirwayChange={actions.setAirway}
+                onETCO2Record={actions.recordETCO2}
+                onCPRRatioChange={actions.setCPRRatio}
+                onUpdateHsAndTs={actions.updateHsAndTs}
+                onTogglePregnancy={actions.togglePregnancy}
+                onUpdatePregnancyCauses={actions.updatePregnancyCauses}
+                onUpdatePregnancyInterventions={actions.updatePregnancyInterventions}
+                onDeliveryAlert={handleDeliveryAlert}
+                onAddNote={() => setShowNoteDialog(true)}
+                onNewCode={handleNewCode}
               />
+            )}
 
-              {/* Session Controls */}
-              <div className="grid grid-cols-2 gap-3 pt-2">
-                <Button
-                  onClick={() => setShowNoteDialog(true)}
-                  variant="outline"
-                  className="h-12 gap-2"
-                >
-                  <StickyNote className="h-4 w-4" />
-                  {t('actions.addNote')}
-                </Button>
-                <Button
-                  onClick={handleNewCode}
-                  variant="outline"
-                  className="h-12 gap-2"
-                >
-                  <RotateCcw className="h-4 w-4" />
-                  {t('actions.reset')}
-                </Button>
-              </div>
-            </>
-          )}
-
-          {/* Active Code Screen */}
-          {isActive && !isInRhythmCheck && (
-            <>
-              {/* Weight Display + Edit Button - Only for Pediatric */}
-              {session.pathwayMode === 'pediatric' && (
-                <>
-                  <div className="flex items-center justify-center gap-3">
-                    <WeightDisplay 
-                      weight={session.patientWeight} 
-                      onEdit={() => setShowWeightDialog(true)} 
-                    />
-                  </div>
-
-                  {/* Weight Input Dialog - controlled externally */}
-                  <WeightInput
-                    currentWeight={session.patientWeight}
-                    onWeightChange={actions.setPatientWeight}
-                    isOpen={showWeightDialog}
-                    onOpenChange={setShowWeightDialog}
-                    showTrigger={false}
-                  />
-                </>
-              )}
-
-              {/* Action Buttons */}
-              <ActionButtons
-                canGiveEpinephrine={buttonStates.canGiveEpinephrine}
-                canGiveAmiodarone={buttonStates.canGiveAmiodarone}
-                canGiveLidocaine={buttonStates.canGiveLidocaine}
-                epiDue={buttonStates.epiDue}
-                rhythmCheckDue={buttonStates.rhythmCheckDue}
+            {/* Active Code View */}
+            {isActive && !isInRhythmCheck && (
+              <ActiveCodeView
+                pathwayMode={session.pathwayMode}
+                patientWeight={session.patientWeight}
                 epinephrineCount={session.epinephrineCount}
                 amiodaroneCount={session.amiodaroneCount}
                 lidocaineCount={session.lidocaineCount}
-                preferLidocaine={settings.preferLidocaine}
-                patientWeight={session.patientWeight}
-                pathwayMode={session.pathwayMode}
-                onEpinephrine={actions.giveEpinephrine}
-                onAmiodarone={actions.giveAmiodarone}
-                onLidocaine={actions.giveLidocaine}
-                onRhythmCheck={actions.startRhythmCheck}
-              />
-
-              {/* Cycle Timers - Rhythm Check & Epi */}
-              <CycleTimers
+                airwayStatus={session.airwayStatus}
+                cprRatio={session.cprRatio}
+                hsAndTs={session.hsAndTs}
+                interventions={session.interventions}
+                startTime={session.startTime}
+                pregnancyActive={session.pregnancyActive}
+                pregnancyCauses={session.pregnancyCauses}
+                pregnancyInterventions={session.pregnancyInterventions}
+                pregnancyStartTime={session.pregnancyStartTime}
                 cprCycleRemaining={timerState.cprCycleRemaining}
                 epiRemaining={timerState.epiRemaining}
                 preShockAlert={timerState.preShockAlert}
                 rhythmCheckDue={timerState.rhythmCheckDue}
-                showEpiTimer={session.epinephrineCount > 0}
-              />
-
-              {/* CPR Quality */}
-              <CPRQualityPanel
-                airwayStatus={session.airwayStatus}
-                onAirwayChange={actions.setAirway}
-                onETCO2Record={actions.recordETCO2}
-                cprRatio={session.cprRatio}
-                onCPRRatioChange={actions.setCPRRatio}
-                pathwayMode={session.pathwayMode}
-              />
-
-              {/* H's & T's */}
-              <HsAndTsChecklist
-                hsAndTs={session.hsAndTs}
-                onUpdate={actions.updateHsAndTs}
-              />
-
-              {/* Pregnancy Checklist - Adult only */}
-              {session.pathwayMode === 'adult' && (
-                <PregnancyChecklist
-                  pregnancyActive={session.pregnancyActive}
-                  pregnancyCauses={session.pregnancyCauses}
-                  pregnancyInterventions={session.pregnancyInterventions}
-                  pregnancyStartTime={session.pregnancyStartTime}
-                  cprStartTime={session.startTime}
-                  onTogglePregnancy={actions.togglePregnancy}
-                  onUpdateCauses={actions.updatePregnancyCauses}
-                  onUpdateInterventions={actions.updatePregnancyInterventions}
-                  onDeliveryAlert={() => {
-                    playAlert('rhythmCheck');
-                    announce('emergencyDelivery');
-                    if (settings.vibrationEnabled) vibrate([500, 200, 500, 200, 500]);
-                  }}
-                />
-              )}
-
-              {/* Code Timers - Total & CPR */}
-              <CodeTimers
                 totalElapsed={timerState.totalElapsed}
                 totalCPRTime={timerState.totalCPRTime}
-              />
-
-              {/* Code Timeline */}
-              <CodeTimeline
-                interventions={session.interventions}
-                startTime={session.startTime}
-              />
-
-              {/* Session Controls */}
-              <div className="grid grid-cols-3 gap-3 pt-2">
-                <Button
-                  onClick={() => setShowNoteDialog(true)}
-                  variant="outline"
-                  className="h-12 gap-2"
-                >
-                  <StickyNote className="h-4 w-4" />
-                  {t('actions.addNote')}
-                </Button>
-                <Button
-                  onClick={actions.exportSession}
-                  variant="outline"
-                  className="h-12 gap-2"
-                >
-                  <Download className="h-4 w-4" />
-                  {t('actions.export')}
-                </Button>
-                <Button
-                  onClick={handleNewCode}
-                  variant="outline"
-                  className="h-12 gap-2"
-                >
-                  <RotateCcw className="h-4 w-4" />
-                  {t('actions.reset')}
-                </Button>
-              </div>
-            </>
-          )}
-
-          {/* Rhythm Check Modal */}
-          {isInRhythmCheck && (
-            <RhythmCheckModal
-              isShockable={session.currentRhythm === 'vf_pvt'}
-              currentEnergy={shockEnergy.display}
-              shockNumber={session.shockCount + 1}
-              onShock={() => {
-                announce('shock');
-                actions.completeRhythmCheckWithShock(shockEnergy.value);
-              }}
-              onNoShockAsystole={() => {
-                announce('noShock');
-                actions.completeRhythmCheckNoShock('asystole');
-              }}
-              onNoShockPEA={() => {
-                announce('noShock');
-                actions.completeRhythmCheckNoShock('pea');
-              }}
-              onROSC={actions.achieveROSC}
-              onTerminate={actions.terminateCode}
-            />
-          )}
-
-          {/* Post-ROSC Screen */}
-          {isPostROSC && (
-            <>
-              <CodeTimeline
-                interventions={session.interventions}
-                startTime={session.startTime}
-              />
-              <PostROSCScreen
-                checklist={session.postROSCChecklist}
-                vitals={session.postROSCVitals}
-                onChecklistUpdate={actions.updatePostROSCChecklist}
-                onVitalsUpdate={actions.updatePostROSCVitals}
+                canGiveEpinephrine={buttonStates.canGiveEpinephrine}
+                canGiveAmiodarone={buttonStates.canGiveAmiodarone}
+                canGiveLidocaine={buttonStates.canGiveLidocaine}
+                epiDue={buttonStates.epiDue}
+                preferLidocaine={settings.preferLidocaine}
+                vibrationEnabled={settings.vibrationEnabled}
+                onSetWeight={actions.setPatientWeight}
+                onEpinephrine={actions.giveEpinephrine}
+                onAmiodarone={actions.giveAmiodarone}
+                onLidocaine={actions.giveLidocaine}
+                onRhythmCheck={actions.startRhythmCheck}
+                onAirwayChange={actions.setAirway}
+                onETCO2Record={actions.recordETCO2}
+                onCPRRatioChange={actions.setCPRRatio}
+                onUpdateHsAndTs={actions.updateHsAndTs}
+                onTogglePregnancy={actions.togglePregnancy}
+                onUpdatePregnancyCauses={actions.updatePregnancyCauses}
+                onUpdatePregnancyInterventions={actions.updatePregnancyInterventions}
+                onDeliveryAlert={handleDeliveryAlert}
+                onAddNote={() => setShowNoteDialog(true)}
                 onExport={actions.exportSession}
                 onNewCode={handleNewCode}
               />
-            </>
-          )}
+            )}
 
-          {/* Code Ended Screen (Death) */}
-          {isCodeEnded && (
-            <>
-              <div className="text-center py-6">
-                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-destructive/20 mb-4">
-                  <XCircle className="h-10 w-10 text-destructive" />
-                </div>
-                <h2 className="text-2xl font-bold text-foreground">{t('codeEnded.title')}</h2>
-                <p className="text-muted-foreground mt-2">{t('codeEnded.deathDeclared')} {new Date(session.endTime || Date.now()).toLocaleTimeString()}</p>
-              </div>
+            {/* Rhythm Check Modal */}
+            {isInRhythmCheck && (
+              <RhythmCheckModal
+                isShockable={session.currentRhythm === 'vf_pvt'}
+                currentEnergy={shockEnergy.display}
+                shockNumber={session.shockCount + 1}
+                onShock={() => {
+                  announce('shock');
+                  actions.completeRhythmCheckWithShock(shockEnergy.value);
+                }}
+                onNoShockAsystole={() => {
+                  announce('noShock');
+                  actions.completeRhythmCheckNoShock('asystole');
+                }}
+                onNoShockPEA={() => {
+                  announce('noShock');
+                  actions.completeRhythmCheckNoShock('pea');
+                }}
+                onROSC={actions.achieveROSC}
+                onTerminate={actions.terminateCode}
+              />
+            )}
 
-              {/* Summary Stats */}
-              <div className="bg-card rounded-lg p-4 border border-border">
-                <h3 className="font-bold text-foreground mb-3">{t('codeEnded.summary')}</h3>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="text-muted-foreground">{t('codeEnded.duration')}:</span>
-                    <span className="ml-2 font-semibold">{formatDuration(timerState.totalElapsed)}</span>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">{t('codeEnded.cprTime')}:</span>
-                    <span className="ml-2 font-semibold">{formatDuration(timerState.totalCPRTime)}</span>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">{t('codeEnded.cprFraction')}:</span>
-                    <span className="ml-2 font-semibold">
-                      {timerState.totalElapsed > 0 
-                        ? ((timerState.totalCPRTime / timerState.totalElapsed) * 100).toFixed(1) + '%'
-                        : 'N/A'}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">{t('codeEnded.shocks')}:</span>
-                    <span className="ml-2 font-semibold">{session.shockCount}</span>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">{t('actions.epinephrine')}:</span>
-                    <span className="ml-2 font-semibold">{session.epinephrineCount} {t('codeEnded.doses')}</span>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">{t('actions.amiodarone')}:</span>
-                    <span className="ml-2 font-semibold">{session.amiodaroneCount} {t('codeEnded.doses')}</span>
-                  </div>
-                </div>
-              </div>
+            {/* Post-ROSC Screen */}
+            {isPostROSC && (
+              <>
+                <CodeTimeline interventions={session.interventions} startTime={session.startTime} />
+                <PostROSCScreen
+                  checklist={session.postROSCChecklist}
+                  vitals={session.postROSCVitals}
+                  onChecklistUpdate={actions.updatePostROSCChecklist}
+                  onVitalsUpdate={actions.updatePostROSCVitals}
+                  onExport={actions.exportSession}
+                  onNewCode={handleNewCode}
+                />
+              </>
+            )}
 
-              <CodeTimeline
+            {/* Code Ended View */}
+            {isCodeEnded && (
+              <CodeEndedView
                 interventions={session.interventions}
                 startTime={session.startTime}
+                endTime={session.endTime}
+                totalElapsed={timerState.totalElapsed}
+                totalCPRTime={timerState.totalCPRTime}
+                shockCount={session.shockCount}
+                epinephrineCount={session.epinephrineCount}
+                amiodaroneCount={session.amiodaroneCount}
+                onExport={actions.exportSession}
+                onNewCode={handleNewCode}
               />
-
-              {/* Actions */}
-              <div className="space-y-3 pt-2">
-                <div className="grid grid-cols-2 gap-3">
-                  <Button
-                    onClick={actions.exportSession}
-                    variant="outline"
-                    className="h-12 gap-2"
-                  >
-                    <Download className="h-4 w-4" />
-                    {t('actions.export')}
-                  </Button>
-                  <Button
-                    onClick={handleNewCode}
-                    variant="outline"
-                    className="h-12 gap-2"
-                  >
-                    <RotateCcw className="h-4 w-4" />
-                    {t('actions.newCode')}
-                  </Button>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-      </ScrollArea>
-
-      {/* Footer Stats Bar - Visible during active code */}
-      {(isActive || isCPRPendingRhythm || isPostROSC) && (
-        <div className="bg-card border-t border-border p-3">
-          <div className="flex justify-around text-center text-sm max-w-lg mx-auto">
-            <div>
-              <span className="text-muted-foreground">{t('codeEnded.epi')}</span>
-              <span className="ml-1 font-bold text-foreground">{session.epinephrineCount}</span>
-            </div>
-            <div>
-              <span className="text-muted-foreground">{t('codeEnded.amio')}</span>
-              <span className="ml-1 font-bold text-foreground">{session.amiodaroneCount}</span>
-            </div>
-            <div>
-              <span className="text-muted-foreground">{t('codeEnded.lido')}</span>
-              <span className="ml-1 font-bold text-foreground">{session.lidocaineCount}</span>
-            </div>
-            <div>
-              <span className="text-muted-foreground">{t('codeEnded.shocks')}</span>
-              <span className="ml-1 font-bold text-foreground">{session.shockCount}</span>
-            </div>
+            )}
           </div>
-        </div>
-      )}
-    </div>
+        </ScrollArea>
+
+        {/* Footer Stats Bar - Visible during active code */}
+        {(isActive || isCPRPendingRhythm || isPostROSC) && (
+          <FooterStatsBar
+            epinephrineCount={session.epinephrineCount}
+            amiodaroneCount={session.amiodaroneCount}
+            lidocaineCount={session.lidocaineCount}
+            shockCount={session.shockCount}
+          />
+        )}
+      </div>
+    </ErrorBoundary>
   );
 }
