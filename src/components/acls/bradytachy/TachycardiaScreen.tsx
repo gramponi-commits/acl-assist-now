@@ -32,17 +32,8 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
   const [adenosineDoses, setAdenosineDoses] = useState(0);
   const [cardioversionAttempts, setCardioversionAttempts] = useState(0);
 
-  // Pediatric: First show sinus evaluation screen (NEW FLOW)
-  if (isPediatric && session.phase === 'tachycardia_assessment') {
-    return <SinusEvaluationScreen session={session} actions={actions} />;
-  }
-
-  // Pediatric: Then cardiopulmonary compromise assessment (NEW FLOW)
-  if (isPediatric && session.phase === 'tachycardia_compromise_assessment') {
-    return <CompromiseAssessmentScreen session={session} actions={actions} />;
-  }
-
   // If pediatric sinus tachycardia selected, show "treat cause" guidance
+  // This check must come BEFORE the assessment phase check
   if (isPediatric && pedsSinusVsSVTChoice === 'probable_sinus') {
     return (
       <ScrollArea className="h-full">
@@ -72,6 +63,16 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
         </div>
       </ScrollArea>
     );
+  }
+
+  // Pediatric: First show sinus evaluation screen (NEW FLOW)
+  if (isPediatric && session.phase === 'tachycardia_assessment') {
+    return <SinusEvaluationScreen session={session} actions={actions} />;
+  }
+
+  // Pediatric: Then cardiopulmonary compromise assessment (NEW FLOW)
+  if (isPediatric && session.phase === 'tachycardia_compromise_assessment') {
+    return <CompromiseAssessmentScreen session={session} actions={actions} />;
   }
 
   // Adult initial assessment (unchanged)
@@ -470,54 +471,56 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
           </Button>
         </div>
 
-        {/* Antiarrhythmic options */}
-        <div className="bg-card rounded-lg p-4 border-2 border-acls-critical">
-          <h3 className="font-bold text-lg mb-3">{t('bradyTachy.tachyWideAntiarrhythmic')}</h3>
-          
-          {/* Procainamide */}
-          <div className="mb-4">
-            <h4 className="font-bold text-md mb-1">{t('bradyTachy.tachyProcainamide')}</h4>
-            <p className="text-xs text-muted-foreground mb-1">
-              {getAdultTachyProcainamide().loading.display}
-            </p>
-            <p className="text-xs text-muted-foreground mb-2">
-              {t('bradyTachy.tachyProcainamideMaint')}
-            </p>
-            <p className="text-xs text-yellow-600 mb-2">
-              ⚠️ {t('bradyTachy.tachyProcainamideAvoid')}
-            </p>
-            <Button
-              onClick={() => {
-                const dose = getAdultTachyProcainamide();
-                actions.giveProcainamide(dose.loading.display);
-              }}
-              variant="outline"
-              className="w-full h-10"
-            >
-              {t('bradyTachy.giveProcainamide')}
-            </Button>
-          </div>
+        {/* Antiarrhythmic options - Adult only */}
+        {!isPediatric && (
+          <div className="bg-card rounded-lg p-4 border-2 border-acls-critical">
+            <h3 className="font-bold text-lg mb-3">{t('bradyTachy.tachyWideAntiarrhythmic')}</h3>
+            
+            {/* Procainamide */}
+            <div className="mb-4">
+              <h4 className="font-bold text-md mb-1">{t('bradyTachy.tachyProcainamide')}</h4>
+              <p className="text-xs text-muted-foreground mb-1">
+                {getAdultTachyProcainamide().loading.display}
+              </p>
+              <p className="text-xs text-muted-foreground mb-2">
+                {t('bradyTachy.tachyProcainamideMaint')}
+              </p>
+              <p className="text-xs text-yellow-600 mb-2">
+                ⚠️ {t('bradyTachy.tachyProcainamideAvoid')}
+              </p>
+              <Button
+                onClick={() => {
+                  const dose = getAdultTachyProcainamide();
+                  actions.giveProcainamide(dose.loading.display);
+                }}
+                variant="outline"
+                className="w-full h-10"
+              >
+                {t('bradyTachy.giveProcainamide')}
+              </Button>
+            </div>
 
-          {/* Amiodarone */}
-          <div>
-            <h4 className="font-bold text-md mb-1">{t('bradyTachy.tachyAmiodarone')}</h4>
-            <p className="text-xs text-muted-foreground mb-1">
-              {getAdultTachyAmiodarone().loading.display}
-            </p>
-            <p className="text-xs text-muted-foreground mb-2">
-              {t('bradyTachy.tachyAmiodaroneMaint')}
-            </p>
-            <Button
-              onClick={() => {
-                const dose = getAdultTachyAmiodarone();
-                actions.giveAmiodarone(dose.loading.display);
-              }}
-              className="w-full h-10 bg-acls-critical hover:bg-acls-critical/90"
-            >
-              {t('bradyTachy.giveAmiodarone')}
-            </Button>
+            {/* Amiodarone */}
+            <div>
+              <h4 className="font-bold text-md mb-1">{t('bradyTachy.tachyAmiodarone')}</h4>
+              <p className="text-xs text-muted-foreground mb-1">
+                {getAdultTachyAmiodarone().loading.display}
+              </p>
+              <p className="text-xs text-muted-foreground mb-2">
+                {t('bradyTachy.tachyAmiodaroneMaint')}
+              </p>
+              <Button
+                onClick={() => {
+                  const dose = getAdultTachyAmiodarone();
+                  actions.giveAmiodarone(dose.loading.display);
+                }}
+                className="w-full h-10 bg-acls-critical hover:bg-acls-critical/90"
+              >
+                {t('bradyTachy.giveAmiodarone')}
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="bg-card rounded-lg p-4 border-2 border-border">
           <p className="text-sm">• {t('bradyTachy.tachyExpertConsult')}</p>

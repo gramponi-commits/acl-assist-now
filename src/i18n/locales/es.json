@@ -599,6 +599,11 @@
     "exitSessionWarning": "Tienes una sesión activa. ¿Estás seguro de que quieres salir?",
     "exit": "Salir",
     "pedsCompromiseQuestion": "¿Compromiso Cardiopulmonar?",
-    "pedsCompromiseCriteria": "Estado mental agudamente alterado, signos de shock o hipotensión"
+    "pedsCompromiseCriteria": "Estado mental agudamente alterado, signos de shock o hipotensión",
+    "pedsCompromiseYes": "SÍ - Compromiso Presente",
+    "pedsCompromiseNo": "NO - Sin Compromiso",
+    "pedsBradyHR60Instructions": "Si la frecuencia cardíaca es <60/min con mala perfusión a pesar de oxigenación y ventilación adecuadas, iniciar RCP (usar botón rojo arriba).",
+    "notSinusConcerningRhythm": "No Sinusal / Ritmo Preocupante",
+    "continueToCompromiseAssessment": "Continuar a Evaluación de Compromiso"
   }
 }
