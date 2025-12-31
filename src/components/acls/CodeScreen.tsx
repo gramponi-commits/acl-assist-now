@@ -105,13 +105,6 @@ export function CodeScreen() {
     }
   }, [t]);
 
-  // Dismiss disclaimer toast when pathway is selected
-  useEffect(() => {
-    if (session.pathwayMode && sessionStorage.getItem('disclaimerToastShown') === 'true') {
-      toast.dismiss('disclaimer-toast');
-      sessionStorage.removeItem('disclaimerToastShown');
-    }
-  }, [session.pathwayMode]);
 
   // Enable audio alerts based on settings
   useEffect(() => {
@@ -235,6 +228,19 @@ export function CodeScreen() {
   }, [isPostROSC, playAlert, announce, vibrate, settings.vibrationEnabled]);
 
   // Handlers
+  const handlePathwaySelected = () => {
+    // Dismiss disclaimer toast immediately when any pathway is selected
+    if (sessionStorage.getItem('disclaimerToastShown') === 'true') {
+      toast.dismiss('disclaimer-toast');
+      sessionStorage.removeItem('disclaimerToastShown');
+    }
+  };
+
+  const handleSetPathwayMode = (mode: 'adult' | 'pediatric') => {
+    handlePathwaySelected();
+    actions.setPathwayMode(mode);
+  };
+
   const handleAddNote = (note: string) => {
     actions.addNote(note);
     toast.success(t('notes.addNote'));
@@ -264,6 +270,7 @@ export function CodeScreen() {
   };
 
   const handleOpenBradyTachy = () => {
+    handlePathwaySelected();
     setShowBradyTachyModule(true);
     logger.sessionEvent('Brady/Tachy module opened');
   };
@@ -361,7 +368,7 @@ export function CodeScreen() {
             {/* Pathway Selection Screen */}
             {isPathwaySelection && (
               <PathwaySelectionView
-                onSelectPathway={actions.setPathwayMode}
+                onSelectPathway={handleSetPathwayMode}
                 onStartCPR={actions.startCPR}
                 onSetWeight={actions.setPatientWeight}
                 currentWeight={session.patientWeight}
