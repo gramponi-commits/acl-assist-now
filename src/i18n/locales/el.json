@@ -56,9 +56,11 @@
     "terminate": "Τερματισμός Κωδικού - Δήλωση Θανάτου",
     "resumeCPR": "Συνέχιση ΚΑΡΠΑ - Ίδιος Ρυθμός",
     "export": "Εξαγωγή PDF",
+    "exportShort": "Εξαγωγή",
     "save": "Αποθήκευση Τοπικά",
     "saved": "Αποθηκεύτηκε Τοπικά",
     "reset": "Επαναφορά",
+    "resetShort": "Reset",
     "newCode": "Νέος Κωδικός",
     "saveFailed": "Αποτυχία αποθήκευσης συνεδρίας",
     "addNote": "Προσθήκη Σημείωσης",
@@ -267,7 +269,11 @@
     "postRoscCare": "Φροντίδα Μετά-ROSC",
     "actionsDone": "Ολοκληρωμένες",
     "actionsNotDone": "Μη Ολοκληρωμένες",
-    "pdfExported": "Το PDF εξήχθη επιτυχώς"
+    "pdfExported": "Το PDF εξήχθη επιτυχώς",
+    "etco2": "ETCO₂",
+    "spo2": "SpO₂",
+    "map": "ΜΑΠ",
+    "temp": "Θερμ"
   },
   "settings": {
     "title": "Ρυθμίσεις",

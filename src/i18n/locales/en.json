@@ -56,9 +56,11 @@
     "terminate": "Terminate Code - Declare Death",
     "resumeCPR": "Resume CPR - Same Rhythm",
     "export": "Export PDF",
+    "exportShort": "Export",
     "save": "Save Session Locally",
     "saved": "Saved Locally",
     "reset": "Reset",
+    "resetShort": "Reset",
     "newCode": "New Code",
     "saveFailed": "Failed to save session",
     "addNote": "Add Note",
@@ -267,7 +269,11 @@
     "postRoscCare": "Post-ROSC Care",
     "actionsDone": "Completed",
     "actionsNotDone": "Not Completed",
-    "pdfExported": "PDF exported successfully"
+    "pdfExported": "PDF exported successfully",
+    "etco2": "ETCO₂",
+    "spo2": "SpO₂",
+    "map": "MAP",
+    "temp": "Temp"
   },
   "settings": {
     "title": "Settings",

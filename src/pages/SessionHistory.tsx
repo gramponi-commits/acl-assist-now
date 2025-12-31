@@ -347,7 +347,7 @@ export default function SessionHistory() {
                           <div className="flex items-center gap-2">
                             <Syringe className="h-4 w-4 text-acls-warning" />
                             <div>
-                              <div className="text-muted-foreground">Epi</div>
+                              <div className="text-muted-foreground">{t('codeEnded.epi')}</div>
                               <div className="font-semibold">{session.epinephrineCount}</div>
                             </div>
                           </div>
@@ -385,7 +385,7 @@ export default function SessionHistory() {
                         <div className="bg-muted/50 rounded-lg p-3">
                           <h4 className="text-sm font-semibold flex items-center gap-2 mb-2">
                             <Activity className="h-4 w-4 text-primary" />
-                            ETCO₂ {t('history.readings')}
+                            {t('history.etco2')} {t('history.readings')}
                           </h4>
                           <div className="flex flex-wrap gap-2">
                             {session.etco2Readings.map((reading, idx) => (
@@ -520,13 +520,13 @@ export default function SessionHistory() {
                               <p className="text-xs text-muted-foreground mb-1">{t('postRosc.vitalTargets')}:</p>
                               <div className="flex flex-wrap gap-2">
                                 {session.postROSCVitals.spo2 && (
-                                  <Badge variant="secondary" className="text-xs">SpO₂: {session.postROSCVitals.spo2}%</Badge>
+                                  <Badge variant="secondary" className="text-xs">{t('history.spo2')}: {session.postROSCVitals.spo2}%</Badge>
                                 )}
                                 {session.postROSCVitals.map && (
-                                  <Badge variant="secondary" className="text-xs">MAP: {session.postROSCVitals.map} mmHg</Badge>
+                                  <Badge variant="secondary" className="text-xs">{t('history.map')}: {session.postROSCVitals.map} mmHg</Badge>
                                 )}
                                 {session.postROSCVitals.temperature && (
-                                  <Badge variant="secondary" className="text-xs">Temp: {session.postROSCVitals.temperature}°C</Badge>
+                                  <Badge variant="secondary" className="text-xs">{t('history.temp')}: {session.postROSCVitals.temperature}°C</Badge>
                                 )}
                               </div>
                             </div>

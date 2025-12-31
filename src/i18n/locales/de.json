@@ -56,9 +56,11 @@
     "terminate": "Code Beenden - Tod Erklären",
     "resumeCPR": "HLW Fortsetzen - Gleicher Rhythmus",
     "export": "PDF Exportieren",
+    "exportShort": "Export",
     "save": "Lokal Speichern",
     "saved": "Gespeichert",
     "reset": "Zurücksetzen",
+    "resetShort": "Reset",
     "newCode": "Neuer Code",
     "saveFailed": "Speichern fehlgeschlagen",
     "addNote": "Notiz Hinzufügen",
@@ -267,7 +269,11 @@
     "postRoscCare": "Post-ROSC-Versorgung",
     "actionsDone": "Durchgeführt",
     "actionsNotDone": "Nicht Durchgeführt",
-    "pdfExported": "PDF erfolgreich exportiert"
+    "pdfExported": "PDF erfolgreich exportiert",
+    "etco2": "ETCO₂",
+    "spo2": "SpO₂",
+    "map": "MAD",
+    "temp": "Temp"
   },
   "settings": {
     "title": "Einstellungen",

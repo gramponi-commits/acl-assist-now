@@ -56,9 +56,11 @@
     "terminate": "Terminar Código - Declarar Muerte",
     "resumeCPR": "Reanudar RCP - Mismo Ritmo",
     "export": "Exportar PDF",
+    "exportShort": "Exportar",
     "save": "Guardar Localmente",
     "saved": "Guardado",
     "reset": "Reiniciar",
+    "resetShort": "Reset",
     "newCode": "Nuevo Código",
     "saveFailed": "Error al guardar sesión",
     "addNote": "Añadir Nota",
@@ -267,7 +269,11 @@
     "postRoscCare": "Atención Post-RCE",
     "actionsDone": "Realizadas",
     "actionsNotDone": "No Realizadas",
-    "pdfExported": "PDF exportado exitosamente"
+    "pdfExported": "PDF exportado exitosamente",
+    "etco2": "ETCO₂",
+    "spo2": "SpO₂",
+    "map": "PAM",
+    "temp": "Temp"
   },
   "settings": {
     "title": "Configuración",

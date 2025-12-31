@@ -56,9 +56,11 @@
     "terminate": "Terminer le Code - Déclarer le Décès",
     "resumeCPR": "Reprendre RCP - Même Rythme",
     "export": "Exporter PDF",
+    "exportShort": "Exporter",
     "save": "Sauvegarder Localement",
     "saved": "Sauvegardé",
     "reset": "Réinitialiser",
+    "resetShort": "Reset",
     "newCode": "Nouveau Code",
     "saveFailed": "Échec de la sauvegarde",
     "addNote": "Ajouter Note",
@@ -267,7 +269,11 @@
     "postRoscCare": "Soins Post-RACS",
     "actionsDone": "Effectuées",
     "actionsNotDone": "Non Effectuées",
-    "pdfExported": "PDF exporté avec succès"
+    "pdfExported": "PDF exporté avec succès",
+    "etco2": "ETCO₂",
+    "spo2": "SpO₂",
+    "map": "PAM",
+    "temp": "Temp"
   },
   "settings": {
     "title": "Paramètres",

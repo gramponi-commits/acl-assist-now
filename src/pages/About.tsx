@@ -163,7 +163,7 @@ const About = () => {
               <ExternalLink className="h-4 w-4" />
             </a>
             <a
-              href="https://www.ahajournals.org/doi/epdf/10.1161/CIR.0000000000001368"
+              href="https://www.ahajournals.org/doi/10.1161/CIR.0000000000001368"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary flex items-center gap-2 transition-colors"
