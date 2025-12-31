@@ -637,6 +637,9 @@
     "giveVerapamil": "Give Verapamil",
     "giveMetoprolol": "Give Metoprolol",
     "giveEsmolol": "Give Esmolol",
-    "rhythmTypeSelected": "Rhythm type: {{rhythm}}"
+    "rhythmTypeSelected": "Rhythm type: {{rhythm}}",
+    "polymorphicVTWarning": "Polymorphic VT: Use DEFIBRILLATION (NOT synchronized)",
+    "deliverDefibrillation": "Deliver DEFIBRILLATION (Unsynchronized)",
+    "defibrillationUnsynchronized": "Defibrillation (unsynchronized)"
   }
 }

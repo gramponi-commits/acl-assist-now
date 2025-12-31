@@ -1,6 +1,8 @@
 // Bradycardia/Tachycardia Dosing Calculations
 // AHA 2025 Guidelines
 
+import type { CardioversionRhythmType } from '@/types/acls';
+
 interface DoseResult {
   value: number | null;
   display: string;
@@ -179,14 +181,14 @@ export function getAdultTachyAdenosine(doseNumber: 1 | 2): DoseResult {
  * @param rhythmType - Type of rhythm requiring cardioversion
  * @returns Energy recommendation based on rhythm
  */
-export function getAdultTachyCardioversion(rhythmType?: 'afib' | 'aflutter' | 'narrow' | 'monomorphic_vt' | 'polymorphic_vt'): DoseResult {
+export function getAdultTachyCardioversion(rhythmType?: CardioversionRhythmType): DoseResult {
   // Rhythm-specific energies per AHA 2025 guidelines
   const energyMap = {
     afib: 200,           // Atrial fibrillation: 200J
     aflutter: 200,       // Atrial flutter: 200J
     narrow: 100,         // Narrow-complex tachycardia: 100J
     monomorphic_vt: 100, // Monomorphic VT: 100J
-    polymorphic_vt: 0,   // Polymorphic VT: Use defibrillation (not synchronized)
+    polymorphic_vt: null, // Polymorphic VT: Use defibrillation (not synchronized)
   };
 
   if (!rhythmType) {
@@ -202,7 +204,7 @@ export function getAdultTachyCardioversion(rhythmType?: 'afib' | 'aflutter' | 'n
   
   if (rhythmType === 'polymorphic_vt') {
     return {
-      value: 0,
+      value: null,
       display: 'Defibrillation (NOT synchronized)',
       unit: 'J',
     };

@@ -44,7 +44,7 @@ describe('Brady/Tachy Adult Tachycardia Dosing', () => {
     it('should return defibrillation message for polymorphic VT', () => {
       const energy = getAdultTachyCardioversion('polymorphic_vt');
       
-      expect(energy.value).toBe(0);
+      expect(energy.value).toBeNull();
       expect(energy.display).toBe('Defibrillation (NOT synchronized)');
       expect(energy.unit).toBe('J');
     });
@@ -128,7 +128,7 @@ describe('Brady/Tachy Adult Tachycardia Dosing', () => {
       expect(getAdultTachyCardioversion('monomorphic_vt').value).toBe(100);
       
       // Polymorphic VT: Defibrillation (not synchronized)
-      expect(getAdultTachyCardioversion('polymorphic_vt').value).toBe(0);
+      expect(getAdultTachyCardioversion('polymorphic_vt').value).toBeNull();
       expect(getAdultTachyCardioversion('polymorphic_vt').display).toContain('NOT synchronized');
     });
   });

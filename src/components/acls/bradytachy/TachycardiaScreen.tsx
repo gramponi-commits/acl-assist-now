@@ -260,7 +260,7 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
                   </p>
                 ) : cardioversionRhythmType === 'polymorphic_vt' ? (
                   <p className="font-bold mt-2 text-red-600">
-                    Polymorphic VT: Use DEFIBRILLATION (NOT synchronized)
+                    {t('bradyTachy.polymorphicVTWarning')}
                   </p>
                 ) : (
                   <p className="font-bold mt-2">
@@ -315,12 +315,12 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
               ) : (
                 <Button
                   onClick={() => {
-                    actions.giveCardioversion('Defibrillation (unsynchronized)');
+                    actions.giveCardioversion(t('bradyTachy.defibrillationUnsynchronized'));
                     setCardioversionAttempts(prev => prev + 1);
                   }}
                   className="w-full h-12 bg-red-600 hover:bg-red-700"
                 >
-                  Deliver DEFIBRILLATION (Unsynchronized)
+                  {t('bradyTachy.deliverDefibrillation')}
                 </Button>
               )}
             </div>
