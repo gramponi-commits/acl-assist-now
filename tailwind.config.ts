@@ -83,6 +83,10 @@ export default {
           "info-foreground": "hsl(var(--acls-info-foreground))",
           medication: "hsl(var(--acls-medication))",
           "medication-foreground": "hsl(var(--acls-medication-foreground))",
+          bradycardia: "hsl(var(--acls-bradycardia))",
+          "bradycardia-foreground": "hsl(var(--acls-bradycardia-foreground))",
+          tachycardia: "hsl(var(--acls-tachycardia))",
+          "tachycardia-foreground": "hsl(var(--acls-tachycardia-foreground))",
         },
       },
       borderRadius: {

@@ -43,11 +43,11 @@
     /* ACLS Adult (Red theme) */
     --acls-primary: 0 84% 50%;
     --acls-primary-foreground: 0 0% 100%;
-    
+
     /* PALS Pediatric (Blue theme) */
     --pals-primary: 199 89% 48%;
     --pals-primary-foreground: 0 0% 100%;
-    
+
     /* Shockable rhythms */
     --acls-shockable: 0 84% 50%;
     --acls-shockable-foreground: 0 0% 100%;
@@ -65,6 +65,10 @@
     --acls-info-foreground: 0 0% 100%;
     --acls-medication: 262 83% 58%;
     --acls-medication-foreground: 0 0% 100%;
+    --acls-bradycardia: 217 91% 40%;
+    --acls-bradycardia-foreground: 0 0% 100%;
+    --acls-tachycardia: 25 95% 53%;
+    --acls-tachycardia-foreground: 0 0% 100%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -127,6 +131,10 @@
     --acls-info-foreground: 0 0% 100%;
     --acls-medication: 262 83% 65%;
     --acls-medication-foreground: 0 0% 100%;
+    --acls-bradycardia: 217 91% 50%;
+    --acls-bradycardia-foreground: 0 0% 100%;
+    --acls-tachycardia: 25 95% 60%;
+    --acls-tachycardia-foreground: 0 0% 100%;
 
     --sidebar-background: 0 0% 8%;
     --sidebar-foreground: 0 0% 90%;

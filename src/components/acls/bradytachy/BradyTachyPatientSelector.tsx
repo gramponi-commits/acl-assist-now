@@ -142,8 +142,8 @@ export function BradyTachyPatientSelector({ session, actions }: BradyTachyPatien
           onClick={() => handleBranchSelect('bradycardia')}
           className={cn(
             'w-full h-24 flex flex-col items-center justify-center gap-2',
-            'bg-blue-600 hover:bg-blue-700 text-white',
-            'shadow-lg transition-all',
+            'bg-acls-bradycardia hover:bg-acls-bradycardia/90 text-white',
+            'shadow-lg shadow-acls-bradycardia/30 transition-all',
             'text-xl font-bold'
           )}
         >
@@ -155,8 +155,8 @@ export function BradyTachyPatientSelector({ session, actions }: BradyTachyPatien
           onClick={() => handleBranchSelect('tachycardia')}
           className={cn(
             'w-full h-24 flex flex-col items-center justify-center gap-2',
-            'bg-orange-600 hover:bg-orange-700 text-white',
-            'shadow-lg transition-all',
+            'bg-acls-tachycardia hover:bg-acls-tachycardia/90 text-white',
+            'shadow-lg shadow-acls-tachycardia/30 transition-all',
             'text-xl font-bold'
           )}
         >
