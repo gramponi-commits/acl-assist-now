@@ -24,10 +24,12 @@ export type AirwayStatus = 'ambu' | 'sga' | 'ett';
 export interface Intervention {
   id: string;
   timestamp: number;
-  type: 'shock' | 'epinephrine' | 'amiodarone' | 'lidocaine' | 'rhythm_change' | 'rosc' | 'airway' | 'cpr_start' | 'note' | 'hs_ts_check' | 'etco2' | 
+  type: 'shock' | 'epinephrine' | 'amiodarone' | 'lidocaine' | 'rhythm_change' | 'rosc' | 'airway' | 'cpr_start' | 'note' | 'hs_ts_check' | 'etco2' |
         'atropine' | 'adenosine' | 'cardioversion' | 'dopamine' | 'epi_infusion' | 'beta_blocker' | 'calcium_blocker' | 'procainamide' | 'vagal_maneuver';
   details: string;
   value?: number | string;
+  translationKey?: string;
+  translationParams?: Record<string, string | number>;
 }
 
 export interface VitalReading {
@@ -303,7 +305,7 @@ export interface BradyTachyDecisionContext {
 export interface BradyTachyIntervention {
   id: string;
   timestamp: number;
-  type: 'atropine' | 'adenosine' | 'cardioversion' | 'dopamine' | 'epi_infusion' | 
+  type: 'atropine' | 'adenosine' | 'cardioversion' | 'dopamine' | 'epi_infusion' |
         'beta_blocker' | 'calcium_blocker' | 'procainamide' | 'amiodarone' | 'vagal_maneuver' |
         'switch_to_arrest' | 'note' | 'assessment' | 'decision';
   details: string;
@@ -311,6 +313,8 @@ export interface BradyTachyIntervention {
   doseStep?: number; // e.g., adenosine dose 1 vs dose 2
   calculatedDose?: string; // calculated dose if weight present
   decisionContext?: Partial<BradyTachyDecisionContext>; // capture decision at time of intervention
+  translationKey?: string;
+  translationParams?: Record<string, string | number>;
 }
 
 export interface BradyTachySession {

@@ -209,6 +209,8 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
                 type: i.type,
                 details: i.details,
                 value: i.value,
+                translationKey: i.translationKey,
+                translationParams: i.translationParams,
               })),
               etco2Readings: sessionSnapshot.vitalReadings
                 .filter(v => v.etco2 !== undefined)
@@ -261,13 +263,21 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
     }
   }, [session.phase]);
 
-  const addIntervention = useCallback((type: Intervention['type'], details: string, value?: number | string) => {
+  const addIntervention = useCallback((
+    type: Intervention['type'],
+    details: string,
+    value?: number | string,
+    translationKey?: string,
+    translationParams?: Record<string, string | number>
+  ) => {
     const intervention: Intervention = {
       id: crypto.randomUUID(),
       timestamp: Date.now(),
       type,
       details,
       value,
+      translationKey,
+      translationParams,
     };
     setSession(prev => ({
       ...prev,
@@ -287,6 +297,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
         timestamp: now,
         type: 'cpr_start' as const,
         details: t('interventions.cprInitiated'),
+        translationKey: 'interventions.cprInitiated',
       }],
     }));
   }, [t]);
@@ -297,7 +308,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
     const now = Date.now();
     const isShockable = rhythm === 'vf_pvt';
     const rhythmName = rhythm === 'vf_pvt' ? 'VF/pVT' : rhythm === 'asystole' ? t('rhythm.asystole') : 'PEA';
-    
+
     setSession(prev => {
       const newPhase = isShockable ? 'shockable_pathway' : 'non_shockable_pathway';
       const interventions: Intervention[] = [...prev.interventions, {
@@ -305,6 +316,8 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
         timestamp: now,
         type: 'rhythm_change' as const,
         details: t('interventions.rhythmIdentified', { rhythm: rhythmName }),
+        translationKey: 'interventions.rhythmIdentified',
+        translationParams: { rhythm: rhythmName },
       }];
 
       // If shockable rhythm, deliver first shock immediately
@@ -315,6 +328,8 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
           type: 'shock' as const,
           details: t('interventions.shockDelivered', { number: 1, energy: defibrillatorEnergy }),
           value: defibrillatorEnergy,
+          translationKey: 'interventions.shockDelivered',
+          translationParams: { number: 1, energy: defibrillatorEnergy },
         });
       }
 
@@ -334,7 +349,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
   const startRhythmCheck = useCallback(() => {
     setIsInRhythmCheck(true);
     cprActiveRef.current = false;
-    addIntervention('note', t('interventions.rhythmCheckPaused'));
+    addIntervention('note', t('interventions.rhythmCheckPaused'), undefined, 'interventions.rhythmCheckPaused');
   }, [addIntervention, t]);
 
   const completeRhythmCheckWithShock = useCallback((defibrillatorEnergy: number) => {
@@ -353,7 +368,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       };
     });
 
-    addIntervention('shock', t('interventions.shockDelivered', { number: shockNumber, energy: defibrillatorEnergy }), defibrillatorEnergy);
+    addIntervention('shock', t('interventions.shockDelivered', { number: shockNumber, energy: defibrillatorEnergy }), defibrillatorEnergy, 'interventions.shockDelivered', { number: shockNumber, energy: defibrillatorEnergy });
     setIsInRhythmCheck(false);
   }, [session.shockCount, addIntervention, t]);
 
@@ -368,7 +383,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       cprCycleStartTime: now,
     }));
 
-    addIntervention('rhythm_change', t('interventions.noShockResume', { rhythm: rhythmName }));
+    addIntervention('rhythm_change', t('interventions.noShockResume', { rhythm: rhythmName }), undefined, 'interventions.noShockResume', { rhythm: rhythmName });
     setIsInRhythmCheck(false);
   }, [addIntervention, t]);
 
@@ -379,7 +394,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       cprCycleStartTime: now,
     }));
 
-    addIntervention('cpr_start', t('interventions.cprResumedSame'));
+    addIntervention('cpr_start', t('interventions.cprResumedSame'), undefined, 'interventions.cprResumedSame');
     setIsInRhythmCheck(false);
   }, [addIntervention, t]);
 
@@ -393,7 +408,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       endTime: now,
     }));
 
-    addIntervention('rosc', t('interventions.roscAchieved'));
+    addIntervention('rosc', t('interventions.roscAchieved'), undefined, 'interventions.roscAchieved');
     setIsInRhythmCheck(false);
   }, [addIntervention, t]);
 
@@ -406,7 +421,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       endTime: now,
     }));
 
-    addIntervention('note', t('interventions.codeTerminated'));
+    addIntervention('note', t('interventions.codeTerminated'), undefined, 'interventions.codeTerminated');
     setIsInRhythmCheck(false);
   }, [addIntervention, t]);
 
@@ -423,7 +438,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       lastEpinephrineTime: now,
     }));
 
-    addIntervention('epinephrine', t('interventions.epinephrineGiven', { dose: dose.display }), dose.display);
+    addIntervention('epinephrine', t('interventions.epinephrineGiven', { dose: dose.display }), dose.display, 'interventions.epinephrineGiven', { dose: dose.display });
   }, [session.patientWeight, session.pathwayMode, addIntervention, t]);
 
   const giveAmiodarone = useCallback(() => {
@@ -438,7 +453,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       lastAmiodaroneTime: Date.now(),
     }));
 
-    addIntervention('amiodarone', t('interventions.amiodaroneGiven', { dose: dose.display }), dose.display);
+    addIntervention('amiodarone', t('interventions.amiodaroneGiven', { dose: dose.display }), dose.display, 'interventions.amiodaroneGiven', { dose: dose.display });
   }, [session.patientWeight, session.amiodaroneCount, session.pathwayMode, addIntervention, t]);
 
   const giveLidocaine = useCallback(() => {
@@ -452,7 +467,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       lidocaineCount: prev.lidocaineCount + 1,
     }));
 
-    addIntervention('lidocaine', t('interventions.lidocaineGiven', { dose: dose.display }), dose.display);
+    addIntervention('lidocaine', t('interventions.lidocaineGiven', { dose: dose.display }), dose.display, 'interventions.lidocaineGiven', { dose: dose.display });
   }, [session.patientWeight, session.lidocaineCount, session.pathwayMode, addIntervention, t]);
 
   const setAirway = useCallback((status: AirwayStatus) => {
@@ -461,16 +476,17 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       airwayStatus: status,
     }));
 
-    const airwayText = status === 'ett' 
-      ? t('interventions.airwayEtt') 
-      : status === 'sga' 
-        ? t('interventions.airwaySga') 
-        : t('interventions.airwayAmbu');
-    addIntervention('airway', airwayText);
+    const airwayKey = status === 'ett'
+      ? 'interventions.airwayEtt'
+      : status === 'sga'
+        ? 'interventions.airwaySga'
+        : 'interventions.airwayAmbu';
+    const airwayText = t(airwayKey);
+    addIntervention('airway', airwayText, undefined, airwayKey);
   }, [addIntervention, t]);
 
   const recordETCO2 = useCallback((value: number) => {
-    addIntervention('etco2', t('interventions.etco2Recorded', { value }), value);
+    addIntervention('etco2', t('interventions.etco2Recorded', { value }), value, 'interventions.etco2Recorded', { value });
   }, [addIntervention, t]);
 
   const updateHsAndTs = useCallback((updates: Partial<HsAndTs>) => {
@@ -509,7 +525,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       endTime: Date.now(),
     }));
 
-    addIntervention('note', t('interventions.codeEnded', { outcome }));
+    addIntervention('note', t('interventions.codeEnded', { outcome }), undefined, 'interventions.codeEnded', { outcome });
   }, [addIntervention, t]);
 
   const resetSession = useCallback(() => {
@@ -581,6 +597,8 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
         type: i.type,
         details: i.details,
         value: i.value,
+        translationKey: i.translationKey,
+        translationParams: i.translationParams,
       })),
       etco2Readings: session.vitalReadings
         .filter(v => v.etco2 !== undefined)
@@ -761,7 +779,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
   })();
 
   const addNote = useCallback((note: string) => {
-    addIntervention('note', t('interventions.noteAdded', { note }));
+    addIntervention('note', t('interventions.noteAdded', { note }), undefined, 'interventions.noteAdded', { note });
   }, [addIntervention, t]);
 
   // Pregnancy-related actions
@@ -772,7 +790,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       pregnancyStartTime: active ? Date.now() : null,
     }));
     if (active) {
-      addIntervention('note', t('interventions.pregnancyActivated'));
+      addIntervention('note', t('interventions.pregnancyActivated'), undefined, 'interventions.pregnancyActivated');
     }
   }, [addIntervention, t]);
 
@@ -802,7 +820,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       patientWeight: weight,
     }));
     if (weight) {
-      addIntervention('note', t('interventions.weightSet', { weight }));
+      addIntervention('note', t('interventions.weightSet', { weight }), undefined, 'interventions.weightSet', { weight });
     }
   }, [addIntervention, t]);
 

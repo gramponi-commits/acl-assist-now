@@ -18,6 +18,8 @@ export interface StoredBradyTachySession {
     doseStep?: number;
     calculatedDose?: string;
     decisionContext?: Record<string, unknown>;
+    translationKey?: string;
+    translationParams?: Record<string, string | number>;
   }>;
   outcome: 'resolved' | 'switched_to_arrest' | 'transferred' | null;
 }
@@ -86,6 +88,8 @@ export async function saveBradyTachyToHistory(session: StoredBradyTachySession):
         type: i.type,
         details: i.details,
         value: i.value,
+        translationKey: i.translationKey,
+        translationParams: i.translationParams,
       })),
       etco2Readings: [],
       hsAndTs: {

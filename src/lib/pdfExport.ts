@@ -83,23 +83,33 @@ const getPregnancyCausesChecked = (causes: PregnancyCauses): string[] => {
 export function exportSessionToPDF(session: StoredSession): void {
   const pdf = new jsPDF();
   const startDate = new Date(session.startTime);
-  const cprFraction = session.duration > 0 
+  const cprFraction = session.duration > 0
     ? session.cprFraction.toFixed(1)
     : 'N/A';
-  
-  const isAdult = session.pathwayMode === 'adult';
-  const protocolText = isAdult ? 'ACLS' : 'PALS';
 
-  const outcomeText = session.outcome === 'rosc' ? 'ROSC' : session.outcome === 'deceased' ? 'Deceased' : 'Unknown';
+  const isAdult = session.pathwayMode === 'adult';
+
+  // Determine protocol text based on pathway mode AND session type
+  let protocolText: string;
+  if (session.sessionType === 'bradytachy') {
+    protocolText = isAdult ? 'ACLS Bradycardia/Tachycardia' : 'PALS Bradycardia/Tachycardia';
+  } else if (session.sessionType === 'bradytachy-arrest') {
+    protocolText = isAdult ? 'ACLS (BradyTachy → Arrest)' : 'PALS (BradyTachy → Arrest)';
+  } else {
+    // cardiac-arrest
+    protocolText = isAdult ? 'ACLS Cardiac Arrest' : 'PALS Cardiac Arrest';
+  }
+
+  const outcomeText = session.outcome === 'rosc' ? 'ROSC' : session.outcome === 'deceased' ? 'Deceased' : session.outcome === 'resolved' ? 'Resolved' : 'Unknown';
 
   // Header with background
   const headerColor = isAdult ? [220, 38, 38] : [59, 130, 246]; // Red for ACLS, Blue for PALS
   pdf.setFillColor(headerColor[0], headerColor[1], headerColor[2]);
   pdf.rect(0, 0, 210, 35, 'F');
   pdf.setTextColor(255, 255, 255);
-  pdf.setFontSize(22);
+  pdf.setFontSize(session.sessionType === 'bradytachy' ? 18 : 22);
   pdf.setFont('helvetica', 'bold');
-  pdf.text(`${protocolText} CODE REPORT`, 105, 18, { align: 'center' });
+  pdf.text(`${protocolText.toUpperCase()} REPORT`, 105, 18, { align: 'center' });
   pdf.setFontSize(11);
   pdf.setFont('helvetica', 'normal');
   const patientInfo = isAdult ? '' : session.patientWeight ? ` | Weight: ${session.patientWeight}kg` : ' | Weight: Unknown';

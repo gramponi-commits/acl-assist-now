@@ -24,7 +24,9 @@ export function useBradyTachyLogic() {
     details: string,
     value?: number | string,
     doseStep?: number,
-    calculatedDose?: string
+    calculatedDose?: string,
+    translationKey?: string,
+    translationParams?: Record<string, string | number>
   ) => {
     const intervention: BradyTachyIntervention = {
       id: crypto.randomUUID(),
@@ -35,6 +37,8 @@ export function useBradyTachyLogic() {
       doseStep,
       calculatedDose,
       decisionContext: { ...session.decisionContext },
+      translationKey,
+      translationParams,
     };
 
     setSession(prev => {
@@ -59,6 +63,8 @@ export function useBradyTachyLogic() {
           doseStep: i.doseStep,
           calculatedDose: i.calculatedDose,
           decisionContext: i.decisionContext,
+          translationKey: i.translationKey,
+          translationParams: i.translationParams,
         })),
         outcome: updated.outcome,
       });
@@ -88,7 +94,7 @@ export function useBradyTachyLogic() {
       },
     }));
     if (weight) {
-      addIntervention('note', t('interventions.weightSet', { weight }));
+      addIntervention('note', t('interventions.weightSet', { weight }), undefined, undefined, undefined, 'interventions.weightSet', { weight });
     }
   }, [addIntervention, t]);
 
@@ -102,8 +108,8 @@ export function useBradyTachyLogic() {
         branch,
       },
     }));
-    addIntervention('decision', `Branch selected: ${branch}`);
-  }, [addIntervention]);
+    addIntervention('decision', t('bradyTachy.decisionLogged', { decision: `Branch selected: ${branch}` }), undefined, undefined, undefined, 'bradyTachy.decisionLogged', { decision: `Branch selected: ${branch}` });
+  }, [addIntervention, t]);
 
   // Set stability status
   const setStability = useCallback((stability: StabilityStatus) => {
@@ -117,8 +123,8 @@ export function useBradyTachyLogic() {
         stability,
       },
     }));
-    addIntervention('assessment', `Stability: ${stability}`);
-  }, [addIntervention]);
+    addIntervention('assessment', t('bradyTachy.assessmentLogged', { assessment: `Stability: ${stability}` }), undefined, undefined, undefined, 'bradyTachy.assessmentLogged', { assessment: `Stability: ${stability}` });
+  }, [addIntervention, t]);
 
   // Set QRS width
   const setQRSWidth = useCallback((qrsWidth: QRSWidth) => {
@@ -129,8 +135,8 @@ export function useBradyTachyLogic() {
         qrsWidth,
       },
     }));
-    addIntervention('assessment', `QRS: ${qrsWidth}`);
-  }, [addIntervention]);
+    addIntervention('assessment', t('bradyTachy.assessmentLogged', { assessment: `QRS: ${qrsWidth}` }), undefined, undefined, undefined, 'bradyTachy.assessmentLogged', { assessment: `QRS: ${qrsWidth}` });
+  }, [addIntervention, t]);
 
   // Set rhythm regularity
   const setRhythmRegular = useCallback((regular: RhythmRegularity) => {
@@ -141,8 +147,8 @@ export function useBradyTachyLogic() {
         rhythmRegular: regular,
       },
     }));
-    addIntervention('assessment', `Rhythm: ${regular}`);
-  }, [addIntervention]);
+    addIntervention('assessment', t('bradyTachy.assessmentLogged', { assessment: `Rhythm: ${regular}` }), undefined, undefined, undefined, 'bradyTachy.assessmentLogged', { assessment: `Rhythm: ${regular}` });
+  }, [addIntervention, t]);
 
   // Set monomorphic status
   const setMonomorphic = useCallback((monomorphic: boolean) => {
@@ -153,8 +159,8 @@ export function useBradyTachyLogic() {
         monomorphic,
       },
     }));
-    addIntervention('assessment', `Monomorphic: ${monomorphic ? 'yes' : 'no'}`);
-  }, [addIntervention]);
+    addIntervention('assessment', t('bradyTachy.assessmentLogged', { assessment: `Monomorphic: ${monomorphic ? 'yes' : 'no'}` }), undefined, undefined, undefined, 'bradyTachy.assessmentLogged', { assessment: `Monomorphic: ${monomorphic ? 'yes' : 'no'}` });
+  }, [addIntervention, t]);
 
   // Set pediatric sinus vs SVT choice
   const setPedsSinusVsSVT = useCallback((choice: PedsSinusVsSVT, criteria?: { pWavesPresent: boolean; variableRR: boolean; appropriateRate: boolean } | { pWavesAbnormal: boolean; fixedRR: boolean; inappropriateRate: boolean; abruptRateChange: boolean }) => {
@@ -168,8 +174,8 @@ export function useBradyTachyLogic() {
         ...(choice === 'probable_svt' && criteria ? { svtCriteria: criteria as { pWavesAbnormal: boolean; fixedRR: boolean; inappropriateRate: boolean; abruptRateChange: boolean } } : {}),
       },
     }));
-    addIntervention('decision', `Pediatric rhythm: ${choice}`);
-  }, [addIntervention]);
+    addIntervention('decision', t('bradyTachy.decisionLogged', { decision: `Pediatric rhythm: ${choice}` }), undefined, undefined, undefined, 'bradyTachy.decisionLogged', { decision: `Pediatric rhythm: ${choice}` });
+  }, [addIntervention, t]);
 
   // New: Select pediatric sinus tachycardia (treat cause pathway)
   const selectPediatricSinusTachy = useCallback(() => {
@@ -180,8 +186,8 @@ export function useBradyTachyLogic() {
         pedsSinusVsSVTChoice: 'probable_sinus',
       },
     }));
-    addIntervention('decision', 'Pediatric sinus tachycardia identified - treat cause');
-  }, [addIntervention]);
+    addIntervention('decision', t('bradyTachy.decisionLogged', { decision: 'Pediatric sinus tachycardia identified - treat cause' }), undefined, undefined, undefined, 'bradyTachy.decisionLogged', { decision: 'Pediatric sinus tachycardia identified - treat cause' });
+  }, [addIntervention, t]);
 
   // New: Advance to compromise assessment phase
   const advanceToCompromiseAssessment = useCallback(() => {
@@ -189,48 +195,48 @@ export function useBradyTachyLogic() {
       ...prev,
       phase: 'tachycardia_compromise_assessment',
     }));
-    addIntervention('decision', 'Concerning rhythm - proceeding to compromise assessment');
-  }, [addIntervention]);
+    addIntervention('decision', t('bradyTachy.decisionLogged', { decision: 'Concerning rhythm - proceeding to compromise assessment' }), undefined, undefined, undefined, 'bradyTachy.decisionLogged', { decision: 'Concerning rhythm - proceeding to compromise assessment' });
+  }, [addIntervention, t]);
 
   // Treatment actions
   const giveAtropine = useCallback((dose: string, doseNumber: number) => {
-    addIntervention('atropine', t('bradyTachy.treatmentGiven', { treatment: 'Atropine' }), dose, doseNumber, dose);
+    addIntervention('atropine', t('bradyTachy.treatmentGiven', { treatment: 'Atropine' }), dose, doseNumber, dose, 'bradyTachy.treatmentGiven', { treatment: 'Atropine' });
   }, [addIntervention, t]);
 
   const giveAdenosine = useCallback((dose: string, doseNumber: 1 | 2) => {
-    addIntervention('adenosine', t('bradyTachy.treatmentGiven', { treatment: `Adenosine (dose ${doseNumber})` }), dose, doseNumber, dose);
+    addIntervention('adenosine', t('bradyTachy.treatmentGiven', { treatment: `Adenosine (dose ${doseNumber})` }), dose, doseNumber, dose, 'bradyTachy.treatmentGiven', { treatment: `Adenosine (dose ${doseNumber})` });
   }, [addIntervention, t]);
 
   const giveCardioversion = useCallback((energy: string) => {
-    addIntervention('cardioversion', t('bradyTachy.treatmentGiven', { treatment: 'Cardioversion' }), energy, undefined, energy);
+    addIntervention('cardioversion', t('bradyTachy.treatmentGiven', { treatment: 'Cardioversion' }), energy, undefined, energy, 'bradyTachy.treatmentGiven', { treatment: 'Cardioversion' });
   }, [addIntervention, t]);
 
   const giveDopamine = useCallback((dose: string) => {
-    addIntervention('dopamine', t('bradyTachy.treatmentGiven', { treatment: 'Dopamine infusion' }), dose, undefined, dose);
+    addIntervention('dopamine', t('bradyTachy.treatmentGiven', { treatment: 'Dopamine infusion' }), dose, undefined, dose, 'bradyTachy.treatmentGiven', { treatment: 'Dopamine infusion' });
   }, [addIntervention, t]);
 
   const giveEpinephrineInfusion = useCallback((dose: string) => {
-    addIntervention('epi_infusion', t('bradyTachy.treatmentGiven', { treatment: 'Epinephrine infusion' }), dose, undefined, dose);
+    addIntervention('epi_infusion', t('bradyTachy.treatmentGiven', { treatment: 'Epinephrine infusion' }), dose, undefined, dose, 'bradyTachy.treatmentGiven', { treatment: 'Epinephrine infusion' });
   }, [addIntervention, t]);
 
   const giveBetaBlocker = useCallback(() => {
-    addIntervention('beta_blocker', t('bradyTachy.treatmentGiven', { treatment: 'Beta-blocker' }));
+    addIntervention('beta_blocker', t('bradyTachy.treatmentGiven', { treatment: 'Beta-blocker' }), undefined, undefined, undefined, 'bradyTachy.treatmentGiven', { treatment: 'Beta-blocker' });
   }, [addIntervention, t]);
 
   const giveCalciumBlocker = useCallback(() => {
-    addIntervention('calcium_blocker', t('bradyTachy.treatmentGiven', { treatment: 'Calcium channel blocker' }));
+    addIntervention('calcium_blocker', t('bradyTachy.treatmentGiven', { treatment: 'Calcium channel blocker' }), undefined, undefined, undefined, 'bradyTachy.treatmentGiven', { treatment: 'Calcium channel blocker' });
   }, [addIntervention, t]);
 
   const giveProcainamide = useCallback((dose: string) => {
-    addIntervention('procainamide', t('bradyTachy.treatmentGiven', { treatment: 'Procainamide' }), dose, undefined, dose);
+    addIntervention('procainamide', t('bradyTachy.treatmentGiven', { treatment: 'Procainamide' }), dose, undefined, dose, 'bradyTachy.treatmentGiven', { treatment: 'Procainamide' });
   }, [addIntervention, t]);
 
   const giveAmiodarone = useCallback((dose: string) => {
-    addIntervention('amiodarone', t('bradyTachy.treatmentGiven', { treatment: 'Amiodarone' }), dose, undefined, dose);
+    addIntervention('amiodarone', t('bradyTachy.treatmentGiven', { treatment: 'Amiodarone' }), dose, undefined, dose, 'bradyTachy.treatmentGiven', { treatment: 'Amiodarone' });
   }, [addIntervention, t]);
 
   const performVagalManeuver = useCallback(() => {
-    addIntervention('vagal_maneuver', t('bradyTachy.treatmentGiven', { treatment: 'Vagal maneuvers' }));
+    addIntervention('vagal_maneuver', t('bradyTachy.treatmentGiven', { treatment: 'Vagal maneuvers' }), undefined, undefined, undefined, 'bradyTachy.treatmentGiven', { treatment: 'Vagal maneuvers' });
   }, [addIntervention, t]);
 
   // Switch to cardiac arrest
@@ -308,6 +314,8 @@ export function useBradyTachyLogic() {
           doseStep: i.doseStep,
           calculatedDose: i.calculatedDose,
           decisionContext: i.decisionContext,
+          translationKey: i.translationKey,
+          translationParams: i.translationParams,
         })),
         outcome: updated.outcome,
       };
