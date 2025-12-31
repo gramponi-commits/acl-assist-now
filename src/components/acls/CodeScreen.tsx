@@ -86,7 +86,7 @@ export function CodeScreen() {
   const isPathwaySelection = session.phase === 'pathway_selection';
   const isInitial = session.phase === 'initial' || session.phase === 'rhythm_selection';
 
-  // Check for active session on mount
+  // Check for active session on mount and show disclaimer if needed
   useEffect(() => {
     const activeSession = getActiveSession();
     if (activeSession) {
@@ -94,15 +94,24 @@ export function CodeScreen() {
       setPendingResumeSession(activeSession);
       setShowResumeDialog(true);
     } else {
-      // Show disclaimer notification on first load when no active session
-      const disclaimerToast = toast.warning(t('about.disclaimerNotification'), {
-        duration: Infinity,
-        id: 'disclaimer-toast',
-      });
-
-      // Store the toast dismiss function for later
-      sessionStorage.setItem('disclaimerToastShown', 'true');
+      // Show disclaimer notification only if not already dismissed in this session
+      const disclaimerDismissed = sessionStorage.getItem('disclaimerDismissed');
+      if (!disclaimerDismissed) {
+        toast.warning(t('about.disclaimerNotification'), {
+          duration: Infinity,
+          id: 'disclaimer-toast',
+        });
+      }
     }
+
+    // Cleanup: dismiss disclaimer when navigating away from this screen
+    return () => {
+      const disclaimerDismissed = sessionStorage.getItem('disclaimerDismissed');
+      if (!disclaimerDismissed) {
+        toast.dismiss('disclaimer-toast');
+        sessionStorage.setItem('disclaimerDismissed', 'true');
+      }
+    };
   }, [t]);
 
 
@@ -230,9 +239,10 @@ export function CodeScreen() {
   // Handlers
   const handlePathwaySelected = () => {
     // Dismiss disclaimer toast immediately when any pathway is selected
-    if (sessionStorage.getItem('disclaimerToastShown') === 'true') {
+    const disclaimerDismissed = sessionStorage.getItem('disclaimerDismissed');
+    if (!disclaimerDismissed) {
       toast.dismiss('disclaimer-toast');
-      sessionStorage.removeItem('disclaimerToastShown');
+      sessionStorage.setItem('disclaimerDismissed', 'true');
     }
   };
 
