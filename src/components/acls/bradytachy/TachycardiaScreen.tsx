@@ -32,17 +32,8 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
   const [adenosineDoses, setAdenosineDoses] = useState(0);
   const [cardioversionAttempts, setCardioversionAttempts] = useState(0);
 
-  // Pediatric: First show sinus evaluation screen (NEW FLOW)
-  if (isPediatric && session.phase === 'tachycardia_assessment') {
-    return <SinusEvaluationScreen session={session} actions={actions} />;
-  }
-
-  // Pediatric: Then cardiopulmonary compromise assessment (NEW FLOW)
-  if (isPediatric && session.phase === 'tachycardia_compromise_assessment') {
-    return <CompromiseAssessmentScreen session={session} actions={actions} />;
-  }
-
   // If pediatric sinus tachycardia selected, show "treat cause" guidance
+  // This check must come BEFORE the assessment phase check
   if (isPediatric && pedsSinusVsSVTChoice === 'probable_sinus') {
     return (
       <ScrollArea className="h-full">
@@ -72,6 +63,16 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
         </div>
       </ScrollArea>
     );
+  }
+
+  // Pediatric: First show sinus evaluation screen (NEW FLOW)
+  if (isPediatric && session.phase === 'tachycardia_assessment') {
+    return <SinusEvaluationScreen session={session} actions={actions} />;
+  }
+
+  // Pediatric: Then cardiopulmonary compromise assessment (NEW FLOW)
+  if (isPediatric && session.phase === 'tachycardia_compromise_assessment') {
+    return <CompromiseAssessmentScreen session={session} actions={actions} />;
   }
 
   // Adult initial assessment (unchanged)
