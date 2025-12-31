@@ -1,6 +1,8 @@
 // Bradycardia/Tachycardia Dosing Calculations
 // AHA 2025 Guidelines
 
+import type { CardioversionRhythmType } from '@/types/acls';
+
 interface DoseResult {
   value: number | null;
   display: string;
@@ -175,16 +177,45 @@ export function getAdultTachyAdenosine(doseNumber: 1 | 2): DoseResult {
 
 /**
  * Synchronized cardioversion for adult tachycardia
- * Use device-recommended energy to maximize first shock success
- * OR use maximum energy setting if dose is not known
+ * Energy varies by rhythm type per AHA 2025 guidelines
+ * @param rhythmType - Type of rhythm requiring cardioversion
+ * @returns Energy recommendation based on rhythm
  */
-export function getAdultTachyCardioversion(deviceEnergy: number): DoseResult {
-  // Validate energy is within reasonable medical range (50-360J for biphasic)
-  const validatedEnergy = Math.min(Math.max(deviceEnergy, 50), 360);
+export function getAdultTachyCardioversion(rhythmType?: CardioversionRhythmType): DoseResult {
+  // Rhythm-specific energies per AHA 2025 guidelines
+  const energyMap = {
+    afib: 200,           // Atrial fibrillation: 200J
+    aflutter: 200,       // Atrial flutter: 200J
+    narrow: 100,         // Narrow-complex tachycardia: 100J
+    monomorphic_vt: 100, // Monomorphic VT: 100J
+    polymorphic_vt: null, // Polymorphic VT: requires defibrillation (unsynchronized) instead of cardioversion
+  };
+
+  if (!rhythmType) {
+    // Default fallback when rhythm not specified (backwards compatibility)
+    // 200J is a common starting energy for most rhythms requiring cardioversion
+    return {
+      value: 200,
+      display: '200 J (or device-recommended)',
+      unit: 'J',
+    };
+  }
+
+  const energy = energyMap[rhythmType];
   
+  if (rhythmType === 'polymorphic_vt') {
+    // Polymorphic VT requires defibrillation (NOT synchronized cardioversion)
+    // Return null to indicate this is not a synchronized cardioversion
+    return {
+      value: null,
+      display: 'Defibrillation (NOT synchronized)',
+      unit: 'J',
+    };
+  }
+
   return {
-    value: validatedEnergy,
-    display: `${validatedEnergy} J (or max energy)`,
+    value: energy,
+    display: `${energy} J`,
     unit: 'J',
   };
 }
@@ -249,5 +280,91 @@ export function getAdultTachyRateControl(): DoseResult {
     value: null,
     display: 'Beta-blocker or CCB (per protocol)',
     unit: '',
+  };
+}
+
+/**
+ * Diltiazem for adult narrow-complex tachycardia (second-line)
+ * Calcium channel blocker for rate control
+ * Loading: 0.25 mg/kg IV bolus over 2 min
+ * Maintenance: 5-10 mg/h
+ */
+export function getAdultTachyDiltiazem(): {
+  loading: DoseResult;
+  maintenance: DoseResult;
+} {
+  return {
+    loading: {
+      value: null,
+      display: '0.25 mg/kg IV over 2 min',
+      unit: 'mg/kg',
+    },
+    maintenance: {
+      value: null,
+      display: '5-10 mg/h',
+      unit: 'mg/h',
+    },
+  };
+}
+
+/**
+ * Verapamil for adult narrow-complex tachycardia (second-line)
+ * Calcium channel blocker for rate control
+ * Initial: 2.5-5 mg IV bolus over 2 min
+ * Repeat: 5-10 mg if needed after 15-30 min
+ */
+export function getAdultTachyVerapamil(): {
+  initial: DoseResult;
+  repeat: DoseResult;
+} {
+  return {
+    initial: {
+      value: null,
+      display: '2.5-5 mg IV over 2 min',
+      unit: 'mg',
+    },
+    repeat: {
+      value: null,
+      display: '5-10 mg (if needed)',
+      unit: 'mg',
+    },
+  };
+}
+
+/**
+ * Metoprolol for adult narrow-complex tachycardia (second-line)
+ * Beta-blocker for rate control
+ * Dose: 2.5-5 mg IV over 2 min
+ * May repeat up to 3 doses
+ */
+export function getAdultTachyMetoprolol(): DoseResult {
+  return {
+    value: null,
+    display: '2.5-5 mg IV over 2 min (up to 3 doses)',
+    unit: 'mg',
+  };
+}
+
+/**
+ * Esmolol for adult narrow-complex tachycardia (second-line)
+ * Beta-blocker for rate control
+ * Loading: 500 mcg/kg over 1 min
+ * Maintenance: 50-300 mcg/kg/min
+ */
+export function getAdultTachyEsmolol(): {
+  loading: DoseResult;
+  maintenance: DoseResult;
+} {
+  return {
+    loading: {
+      value: 500,
+      display: '500 mcg/kg over 1 min',
+      unit: 'mcg/kg',
+    },
+    maintenance: {
+      value: null,
+      display: '50-300 mcg/kg/min',
+      unit: 'mcg/kg/min',
+    },
   };
 }
