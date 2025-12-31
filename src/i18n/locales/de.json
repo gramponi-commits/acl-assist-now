@@ -606,6 +606,11 @@
     "pedsCompromiseNo": "NEIN - Keine Kompromittierung",
     "pedsBradyHR60Instructions": "Wenn Herzfrequenz <60/min mit schlechter Perfusion trotz adäquater Sauerstoffzufuhr und Beatmung, CPR starten (roten Knopf oben verwenden).",
     "notSinusConcerningRhythm": "Kein Sinusrhythmus / Besorgniserregender Rhythmus",
-    "continueToCompromiseAssessment": "Weiter zur Kompromittierungsbewertung"
+    "continueToCompromiseAssessment": "Weiter zur Kompromittierungsbewertung",
+    "nextSteps": "Nächste Schritte:",
+    "compromisePresentInstruction": "Wenn Kompromittierung vorliegt (instabil), sofortige Kardioversion oder Adenosin durchführen. Wenn keine Kompromittierung (stabil), vagale Manöver und Adenosin durchführen.",
+    "orCompromiseSuspected": "ODER kardiopulmonale Kompromittierung vermutet",
+    "pacingInitiated": "Transkutanes Pacing eingeleitet",
+    "ifRegularMonomorphic": "(wenn regelmäßig & monomorph)"
   }
 }

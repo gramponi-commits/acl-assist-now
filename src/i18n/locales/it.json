@@ -603,6 +603,11 @@
     "pedsCompromiseNo": "NO - Nessuna Compromissione",
     "pedsBradyHR60Instructions": "Se frequenza cardiaca <60/min con scarsa perfusione nonostante ossigenazione e ventilazione adeguate, iniziare la RCP (usare il pulsante rosso in alto).",
     "notSinusConcerningRhythm": "Non Sinusale / Ritmo Preoccupante",
-    "continueToCompromiseAssessment": "Continua alla Valutazione della Compromissione"
+    "continueToCompromiseAssessment": "Continua alla Valutazione della Compromissione",
+    "nextSteps": "Prossimi Passi:",
+    "compromisePresentInstruction": "Se la compromissione è presente (instabile), procedere con cardioversione immediata o adenosina. Se non c'è compromissione (stabile), procedere con manovre vagali e adenosina.",
+    "orCompromiseSuspected": "OPPURE sospetta compromissione cardiopolmonare",
+    "pacingInitiated": "Pacing transcutaneo iniziato",
+    "ifRegularMonomorphic": "(se regolare e monomorfico)"
   }
 }

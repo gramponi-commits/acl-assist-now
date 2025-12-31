@@ -71,10 +71,9 @@ export function CompromiseAssessmentScreen({ session, actions }: CompromiseAsses
 
         {/* Info box */}
         <div className="bg-muted rounded-lg p-4 text-sm">
-          <p className="font-medium mb-2">Next Steps:</p>
+          <p className="font-medium mb-2">{t('bradyTachy.nextSteps')}</p>
           <p className="text-xs text-muted-foreground">
-            If compromise is present (unstable), proceed to immediate cardioversion or adenosine.
-            If no compromise (stable), proceed with vagal maneuvers and adenosine.
+            {t('bradyTachy.compromisePresentInstruction')}
           </p>
         </div>
       </div>
