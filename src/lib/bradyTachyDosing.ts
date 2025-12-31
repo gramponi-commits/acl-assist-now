@@ -188,11 +188,12 @@ export function getAdultTachyCardioversion(rhythmType?: CardioversionRhythmType)
     aflutter: 200,       // Atrial flutter: 200J
     narrow: 100,         // Narrow-complex tachycardia: 100J
     monomorphic_vt: 100, // Monomorphic VT: 100J
-    polymorphic_vt: null, // Polymorphic VT: Use defibrillation (not synchronized)
+    polymorphic_vt: null, // Polymorphic VT: null indicates defibrillation (unsynchronized) should be used
   };
 
   if (!rhythmType) {
-    // Default fallback if no rhythm specified
+    // Default fallback when rhythm not specified (backwards compatibility)
+    // 200J is a common starting energy for most rhythms requiring cardioversion
     return {
       value: 200,
       display: '200 J (or device-recommended)',
@@ -203,6 +204,8 @@ export function getAdultTachyCardioversion(rhythmType?: CardioversionRhythmType)
   const energy = energyMap[rhythmType];
   
   if (rhythmType === 'polymorphic_vt') {
+    // Polymorphic VT requires defibrillation (NOT synchronized cardioversion)
+    // Return null to indicate this is not a synchronized cardioversion
     return {
       value: null,
       display: 'Defibrillation (NOT synchronized)',
