@@ -86,7 +86,7 @@ export function CodeScreen() {
   const isPathwaySelection = session.phase === 'pathway_selection';
   const isInitial = session.phase === 'initial' || session.phase === 'rhythm_selection';
 
-  // Check for active session on mount
+  // Check for active session on mount and show disclaimer if needed
   useEffect(() => {
     const activeSession = getActiveSession();
     if (activeSession) {
@@ -94,24 +94,26 @@ export function CodeScreen() {
       setPendingResumeSession(activeSession);
       setShowResumeDialog(true);
     } else {
-      // Show disclaimer notification on first load when no active session
-      const disclaimerToast = toast.warning(t('about.disclaimerNotification'), {
-        duration: Infinity,
-        id: 'disclaimer-toast',
-      });
-
-      // Store the toast dismiss function for later
-      sessionStorage.setItem('disclaimerToastShown', 'true');
+      // Show disclaimer notification only if not already dismissed in this session
+      const disclaimerDismissed = sessionStorage.getItem('disclaimerDismissed');
+      if (!disclaimerDismissed) {
+        toast.warning(t('about.disclaimerNotification'), {
+          duration: Infinity,
+          id: 'disclaimer-toast',
+        });
+      }
     }
+
+    // Cleanup: dismiss disclaimer when navigating away from this screen
+    return () => {
+      const disclaimerDismissed = sessionStorage.getItem('disclaimerDismissed');
+      if (!disclaimerDismissed) {
+        toast.dismiss('disclaimer-toast');
+        sessionStorage.setItem('disclaimerDismissed', 'true');
+      }
+    };
   }, [t]);
 
-  // Dismiss disclaimer toast when pathway is selected
-  useEffect(() => {
-    if (session.pathwayMode && sessionStorage.getItem('disclaimerToastShown') === 'true') {
-      toast.dismiss('disclaimer-toast');
-      sessionStorage.removeItem('disclaimerToastShown');
-    }
-  }, [session.pathwayMode]);
 
   // Enable audio alerts based on settings
   useEffect(() => {
@@ -235,6 +237,20 @@ export function CodeScreen() {
   }, [isPostROSC, playAlert, announce, vibrate, settings.vibrationEnabled]);
 
   // Handlers
+  const handlePathwaySelected = () => {
+    // Dismiss disclaimer toast immediately when any pathway is selected
+    const disclaimerDismissed = sessionStorage.getItem('disclaimerDismissed');
+    if (!disclaimerDismissed) {
+      toast.dismiss('disclaimer-toast');
+      sessionStorage.setItem('disclaimerDismissed', 'true');
+    }
+  };
+
+  const handleSetPathwayMode = (mode: 'adult' | 'pediatric') => {
+    handlePathwaySelected();
+    actions.setPathwayMode(mode);
+  };
+
   const handleAddNote = (note: string) => {
     actions.addNote(note);
     toast.success(t('notes.addNote'));
@@ -264,6 +280,7 @@ export function CodeScreen() {
   };
 
   const handleOpenBradyTachy = () => {
+    handlePathwaySelected();
     setShowBradyTachyModule(true);
     logger.sessionEvent('Brady/Tachy module opened');
   };
@@ -361,7 +378,7 @@ export function CodeScreen() {
             {/* Pathway Selection Screen */}
             {isPathwaySelection && (
               <PathwaySelectionView
-                onSelectPathway={actions.setPathwayMode}
+                onSelectPathway={handleSetPathwayMode}
                 onStartCPR={actions.startCPR}
                 onSetWeight={actions.setPatientWeight}
                 currentWeight={session.patientWeight}
