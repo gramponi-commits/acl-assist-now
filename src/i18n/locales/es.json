@@ -606,6 +606,11 @@
     "pedsCompromiseNo": "NO - Sin Compromiso",
     "pedsBradyHR60Instructions": "Si la frecuencia cardíaca es <60/min con mala perfusión a pesar de oxigenación y ventilación adecuadas, iniciar RCP (usar botón rojo arriba).",
     "notSinusConcerningRhythm": "No Sinusal / Ritmo Preocupante",
-    "continueToCompromiseAssessment": "Continuar a Evaluación de Compromiso"
+    "continueToCompromiseAssessment": "Continuar a Evaluación de Compromiso",
+    "nextSteps": "Próximos Pasos:",
+    "compromisePresentInstruction": "Si el compromiso está presente (inestable), proceder con cardioversión inmediata o adenosina. Si no hay compromiso (estable), proceder con maniobras vagales y adenosina.",
+    "orCompromiseSuspected": "O compromiso cardiopulmonar sospechado",
+    "pacingInitiated": "Marcapasos transcutáneo iniciado",
+    "ifRegularMonomorphic": "(si regular y monomórfico)"
   }
 }

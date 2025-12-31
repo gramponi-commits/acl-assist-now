@@ -265,7 +265,7 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
                   </p>
                   <Button
                     onClick={() => {
-                      actions.addIntervention('note', 'Transcutaneous pacing initiated');
+                      actions.addIntervention('note', t('bradyTachy.pacingInitiated'));
                     }}
                     variant="outline"
                     className="w-full h-10"

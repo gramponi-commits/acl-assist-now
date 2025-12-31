@@ -467,7 +467,7 @@ export function TachycardiaScreen({ session, actions }: TachycardiaScreenProps) 
             variant="outline"
             className="w-full h-12"
           >
-            {t('bradyTachy.giveAdenosine')} (if regular & monomorphic)
+            {t('bradyTachy.giveAdenosine')} {t('bradyTachy.ifRegularMonomorphic')}
           </Button>
         </div>
 

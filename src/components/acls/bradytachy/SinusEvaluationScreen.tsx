@@ -84,7 +84,7 @@ export function SinusEvaluationScreen({ session, actions }: SinusEvaluationScree
           </div>
 
           <p className="text-sm mb-3">
-            OR cardiopulmonary compromise suspected
+            {t('bradyTachy.orCompromiseSuspected')}
           </p>
 
           <div className="bg-muted rounded p-3 mb-3 text-sm">

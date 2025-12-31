@@ -606,6 +606,11 @@
     "pedsCompromiseNo": "NON - Pas de Compromis",
     "pedsBradyHR60Instructions": "Si fréquence cardiaque <60/min avec mauvaise perfusion malgré une oxygénation et ventilation adéquates, commencer la RCP (utiliser le bouton rouge en haut).",
     "notSinusConcerningRhythm": "Pas Sinusal / Rythme Préoccupant",
-    "continueToCompromiseAssessment": "Continuer vers l'Évaluation du Compromis"
+    "continueToCompromiseAssessment": "Continuer vers l'Évaluation du Compromis",
+    "nextSteps": "Prochaines Étapes:",
+    "compromisePresentInstruction": "Si un compromis est présent (instable), procéder à une cardioversion immédiate ou à l'adénosine. Si aucun compromis (stable), procéder avec des manœuvres vagales et l'adénosine.",
+    "orCompromiseSuspected": "OU compromis cardiopulmonaire suspecté",
+    "pacingInitiated": "Stimulation transcutanée initiée",
+    "ifRegularMonomorphic": "(si régulier et monomorphe)"
   }
 }

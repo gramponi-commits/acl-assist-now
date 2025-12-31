@@ -602,6 +602,11 @@
     "pedsCompromiseNo": "NO - No Compromise",
     "pedsBradyHR60Instructions": "If heart rate <60/min with poor perfusion despite adequate oxygenation and ventilation, start CPR (use red button at top).",
     "notSinusConcerningRhythm": "Not Sinus / Concerning Rhythm",
-    "continueToCompromiseAssessment": "Continue to Compromise Assessment"
+    "continueToCompromiseAssessment": "Continue to Compromise Assessment",
+    "nextSteps": "Next Steps:",
+    "compromisePresentInstruction": "If compromise is present (unstable), proceed to immediate cardioversion or adenosine. If no compromise (stable), proceed with vagal maneuvers and adenosine.",
+    "orCompromiseSuspected": "OR cardiopulmonary compromise suspected",
+    "pacingInitiated": "Transcutaneous pacing initiated",
+    "ifRegularMonomorphic": "(if regular & monomorphic)"
   }
 }
