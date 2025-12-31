@@ -63,6 +63,10 @@ export default {
           "primary-foreground": "hsl(var(--pals-primary-foreground))",
         },
         acls: {
+          adult: "hsl(var(--acls-primary))",
+          "adult-foreground": "hsl(var(--acls-primary-foreground))",
+          pediatric: "hsl(var(--pals-primary))",
+          "pediatric-foreground": "hsl(var(--pals-primary-foreground))",
           shockable: "hsl(var(--acls-shockable))",
           "shockable-foreground": "hsl(var(--acls-shockable-foreground))",
           "non-shockable": "hsl(var(--acls-non-shockable))",
