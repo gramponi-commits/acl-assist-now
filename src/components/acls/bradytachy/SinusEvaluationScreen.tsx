@@ -10,9 +10,10 @@ interface SinusEvaluationScreenProps {
   decisionContext: BradyTachyDecisionContext;
   actions: BradyTachyActions;
   onComplete: () => void;
+  onAdvanceToCompromise: () => void;
 }
 
-export function SinusEvaluationScreen({ decisionContext, actions, onComplete }: SinusEvaluationScreenProps) {
+export function SinusEvaluationScreen({ decisionContext, actions, onComplete, onAdvanceToCompromise }: SinusEvaluationScreenProps) {
   const { t } = useTranslation();
 
   const handleProbableSinus = () => {
@@ -24,7 +25,7 @@ export function SinusEvaluationScreen({ decisionContext, actions, onComplete }: 
   const handleConcerningRhythm = () => {
     // This will advance to compromise assessment
     actions.advanceToCompromiseAssessment();
-    onComplete();
+    onAdvanceToCompromise();
   };
 
   return (

@@ -50,7 +50,10 @@ export function CompromiseAssessmentScreen({ decisionContext, actions, onComplet
 
           <div className="grid grid-cols-1 gap-3 mt-4">
             <Button
-              onClick={() => actions.setStability('unstable')}
+              onClick={() => {
+                actions.setStability('unstable');
+                onComplete();
+              }}
               className={cn(
                 "h-16 text-lg font-bold",
                 "bg-red-600 hover:bg-red-700 text-white",
@@ -61,7 +64,10 @@ export function CompromiseAssessmentScreen({ decisionContext, actions, onComplet
               {t('bradyTachy.pedsCompromiseYes')}
             </Button>
             <Button
-              onClick={() => actions.setStability('stable')}
+              onClick={() => {
+                actions.setStability('stable');
+                onComplete();
+              }}
               variant="outline"
               className="h-16 text-lg font-bold"
             >

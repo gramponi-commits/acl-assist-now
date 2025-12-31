@@ -37,7 +37,15 @@ export function TachycardiaScreen({ decisionContext, actions, patientWeight }: T
 
   // Pediatric: First show sinus evaluation screen (NEW FLOW)
   if (isPediatric && showSinusEval) {
-    return <SinusEvaluationScreen decisionContext={decisionContext} actions={actions} onComplete={() => setShowSinusEval(false)} />;
+    return <SinusEvaluationScreen 
+      decisionContext={decisionContext} 
+      actions={actions} 
+      onComplete={() => setShowSinusEval(false)}
+      onAdvanceToCompromise={() => {
+        setShowSinusEval(false);
+        setShowCompromiseAssess(true);
+      }}
+    />;
   }
 
   // Pediatric: Then cardiopulmonary compromise assessment (NEW FLOW)
