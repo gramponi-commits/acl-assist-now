@@ -70,6 +70,7 @@ export function BradyTachyModule({ onSwitchToArrest, onExit }: BradyTachyModuleP
           <TachycardiaScreen
             session={session}
             actions={actions}
+            onSwitchToArrest={handleSwitchToArrest}
           />
         );
 
