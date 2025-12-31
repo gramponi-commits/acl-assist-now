@@ -58,7 +58,11 @@ export function clearBradyTachySession(): void {
 export async function saveBradyTachyToHistory(session: StoredBradyTachySession): Promise<void> {
   try {
     const duration = session.endTime ? session.endTime - session.startTime : 0;
-    
+
+    // Determine session type and outcome
+    const sessionType = session.outcome === 'switched_to_arrest' ? 'bradytachy-arrest' : 'bradytachy';
+    const outcome = session.outcome === 'resolved' ? 'resolved' : null;
+
     // Convert BradyTachy session to StoredSession format for history
     const historySession: StoredSession = {
       id: session.id,
@@ -66,7 +70,7 @@ export async function saveBradyTachyToHistory(session: StoredBradyTachySession):
       startTime: session.startTime,
       endTime: session.endTime,
       roscTime: null,
-      outcome: session.outcome === 'resolved' ? 'rosc' : null,
+      outcome,
       duration,
       totalCPRTime: 0, // BradyTachy doesn't track CPR time (that's for arrest)
       cprFraction: 0,
@@ -74,6 +78,7 @@ export async function saveBradyTachyToHistory(session: StoredBradyTachySession):
       epinephrineCount: 0,
       amiodaroneCount: 0,
       lidocaineCount: 0,
+      sessionType,
       pathwayMode: session.patientGroup as PathwayMode,
       patientWeight: session.weightKg,
       interventions: session.interventions.map(i => ({

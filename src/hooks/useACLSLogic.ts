@@ -178,9 +178,14 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
             const sessionSnapshot = sessionRef.current;
             const timerSnapshot = timerRef.current;
             
-            const cprFraction = timerSnapshot.totalElapsed > 0 
+            const cprFraction = timerSnapshot.totalElapsed > 0
               ? (timerSnapshot.totalCPRTime / timerSnapshot.totalElapsed) * 100
               : 0;
+
+            // Check if this session started from bradytachy (contains a switch marker)
+            const hasBradyTachySwitch = sessionSnapshot.interventions.some(
+              i => i.type === 'note' && i.details.toLowerCase().includes('switched') && i.details.toLowerCase().includes('arrest')
+            );
 
             const storedSession: StoredSession = {
               id: sessionSnapshot.id,
@@ -196,6 +201,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
               epinephrineCount: sessionSnapshot.epinephrineCount,
               amiodaroneCount: sessionSnapshot.amiodaroneCount,
               lidocaineCount: sessionSnapshot.lidocaineCount,
+              sessionType: hasBradyTachySwitch ? 'bradytachy-arrest' : 'cardiac-arrest',
               pathwayMode: sessionSnapshot.pathwayMode,
               patientWeight: sessionSnapshot.patientWeight,
               interventions: sessionSnapshot.interventions.map(i => ({

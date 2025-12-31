@@ -3,8 +3,10 @@
 import { HsAndTs, PostROSCChecklist, PostROSCVitals, PathwayMode, PregnancyCauses, PregnancyInterventions } from '@/types/acls';
 
 const DB_NAME = 'acls_sessions';
-const DB_VERSION = 3; // Bump version for pregnancy schema update
+const DB_VERSION = 4; // Bump version for sessionType field
 const STORE_NAME = 'sessions';
+
+export type SessionType = 'cardiac-arrest' | 'bradytachy' | 'bradytachy-arrest';
 
 export interface StoredSession {
   id: string;
@@ -12,7 +14,7 @@ export interface StoredSession {
   startTime: number;
   endTime: number | null;
   roscTime: number | null;
-  outcome: 'rosc' | 'deceased' | null;
+  outcome: 'rosc' | 'deceased' | 'resolved' | null;
   duration: number;
   totalCPRTime: number;
   cprFraction: number;
@@ -20,6 +22,8 @@ export interface StoredSession {
   epinephrineCount: number;
   amiodaroneCount: number;
   lidocaineCount: number;
+  // Session type (cardiac arrest, bradytachy only, or bradytachy that switched to arrest)
+  sessionType: SessionType;
   // Pathway mode (Adult ACLS / Pediatric PALS)
   pathwayMode: PathwayMode;
   patientWeight: number | null;
@@ -61,6 +65,14 @@ function openDB(): Promise<IDBDatabase> {
         const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
         store.createIndex('savedAt', 'savedAt', { unique: false });
         store.createIndex('pathwayMode', 'pathwayMode', { unique: false });
+        store.createIndex('sessionType', 'sessionType', { unique: false });
+      } else {
+        // Handle migration for existing stores
+        const transaction = (event.target as IDBOpenDBRequest).transaction;
+        const store = transaction?.objectStore(STORE_NAME);
+        if (store && !store.indexNames.contains('sessionType')) {
+          store.createIndex('sessionType', 'sessionType', { unique: false });
+        }
       }
     };
   });

@@ -7,6 +7,7 @@ import { useBradyTachyLogic } from '@/hooks/useBradyTachyLogic';
 import { BradyTachyPatientSelector } from './BradyTachyPatientSelector';
 import { BradycardiaScreen } from './BradycardiaScreen';
 import { TachycardiaScreen } from './TachycardiaScreen';
+import { BradyTachyTimeline } from './BradyTachyTimeline';
 
 interface BradyTachyModuleProps {
   onSwitchToArrest: (patientGroup: 'adult' | 'pediatric') => void;
@@ -111,7 +112,21 @@ export function BradyTachyModule({ onSwitchToArrest, onExit }: BradyTachyModuleP
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
-        {renderContent()}
+        <div className="p-4 space-y-4">
+          {renderContent()}
+
+          {/* Timeline - Show when session is active (not in selection phases) */}
+          {session.phase !== 'patient_selection' &&
+           session.phase !== 'branch_selection' &&
+           session.phase !== 'session_ended' && (
+            <div className="mt-6">
+              <BradyTachyTimeline
+                interventions={session.interventions}
+                startTime={session.startTime}
+              />
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Exit Confirmation Dialog */}
