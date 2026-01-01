@@ -66,11 +66,11 @@ export function SinusEvaluationScreen({ session, actions }: SinusEvaluationScree
           <Button
             onClick={handleProbableSinus}
             className={cn(
-              "w-full h-11 sm:h-12 text-sm sm:text-lg font-bold",
+              "w-full min-h-11 sm:min-h-12 h-auto px-4 py-3 sm:py-3.5 text-sm sm:text-lg font-bold whitespace-normal text-center leading-snug",
               "bg-green-600 hover:bg-green-700 text-white"
             )}
           >
-            <span className="truncate">{t('bradyTachy.pedsProbableSinus')}</span>
+            <span className="whitespace-normal break-words">{t('bradyTachy.pedsProbableSinus')}</span>
           </Button>
         </div>
 
@@ -96,11 +96,13 @@ export function SinusEvaluationScreen({ session, actions }: SinusEvaluationScree
           <Button
             onClick={handleConcerningRhythm}
             className={cn(
-              "w-full h-11 sm:h-12 text-sm sm:text-lg font-bold",
+              "w-full min-h-11 sm:min-h-12 h-auto px-4 py-3 sm:py-3.5 text-sm sm:text-lg font-bold whitespace-normal text-center leading-snug",
               "bg-orange-600 hover:bg-orange-700 text-white"
             )}
           >
-            <span className="truncate">{t('bradyTachy.continueToCompromiseAssessment')}</span>
+            <span className="whitespace-normal break-words">
+              {t('bradyTachy.continueToCompromiseAssessment')}
+            </span>
           </Button>
         </div>
       </div>

@@ -17,14 +17,14 @@ export function CompromiseAssessmentScreen({ session, actions }: CompromiseAsses
 
   return (
     <ScrollArea className="h-full">
-      <div className="p-6 space-y-6 max-w-3xl mx-auto">
+      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pals-primary/20 text-pals-primary text-sm font-medium mb-4">
             <Activity className="h-4 w-4" />
             {t('bradyTachy.pediatric')} - {t('bradyTachy.tachycardia')}
           </div>
-          <h1 className="text-2xl font-bold">{t('bradyTachy.pedsCompromiseQuestion')}</h1>
+          <h1 className="text-xl sm:text-2xl font-bold break-words">{t('bradyTachy.pedsCompromiseQuestion')}</h1>
         </div>
 
         {/* Compromise Assessment */}
@@ -51,20 +51,20 @@ export function CompromiseAssessmentScreen({ session, actions }: CompromiseAsses
             <Button
               onClick={() => actions.setStability('unstable')}
               className={cn(
-                "h-16 text-lg font-bold",
-                "bg-red-600 hover:bg-red-700 text-white",
-                "flex items-center justify-center gap-2"
+                "min-h-14 h-auto px-4 py-3 text-base sm:text-lg font-bold",
+                "whitespace-normal text-center leading-snug flex flex-wrap items-center justify-center gap-2",
+                "bg-red-600 hover:bg-red-700 text-white"
               )}
             >
-              <AlertCircle className="h-5 w-5" />
-              {t('bradyTachy.pedsCompromiseYes')}
+              <AlertCircle className="h-5 w-5 flex-shrink-0" />
+              <span className="whitespace-normal break-words">{t('bradyTachy.pedsCompromiseYes')}</span>
             </Button>
             <Button
               onClick={() => actions.setStability('stable')}
               variant="outline"
-              className="h-16 text-lg font-bold"
+              className="min-h-14 h-auto px-4 py-3 text-base sm:text-lg font-bold whitespace-normal text-center leading-snug"
             >
-              {t('bradyTachy.pedsCompromiseNo')}
+              <span className="whitespace-normal break-words">{t('bradyTachy.pedsCompromiseNo')}</span>
             </Button>
           </div>
         </div>
