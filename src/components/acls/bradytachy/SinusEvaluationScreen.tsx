@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
 import { BradyTachySession } from '@/types/acls';
 import { BradyTachyActions } from '@/hooks/useBradyTachyLogic';
-import { Activity, AlertCircle } from 'lucide-react';
 
 interface SinusEvaluationScreenProps {
   session: BradyTachySession;
@@ -29,10 +29,6 @@ export function SinusEvaluationScreen({ session, actions }: SinusEvaluationScree
       <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pals-primary/20 text-pals-primary text-sm font-medium mb-4">
-            <Activity className="h-4 w-4" />
-            {t('bradyTachy.pediatric')}
-          </div>
           <h1 className="text-xl sm:text-2xl font-bold">{t('bradyTachy.pedsSinusVsSVT')}</h1>
           <p className="text-xs sm:text-sm text-muted-foreground mt-2">
             {t('bradyTachy.differentiateRhythmDesc')}
@@ -40,23 +36,26 @@ export function SinusEvaluationScreen({ session, actions }: SinusEvaluationScree
         </div>
 
         {/* Option A: Probable Sinus Tachycardia */}
-        <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-green-600 overflow-hidden">
-          <div className="flex items-center gap-2 mb-3">
-            <Activity className="h-5 w-5 text-green-600 flex-shrink-0" />
-            <h3 className="font-bold text-base sm:text-lg text-green-600 break-words">
-              {t('bradyTachy.pedsProbableSinus')}
-            </h3>
-          </div>
+        <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border overflow-hidden">
+          <h3 className="font-bold text-base sm:text-lg break-words mb-3">
+            {t('bradyTachy.pedsProbableSinus')}
+          </h3>
 
-          <p className="text-xs sm:text-sm font-medium mb-2">{t('bradyTachy.pedsSinusCriteria')}</p>
-          <ul className="space-y-1 text-xs sm:text-sm mb-4 list-disc list-inside">
-            <li>{t('bradyTachy.pedsSinusPWaves')}</li>
-            <li>{t('bradyTachy.pedsSinusVariableRR')}</li>
-            <li>{t('bradyTachy.pedsSinusInfantRate')}</li>
-            <li>{t('bradyTachy.pedsSinusChildRate')}</li>
-          </ul>
+          <Accordion type="single" collapsible>
+            <AccordionItem value="criteria">
+              <AccordionTrigger className="text-sm py-2">{t('bradyTachy.pedsSinusCriteria')}</AccordionTrigger>
+              <AccordionContent>
+                <ul className="space-y-1 text-xs sm:text-sm pt-2 list-disc list-inside">
+                  <li>{t('bradyTachy.pedsSinusPWaves')}</li>
+                  <li>{t('bradyTachy.pedsSinusVariableRR')}</li>
+                  <li>{t('bradyTachy.pedsSinusInfantRate')}</li>
+                  <li>{t('bradyTachy.pedsSinusChildRate')}</li>
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
 
-          <div className="bg-muted rounded p-2 sm:p-3 mb-3 text-xs sm:text-sm">
+          <div className="bg-muted rounded p-2 sm:p-3 my-3 text-xs sm:text-sm">
             <p className="font-medium mb-1">{t('bradyTachy.pedsSinusTreatCause')}</p>
             <p className="text-xs text-muted-foreground break-words">
               {t('bradyTachy.searchCausesDesc')}
@@ -65,23 +64,17 @@ export function SinusEvaluationScreen({ session, actions }: SinusEvaluationScree
 
           <Button
             onClick={handleProbableSinus}
-            className={cn(
-              "w-full min-h-11 sm:min-h-12 h-auto px-4 py-3 sm:py-3.5 text-sm sm:text-lg font-bold whitespace-normal text-center leading-snug",
-              "bg-green-600 hover:bg-green-700 text-white"
-            )}
+            className="w-full min-h-11 sm:min-h-12 h-auto px-4 py-3 sm:py-3.5 text-sm sm:text-lg font-bold whitespace-normal text-center leading-snug"
           >
             <span className="whitespace-normal break-words">{t('bradyTachy.pedsProbableSinus')}</span>
           </Button>
         </div>
 
         {/* Option B: Not Sinus / Concerning Rhythm OR Compromise */}
-        <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-orange-600 overflow-hidden">
-          <div className="flex items-center gap-2 mb-3">
-            <AlertCircle className="h-5 w-5 text-orange-600 flex-shrink-0" />
-            <h3 className="font-bold text-base sm:text-lg text-orange-600 break-words">
-              {t('bradyTachy.notSinusConcerningRhythm')}
-            </h3>
-          </div>
+        <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border overflow-hidden">
+          <h3 className="font-bold text-base sm:text-lg break-words mb-3">
+            {t('bradyTachy.notSinusConcerningRhythm')}
+          </h3>
 
           <p className="text-xs sm:text-sm mb-3 break-words">
             {t('bradyTachy.orCompromiseSuspected')}
@@ -95,10 +88,8 @@ export function SinusEvaluationScreen({ session, actions }: SinusEvaluationScree
 
           <Button
             onClick={handleConcerningRhythm}
-            className={cn(
-              "w-full min-h-11 sm:min-h-12 h-auto px-4 py-3 sm:py-3.5 text-sm sm:text-lg font-bold whitespace-normal text-center leading-snug",
-              "bg-orange-600 hover:bg-orange-700 text-white"
-            )}
+            variant="outline"
+            className="w-full min-h-11 sm:min-h-12 h-auto px-4 py-3 sm:py-3.5 text-sm sm:text-lg font-bold whitespace-normal text-center leading-snug"
           >
             <span className="whitespace-normal break-words">
               {t('bradyTachy.continueToCompromiseAssessment')}

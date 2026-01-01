@@ -6,7 +6,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { BradyTachySession } from '@/types/acls';
 import { BradyTachyActions } from '@/hooks/useBradyTachyLogic';
-import { Activity, Zap } from 'lucide-react';
 
 interface SinusVsSVTSelectorProps {
   session: BradyTachySession;
@@ -44,10 +43,6 @@ export function SinusVsSVTSelector({ session, actions }: SinusVsSVTSelectorProps
       <div className="p-6 space-y-6 max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pals-primary/20 text-pals-primary text-sm font-medium mb-4">
-            <Activity className="h-4 w-4" />
-            {t('bradyTachy.pediatric')}
-          </div>
           <h1 className="text-2xl font-bold">{t('bradyTachy.pedsSinusVsSVT')}</h1>
           <p className="text-sm text-muted-foreground mt-2">
             {t('bradyTachy.differentiateRhythmDesc')}
@@ -55,13 +50,10 @@ export function SinusVsSVTSelector({ session, actions }: SinusVsSVTSelectorProps
         </div>
 
         {/* Probable Sinus Tachycardia */}
-        <div className="bg-card rounded-lg p-4 border-2 border-green-600">
-          <div className="flex items-center gap-2 mb-3">
-            <Activity className="h-5 w-5 text-green-600" />
-            <h3 className="font-bold text-lg text-green-600">
-              {t('bradyTachy.pedsProbableSinus')}
-            </h3>
-          </div>
+        <div className="bg-card rounded-lg p-4 border-2 border-border">
+          <h3 className="font-bold text-lg mb-3">
+            {t('bradyTachy.pedsProbableSinus')}
+          </h3>
           
           <p className="text-sm font-medium mb-2">{t('bradyTachy.pedsSinusCriteria')}</p>
           <div className="space-y-2 text-sm mb-4">
@@ -109,23 +101,17 @@ export function SinusVsSVTSelector({ session, actions }: SinusVsSVTSelectorProps
 
           <Button
             onClick={handleSinusSelect}
-            className={cn(
-              "w-full h-12 text-lg font-bold",
-              "bg-green-600 hover:bg-green-700 text-white"
-            )}
+            className="w-full h-12 text-lg font-bold"
           >
             {t('bradyTachy.pedsProbableSinus')}
           </Button>
         </div>
 
         {/* Probable SVT */}
-        <div className="bg-card rounded-lg p-4 border-2 border-pals-primary">
-          <div className="flex items-center gap-2 mb-3">
-            <Zap className="h-5 w-5 text-pals-primary" />
-            <h3 className="font-bold text-lg text-pals-primary">
-              {t('bradyTachy.pedsProbableSVT')}
-            </h3>
-          </div>
+        <div className="bg-card rounded-lg p-4 border-2 border-border">
+          <h3 className="font-bold text-lg mb-3">
+            {t('bradyTachy.pedsProbableSVT')}
+          </h3>
           
           <p className="text-sm font-medium mb-2">{t('bradyTachy.pedsSVTCriteria')}</p>
           <div className="space-y-2 text-sm mb-4">
@@ -182,10 +168,8 @@ export function SinusVsSVTSelector({ session, actions }: SinusVsSVTSelectorProps
 
           <Button
             onClick={handleSVTSelect}
-            className={cn(
-              "w-full h-12 text-lg font-bold",
-              "bg-pals-primary hover:bg-pals-primary/90 text-white"
-            )}
+            variant="outline"
+            className="w-full h-12 text-lg font-bold"
           >
             {t('bradyTachy.pedsProbableSVT')}
           </Button>
