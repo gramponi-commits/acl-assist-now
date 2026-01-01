@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-ResusBuddy is a clinical-grade ACLS (Advanced Cardiac Life Support) and PALS (Pediatric Advanced Life Support) decision support PWA implementing 2024 AHA Cardiac Arrest Algorithm guidelines. It provides real-time guidance during resuscitation scenarios with offline support.
+ResusBuddy is a clinical-grade ACLS (Advanced Cardiac Life Support) and PALS (Pediatric Advanced Life Support) decision support PWA implementing 2025 AHA Cardiac Arrest Algorithm guidelines. It provides real-time guidance during resuscitation scenarios with offline support.
 
 ## Development Commands
 
@@ -113,7 +113,7 @@ Coverage thresholds: 80% lines/functions/statements, 75% branches.
 
 ## Clinical Accuracy
 
-When modifying clinical logic, always verify against 2024 AHA guidelines:
+When modifying clinical logic, always verify against 2025 AHA guidelines:
 - Adult: Epi every 3-5 min (we use 4), amiodarone after 3rd shock
 - Pediatric: Weight-based dosing, 15:2 CPR ratio
 - Rhythm check every 2 minutes with pre-shock charging alert at 15 seconds
