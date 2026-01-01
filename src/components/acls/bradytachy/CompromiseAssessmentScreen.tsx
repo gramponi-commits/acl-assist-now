@@ -5,7 +5,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { BradyTachySession } from '@/types/acls';
 import { BradyTachyActions } from '@/hooks/useBradyTachyLogic';
-import { AlertCircle, Activity } from 'lucide-react';
 
 interface CompromiseAssessmentScreenProps {
   session: BradyTachySession;
@@ -20,11 +19,10 @@ export function CompromiseAssessmentScreen({ session, actions }: CompromiseAsses
       <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pals-primary/20 text-pals-primary text-sm font-medium mb-4">
-            <Activity className="h-4 w-4" />
-            {t('bradyTachy.pediatric')} - {t('bradyTachy.tachycardia')}
-          </div>
           <h1 className="text-xl sm:text-2xl font-bold break-words">{t('bradyTachy.pedsCompromiseQuestion')}</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            {t('bradyTachy.pediatric')} - {t('bradyTachy.tachycardia')}
+          </p>
         </div>
 
         {/* Compromise Assessment */}
@@ -50,13 +48,12 @@ export function CompromiseAssessmentScreen({ session, actions }: CompromiseAsses
           <div className="grid grid-cols-1 gap-3 mt-4">
             <Button
               onClick={() => actions.setStability('unstable')}
+              variant="destructive"
               className={cn(
                 "min-h-14 h-auto px-4 py-3 text-base sm:text-lg font-bold",
-                "whitespace-normal text-center leading-snug flex flex-wrap items-center justify-center gap-2",
-                "bg-red-600 hover:bg-red-700 text-white"
+                "whitespace-normal text-center leading-snug"
               )}
             >
-              <AlertCircle className="h-5 w-5 flex-shrink-0" />
               <span className="whitespace-normal break-words">{t('bradyTachy.pedsCompromiseYes')}</span>
             </Button>
             <Button
