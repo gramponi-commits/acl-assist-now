@@ -18,25 +18,59 @@ import "@/i18n";
 
 const queryClient = new QueryClient();
 
-// Initialize theme from localStorage
+// Initialize theme from localStorage and update status bar color
 function useInitialTheme() {
   useEffect(() => {
+    const updateThemeColor = (isDark: boolean) => {
+      // Update theme-color meta tag for mobile status bar
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+      if (metaThemeColor) {
+        // Dark mode: use navy background (hsl(222, 47%, 11%))
+        // Light mode: use white
+        metaThemeColor.setAttribute('content', isDark ? '#1a1f2e' : '#ffffff');
+      }
+
+      // Update apple-mobile-web-app-status-bar-style for iOS
+      const metaAppleStatusBar = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+      if (metaAppleStatusBar) {
+        // Use 'default' for light mode (white status bar) and 'black-translucent' for dark mode
+        metaAppleStatusBar.setAttribute('content', isDark ? 'black-translucent' : 'default');
+      }
+    };
+
     try {
       const stored = localStorage.getItem('acls-settings');
       if (stored) {
         const settings = JSON.parse(stored);
-        if (settings.theme === 'dark') {
+        const isDark = settings.theme === 'dark';
+        if (isDark) {
           document.documentElement.classList.add('dark');
         } else {
           document.documentElement.classList.remove('dark');
         }
+        updateThemeColor(isDark);
       } else {
         // Default to dark
         document.documentElement.classList.add('dark');
+        updateThemeColor(true);
       }
     } catch (e) {
       document.documentElement.classList.add('dark');
+      updateThemeColor(true);
     }
+
+    // Listen for theme changes
+    const observer = new MutationObserver(() => {
+      const isDark = document.documentElement.classList.contains('dark');
+      updateThemeColor(isDark);
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    return () => observer.disconnect();
   }, []);
 }
 
