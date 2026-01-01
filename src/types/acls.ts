@@ -55,6 +55,9 @@ export interface HsAndTs {
   thrombosisCoronary: boolean;
 }
 
+// Alias for backward compatibility
+export type HsAndTsState = HsAndTs;
+
 // Pregnancy-specific causes (A-H for obstetric cardiac arrest)
 export interface PregnancyCauses {
   anestheticComplications: boolean;

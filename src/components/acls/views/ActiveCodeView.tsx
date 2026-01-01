@@ -9,7 +9,10 @@ import { CPRQualityPanel } from '../CPRQualityPanel';
 import { HsAndTsChecklist } from '../HsAndTsChecklist';
 import { PregnancyChecklist } from '../PregnancyChecklist';
 import { CodeTimeline } from '../CodeTimeline';
-import type { PathwayMode, Intervention, HsAndTsState, AirwayStatus, PregnancyCauses, PregnancyInterventions, CPRRatio } from '@/types/acls';
+import type { PathwayMode, Intervention, HsAndTs, AirwayStatus, PregnancyCauses, PregnancyInterventions, CPRRatio } from '@/types/acls';
+
+// Use HsAndTs directly instead of HsAndTsState alias
+type HsAndTsState = HsAndTs;
 
 interface ActiveCodeViewProps {
   // Session state
@@ -56,7 +59,7 @@ interface ActiveCodeViewProps {
   onETCO2Record: (value: number) => void;
   onCPRRatioChange: (ratio: CPRRatio) => void;
   onUpdateHsAndTs: (updates: Partial<HsAndTsState>) => void;
-  onTogglePregnancy: () => void;
+  onTogglePregnancy: (active: boolean) => void;
   onUpdatePregnancyCauses: (updates: Partial<PregnancyCauses>) => void;
   onUpdatePregnancyInterventions: (updates: Partial<PregnancyInterventions>) => void;
   onDeliveryAlert: () => void;

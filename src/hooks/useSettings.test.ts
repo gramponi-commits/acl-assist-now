@@ -18,7 +18,6 @@ describe('useSettings Hook', () => {
         metronomeBPM: 110,
         voiceAnnouncementsEnabled: false,
         preferLidocaine: false,
-        defibrillatorEnergy: 200,
         theme: 'dark',
         adultDefibrillatorEnergy: 200,
       });
@@ -32,7 +31,6 @@ describe('useSettings Hook', () => {
         metronomeBPM: 120,
         voiceAnnouncementsEnabled: true,
         preferLidocaine: true,
-        defibrillatorEnergy: 360,
         theme: 'light',
         adultDefibrillatorEnergy: 360,
       };
@@ -102,12 +100,12 @@ describe('useSettings Hook', () => {
       act(() => {
         result.current.updateSetting('soundEnabled', false);
         result.current.updateSetting('theme', 'light');
-        result.current.updateSetting('defibrillatorEnergy', 360);
+        result.current.updateSetting('adultDefibrillatorEnergy', 360);
       });
 
       expect(result.current.settings.soundEnabled).toBe(false);
       expect(result.current.settings.theme).toBe('light');
-      expect(result.current.settings.defibrillatorEnergy).toBe(360);
+      expect(result.current.settings.adultDefibrillatorEnergy).toBe(360);
     });
 
     it('should preserve type safety for settings values', () => {
@@ -151,7 +149,6 @@ describe('useSettings Hook', () => {
         metronomeBPM: 110,
         voiceAnnouncementsEnabled: false,
         preferLidocaine: false,
-        defibrillatorEnergy: 200,
         theme: 'dark',
         adultDefibrillatorEnergy: 200,
       });
@@ -269,14 +266,14 @@ describe('useSettings Hook', () => {
   });
 
   describe('Defibrillator Energy Settings', () => {
-    it('should update defibrillator energy', () => {
+    it('should update adult defibrillator energy', () => {
       const { result } = renderHook(() => useSettings());
 
       act(() => {
-        result.current.updateSetting('defibrillatorEnergy', 360);
+        result.current.updateSetting('adultDefibrillatorEnergy', 360);
       });
 
-      expect(result.current.settings.defibrillatorEnergy).toBe(360);
+      expect(result.current.settings.adultDefibrillatorEnergy).toBe(360);
     });
 
     it('should update adult defibrillator energy', () => {

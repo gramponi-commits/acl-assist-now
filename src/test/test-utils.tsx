@@ -2,7 +2,8 @@ import { ReactElement } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '../i18n/config';
+import i18n from '../i18n';
+import { vi } from 'vitest';
 
 // Create a custom render function that includes common providers
 function customRender(
@@ -137,7 +138,6 @@ export function createMockSettings(overrides = {}) {
     metronomeBPM: 110,
     voiceAnnouncementsEnabled: false,
     preferLidocaine: false,
-    defibrillatorEnergy: 200,
     theme: 'dark' as const,
     adultDefibrillatorEnergy: 200 as const,
     ...overrides,

@@ -590,6 +590,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       epinephrineCount: session.epinephrineCount,
       amiodaroneCount: session.amiodaroneCount,
       lidocaineCount: session.lidocaineCount,
+      sessionType: 'cardiac-arrest',
       pathwayMode: session.pathwayMode,
       patientWeight: session.patientWeight,
       interventions: session.interventions.map(i => ({
