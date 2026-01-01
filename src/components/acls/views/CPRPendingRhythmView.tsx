@@ -9,13 +9,15 @@ import { CPRQualityPanel } from '../CPRQualityPanel';
 import { HsAndTsChecklist } from '../HsAndTsChecklist';
 import { PregnancyChecklist } from '../PregnancyChecklist';
 import { CodeTimeline } from '../CodeTimeline';
-import { PathwayMode, Intervention, HsAndTsState, AirwayStatus, PregnancyCauses, PregnancyInterventions } from '@/types/acls';
-import { CPRRatio } from '@/types/acls';
+import type { PathwayMode, Intervention, HsAndTs, AirwayStatus, PregnancyCauses, PregnancyInterventions, CPRRatio, RhythmType } from '@/types/acls';
+
+// Use HsAndTs directly instead of HsAndTsState alias
+type HsAndTsState = HsAndTs;
 
 interface CPRPendingRhythmViewProps {
   pathwayMode: PathwayMode;
   patientWeight: number | null;
-  currentRhythm: string;
+  currentRhythm: RhythmType;
   totalElapsed: number;
   totalCPRTime: number;
   airwayStatus: AirwayStatus;
@@ -29,13 +31,13 @@ interface CPRPendingRhythmViewProps {
   pregnancyStartTime?: number | null;
   vibrationEnabled: boolean;
   onSetWeight: (weight: number | null) => void;
-  onSelectRhythm: (rhythm: string) => void;
+  onSelectRhythm: (rhythm: RhythmType) => void;
   onSetRhythmAnalysisActive: (active: boolean) => void;
   onAirwayChange: (status: AirwayStatus) => void;
   onETCO2Record: (value: number) => void;
   onCPRRatioChange: (ratio: CPRRatio) => void;
   onUpdateHsAndTs: (updates: Partial<HsAndTsState>) => void;
-  onTogglePregnancy: () => void;
+  onTogglePregnancy: (active: boolean) => void;
   onUpdatePregnancyCauses: (updates: Partial<PregnancyCauses>) => void;
   onUpdatePregnancyInterventions: (updates: Partial<PregnancyInterventions>) => void;
   onDeliveryAlert: () => void;
