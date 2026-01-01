@@ -397,22 +397,22 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
   if (qrsWidth === 'narrow') {
     return (
       <ScrollArea className="h-full">
-        <div className="p-6 space-y-6 max-w-3xl mx-auto">
+        <div className="p-4 md:p-6 space-y-4 md:space-y-6 max-w-3xl mx-auto">
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-600/20 text-blue-600 text-sm font-medium mb-4">
-              <Activity className="h-4 w-4" />
-              {t('bradyTachy.tachyNarrowQRS')}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-600/20 text-blue-600 text-xs md:text-sm font-medium mb-3 md:mb-4">
+              <Activity className="h-4 w-4 flex-shrink-0" />
+              <span className="break-words">{t('bradyTachy.tachyNarrowQRS')}</span>
             </div>
-            <h1 className="text-2xl font-bold">{t('bradyTachy.treatment')}</h1>
+            <h1 className="text-xl md:text-2xl font-bold">{t('bradyTachy.treatment')}</h1>
           </div>
 
           {/* Vagal Maneuvers */}
-          <div className="bg-card rounded-lg p-4 border-2 border-border">
-            <h3 className="font-bold text-lg mb-2">{t('bradyTachy.tachyNarrowVagal')}</h3>
+          <div className="bg-card rounded-lg p-3 md:p-4 border-2 border-border">
+            <h3 className="font-bold text-base md:text-lg mb-2 break-words">{t('bradyTachy.tachyNarrowVagal')}</h3>
             <Button
               onClick={() => actions.performVagalManeuver()}
               variant="outline"
-              className="w-full h-12"
+              className="w-full h-12 text-xs md:text-sm"
             >
               {t('bradyTachy.performVagal')}
             </Button>
@@ -420,13 +420,13 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
 
           {/* Adenosine */}
           <div className={cn(
-            "bg-card rounded-lg p-4 border-2",
+            "bg-card rounded-lg p-3 md:p-4 border-2",
             isPediatric ? "border-pals-primary" : "border-acls-critical"
           )}>
-            <h3 className="font-bold text-lg mb-2">{t('bradyTachy.tachyNarrowAdenosine')}</h3>
+            <h3 className="font-bold text-base md:text-lg mb-2 break-words">{t('bradyTachy.tachyNarrowAdenosine')}</h3>
             {isPediatric ? (
               <>
-                <p className="text-sm mb-3">{t('bradyTachy.pedsTachyAdenosineDose1')}</p>
+                <p className="text-xs md:text-sm mb-3 break-words">{t('bradyTachy.pedsTachyAdenosineDose1')}</p>
                 <div className="space-y-2">
                   <Button
                     onClick={() => {
@@ -435,13 +435,13 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
                       actions.giveAdenosine(dose.display, 1);
                     }}
                     disabled={adenosineDoses >= 1}
-                    className="w-full h-12 bg-pals-primary hover:bg-pals-primary/90"
+                    className="w-full h-12 bg-pals-primary hover:bg-pals-primary/90 text-xs md:text-sm"
                   >
                     {t('bradyTachy.giveAdenosine')} Dose 1 - {calculatePedsTachyAdenosine(weightKg, 1).display}
                   </Button>
                   {adenosineDoses >= 1 && (
                     <>
-                      <p className="text-sm">{t('bradyTachy.pedsTachyAdenosineDose2')}</p>
+                      <p className="text-xs md:text-sm break-words">{t('bradyTachy.pedsTachyAdenosineDose2')}</p>
                       <Button
                         onClick={() => {
                           setAdenosineDoses(2);
@@ -449,7 +449,7 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
                           actions.giveAdenosine(dose.display, 2);
                         }}
                         disabled={adenosineDoses >= 2}
-                        className="w-full h-12 bg-pals-primary hover:bg-pals-primary/90"
+                        className="w-full h-12 bg-pals-primary hover:bg-pals-primary/90 text-xs md:text-sm"
                       >
                         {t('bradyTachy.giveAdenosine')} Dose 2 - {calculatePedsTachyAdenosine(weightKg, 2).display}
                       </Button>
@@ -459,8 +459,8 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
               </>
             ) : (
               <>
-                <p className="text-sm mb-1">{t('bradyTachy.tachyAdenosineDose1')}</p>
-                <p className="text-sm mb-3">{t('bradyTachy.tachyAdenosineDose2')}</p>
+                <p className="text-xs md:text-sm mb-1 break-words">{t('bradyTachy.tachyAdenosineDose1')}</p>
+                <p className="text-xs md:text-sm mb-3 break-words">{t('bradyTachy.tachyAdenosineDose2')}</p>
                 <div className="space-y-2">
                   <Button
                     onClick={() => {
@@ -469,7 +469,7 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
                       actions.giveAdenosine(dose.display, 1);
                     }}
                     disabled={adenosineDoses >= 1}
-                    className="w-full h-12 bg-acls-critical hover:bg-acls-critical/90"
+                    className="w-full h-12 bg-acls-critical hover:bg-acls-critical/90 text-xs md:text-sm"
                   >
                     {t('bradyTachy.giveAdenosine')} 6 mg
                   </Button>
@@ -481,7 +481,7 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
                         actions.giveAdenosine(dose.display, 2);
                       }}
                       disabled={adenosineDoses >= 2}
-                      className="w-full h-12 bg-acls-critical hover:bg-acls-critical/90"
+                      className="w-full h-12 bg-acls-critical hover:bg-acls-critical/90 text-xs md:text-sm"
                     >
                       {t('bradyTachy.giveAdenosine')} 12 mg
                     </Button>
@@ -493,22 +493,22 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
 
           {/* Beta-blocker / Calcium blocker (adult only) - Second-line medications */}
           {!isPediatric && (
-            <div className="bg-card rounded-lg p-4 border-2 border-border space-y-4">
+            <div className="bg-card rounded-lg p-3 md:p-4 border-2 border-border space-y-4">
               <div>
-                <h3 className="font-bold text-lg mb-2">{t('bradyTachy.secondLineMedications')}</h3>
-                <p className="text-sm text-muted-foreground mb-3">{t('bradyTachy.eitherOrInstruction')}</p>
+                <h3 className="font-bold text-base md:text-lg mb-2 break-words">{t('bradyTachy.secondLineMedications')}</h3>
+                <p className="text-xs md:text-sm text-muted-foreground mb-3 break-words">{t('bradyTachy.eitherOrInstruction')}</p>
               </div>
 
               {/* Calcium Channel Blockers */}
               <div className="space-y-3">
-                <h4 className="font-semibold text-md">{t('bradyTachy.calciumChannelBlockers')}</h4>
+                <h4 className="font-semibold text-sm md:text-md break-words">{t('bradyTachy.calciumChannelBlockers')}</h4>
                 
                 {/* Diltiazem */}
-                <div className="bg-muted/50 rounded p-3 space-y-2">
-                  <div className="font-medium">{t('bradyTachy.diltiazem')}</div>
-                  <div className="text-sm space-y-1">
-                    <p>• <span className="font-medium">{t('bradyTachy.diltiazemBolus')}</span></p>
-                    <p>• {t('bradyTachy.diltiazemMaint')}</p>
+                <div className="bg-muted/50 rounded p-2 md:p-3 space-y-2">
+                  <div className="font-medium text-sm break-words">{t('bradyTachy.diltiazem')}</div>
+                  <div className="text-xs md:text-sm space-y-1">
+                    <p className="break-words">• <span className="font-medium">{t('bradyTachy.diltiazemBolus')}</span></p>
+                    <p className="break-words">• {t('bradyTachy.diltiazemMaint')}</p>
                   </div>
                   <Button
                     onClick={() => {
@@ -516,18 +516,18 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
                       actions.giveDiltiazem(`${dose.loading.display}; ${dose.maintenance.display}`);
                     }}
                     variant="outline"
-                    className="w-full h-10"
+                    className="w-full h-10 text-xs md:text-sm"
                   >
                     {t('bradyTachy.giveDiltiazem')}
                   </Button>
                 </div>
 
                 {/* Verapamil */}
-                <div className="bg-muted/50 rounded p-3 space-y-2">
-                  <div className="font-medium">{t('bradyTachy.verapamil')}</div>
-                  <div className="text-sm space-y-1">
-                    <p>• <span className="font-medium">{t('bradyTachy.verapamilInitial')}</span></p>
-                    <p>• {t('bradyTachy.verapamilRepeat')}</p>
+                <div className="bg-muted/50 rounded p-2 md:p-3 space-y-2">
+                  <div className="font-medium text-sm break-words">{t('bradyTachy.verapamil')}</div>
+                  <div className="text-xs md:text-sm space-y-1">
+                    <p className="break-words">• <span className="font-medium">{t('bradyTachy.verapamilInitial')}</span></p>
+                    <p className="break-words">• {t('bradyTachy.verapamilRepeat')}</p>
                   </div>
                   <Button
                     onClick={() => {
@@ -535,7 +535,7 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
                       actions.giveVerapamil(`${dose.initial.display}; ${dose.repeat.display}`);
                     }}
                     variant="outline"
-                    className="w-full h-10"
+                    className="w-full h-10 text-xs md:text-sm"
                   >
                     {t('bradyTachy.giveVerapamil')}
                   </Button>
@@ -544,13 +544,13 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
 
               {/* Beta-Blockers */}
               <div className="space-y-3">
-                <h4 className="font-semibold text-md">{t('bradyTachy.betaBlockers')}</h4>
-                
+                <h4 className="font-semibold text-sm md:text-md break-words">{t('bradyTachy.betaBlockers')}</h4>
+
                 {/* Metoprolol */}
-                <div className="bg-muted/50 rounded p-3 space-y-2">
-                  <div className="font-medium">{t('bradyTachy.metoprolol')}</div>
-                  <div className="text-sm">
-                    <p>• <span className="font-medium">{t('bradyTachy.metoprololDose')}</span></p>
+                <div className="bg-muted/50 rounded p-2 md:p-3 space-y-2">
+                  <div className="font-medium text-sm break-words">{t('bradyTachy.metoprolol')}</div>
+                  <div className="text-xs md:text-sm">
+                    <p className="break-words">• <span className="font-medium">{t('bradyTachy.metoprololDose')}</span></p>
                   </div>
                   <Button
                     onClick={() => {
@@ -558,18 +558,18 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
                       actions.giveMetoprolol(dose.display);
                     }}
                     variant="outline"
-                    className="w-full h-10"
+                    className="w-full h-10 text-xs md:text-sm"
                   >
                     {t('bradyTachy.giveMetoprolol')}
                   </Button>
                 </div>
 
                 {/* Esmolol */}
-                <div className="bg-muted/50 rounded p-3 space-y-2">
-                  <div className="font-medium">{t('bradyTachy.esmolol')}</div>
-                  <div className="text-sm space-y-1">
-                    <p>• <span className="font-medium">{t('bradyTachy.esmololLoad')}</span></p>
-                    <p>• {t('bradyTachy.esmololMaint')}</p>
+                <div className="bg-muted/50 rounded p-2 md:p-3 space-y-2">
+                  <div className="font-medium text-sm break-words">{t('bradyTachy.esmolol')}</div>
+                  <div className="text-xs md:text-sm space-y-1">
+                    <p className="break-words">• <span className="font-medium">{t('bradyTachy.esmololLoad')}</span></p>
+                    <p className="break-words">• {t('bradyTachy.esmololMaint')}</p>
                   </div>
                   <Button
                     onClick={() => {
@@ -577,7 +577,7 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
                       actions.giveEsmolol(`${dose.loading.display}; ${dose.maintenance.display}`);
                     }}
                     variant="outline"
-                    className="w-full h-10"
+                    className="w-full h-10 text-xs md:text-sm"
                   >
                     {t('bradyTachy.giveEsmolol')}
                   </Button>
@@ -586,14 +586,14 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
             </div>
           )}
 
-          <div className="bg-card rounded-lg p-4 border-2 border-border">
-            <p className="text-sm">• {t('bradyTachy.tachyConsiderExpert')}</p>
+          <div className="bg-card rounded-lg p-3 md:p-4 border-2 border-border">
+            <p className="text-xs md:text-sm break-words">• {t('bradyTachy.tachyConsiderExpert')}</p>
           </div>
 
           <div className="flex gap-2">
             <Button
               onClick={() => actions.endSession('resolved')}
-              className="flex-1 h-12"
+              className="flex-1 h-12 text-sm md:text-base"
             >
               {t('bradyTachy.endSession')}
             </Button>
@@ -606,45 +606,45 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
   // Wide QRS treatment (adult only - pediatric wouldn't typically reach here)
   return (
     <ScrollArea className="h-full">
-      <div className="p-6 space-y-6 max-w-3xl mx-auto">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-6 max-w-3xl mx-auto">
         <div className="text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-600/20 text-orange-600 text-sm font-medium mb-4">
-            <Zap className="h-4 w-4" />
-            {t('bradyTachy.tachyWideQRSPath')}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-600/20 text-orange-600 text-xs md:text-sm font-medium mb-3 md:mb-4">
+            <Zap className="h-4 w-4 flex-shrink-0" />
+            <span className="break-words">{t('bradyTachy.tachyWideQRSPath')}</span>
           </div>
-          <h1 className="text-2xl font-bold">{t('bradyTachy.treatment')}</h1>
+          <h1 className="text-xl md:text-2xl font-bold">{t('bradyTachy.treatment')}</h1>
         </div>
 
         {/* Adenosine (only if regular and monomorphic) */}
-        <div className="bg-card rounded-lg p-4 border-2 border-yellow-600">
-          <h3 className="font-bold text-lg mb-2">{t('bradyTachy.tachyWideAdenosine')}</h3>
+        <div className="bg-card rounded-lg p-3 md:p-4 border-2 border-yellow-600">
+          <h3 className="font-bold text-base md:text-lg mb-2 break-words">{t('bradyTachy.tachyWideAdenosine')}</h3>
           <Button
             onClick={() => {
               const dose = getAdultTachyAdenosine(1);
               actions.giveAdenosine(dose.display, 1);
             }}
             variant="outline"
-            className="w-full h-12"
+            className="w-full h-12 text-xs md:text-sm break-words whitespace-normal"
           >
-            {t('bradyTachy.giveAdenosine')} {t('bradyTachy.ifRegularMonomorphic')}
+            <span className="break-words">{t('bradyTachy.giveAdenosine')} {t('bradyTachy.ifRegularMonomorphic')}</span>
           </Button>
         </div>
 
         {/* Antiarrhythmic options - Adult only */}
         {!isPediatric && (
-          <div className="bg-card rounded-lg p-4 border-2 border-acls-critical">
-            <h3 className="font-bold text-lg mb-3">{t('bradyTachy.tachyWideAntiarrhythmic')}</h3>
-            
+          <div className="bg-card rounded-lg p-3 md:p-4 border-2 border-acls-critical">
+            <h3 className="font-bold text-base md:text-lg mb-3 break-words">{t('bradyTachy.tachyWideAntiarrhythmic')}</h3>
+
             {/* Procainamide */}
             <div className="mb-4">
-              <h4 className="font-bold text-md mb-1">{t('bradyTachy.tachyProcainamide')}</h4>
-              <p className="text-xs text-muted-foreground mb-1">
+              <h4 className="font-bold text-sm md:text-md mb-1 break-words">{t('bradyTachy.tachyProcainamide')}</h4>
+              <p className="text-xs text-muted-foreground mb-1 break-words">
                 {getAdultTachyProcainamide().loading.display}
               </p>
-              <p className="text-xs text-muted-foreground mb-2">
+              <p className="text-xs text-muted-foreground mb-2 break-words">
                 {t('bradyTachy.tachyProcainamideMaint')}
               </p>
-              <p className="text-xs text-yellow-600 mb-2">
+              <p className="text-xs text-yellow-600 mb-2 break-words">
                 ⚠️ {t('bradyTachy.tachyProcainamideAvoid')}
               </p>
               <Button
@@ -653,7 +653,7 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
                   actions.giveProcainamide(dose.loading.display);
                 }}
                 variant="outline"
-                className="w-full h-10"
+                className="w-full h-10 text-xs md:text-sm"
               >
                 {t('bradyTachy.giveProcainamide')}
               </Button>
@@ -661,11 +661,11 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
 
             {/* Amiodarone */}
             <div>
-              <h4 className="font-bold text-md mb-1">{t('bradyTachy.tachyAmiodarone')}</h4>
-              <p className="text-xs text-muted-foreground mb-1">
+              <h4 className="font-bold text-sm md:text-md mb-1 break-words">{t('bradyTachy.tachyAmiodarone')}</h4>
+              <p className="text-xs text-muted-foreground mb-1 break-words">
                 {getAdultTachyAmiodarone().loading.display}
               </p>
-              <p className="text-xs text-muted-foreground mb-2">
+              <p className="text-xs text-muted-foreground mb-2 break-words">
                 {t('bradyTachy.tachyAmiodaroneMaint')}
               </p>
               <Button
@@ -673,7 +673,7 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
                   const dose = getAdultTachyAmiodarone();
                   actions.giveAmiodarone(dose.loading.display);
                 }}
-                className="w-full h-10 bg-acls-critical hover:bg-acls-critical/90"
+                className="w-full h-10 bg-acls-critical hover:bg-acls-critical/90 text-xs md:text-sm"
               >
                 {t('bradyTachy.giveAmiodarone')}
               </Button>
@@ -681,14 +681,14 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
           </div>
         )}
 
-        <div className="bg-card rounded-lg p-4 border-2 border-border">
-          <p className="text-sm">• {t('bradyTachy.tachyExpertConsult')}</p>
+        <div className="bg-card rounded-lg p-3 md:p-4 border-2 border-border">
+          <p className="text-xs md:text-sm break-words">• {t('bradyTachy.tachyExpertConsult')}</p>
         </div>
 
         <div className="flex gap-2">
           <Button
             onClick={() => actions.endSession('resolved')}
-            className="flex-1 h-12"
+            className="flex-1 h-12 text-sm md:text-base"
           >
             {t('bradyTachy.endSession')}
           </Button>
