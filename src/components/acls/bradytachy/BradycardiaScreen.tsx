@@ -31,21 +31,21 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
   if (session.phase === 'bradycardia_assessment') {
     return (
       <ScrollArea className="h-full">
-        <div className="p-6 space-y-6 max-w-3xl mx-auto">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-3xl mx-auto">
           {/* Header */}
           <div className="text-center">
-            <h1 className="text-2xl font-bold">{t('bradyTachy.bradycardia')}</h1>
-            <p className="text-sm text-muted-foreground mt-1">{t('bradyTachy.assessment')}</p>
+            <h1 className="text-xl sm:text-2xl font-bold">{t('bradyTachy.bradycardia')}</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-1">{t('bradyTachy.assessment')}</p>
           </div>
 
           {/* Initial Assessment Checklist - Collapsible */}
           <Accordion type="single" collapsible defaultValue="initial-care">
             <AccordionItem value="initial-care">
-              <AccordionTrigger className="font-bold text-lg">
+              <AccordionTrigger className="font-bold text-base sm:text-lg">
                 {t('bradyTachy.bradyInitialCare')}
               </AccordionTrigger>
               <AccordionContent>
-                <div className="space-y-2 text-sm pt-2">
+                <div className="space-y-2 text-xs sm:text-sm pt-2">
                   <div className="flex items-start gap-2">
                     <div className="mt-0.5">•</div>
                     <div>{t('bradyTachy.bradyMaintainAirway')}</div>
@@ -65,24 +65,24 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
 
           {/* Pediatric: Special HR <60 Warning */}
           {isPediatric && (
-            <div className="bg-red-600/10 border-2 border-red-600 rounded-lg p-4">
-              <div className="flex items-center gap-2 text-red-600 font-bold text-lg mb-2">
+            <div className="bg-red-600/10 border-2 border-red-600 rounded-lg p-3 sm:p-4">
+              <div className="flex items-center gap-2 text-red-600 font-bold text-base sm:text-lg mb-2">
                 <AlertCircle className="h-5 w-5" />
                 {t('bradyTachy.pedsBradyHR60StartCPR')}
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {t('bradyTachy.pedsBradyHR60Instructions')}
               </p>
             </div>
           )}
 
           {/* Compromise Assessment */}
-          <div className="bg-card rounded-lg p-4 border-2 border-border">
-            <h3 className="font-bold text-lg mb-3">{t('bradyTachy.compromise')}</h3>
-            <p className="text-sm text-muted-foreground mb-3">
+          <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border">
+            <h3 className="font-bold text-base sm:text-lg mb-3">{t('bradyTachy.compromise')}</h3>
+            <p className="text-xs sm:text-sm text-muted-foreground mb-3">
               {t('bradyTachy.compromiseCriteria')}
             </p>
-            <div className="space-y-2 text-sm mb-4">
+            <div className="space-y-2 text-xs sm:text-sm mb-4">
               <div className="flex items-center gap-2">
                 <Checkbox id="hypo" />
                 <label htmlFor="hypo">{t('bradyTachy.hypotension')}</label>
@@ -109,14 +109,14 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
               <Button
                 onClick={() => actions.setStability('unstable')}
                 variant="destructive"
-                className="h-16 text-lg font-bold"
+                className="min-h-14 sm:h-16 h-auto px-4 py-3 text-base sm:text-lg font-bold whitespace-normal text-center leading-snug"
               >
                 {t('bradyTachy.compromiseYes')}
               </Button>
               <Button
                 onClick={() => actions.setStability('stable')}
                 variant="outline"
-                className="h-16 text-lg font-bold"
+                className="min-h-14 sm:h-16 h-auto px-4 py-3 text-base sm:text-lg font-bold whitespace-normal text-center leading-snug"
               >
                 {t('bradyTachy.compromiseNo')}
               </Button>
@@ -132,19 +132,19 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
     // No compromise - observe and treat cause
     return (
       <ScrollArea className="h-full">
-        <div className="p-6 space-y-6 max-w-3xl mx-auto">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-3xl mx-auto">
           <div className="text-center">
-            <h1 className="text-2xl font-bold">{t('bradyTachy.bradyNoCompromise')}</h1>
-            <p className="text-sm text-muted-foreground mt-1">{t('bradyTachy.compromiseNo')}</p>
+            <h1 className="text-xl sm:text-2xl font-bold">{t('bradyTachy.bradyNoCompromise')}</h1>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-1">{t('bradyTachy.compromiseNo')}</p>
           </div>
 
           <Accordion type="single" collapsible defaultValue="treatment">
             <AccordionItem value="treatment">
-              <AccordionTrigger className="font-bold text-lg">
+              <AccordionTrigger className="font-bold text-base sm:text-lg">
                 {t('bradyTachy.treatment')}
               </AccordionTrigger>
               <AccordionContent>
-                <div className="space-y-2 text-sm pt-2">
+                <div className="space-y-2 text-xs sm:text-sm pt-2">
                   <div className="flex items-start gap-2">
                     <div className="mt-0.5">•</div>
                     <div>{t('bradyTachy.bradyIdentifyCause')}</div>
@@ -186,19 +186,19 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
   // Unstable - treatment needed
   return (
     <ScrollArea className="h-full">
-      <div className="p-6 space-y-6 max-w-3xl mx-auto">
+      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-3xl mx-auto">
         <div className="text-center">
-          <h1 className="text-2xl font-bold">{t('bradyTachy.bradyCompromiseYes')}</h1>
-          <p className="text-sm text-muted-foreground mt-1">{t('bradyTachy.compromiseYes')}</p>
+          <h1 className="text-xl sm:text-2xl font-bold">{t('bradyTachy.bradyCompromiseYes')}</h1>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">{t('bradyTachy.compromiseYes')}</p>
         </div>
 
         {/* Pediatric Treatment */}
         {isPediatric ? (
           <>
             {/* Epinephrine */}
-            <div className="bg-card rounded-lg p-4 border-2 border-border">
-              <h3 className="font-bold text-lg mb-2">{t('bradyTachy.pedsBradyEpinephrine')}</h3>
-              <p className="text-sm text-muted-foreground mb-3">
+            <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border">
+              <h3 className="font-bold text-base sm:text-lg mb-2">{t('bradyTachy.pedsBradyEpinephrine')}</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground mb-3">
                 {calculatePedsBradyEpinephrine(weightKg).display}
               </p>
               <Button
@@ -206,19 +206,19 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
                   const dose = calculatePedsBradyEpinephrine(weightKg);
                   actions.giveEpinephrineInfusion(dose.display);
                 }}
-                className="w-full h-12 bg-acls-medication hover:bg-acls-medication/90 text-white"
+                className="w-full min-h-11 sm:h-12 h-auto px-4 py-3 bg-acls-medication hover:bg-acls-medication/90 text-white text-sm sm:text-base font-bold"
               >
                 {t('bradyTachy.giveEpiInfusion')}
               </Button>
             </div>
 
             {/* Atropine */}
-            <div className="bg-card rounded-lg p-4 border-2 border-border">
-              <h3 className="font-bold text-lg mb-2">{t('bradyTachy.bradyAtropine')}</h3>
+            <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border">
+              <h3 className="font-bold text-base sm:text-lg mb-2">{t('bradyTachy.bradyAtropine')}</h3>
               <p className="text-xs text-muted-foreground mb-2">
                 {t('bradyTachy.pedsBradyAtropineNote')}
               </p>
-              <p className="text-sm font-medium mb-3">
+              <p className="text-xs sm:text-sm font-medium mb-3">
                 {calculatePedsBradyAtropine(weightKg).display}
               </p>
               <Button
@@ -226,7 +226,7 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
                   const dose = calculatePedsBradyAtropine(weightKg);
                   actions.giveAtropine(dose.display, 1);
                 }}
-                className="w-full h-12 bg-acls-medication hover:bg-acls-medication/90 text-white"
+                className="w-full min-h-11 sm:h-12 h-auto px-4 py-3 bg-acls-medication hover:bg-acls-medication/90 text-white text-sm sm:text-base font-bold"
               >
                 {t('bradyTachy.giveAtropine')}
               </Button>
@@ -235,13 +235,13 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
         ) : (
           <>
             {/* Adult Atropine */}
-            <div className="bg-card rounded-lg p-4 border-2 border-border">
-              <h3 className="font-bold text-lg mb-2">{t('bradyTachy.bradyAtropine')}</h3>
+            <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border">
+              <h3 className="font-bold text-base sm:text-lg mb-2">{t('bradyTachy.bradyAtropine')}</h3>
               <Accordion type="single" collapsible>
                 <AccordionItem value="dosing">
-                  <AccordionTrigger className="text-sm py-2">Dosing details</AccordionTrigger>
+                  <AccordionTrigger className="text-xs sm:text-sm py-2">Dosing details</AccordionTrigger>
                   <AccordionContent>
-                    <div className="space-y-1 text-sm">
+                    <div className="space-y-1 text-xs sm:text-sm">
                       <p>{t('bradyTachy.bradyAtropineDose')}</p>
                       <p>{t('bradyTachy.bradyAtropineRepeat')}</p>
                       <p className="font-bold">{t('bradyTachy.bradyAtropineMax')}</p>
@@ -257,7 +257,7 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
                   actions.giveAtropine(dose.display, newCount);
                 }}
                 disabled={atropineDoses >= 3}
-                className="w-full h-12 mt-3 bg-acls-medication hover:bg-acls-medication/90 text-white"
+                className="w-full min-h-11 sm:h-12 h-auto px-4 py-3 mt-3 bg-acls-medication hover:bg-acls-medication/90 text-white text-sm sm:text-base font-bold"
               >
                 {t('bradyTachy.giveAtropine')} {atropineDoses > 0 && `(${atropineDoses}/3)`}
               </Button>

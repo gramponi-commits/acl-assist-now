@@ -40,23 +40,23 @@ export function SinusVsSVTSelector({ session, actions }: SinusVsSVTSelectorProps
 
   return (
     <ScrollArea className="h-full">
-      <div className="p-6 space-y-6 max-w-3xl mx-auto">
+      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-2xl font-bold">{t('bradyTachy.pedsSinusVsSVT')}</h1>
-          <p className="text-sm text-muted-foreground mt-2">
+          <h1 className="text-xl sm:text-2xl font-bold">{t('bradyTachy.pedsSinusVsSVT')}</h1>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-2">
             {t('bradyTachy.differentiateRhythmDesc')}
           </p>
         </div>
 
         {/* Probable Sinus Tachycardia */}
-        <div className="bg-card rounded-lg p-4 border-2 border-border">
-          <h3 className="font-bold text-lg mb-3">
+        <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border">
+          <h3 className="font-bold text-base sm:text-lg mb-3 break-words">
             {t('bradyTachy.pedsProbableSinus')}
           </h3>
-          
-          <p className="text-sm font-medium mb-2">{t('bradyTachy.pedsSinusCriteria')}</p>
-          <div className="space-y-2 text-sm mb-4">
+
+          <p className="text-xs sm:text-sm font-medium mb-2">{t('bradyTachy.pedsSinusCriteria')}</p>
+          <div className="space-y-2 text-xs sm:text-sm mb-4">
             <div className="flex items-center gap-2">
               <Checkbox 
                 id="sinus-pwaves" 
@@ -92,29 +92,29 @@ export function SinusVsSVTSelector({ session, actions }: SinusVsSVTSelectorProps
             </div>
           </div>
 
-          <div className="bg-muted rounded p-3 mb-3 text-sm">
+          <div className="bg-muted rounded p-2 sm:p-3 mb-3 text-xs sm:text-sm">
             <p className="font-medium mb-1">{t('bradyTachy.pedsSinusTreatCause')}</p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground break-words">
               {t('bradyTachy.searchCausesDesc')}
             </p>
           </div>
 
           <Button
             onClick={handleSinusSelect}
-            className="w-full h-12 text-lg font-bold"
+            className="w-full min-h-11 sm:h-12 h-auto px-4 py-3 text-sm sm:text-lg font-bold whitespace-normal text-center leading-snug"
           >
-            {t('bradyTachy.pedsProbableSinus')}
+            <span className="whitespace-normal break-words">{t('bradyTachy.pedsProbableSinus')}</span>
           </Button>
         </div>
 
         {/* Probable SVT */}
-        <div className="bg-card rounded-lg p-4 border-2 border-border">
-          <h3 className="font-bold text-lg mb-3">
+        <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border">
+          <h3 className="font-bold text-base sm:text-lg mb-3 break-words">
             {t('bradyTachy.pedsProbableSVT')}
           </h3>
-          
-          <p className="text-sm font-medium mb-2">{t('bradyTachy.pedsSVTCriteria')}</p>
-          <div className="space-y-2 text-sm mb-4">
+
+          <p className="text-xs sm:text-sm font-medium mb-2">{t('bradyTachy.pedsSVTCriteria')}</p>
+          <div className="space-y-2 text-xs sm:text-sm mb-4">
             <div className="flex items-center gap-2">
               <Checkbox 
                 id="svt-pwaves" 
@@ -160,8 +160,8 @@ export function SinusVsSVTSelector({ session, actions }: SinusVsSVTSelectorProps
             </div>
           </div>
 
-          <div className="bg-muted rounded p-3 mb-3 text-sm">
-            <p className="text-xs text-muted-foreground">
+          <div className="bg-muted rounded p-2 sm:p-3 mb-3 text-xs sm:text-sm">
+            <p className="text-xs text-muted-foreground break-words">
               {t('bradyTachy.pedsSVTContinue')}
             </p>
           </div>
@@ -169,15 +169,15 @@ export function SinusVsSVTSelector({ session, actions }: SinusVsSVTSelectorProps
           <Button
             onClick={handleSVTSelect}
             variant="outline"
-            className="w-full h-12 text-lg font-bold"
+            className="w-full min-h-11 sm:h-12 h-auto px-4 py-3 text-sm sm:text-lg font-bold whitespace-normal text-center leading-snug"
           >
-            {t('bradyTachy.pedsProbableSVT')}
+            <span className="whitespace-normal break-words">{t('bradyTachy.pedsProbableSVT')}</span>
           </Button>
         </div>
 
         {/* Helper note */}
         <div className="text-center text-xs text-muted-foreground">
-          <p>{t('bradyTachy.checkCriteriaThenSelect')}</p>
+          <p className="break-words">{t('bradyTachy.checkCriteriaThenSelect')}</p>
         </div>
       </div>
     </ScrollArea>
