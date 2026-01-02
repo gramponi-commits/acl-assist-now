@@ -13,19 +13,26 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
+import { useIsNativeApp } from '@/hooks/useIsNativeApp';
 
 export function AppSidebar() {
   const { t } = useTranslation();
   const { state } = useSidebar();
   const collapsed = state === 'collapsed';
+  const isNativeApp = useIsNativeApp();
 
-  const items = [
+  const allItems = [
     { title: t('nav.code'), url: '/', icon: Heart },
     { title: t('nav.history'), url: '/history', icon: History },
     { title: t('nav.settings'), url: '/settings', icon: Settings },
     { title: t('nav.install'), url: '/install', icon: Smartphone },
     { title: t('nav.about'), url: '/about', icon: Info },
   ];
+
+  // Filter out install page for native apps (Android/iOS wrappers)
+  const items = isNativeApp
+    ? allItems.filter((item) => item.url !== '/install')
+    : allItems;
 
   return (
     <Sidebar

@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { SidebarProvider, useSidebar } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { MobileHeader } from "@/components/MobileHeader";
@@ -14,6 +14,7 @@ import Settings from "./pages/Settings";
 import InstallHelp from "./pages/InstallHelp";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import { useIsNativeApp } from "@/hooks/useIsNativeApp";
 import "@/i18n";
 
 const queryClient = new QueryClient();
@@ -79,6 +80,7 @@ function useInitialTheme() {
  */
 function AppLayout() {
   const { open, setOpen, isMobile } = useSidebar();
+  const isNativeApp = useIsNativeApp();
 
   // Swipe gesture handlers - only active on mobile
   const swipeHandlers = useSwipeable({
@@ -108,7 +110,11 @@ function AppLayout() {
           <Route path="/" element={<Index />} />
           <Route path="/history" element={<SessionHistory />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/install" element={<InstallHelp />} />
+          {/* Hide install page in native apps (Android/iOS wrappers) */}
+          <Route
+            path="/install"
+            element={isNativeApp ? <Navigate to="/" replace /> : <InstallHelp />}
+          />
           <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
