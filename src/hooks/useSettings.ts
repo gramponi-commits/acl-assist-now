@@ -3,6 +3,7 @@ import { logger } from '@/utils/logger';
 
 export type ThemeMode = 'dark' | 'light';
 export type AdultDefibrillatorEnergy = 120 | 150 | 200 | 360;
+export type EpinephrineIntervalMinutes = 3 | 4 | 5;
 
 export interface AppSettings {
   soundEnabled: boolean;
@@ -13,6 +14,7 @@ export interface AppSettings {
   preferLidocaine: boolean;
   theme: ThemeMode;
   adultDefibrillatorEnergy: AdultDefibrillatorEnergy;
+  epinephrineIntervalMinutes: EpinephrineIntervalMinutes;
 }
 
 const SETTINGS_KEY = 'acls-settings';
@@ -26,6 +28,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   preferLidocaine: false,
   theme: 'dark',
   adultDefibrillatorEnergy: 200,
+  epinephrineIntervalMinutes: 4,
 };
 
 export function useSettings() {
@@ -54,6 +57,15 @@ export function useSettings() {
             energy: parsed.adultDefibrillatorEnergy
           });
           parsed.adultDefibrillatorEnergy = DEFAULT_SETTINGS.adultDefibrillatorEnergy;
+        }
+
+        // Validate epinephrine interval
+        const validIntervals: EpinephrineIntervalMinutes[] = [3, 4, 5];
+        if (parsed.epinephrineIntervalMinutes && !validIntervals.includes(parsed.epinephrineIntervalMinutes)) {
+          logger.warn('Invalid epinephrine interval, resetting to default', {
+            interval: parsed.epinephrineIntervalMinutes
+          });
+          parsed.epinephrineIntervalMinutes = DEFAULT_SETTINGS.epinephrineIntervalMinutes;
         }
 
         return { ...DEFAULT_SETTINGS, ...parsed };

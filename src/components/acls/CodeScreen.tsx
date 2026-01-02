@@ -19,6 +19,7 @@ import { useAudioAlerts } from '@/hooks/useAudioAlerts';
 import { useMetronome } from '@/hooks/useMetronome';
 import { useVoiceAnnouncements } from '@/hooks/useVoiceAnnouncements';
 import { useSettings } from '@/hooks/useSettings';
+import { DEFAULT_ACLS_CONFIG } from '@/types/acls';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
@@ -46,8 +47,15 @@ const BradyTachyModule = lazy(() =>
 export function CodeScreen() {
   const { t } = useTranslation();
   const { settings } = useSettings();
+
+  // Create custom config with user's epinephrine interval preference
+  const aclsConfig = {
+    ...DEFAULT_ACLS_CONFIG,
+    epinephrineIntervalMs: settings.epinephrineIntervalMinutes * 60 * 1000,
+  };
+
   const { session, timerState, isInRhythmCheck, commandBanner, actions, buttonStates } =
-    useACLSLogic(undefined, settings.adultDefibrillatorEnergy);
+    useACLSLogic(aclsConfig, settings.adultDefibrillatorEnergy);
   const { requestWakeLock, releaseWakeLock } = useWakeLock();
   const { playAlert, setEnabled: setAudioEnabled, vibrate } = useAudioAlerts();
   const { announce, setEnabled: setVoiceEnabled } = useVoiceAnnouncements();

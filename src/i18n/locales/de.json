@@ -281,9 +281,6 @@
     "languageDesc": "Wählen Sie Ihre bevorzugte Sprache",
     "english": "English",
     "italian": "Italiano",
-    "spanish": "Español",
-    "french": "Français",
-    "german": "Deutsch",
     "audio": "Audio-Alarme",
     "audioDesc": "Töne für Rhythmusanalyse und Adrenalin-Erinnerungen",
     "vibration": "Vibration",
@@ -305,7 +302,9 @@
     "lightMode": "Hellmodus",
     "adultDefibrillator": "Defibrillator-Energie Erwachsene",
     "adultDefibrillatorDesc": "Schockenergie für Erwachsene auswählen",
-    "pediatricDefibrillator": "Defibrillator-Energie Pädiatrisch"
+    "epinephrineInterval": "Epinephrin/Adrenalin Intervall",
+    "epinephrineIntervalDesc": "Zeit zwischen Epinephrin-Dosen (AHA empfiehlt 3-5 Min)",
+    "minutes": "Min"
   },
   "resume": {
     "title": "Aktiver Code Erkannt",

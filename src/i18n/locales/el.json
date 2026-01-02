@@ -302,7 +302,9 @@
     "lightMode": "Φωτεινή Λειτουργία",
     "adultDefibrillator": "Ενέργεια Απινιδωτή Ενηλίκων",
     "adultDefibrillatorDesc": "Επιλέξτε ενέργεια απινίδωσης για ενήλικες",
-    "pediatricDefibrillator": "Ενέργεια Απινιδωτή Παιδιατρική"
+    "epinephrineInterval": "Διάστημα Επινεφρίνης/Αδρεναλίνης",
+    "epinephrineIntervalDesc": "Χρόνος μεταξύ δόσεων επινεφρίνης (AHA συνιστά 3-5 λεπτά)",
+    "minutes": "λεπ"
   },
   "resume": {
     "title": "Ανιχνεύθηκε Ενεργός Κωδικός",

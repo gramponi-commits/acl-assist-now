@@ -281,9 +281,6 @@
     "languageDesc": "Seleccione su idioma preferido",
     "english": "English",
     "italian": "Italiano",
-    "spanish": "Español",
-    "french": "Français",
-    "german": "Deutsch",
     "audio": "Alertas de Audio",
     "audioDesc": "Sonidos para análisis de ritmo y recordatorios de adrenalina",
     "vibration": "Vibración",
@@ -305,7 +302,9 @@
     "lightMode": "Modo Claro",
     "adultDefibrillator": "Energía Desfibrilador Adultos",
     "adultDefibrillatorDesc": "Seleccionar energía de descarga para adultos",
-    "pediatricDefibrillator": "Energía Desfibrilador Pediátrico"
+    "epinephrineInterval": "Intervalo Epinefrina/Adrenalina",
+    "epinephrineIntervalDesc": "Tiempo entre dosis de epinefrina (AHA recomienda 3-5 min)",
+    "minutes": "min"
   },
   "resume": {
     "title": "Código Activo Detectado",
