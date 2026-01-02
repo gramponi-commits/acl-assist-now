@@ -1,6 +1,6 @@
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Stethoscope, StickyNote, RotateCcw } from 'lucide-react';
+import { Stethoscope, StickyNote, Heart, Skull } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { WeightInput, WeightDisplay } from '../WeightInput';
 import { RhythmSelector } from '../RhythmSelector';
@@ -43,6 +43,8 @@ interface CPRPendingRhythmViewProps {
   onDeliveryAlert: () => void;
   onAddNote: () => void;
   onNewCode: () => void;
+  onROSC: () => void;
+  onTerminate: () => void;
 }
 
 /**
@@ -78,6 +80,8 @@ export const CPRPendingRhythmView = memo<CPRPendingRhythmViewProps>(({
   onDeliveryAlert,
   onAddNote,
   onNewCode,
+  onROSC,
+  onTerminate,
 }) => {
   const { t } = useTranslation();
   const [showRhythmSelector, setShowRhythmSelector] = useState(false);
@@ -173,27 +177,38 @@ export const CPRPendingRhythmView = memo<CPRPendingRhythmViewProps>(({
         startTime={startTime}
       />
 
-      {/* Session Controls */}
+      {/* Session Controls - End Code Options */}
       <div className="grid grid-cols-2 gap-2 sm:gap-3 pt-2">
+        <Button
+          onClick={onROSC}
+          className="h-12 sm:h-14 gap-1 sm:gap-2 touch-target interactive-active bg-acls-success hover:bg-acls-success/90 text-white font-bold"
+          aria-label={t('actions.rosc')}
+        >
+          <Heart className="h-4 w-4 sm:h-5 sm:w-5" />
+          {t('actions.rosc')}
+        </Button>
+        <Button
+          onClick={onTerminate}
+          variant="outline"
+          className="h-12 sm:h-14 gap-1 sm:gap-2 touch-target interactive-hover border-destructive text-destructive hover:bg-destructive/10"
+          aria-label={t('actions.terminate')}
+        >
+          <Skull className="h-4 w-4 sm:h-5 sm:w-5" />
+          <span className="hidden sm:inline">{t('actions.terminate')}</span>
+          <span className="sm:hidden">{t('history.deceased')}</span>
+        </Button>
+      </div>
+
+      {/* Add Note Button */}
+      <div className="pt-2">
         <Button
           onClick={onAddNote}
           variant="outline"
-          className="h-10 sm:h-12 gap-1 sm:gap-2 touch-target interactive-hover text-clinical-sm"
+          className="w-full h-10 sm:h-12 gap-1 sm:gap-2 touch-target interactive-hover text-clinical-sm"
           aria-label={t('actions.addNote')}
         >
           <StickyNote className="h-3 w-3 sm:h-4 sm:w-4" />
-          <span className="hidden sm:inline">{t('actions.addNote')}</span>
-          <span className="sm:hidden">{t('actions.note')}</span>
-        </Button>
-        <Button
-          onClick={onNewCode}
-          variant="outline"
-          className="h-10 sm:h-12 gap-1 sm:gap-2 touch-target interactive-hover text-clinical-sm"
-          aria-label={t('actions.reset')}
-        >
-          <RotateCcw className="h-3 w-3 sm:h-4 sm:w-4" />
-          <span className="hidden sm:inline">{t('actions.reset')}</span>
-          <span className="sm:hidden">{t('actions.resetShort')}</span>
+          {t('actions.addNote')}
         </Button>
       </div>
     </>

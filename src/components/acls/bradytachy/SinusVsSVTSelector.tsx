@@ -177,6 +177,5 @@ export function SinusVsSVTSelector({ session, actions }: SinusVsSVTSelectorProps
           <p className="break-words">{t('bradyTachy.checkCriteriaThenSelect')}</p>
         </div>
       </div>
-    </div>
   );
 }
