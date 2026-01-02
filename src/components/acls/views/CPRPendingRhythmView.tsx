@@ -1,6 +1,6 @@
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Stethoscope, StickyNote, Heart, Skull } from 'lucide-react';
+import { Stethoscope, StickyNote, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { WeightInput, WeightDisplay } from '../WeightInput';
 import { RhythmSelector } from '../RhythmSelector';
@@ -193,7 +193,6 @@ export const CPRPendingRhythmView = memo<CPRPendingRhythmViewProps>(({
           className="h-12 sm:h-14 gap-1 sm:gap-2 touch-target interactive-hover border-destructive text-destructive hover:bg-destructive/10"
           aria-label={t('actions.terminate')}
         >
-          <Skull className="h-4 w-4 sm:h-5 sm:w-5" />
           <span className="hidden sm:inline">{t('actions.terminate')}</span>
           <span className="sm:hidden">{t('history.deceased')}</span>
         </Button>
