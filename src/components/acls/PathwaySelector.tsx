@@ -66,32 +66,28 @@ export function PathwaySelector({
           <Button
             onClick={handleAdultSelect}
             className={cn(
-              'w-full h-28 flex flex-col items-center justify-center gap-2',
+              'w-full h-20 flex items-center justify-start gap-4 px-6',
               'bg-acls-critical hover:bg-acls-critical/90 text-white',
               'shadow-lg shadow-acls-critical/30 transition-all',
               'border-2 border-acls-critical'
             )}
           >
-            <User className="h-10 w-10" />
-            <div className="text-center">
-              <div className="text-xl font-bold">{t('pathway.adultACLS')}</div>
-            </div>
+            <User className="h-8 w-8 shrink-0" />
+            <span className="text-xl font-bold">{t('pathway.adultACLS')}</span>
           </Button>
 
           {/* Pediatric PALS Button */}
           <Button
             onClick={handlePediatricSelect}
             className={cn(
-              'w-full h-28 flex flex-col items-center justify-center gap-2',
+              'w-full h-20 flex items-center justify-start gap-4 px-6',
               'bg-pals-primary hover:bg-pals-primary/90 text-white',
               'shadow-lg shadow-pals-primary/30 transition-all',
               'border-2 border-pals-primary'
             )}
           >
-            <Baby className="h-10 w-10" />
-            <div className="text-center">
-              <div className="text-xl font-bold">{t('pathway.pediatricPALS')}</div>
-            </div>
+            <Baby className="h-8 w-8 shrink-0" />
+            <span className="text-xl font-bold">{t('pathway.pediatricPALS')}</span>
           </Button>
 
           {/* Bradycardia / Tachycardia (With Pulse) Button */}
@@ -99,23 +95,19 @@ export function PathwaySelector({
             <Button
               onClick={onSelectBradyTachy}
               className={cn(
-                'w-full h-28 flex flex-col items-center justify-center gap-2',
+                'w-full h-20 flex items-center justify-start gap-4 px-6',
                 'bg-yellow-500 hover:bg-yellow-600 text-black',
-                'shadow-lg shadow-yellow-500/30 transition-all',
-                'border-2 border-yellow-600'
+                'shadow-lg shadow-yellow-500/30 transition-all'
               )}
             >
-              <Activity className="h-10 w-10" />
-              <div className="text-center">
-                <div className="text-xl font-bold">{t('bradyTachy.moduleTitle')}</div>
-              </div>
+              <Activity className="h-8 w-8 shrink-0" />
+              <span className="text-xl font-bold">{t('bradyTachy.moduleTitle')}</span>
             </Button>
           )}
         </div>
 
         <div className="text-center text-xs text-muted-foreground max-w-xs mt-4">
-          <p><strong>{t('pathway.adult')}:</strong> {t('pathway.adultDescription')}</p>
-          <p className="mt-1"><strong>{t('pathway.pediatric')}:</strong> {t('pathway.pediatricDescription')}</p>
+          <p>{t('pathway.selectDescription')}</p>
         </div>
       </div>
     );

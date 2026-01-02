@@ -304,22 +304,18 @@ export function CodeScreen() {
     setShowBradyTachyModule(false);
     actions.setPathwayMode(patientGroup);
 
-    // Merge Brady/Tachy interventions into CODE session
-    if (bradyTachySession && bradyTachySession.interventions.length > 0) {
-      actions.addIntervention('note', t('bradyTachy.switchedToArrest'));
-
-      bradyTachySession.interventions.forEach((intervention) => {
-        actions.addIntervention('note', intervention.details, intervention.value);
-      });
-
-      if (bradyTachySession.weightKg && patientGroup === 'pediatric') {
-        actions.setPatientWeight(bradyTachySession.weightKg);
-      }
+    // Set weight first if available
+    if (bradyTachySession?.weightKg && patientGroup === 'pediatric') {
+      actions.setPatientWeight(bradyTachySession.weightKg);
     }
 
     clearBradyTachySession();
     actions.startCPR();
-    toast.success(t('bradyTachy.switchedToArrest') + ' - ' + t('timeline.title') + ' merged');
+    
+    // Add note about the switch
+    actions.addIntervention('note', t('bradyTachy.switchedToArrest'), undefined, 'bradyTachy.switchedToArrest');
+    
+    toast.success(t('bradyTachy.switchedToArrest'));
     logger.medicalEvent('Switched from Brady/Tachy to arrest mode', { patientGroup });
   };
 
@@ -425,6 +421,8 @@ export function CodeScreen() {
                 onDeliveryAlert={handleDeliveryAlert}
                 onAddNote={() => setShowNoteDialog(true)}
                 onNewCode={handleNewCode}
+                onROSC={actions.achieveROSC}
+                onTerminate={actions.terminateCode}
               />
             )}
 
@@ -473,6 +471,8 @@ export function CodeScreen() {
                 onAddNote={() => setShowNoteDialog(true)}
                 onExport={actions.exportSession}
                 onNewCode={handleNewCode}
+                onROSC={actions.achieveROSC}
+                onTerminate={actions.terminateCode}
               />
             )}
 
