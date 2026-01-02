@@ -285,6 +285,29 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
     }));
   }, []);
 
+  // Import interventions from brady/tachy module
+  const importInterventions = useCallback((interventions: Array<{
+    timestamp: number;
+    type: string;
+    details: string;
+    value?: number | string;
+    translationKey?: string;
+    translationParams?: Record<string, string | number>;
+  }>) => {
+    setSession(prev => ({
+      ...prev,
+      interventions: interventions.map(i => ({
+        id: crypto.randomUUID(),
+        timestamp: i.timestamp,
+        type: i.type as Intervention['type'],
+        details: i.details,
+        value: i.value,
+        translationKey: i.translationKey,
+        translationParams: i.translationParams,
+      })),
+    }));
+  }, []);
+
   // NEW: Start CPR without rhythm selection
   const startCPR = useCallback(() => {
     const now = Date.now();
@@ -869,6 +892,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       resumeSession,
       exportSession,
       addIntervention,
+      importInterventions,
       addNote,
       setRhythmAnalysisActive,
       recordETCO2,

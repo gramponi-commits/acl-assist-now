@@ -309,12 +309,17 @@ export function CodeScreen() {
       actions.setPatientWeight(bradyTachySession.weightKg);
     }
 
+    // Import brady/tachy interventions BEFORE starting CPR to preserve timeline
+    if (bradyTachySession?.interventions && bradyTachySession.interventions.length > 0) {
+      actions.importInterventions(bradyTachySession.interventions);
+    }
+
     clearBradyTachySession();
     actions.startCPR();
-    
+
     // Add note about the switch
     actions.addIntervention('note', t('bradyTachy.switchedToArrest'), undefined, 'bradyTachy.switchedToArrest');
-    
+
     toast.success(t('bradyTachy.switchedToArrest'));
     logger.medicalEvent('Switched from Brady/Tachy to arrest mode', { patientGroup });
   };

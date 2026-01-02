@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { User, Baby, Scale, ArrowRight, Activity } from 'lucide-react';
+import { Scale, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { WeightInput } from './WeightInput';
 
@@ -66,13 +66,12 @@ export function PathwaySelector({
           <Button
             onClick={handleAdultSelect}
             className={cn(
-              'w-full h-20 flex items-center justify-start gap-4 px-6',
+              'w-full h-20 flex items-center justify-center px-6',
               'bg-acls-critical hover:bg-acls-critical/90 text-white',
               'shadow-lg shadow-acls-critical/30 transition-all',
               'border-2 border-acls-critical'
             )}
           >
-            <User className="h-8 w-8 shrink-0" />
             <span className="text-xl font-bold">{t('pathway.adultACLS')}</span>
           </Button>
 
@@ -80,13 +79,12 @@ export function PathwaySelector({
           <Button
             onClick={handlePediatricSelect}
             className={cn(
-              'w-full h-20 flex items-center justify-start gap-4 px-6',
+              'w-full h-20 flex items-center justify-center px-6',
               'bg-pals-primary hover:bg-pals-primary/90 text-white',
               'shadow-lg shadow-pals-primary/30 transition-all',
               'border-2 border-pals-primary'
             )}
           >
-            <Baby className="h-8 w-8 shrink-0" />
             <span className="text-xl font-bold">{t('pathway.pediatricPALS')}</span>
           </Button>
 
@@ -95,19 +93,14 @@ export function PathwaySelector({
             <Button
               onClick={onSelectBradyTachy}
               className={cn(
-                'w-full h-20 flex items-center justify-start gap-4 px-6',
+                'w-full h-20 flex items-center justify-center px-6',
                 'bg-yellow-500 hover:bg-yellow-600 text-black',
                 'shadow-lg shadow-yellow-500/30 transition-all'
               )}
             >
-              <Activity className="h-8 w-8 shrink-0" />
               <span className="text-xl font-bold">{t('bradyTachy.moduleTitle')}</span>
             </Button>
           )}
-        </div>
-
-        <div className="text-center text-xs text-muted-foreground max-w-xs mt-4">
-          <p>{t('pathway.selectDescription')}</p>
         </div>
       </div>
     );
