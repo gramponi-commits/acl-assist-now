@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { BradyTachySession } from '@/types/acls';
 import { BradyTachyActions } from '@/hooks/useBradyTachyLogic';
@@ -15,8 +14,7 @@ export function CompromiseAssessmentScreen({ session, actions }: CompromiseAsses
   const { t } = useTranslation();
 
   return (
-    <ScrollArea className="h-full">
-      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-3xl mx-auto">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center">
           <h1 className="text-xl sm:text-2xl font-bold break-words">{t('bradyTachy.pedsCompromiseQuestion')}</h1>
@@ -73,7 +71,6 @@ export function CompromiseAssessmentScreen({ session, actions }: CompromiseAsses
             {t('bradyTachy.compromisePresentInstruction')}
           </p>
         </div>
-      </div>
-    </ScrollArea>
+    </div>
   );
 }

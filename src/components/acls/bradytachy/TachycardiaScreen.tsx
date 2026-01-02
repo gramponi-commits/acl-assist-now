@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
 import { BradyTachySession, CardioversionRhythmType } from '@/types/acls';
@@ -44,8 +42,7 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
   // This check must come BEFORE the assessment phase check
   if (isPediatric && pedsSinusVsSVTChoice === 'probable_sinus') {
     return (
-      <ScrollArea className="h-full">
-        <div className="p-6 space-y-6 max-w-3xl mx-auto">
+      <div className="p-6 space-y-6 max-w-3xl mx-auto">
           <div className="text-center">
             <h1 className="text-2xl font-bold">{t('bradyTachy.pedsSinusTreatCause')}</h1>
             <p className="text-sm text-muted-foreground mt-1">{t('bradyTachy.pedsProbableSinus')}</p>
@@ -65,8 +62,7 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
               {t('bradyTachy.endSession')}
             </Button>
           </div>
-        </div>
-      </ScrollArea>
+      </div>
     );
   }
 
@@ -83,46 +79,41 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
   // Adult initial assessment (unchanged)
   if (!isPediatric && session.phase === 'tachycardia_assessment') {
     return (
-      <ScrollArea className="h-full">
-        <div className="p-6 space-y-6 max-w-3xl mx-auto">
-          {/* Header */}
-          <div className="text-center">
-            <h1 className="text-2xl font-bold">{t('bradyTachy.tachycardia')}</h1>
-            <p className="text-sm text-muted-foreground mt-1">{t('bradyTachy.assessment')}</p>
-          </div>
+      <div className="p-6 space-y-6 max-w-3xl mx-auto">
+        {/* Header */}
+        <div className="text-center">
+          <h1 className="text-2xl font-bold">{t('bradyTachy.tachycardia')}</h1>
+          <p className="text-sm text-muted-foreground mt-1">{t('bradyTachy.assessment')}</p>
+        </div>
 
-          {/* Initial Assessment Checklist - Collapsible */}
-          <Accordion type="single" collapsible defaultValue="initial-care">
-            <AccordionItem value="initial-care">
-              <AccordionTrigger className="font-bold text-lg">
-                {t('bradyTachy.tachyInitialCare')}
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className="space-y-2 text-sm pt-2">
-                  <div className="flex items-start gap-2">
-                    <div className="mt-0.5">•</div>
-                    <div>{t('bradyTachy.tachyMaintainAirway')}</div>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <div className="mt-0.5">•</div>
-                    <div>{t('bradyTachy.tachyOxygen')}</div>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <div className="mt-0.5">•</div>
-                    <div>{t('bradyTachy.tachyMonitor')}</div>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <div className="mt-0.5">•</div>
-                    <div>{t('bradyTachy.tachyIVAccess')}</div>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <div className="mt-0.5">•</div>
-                    <div>{t('bradyTachy.tachy12LeadECG')}</div>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+        {/* Initial Assessment Checklist */}
+        <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border">
+          <h3 className="font-bold text-base sm:text-lg mb-3">
+            {t('bradyTachy.tachyInitialCare')}
+          </h3>
+          <div className="space-y-2 text-sm">
+            <div className="flex items-start gap-2">
+              <div className="mt-0.5">•</div>
+              <div>{t('bradyTachy.tachyMaintainAirway')}</div>
+            </div>
+            <div className="flex items-start gap-2">
+              <div className="mt-0.5">•</div>
+              <div>{t('bradyTachy.tachyOxygen')}</div>
+            </div>
+            <div className="flex items-start gap-2">
+              <div className="mt-0.5">•</div>
+              <div>{t('bradyTachy.tachyMonitor')}</div>
+            </div>
+            <div className="flex items-start gap-2">
+              <div className="mt-0.5">•</div>
+              <div>{t('bradyTachy.tachyIVAccess')}</div>
+            </div>
+            <div className="flex items-start gap-2">
+              <div className="mt-0.5">•</div>
+              <div>{t('bradyTachy.tachy12LeadECG')}</div>
+            </div>
+          </div>
+        </div>
 
           {/* Instability Assessment */}
           <div className="bg-card rounded-lg p-4 border-2 border-border">
@@ -170,16 +161,14 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
               </Button>
             </div>
           </div>
-        </div>
-      </ScrollArea>
+      </div>
     );
   }
 
   // Unstable - Cardioversion
   if (stability === 'unstable') {
     return (
-      <ScrollArea className="h-full">
-        <div className="p-6 space-y-6 max-w-3xl mx-auto">
+      <div className="p-6 space-y-6 max-w-3xl mx-auto">
           <div className="text-center">
             <h1 className="text-2xl font-bold">{t('bradyTachy.treatment')}</h1>
             <p className="text-sm text-muted-foreground mt-1">{t('bradyTachy.tachyUnstable')}</p>
@@ -248,30 +237,26 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
           {(isPediatric || cardioversionRhythmType) && (
             <div className="bg-card rounded-lg p-4 border-2 border-border">
               <h3 className="font-bold text-lg mb-2">{t('bradyTachy.tachySyncCardioversion')}</h3>
-              <Accordion type="single" collapsible>
-                <AccordionItem value="instructions">
-                  <AccordionTrigger className="text-sm py-2">Instructions</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-1 text-sm">
-                      <p>{t('bradyTachy.tachyConsiderSedation')}</p>
-                      <p>{t('bradyTachy.tachyIfRegularNarrow')}</p>
-                      {isPediatric ? (
-                        <p className="font-bold mt-2">
-                          {t('bradyTachy.pedsTachyCardioversionInitial')}
-                        </p>
-                      ) : cardioversionRhythmType === 'polymorphic_vt' ? (
-                        <p className="font-bold mt-2">
-                          {t('bradyTachy.polymorphicVTWarning')}
-                        </p>
-                      ) : (
-                        <p className="font-bold mt-2">
-                          Energy: {getAdultTachyCardioversion(cardioversionRhythmType).display}
-                        </p>
-                      )}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+              <div className="mb-3">
+                <p className="text-sm font-medium mb-2">Instructions</p>
+                <div className="space-y-1 text-sm text-muted-foreground">
+                  <p>{t('bradyTachy.tachyConsiderSedation')}</p>
+                  <p>{t('bradyTachy.tachyIfRegularNarrow')}</p>
+                  {isPediatric ? (
+                    <p className="font-bold mt-2">
+                      {t('bradyTachy.pedsTachyCardioversionInitial')}
+                    </p>
+                  ) : cardioversionRhythmType === 'polymorphic_vt' ? (
+                    <p className="font-bold mt-2">
+                      {t('bradyTachy.polymorphicVTWarning')}
+                    </p>
+                  ) : (
+                    <p className="font-bold mt-2">
+                      Energy: {getAdultTachyCardioversion(cardioversionRhythmType).display}
+                    </p>
+                  )}
+                </div>
+              </div>
               
               {isPediatric ? (
                 <div className="space-y-2 mt-3">
@@ -330,21 +315,17 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
           )}
 
           {/* If Refractory */}
-          <Accordion type="single" collapsible>
-            <AccordionItem value="refractory">
-              <AccordionTrigger className="font-bold text-lg">
-                {t('bradyTachy.tachyIfRefractory')}
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className="space-y-1 text-sm pt-2">
-                  <p>• {t('bradyTachy.tachyUnderlyingCause')}</p>
-                  <p>• {t('bradyTachy.tachyIncreaseEnergy')}</p>
-                  <p>• {t('bradyTachy.tachyAddAntiarrhythmic')}</p>
-                  <p>• {t('bradyTachy.tachyExpertConsult')}</p>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+          <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border">
+            <h3 className="font-bold text-base sm:text-lg mb-2">
+              {t('bradyTachy.tachyIfRefractory')}
+            </h3>
+            <div className="space-y-1 text-sm">
+              <p>• {t('bradyTachy.tachyUnderlyingCause')}</p>
+              <p>• {t('bradyTachy.tachyIncreaseEnergy')}</p>
+              <p>• {t('bradyTachy.tachyAddAntiarrhythmic')}</p>
+              <p>• {t('bradyTachy.tachyExpertConsult')}</p>
+            </div>
+          </div>
 
           <div className="flex gap-2">
             <Button
@@ -354,16 +335,14 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
               {t('bradyTachy.endSession')}
             </Button>
           </div>
-        </div>
-      </ScrollArea>
+      </div>
     );
   }
 
   // Stable - Need QRS assessment
   if (qrsWidth === null) {
     return (
-      <ScrollArea className="h-full">
-        <div className="p-6 space-y-6 max-w-3xl mx-auto">
+      <div className="p-6 space-y-6 max-w-3xl mx-auto">
           <div className="text-center">
             <h1 className="text-2xl font-bold">{t('bradyTachy.tachyWideQRS')}</h1>
             <p className="text-sm text-muted-foreground mt-1">{t('bradyTachy.tachyStable')}</p>
@@ -389,16 +368,14 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
               </Button>
             </div>
           </div>
-        </div>
-      </ScrollArea>
+      </div>
     );
   }
 
   // Narrow QRS treatment
   if (qrsWidth === 'narrow') {
     return (
-      <ScrollArea className="h-full">
-        <div className="p-4 md:p-6 space-y-4 md:space-y-6 max-w-3xl mx-auto">
+      <div className="p-4 md:p-6 space-y-4 md:space-y-6 max-w-3xl mx-auto">
           <div className="text-center">
             <h1 className="text-xl md:text-2xl font-bold">{t('bradyTachy.treatment')}</h1>
             <p className="text-sm text-muted-foreground mt-1">{t('bradyTachy.tachyNarrowQRS')}</p>
@@ -430,7 +407,7 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
                       actions.giveAdenosine(dose.display, 1);
                     }}
                     disabled={adenosineDoses >= 1}
-                    className="w-full h-12 bg-acls-medication hover:bg-acls-medication/90 text-white text-xs md:text-sm"
+                    className="w-full h-12 text-xs md:text-sm"
                   >
                     {t('bradyTachy.giveAdenosine')} Dose 1 - {calculatePedsTachyAdenosine(weightKg, 1).display}
                   </Button>
@@ -444,7 +421,7 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
                           actions.giveAdenosine(dose.display, 2);
                         }}
                         disabled={adenosineDoses >= 2}
-                        className="w-full h-12 bg-acls-medication hover:bg-acls-medication/90 text-white text-xs md:text-sm"
+                        className="w-full h-12 text-xs md:text-sm"
                       >
                         {t('bradyTachy.giveAdenosine')} Dose 2 - {calculatePedsTachyAdenosine(weightKg, 2).display}
                       </Button>
@@ -454,18 +431,14 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
               </>
             ) : (
               <>
-                <Accordion type="single" collapsible>
-                  <AccordionItem value="dosing">
-                    <AccordionTrigger className="text-sm py-2">Dosing details</AccordionTrigger>
-                    <AccordionContent>
-                      <div className="space-y-1 text-xs md:text-sm">
-                        <p>{t('bradyTachy.tachyAdenosineDose1')}</p>
-                        <p>{t('bradyTachy.tachyAdenosineDose2')}</p>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-                <div className="space-y-2 mt-3">
+                <div className="mb-3">
+                  <p className="text-sm font-medium mb-2">Dosing details</p>
+                  <div className="space-y-1 text-xs md:text-sm text-muted-foreground">
+                    <p>{t('bradyTachy.tachyAdenosineDose1')}</p>
+                    <p>{t('bradyTachy.tachyAdenosineDose2')}</p>
+                  </div>
+                </div>
+                <div className="space-y-2">
                   <Button
                     onClick={() => {
                       setAdenosineDoses(1);
@@ -473,7 +446,7 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
                       actions.giveAdenosine(dose.display, 1);
                     }}
                     disabled={adenosineDoses >= 1}
-                    className="w-full h-12 bg-acls-medication hover:bg-acls-medication/90 text-white text-xs md:text-sm"
+                    className="w-full h-12 text-xs md:text-sm"
                   >
                     {t('bradyTachy.giveAdenosine')} 6 mg
                   </Button>
@@ -485,7 +458,7 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
                         actions.giveAdenosine(dose.display, 2);
                       }}
                       disabled={adenosineDoses >= 2}
-                      className="w-full h-12 bg-acls-medication hover:bg-acls-medication/90 text-white text-xs md:text-sm"
+                      className="w-full h-12 text-xs md:text-sm"
                     >
                       {t('bradyTachy.giveAdenosine')} 12 mg
                     </Button>
@@ -495,101 +468,97 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
             )}
           </div>
 
-          {/* Beta-blocker / Calcium blocker (adult only) - Second-line medications - COLLAPSIBLE */}
+          {/* Beta-blocker / Calcium blocker (adult only) - Second-line medications */}
           {!isPediatric && (
-            <Accordion type="single" collapsible>
-              <AccordionItem value="second-line">
-                <AccordionTrigger className="font-bold text-base md:text-lg">
-                  {t('bradyTachy.secondLineMedications')}
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="space-y-4 pt-2">
-                    <p className="text-xs md:text-sm text-muted-foreground break-words">{t('bradyTachy.eitherOrInstruction')}</p>
+            <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border">
+              <h3 className="font-bold text-base md:text-lg mb-3">
+                {t('bradyTachy.secondLineMedications')}
+              </h3>
+              <div className="space-y-4">
+                <p className="text-xs md:text-sm text-muted-foreground break-words">{t('bradyTachy.eitherOrInstruction')}</p>
 
-                    {/* Calcium Channel Blockers */}
-                    <div className="space-y-3">
-                      <h4 className="font-semibold text-sm md:text-md break-words">{t('bradyTachy.calciumChannelBlockers')}</h4>
+                {/* Calcium Channel Blockers */}
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-sm md:text-md break-words">{t('bradyTachy.calciumChannelBlockers')}</h4>
 
-                      {/* Diltiazem */}
-                      <div className="bg-muted/50 rounded p-2 md:p-3 space-y-2">
-                        <div className="font-medium text-sm break-words">{t('bradyTachy.diltiazem')}</div>
-                        <div className="text-xs md:text-sm space-y-1">
-                          <p className="break-words">• <span className="font-medium">{t('bradyTachy.diltiazemBolus')}</span></p>
-                          <p className="break-words">• {t('bradyTachy.diltiazemMaint')}</p>
-                        </div>
-                        <Button
-                          onClick={() => {
-                            const dose = getAdultTachyDiltiazem();
-                            actions.giveDiltiazem(`${dose.loading.display}; ${dose.maintenance.display}`);
-                          }}
-                          className="w-full h-10 bg-acls-medication hover:bg-acls-medication/90 text-white text-xs md:text-sm"
-                        >
-                          {t('bradyTachy.giveDiltiazem')}
-                        </Button>
-                      </div>
-
-                      {/* Verapamil */}
-                      <div className="bg-muted/50 rounded p-2 md:p-3 space-y-2">
-                        <div className="font-medium text-sm break-words">{t('bradyTachy.verapamil')}</div>
-                        <div className="text-xs md:text-sm space-y-1">
-                          <p className="break-words">• <span className="font-medium">{t('bradyTachy.verapamilInitial')}</span></p>
-                          <p className="break-words">• {t('bradyTachy.verapamilRepeat')}</p>
-                        </div>
-                        <Button
-                          onClick={() => {
-                            const dose = getAdultTachyVerapamil();
-                            actions.giveVerapamil(`${dose.initial.display}; ${dose.repeat.display}`);
-                          }}
-                          className="w-full h-10 bg-acls-medication hover:bg-acls-medication/90 text-white text-xs md:text-sm"
-                        >
-                          {t('bradyTachy.giveVerapamil')}
-                        </Button>
-                      </div>
+                  {/* Diltiazem */}
+                  <div className="bg-muted/50 rounded p-2 md:p-3 space-y-2">
+                    <div className="font-medium text-sm break-words">{t('bradyTachy.diltiazem')}</div>
+                    <div className="text-xs md:text-sm space-y-1">
+                      <p className="break-words">• <span className="font-medium">{t('bradyTachy.diltiazemBolus')}</span></p>
+                      <p className="break-words">• {t('bradyTachy.diltiazemMaint')}</p>
                     </div>
-
-                    {/* Beta-Blockers */}
-                    <div className="space-y-3">
-                      <h4 className="font-semibold text-sm md:text-md break-words">{t('bradyTachy.betaBlockers')}</h4>
-
-                      {/* Metoprolol */}
-                      <div className="bg-muted/50 rounded p-2 md:p-3 space-y-2">
-                        <div className="font-medium text-sm break-words">{t('bradyTachy.metoprolol')}</div>
-                        <div className="text-xs md:text-sm">
-                          <p className="break-words">• <span className="font-medium">{t('bradyTachy.metoprololDose')}</span></p>
-                        </div>
-                        <Button
-                          onClick={() => {
-                            const dose = getAdultTachyMetoprolol();
-                            actions.giveMetoprolol(dose.display);
-                          }}
-                          className="w-full h-10 bg-acls-medication hover:bg-acls-medication/90 text-white text-xs md:text-sm"
-                        >
-                          {t('bradyTachy.giveMetoprolol')}
-                        </Button>
-                      </div>
-
-                      {/* Esmolol */}
-                      <div className="bg-muted/50 rounded p-2 md:p-3 space-y-2">
-                        <div className="font-medium text-sm break-words">{t('bradyTachy.esmolol')}</div>
-                        <div className="text-xs md:text-sm space-y-1">
-                          <p className="break-words">• <span className="font-medium">{t('bradyTachy.esmololLoad')}</span></p>
-                          <p className="break-words">• {t('bradyTachy.esmololMaint')}</p>
-                        </div>
-                        <Button
-                          onClick={() => {
-                            const dose = getAdultTachyEsmolol();
-                            actions.giveEsmolol(`${dose.loading.display}; ${dose.maintenance.display}`);
-                          }}
-                          className="w-full h-10 bg-acls-medication hover:bg-acls-medication/90 text-white text-xs md:text-sm"
-                        >
-                          {t('bradyTachy.giveEsmolol')}
-                        </Button>
-                      </div>
-                    </div>
+                    <Button
+                      onClick={() => {
+                        const dose = getAdultTachyDiltiazem();
+                        actions.giveDiltiazem(`${dose.loading.display}; ${dose.maintenance.display}`);
+                      }}
+                      className="w-full h-10 text-xs md:text-sm"
+                    >
+                      {t('bradyTachy.giveDiltiazem')}
+                    </Button>
                   </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+
+                  {/* Verapamil */}
+                  <div className="bg-muted/50 rounded p-2 md:p-3 space-y-2">
+                    <div className="font-medium text-sm break-words">{t('bradyTachy.verapamil')}</div>
+                    <div className="text-xs md:text-sm space-y-1">
+                      <p className="break-words">• <span className="font-medium">{t('bradyTachy.verapamilInitial')}</span></p>
+                      <p className="break-words">• {t('bradyTachy.verapamilRepeat')}</p>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        const dose = getAdultTachyVerapamil();
+                        actions.giveVerapamil(`${dose.initial.display}; ${dose.repeat.display}`);
+                      }}
+                      className="w-full h-10 text-xs md:text-sm"
+                    >
+                      {t('bradyTachy.giveVerapamil')}
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Beta-Blockers */}
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-sm md:text-md break-words">{t('bradyTachy.betaBlockers')}</h4>
+
+                  {/* Metoprolol */}
+                  <div className="bg-muted/50 rounded p-2 md:p-3 space-y-2">
+                    <div className="font-medium text-sm break-words">{t('bradyTachy.metoprolol')}</div>
+                    <div className="text-xs md:text-sm">
+                      <p className="break-words">• <span className="font-medium">{t('bradyTachy.metoprololDose')}</span></p>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        const dose = getAdultTachyMetoprolol();
+                        actions.giveMetoprolol(dose.display);
+                      }}
+                      className="w-full h-10 text-xs md:text-sm"
+                    >
+                      {t('bradyTachy.giveMetoprolol')}
+                    </Button>
+                  </div>
+
+                  {/* Esmolol */}
+                  <div className="bg-muted/50 rounded p-2 md:p-3 space-y-2">
+                    <div className="font-medium text-sm break-words">{t('bradyTachy.esmolol')}</div>
+                    <div className="text-xs md:text-sm space-y-1">
+                      <p className="break-words">• <span className="font-medium">{t('bradyTachy.esmololLoad')}</span></p>
+                      <p className="break-words">• {t('bradyTachy.esmololMaint')}</p>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        const dose = getAdultTachyEsmolol();
+                        actions.giveEsmolol(`${dose.loading.display}; ${dose.maintenance.display}`);
+                      }}
+                      className="w-full h-10 text-xs md:text-sm"
+                    >
+                      {t('bradyTachy.giveEsmolol')}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
 
           <div className="bg-card rounded-lg p-3 md:p-4 border-2 border-border">
@@ -604,15 +573,13 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
               {t('bradyTachy.endSession')}
             </Button>
           </div>
-        </div>
-      </ScrollArea>
+      </div>
     );
   }
 
   // Wide QRS treatment (adult only - pediatric wouldn't typically reach here)
   return (
-    <ScrollArea className="h-full">
-      <div className="p-4 md:p-6 space-y-4 md:space-y-6 max-w-3xl mx-auto">
+    <div className="p-4 md:p-6 space-y-4 md:space-y-6 max-w-3xl mx-auto">
         <div className="text-center">
           <h1 className="text-xl md:text-2xl font-bold">{t('bradyTachy.treatment')}</h1>
           <p className="text-sm text-muted-foreground mt-1">{t('bradyTachy.tachyWideQRSPath')}</p>
@@ -626,67 +593,63 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
               const dose = getAdultTachyAdenosine(1);
               actions.giveAdenosine(dose.display, 1);
             }}
-            className="w-full h-12 bg-acls-medication hover:bg-acls-medication/90 text-white text-xs md:text-sm break-words whitespace-normal"
+            className="w-full h-12 text-xs md:text-sm break-words whitespace-normal"
           >
             <span className="break-words">{t('bradyTachy.giveAdenosine')} {t('bradyTachy.ifRegularMonomorphic')}</span>
           </Button>
         </div>
 
-        {/* Antiarrhythmic options - Adult only - COLLAPSIBLE */}
+        {/* Antiarrhythmic options - Adult only */}
         {!isPediatric && (
-          <Accordion type="single" collapsible defaultValue="antiarrhythmic">
-            <AccordionItem value="antiarrhythmic">
-              <AccordionTrigger className="font-bold text-base md:text-lg">
-                {t('bradyTachy.tachyWideAntiarrhythmic')}
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className="space-y-4 pt-2">
-                  {/* Procainamide */}
-                  <div>
-                    <h4 className="font-bold text-sm md:text-md mb-2 break-words">{t('bradyTachy.tachyProcainamide')}</h4>
-                    <p className="text-xs text-muted-foreground mb-1 break-words">
-                      {getAdultTachyProcainamide().loading.display}
-                    </p>
-                    <p className="text-xs text-muted-foreground mb-2 break-words">
-                      {t('bradyTachy.tachyProcainamideMaint')}
-                    </p>
-                    <p className="text-xs text-muted-foreground mb-2 break-words">
-                      ⚠️ {t('bradyTachy.tachyProcainamideAvoid')}
-                    </p>
-                    <Button
-                      onClick={() => {
-                        const dose = getAdultTachyProcainamide();
-                        actions.giveProcainamide(dose.loading.display);
-                      }}
-                      className="w-full h-10 bg-acls-medication hover:bg-acls-medication/90 text-white text-xs md:text-sm"
-                    >
-                      {t('bradyTachy.giveProcainamide')}
-                    </Button>
-                  </div>
+          <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border">
+            <h3 className="font-bold text-base md:text-lg mb-3">
+              {t('bradyTachy.tachyWideAntiarrhythmic')}
+            </h3>
+            <div className="space-y-4">
+              {/* Procainamide */}
+              <div>
+                <h4 className="font-bold text-sm md:text-md mb-2 break-words">{t('bradyTachy.tachyProcainamide')}</h4>
+                <p className="text-xs text-muted-foreground mb-1 break-words">
+                  {getAdultTachyProcainamide().loading.display}
+                </p>
+                <p className="text-xs text-muted-foreground mb-2 break-words">
+                  {t('bradyTachy.tachyProcainamideMaint')}
+                </p>
+                <p className="text-xs text-muted-foreground mb-2 break-words">
+                  ⚠️ {t('bradyTachy.tachyProcainamideAvoid')}
+                </p>
+                <Button
+                  onClick={() => {
+                    const dose = getAdultTachyProcainamide();
+                    actions.giveProcainamide(dose.loading.display);
+                  }}
+                  className="w-full h-10 text-xs md:text-sm"
+                >
+                  {t('bradyTachy.giveProcainamide')}
+                </Button>
+              </div>
 
-                  {/* Amiodarone */}
-                  <div>
-                    <h4 className="font-bold text-sm md:text-md mb-2 break-words">{t('bradyTachy.tachyAmiodarone')}</h4>
-                    <p className="text-xs text-muted-foreground mb-1 break-words">
-                      {getAdultTachyAmiodarone().loading.display}
-                    </p>
-                    <p className="text-xs text-muted-foreground mb-2 break-words">
-                      {t('bradyTachy.tachyAmiodaroneMaint')}
-                    </p>
-                    <Button
-                      onClick={() => {
-                        const dose = getAdultTachyAmiodarone();
-                        actions.giveAmiodarone(dose.loading.display);
-                      }}
-                      className="w-full h-10 bg-acls-medication hover:bg-acls-medication/90 text-white text-xs md:text-sm"
-                    >
-                      {t('bradyTachy.giveAmiodarone')}
-                    </Button>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+              {/* Amiodarone */}
+              <div>
+                <h4 className="font-bold text-sm md:text-md mb-2 break-words">{t('bradyTachy.tachyAmiodarone')}</h4>
+                <p className="text-xs text-muted-foreground mb-1 break-words">
+                  {getAdultTachyAmiodarone().loading.display}
+                </p>
+                <p className="text-xs text-muted-foreground mb-2 break-words">
+                  {t('bradyTachy.tachyAmiodaroneMaint')}
+                </p>
+                <Button
+                  onClick={() => {
+                    const dose = getAdultTachyAmiodarone();
+                    actions.giveAmiodarone(dose.loading.display);
+                  }}
+                  className="w-full h-10 text-xs md:text-sm"
+                >
+                  {t('bradyTachy.giveAmiodarone')}
+                </Button>
+              </div>
+            </div>
+          </div>
         )}
 
         <div className="bg-card rounded-lg p-3 md:p-4 border-2 border-border">
@@ -701,7 +664,6 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
             {t('bradyTachy.endSession')}
           </Button>
         </div>
-      </div>
-    </ScrollArea>
+    </div>
   );
 }

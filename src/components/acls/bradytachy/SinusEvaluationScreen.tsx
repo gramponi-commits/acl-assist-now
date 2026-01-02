@@ -1,8 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { cn } from '@/lib/utils';
 import { BradyTachySession } from '@/types/acls';
 import { BradyTachyActions } from '@/hooks/useBradyTachyLogic';
 
@@ -25,35 +22,30 @@ export function SinusEvaluationScreen({ session, actions }: SinusEvaluationScree
   };
 
   return (
-    <ScrollArea className="h-full">
-      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-3xl mx-auto">
-        {/* Header */}
-        <div className="text-center">
-          <h1 className="text-xl sm:text-2xl font-bold">{t('bradyTachy.pedsSinusVsSVT')}</h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-2">
-            {t('bradyTachy.differentiateRhythmDesc')}
-          </p>
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-3xl mx-auto">
+      {/* Header */}
+      <div className="text-center">
+        <h1 className="text-xl sm:text-2xl font-bold">{t('bradyTachy.pedsSinusVsSVT')}</h1>
+        <p className="text-xs sm:text-sm text-muted-foreground mt-2">
+          {t('bradyTachy.differentiateRhythmDesc')}
+        </p>
+      </div>
+
+      {/* Option A: Probable Sinus Tachycardia */}
+      <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border overflow-hidden">
+        <h3 className="font-bold text-base sm:text-lg break-words mb-3">
+          {t('bradyTachy.pedsProbableSinus')}
+        </h3>
+
+        <div className="mb-3">
+          <p className="text-sm font-medium mb-2">{t('bradyTachy.pedsSinusCriteria')}</p>
+          <ul className="space-y-1 text-xs sm:text-sm list-disc list-inside">
+            <li>{t('bradyTachy.pedsSinusPWaves')}</li>
+            <li>{t('bradyTachy.pedsSinusVariableRR')}</li>
+            <li>{t('bradyTachy.pedsSinusInfantRate')}</li>
+            <li>{t('bradyTachy.pedsSinusChildRate')}</li>
+          </ul>
         </div>
-
-        {/* Option A: Probable Sinus Tachycardia */}
-        <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border overflow-hidden">
-          <h3 className="font-bold text-base sm:text-lg break-words mb-3">
-            {t('bradyTachy.pedsProbableSinus')}
-          </h3>
-
-          <Accordion type="single" collapsible>
-            <AccordionItem value="criteria">
-              <AccordionTrigger className="text-sm py-2">{t('bradyTachy.pedsSinusCriteria')}</AccordionTrigger>
-              <AccordionContent>
-                <ul className="space-y-1 text-xs sm:text-sm pt-2 list-disc list-inside">
-                  <li>{t('bradyTachy.pedsSinusPWaves')}</li>
-                  <li>{t('bradyTachy.pedsSinusVariableRR')}</li>
-                  <li>{t('bradyTachy.pedsSinusInfantRate')}</li>
-                  <li>{t('bradyTachy.pedsSinusChildRate')}</li>
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
 
           <div className="bg-muted rounded p-2 sm:p-3 my-3 text-xs sm:text-sm">
             <p className="font-medium mb-1">{t('bradyTachy.pedsSinusTreatCause')}</p>
@@ -96,7 +88,6 @@ export function SinusEvaluationScreen({ session, actions }: SinusEvaluationScree
             </span>
           </Button>
         </div>
-      </div>
-    </ScrollArea>
+    </div>
   );
 }

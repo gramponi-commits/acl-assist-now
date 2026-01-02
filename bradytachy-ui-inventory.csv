@@ -1,0 +1,75 @@
+Component,Element Type,Button/Menu Name,Color/Variant,Styling Details,Location (File:Line)
+BradyTachyModule,Button,NO PULSE / START CPR,Red,bg-red-600 hover:bg-red-700 text-white,BradyTachyModule.tsx:99-111
+BradyTachyModule,Button,Reset (session ended),Default,default variant,BradyTachyModule.tsx:82-84
+BradyTachyModule,Button,Exit (confirm),Destructive,variant="destructive",BradyTachyModule.tsx:142-148
+BradyTachyModule,Button,Cancel (exit),Outline,variant="outline",BradyTachyModule.tsx:149-155
+BradyTachyPatientSelector,Button,Adult ACLS,ACLS Critical Red,bg-acls-critical hover:bg-acls-critical/90 text-white border-2,BradyTachyPatientSelector.tsx:56-69
+BradyTachyPatientSelector,Button,Pediatric PALS,PALS Primary Blue,bg-pals-primary hover:bg-pals-primary/90 text-white border-2,BradyTachyPatientSelector.tsx:72-85
+BradyTachyPatientSelector,Button,Optional Weight Input,Outline (PALS border),variant="outline" border-2 border-pals-primary text-pals-primary hover:bg-pals-primary/10,BradyTachyPatientSelector.tsx:112-127
+BradyTachyPatientSelector,Button,Bradycardia,Bradycardia Purple,bg-acls-bradycardia hover:bg-acls-bradycardia/90 text-white border-2,BradyTachyPatientSelector.tsx:141-151
+BradyTachyPatientSelector,Button,Tachycardia,Tachycardia Red,bg-acls-tachycardia hover:bg-acls-tachycardia/90 text-white border-2,BradyTachyPatientSelector.tsx:154-164
+BradycardiaScreen,Button,Compromise Yes,Destructive,variant="destructive",BradycardiaScreen.tsx:109-115
+BradycardiaScreen,Button,Compromise No,Outline,variant="outline",BradycardiaScreen.tsx:116-122
+BradycardiaScreen,Button,End Session (stable),Default,default variant,BradycardiaScreen.tsx:174-179
+BradycardiaScreen,Button,Give Epinephrine Infusion (peds),Medication Purple,bg-acls-medication hover:bg-acls-medication/90 text-white,BradycardiaScreen.tsx:204-212
+BradycardiaScreen,Button,Give Atropine (peds),Medication Purple,bg-acls-medication hover:bg-acls-medication/90 text-white,BradycardiaScreen.tsx:224-232
+BradycardiaScreen,Button,Give Atropine (adult),Medication Purple,bg-acls-medication hover:bg-acls-medication/90 text-white,BradycardiaScreen.tsx:252-263
+BradycardiaScreen,Button,Give Pacing,Outline,variant="outline",BradycardiaScreen.tsx:280-288
+BradycardiaScreen,Button,Give Dopamine,Medication Purple,bg-acls-medication hover:bg-acls-medication/90 text-white,BradycardiaScreen.tsx:297-305
+BradycardiaScreen,Button,Give Epi Infusion (adult),Medication Purple,bg-acls-medication hover:bg-acls-medication/90 text-white,BradycardiaScreen.tsx:314-322
+BradycardiaScreen,Button,End Session (unstable),Default,default variant,BradycardiaScreen.tsx:358-363
+BradycardiaScreen,Accordion,Initial Care Checklist,Collapsible,defaultValue="initial-care",BradycardiaScreen.tsx:42-64
+BradycardiaScreen,Accordion,Treatment (stable),Collapsible,defaultValue="treatment",BradycardiaScreen.tsx:141-171
+BradycardiaScreen,Accordion,Atropine Dosing Details,Collapsible,single collapsible,BradycardiaScreen.tsx:240-251
+BradycardiaScreen,Accordion,If Atropine Ineffective,Collapsible,value="second-line",BradycardiaScreen.tsx:267-326
+BradycardiaScreen,Accordion,Consider (expert consult),Collapsible,value="consider",BradycardiaScreen.tsx:328-338
+BradycardiaScreen,Accordion,Possible Causes,Collapsible,value="causes",BradycardiaScreen.tsx:340-352
+BradycardiaScreen,ScrollArea,Main Container,Scrollable,h-full,BradycardiaScreen.tsx:33,134,188
+CompromiseAssessmentScreen,Button,Compromise Yes (peds),Destructive,variant="destructive",CompromiseAssessmentScreen.tsx:49-58
+CompromiseAssessmentScreen,Button,Compromise No (peds),Outline,variant="outline",CompromiseAssessmentScreen.tsx:59-65
+CompromiseAssessmentScreen,ScrollArea,Main Container,Scrollable,h-full,CompromiseAssessmentScreen.tsx:18
+SinusEvaluationScreen,Button,Probable Sinus,Default,default variant,SinusEvaluationScreen.tsx:65-70
+SinusEvaluationScreen,Button,Continue to Compromise Assessment,Outline,variant="outline",SinusEvaluationScreen.tsx:89-97
+SinusEvaluationScreen,Accordion,Sinus Criteria,Collapsible,value="criteria",SinusEvaluationScreen.tsx:44-56
+SinusEvaluationScreen,ScrollArea,Main Container,Scrollable,h-full,SinusEvaluationScreen.tsx:28
+SinusVsSVTSelector,Button,Probable Sinus (with criteria),Default,default variant,SinusVsSVTSelector.tsx:102-107
+SinusVsSVTSelector,Button,Probable SVT (with criteria),Outline,variant="outline",SinusVsSVTSelector.tsx:169-175
+SinusVsSVTSelector,ScrollArea,Main Container,Scrollable,h-full,SinusVsSVTSelector.tsx:42
+TachycardiaScreen,Button,End Session (sinus tachy),Default,default variant,TachycardiaScreen.tsx:61-66
+TachycardiaScreen,Button,Unstable,Destructive,variant="destructive",TachycardiaScreen.tsx:157-162
+TachycardiaScreen,Button,Stable,Outline,variant="outline",TachycardiaScreen.tsx:164-170
+TachycardiaScreen,Button,Atrial Fib (200J),Outline,variant="outline",TachycardiaScreen.tsx:208-214
+TachycardiaScreen,Button,Atrial Flutter (200J),Outline,variant="outline",TachycardiaScreen.tsx:215-221
+TachycardiaScreen,Button,Narrow Complex (100J),Outline,variant="outline",TachycardiaScreen.tsx:222-228
+TachycardiaScreen,Button,Monomorphic VT (100J),Outline,variant="outline",TachycardiaScreen.tsx:229-235
+TachycardiaScreen,Button,Polymorphic VT,Destructive,variant="destructive",TachycardiaScreen.tsx:236-242
+TachycardiaScreen,Button,Give Cardioversion Initial (peds),Default,default variant,TachycardiaScreen.tsx:278-287
+TachycardiaScreen,Button,Give Cardioversion Higher (peds),Outline,variant="outline",TachycardiaScreen.tsx:289-300
+TachycardiaScreen,Button,Give Cardioversion (adult),Default,default variant,TachycardiaScreen.tsx:303-312
+TachycardiaScreen,Button,Deliver Defibrillation (polymorphic VT),Destructive,variant="destructive",TachycardiaScreen.tsx:314-327
+TachycardiaScreen,Button,End Session (after cardioversion),Default,default variant,TachycardiaScreen.tsx:350-355
+TachycardiaScreen,Button,Narrow QRS (<0.12s),Default,default variant,TachycardiaScreen.tsx:377-382
+TachycardiaScreen,Button,Wide QRS (≥0.12s),Outline,variant="outline",TachycardiaScreen.tsx:383-389
+TachycardiaScreen,Button,Perform Vagal Maneuver,Outline,variant="outline",TachycardiaScreen.tsx:410-416
+TachycardiaScreen,Button,Give Adenosine Dose 1 (peds),Medication Purple,bg-acls-medication hover:bg-acls-medication/90 text-white,TachycardiaScreen.tsx:426-436
+TachycardiaScreen,Button,Give Adenosine Dose 2 (peds),Medication Purple,bg-acls-medication hover:bg-acls-medication/90 text-white,TachycardiaScreen.tsx:440-450
+TachycardiaScreen,Button,Give Adenosine 6mg (adult),Medication Purple,bg-acls-medication hover:bg-acls-medication/90 text-white,TachycardiaScreen.tsx:469-479
+TachycardiaScreen,Button,Give Adenosine 12mg (adult),Medication Purple,bg-acls-medication hover:bg-acls-medication/90 text-white,TachycardiaScreen.tsx:481-491
+TachycardiaScreen,Button,Give Diltiazem,Medication Purple,bg-acls-medication hover:bg-acls-medication/90 text-white,TachycardiaScreen.tsx:520-528
+TachycardiaScreen,Button,Give Verapamil,Medication Purple,bg-acls-medication hover:bg-acls-medication/90 text-white,TachycardiaScreen.tsx:538-546
+TachycardiaScreen,Button,Give Metoprolol,Medication Purple,bg-acls-medication hover:bg-acls-medication/90 text-white,TachycardiaScreen.tsx:560-568
+TachycardiaScreen,Button,Give Esmolol,Medication Purple,bg-acls-medication hover:bg-acls-medication/90 text-white,TachycardiaScreen.tsx:578-586
+TachycardiaScreen,Button,End Session (narrow QRS),Default,default variant,TachycardiaScreen.tsx:600-605
+TachycardiaScreen,Button,Give Adenosine (wide QRS if regular),Medication Purple,bg-acls-medication hover:bg-acls-medication/90 text-white,TachycardiaScreen.tsx:624-632
+TachycardiaScreen,Button,Give Procainamide,Medication Purple,bg-acls-medication hover:bg-acls-medication/90 text-white,TachycardiaScreen.tsx:656-664
+TachycardiaScreen,Button,Give Amiodarone,Medication Purple,bg-acls-medication hover:bg-acls-medication/90 text-white,TachycardiaScreen.tsx:676-684
+TachycardiaScreen,Button,End Session (wide QRS),Default,default variant,TachycardiaScreen.tsx:697-702
+TachycardiaScreen,Accordion,Initial Care (adult assessment),Collapsible,defaultValue="initial-care",TachycardiaScreen.tsx:95-125
+TachycardiaScreen,Accordion,Cardioversion Instructions,Collapsible,value="instructions",TachycardiaScreen.tsx:251-274
+TachycardiaScreen,Accordion,If Refractory,Collapsible,value="refractory",TachycardiaScreen.tsx:333-347
+TachycardiaScreen,Accordion,Adenosine Dosing Details,Collapsible,value="dosing",TachycardiaScreen.tsx:457-467
+TachycardiaScreen,Accordion,Second Line Medications,Collapsible,value="second-line",TachycardiaScreen.tsx:500-592
+TachycardiaScreen,Accordion,Antiarrhythmic Options,Collapsible,defaultValue="antiarrhythmic",TachycardiaScreen.tsx:637-689
+TachycardiaScreen,ScrollArea,Main Container,Scrollable,h-full,"Multiple locations (all screens)"
+BradyTachyTimeline,Collapsible,Timeline,Collapsible,Collapsed by default,BradyTachyTimeline.tsx:60-112
+BradyTachyTimeline,ScrollArea,Timeline Content,Scrollable,h-48,BradyTachyTimeline.tsx:76-110
