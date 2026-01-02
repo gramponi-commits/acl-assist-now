@@ -164,6 +164,7 @@ To assist hospital code teams and healthcare professionals in managing cardiac a
 │   │   ├── useWakeLock.ts          # Screen wake lock
 │   │   ├── useSettings.ts          # Settings persistence
 │   │   ├── usePWAInstall.ts        # PWA installation
+│   │   ├── useIsNativeApp.ts       # Capacitor native platform detection
 │   │   └── use-mobile.tsx          # Mobile detection
 │   │
 │   ├── types/
@@ -1034,9 +1035,18 @@ function MyComponent() {
 - Show custom install prompt
 - Track installation events
 
+**Platform Detection**: `useIsNativeApp.ts`
+- Uses Capacitor API to detect if running as native app (Android/iOS wrapper)
+- Returns `false` for PWA/web, `true` for native builds
+
 **UI**:
-- Install banner on mobile (dismissible)
-- "Install App" page (`InstallHelp.tsx`) with platform-specific instructions
+- Install banner on mobile (dismissible) - **PWA only**
+- "Install App" page (`InstallHelp.tsx`) with platform-specific instructions - **PWA only**
+- Install navigation menu item - **hidden in native apps**
+- Install button in mobile header - **hidden in native apps**
+
+**Conditional Rendering**:
+The install page and related UI elements are automatically hidden when running as a native Android/iOS wrapper (detected via `Capacitor.isNativePlatform()`). This prevents redundant PWA installation prompts in apps already delivered as native wrappers.
 
 ### Offline Functionality
 
