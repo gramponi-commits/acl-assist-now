@@ -305,7 +305,9 @@
     "lightMode": "Mode Clair",
     "adultDefibrillator": "Énergie Défibrillateur Adulte",
     "adultDefibrillatorDesc": "Sélectionner l'énergie de choc pour adultes",
-    "pediatricDefibrillator": "Énergie Défibrillateur Pédiatrique"
+    "epinephrineInterval": "Intervalle Épinéphrine/Adrénaline",
+    "epinephrineIntervalDesc": "Délai entre les doses d'épinéphrine (AHA recommande 3-5 min)",
+    "minutes": "min"
   },
   "resume": {
     "title": "Code Actif Détecté",

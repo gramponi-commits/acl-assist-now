@@ -302,7 +302,9 @@
     "lightMode": "Light Mode",
     "adultDefibrillator": "Adult Defibrillator Energy",
     "adultDefibrillatorDesc": "Select shock energy for adult patients",
-    "pediatricDefibrillator": "Pediatric Defibrillator Energy"
+    "epinephrineInterval": "Epinephrine/Adrenaline Interval",
+    "epinephrineIntervalDesc": "Time between epinephrine doses (AHA recommends 3-5 min)",
+    "minutes": "min"
   },
   "resume": {
     "title": "Active Code Detected",

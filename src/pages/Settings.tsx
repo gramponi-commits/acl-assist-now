@@ -4,8 +4,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Globe, Volume2, Vibrate, Music, Mic, Pill, Zap, Sun, Moon } from 'lucide-react';
-import { useSettings, AdultDefibrillatorEnergy } from '@/hooks/useSettings';
+import { Globe, Volume2, Vibrate, Music, Mic, Pill, Zap, Sun, Moon, Clock } from 'lucide-react';
+import { useSettings, AdultDefibrillatorEnergy, EpinephrineIntervalMinutes } from '@/hooks/useSettings';
 
 const languages = [
   { code: 'en', name: 'English', nativeName: 'English', flag: '🇬🇧' },
@@ -17,6 +17,7 @@ const languages = [
 ];
 
 const adultEnergyOptions: AdultDefibrillatorEnergy[] = [120, 150, 200, 360];
+const epinephrineIntervalOptions: EpinephrineIntervalMinutes[] = [3, 4, 5];
 
 export default function Settings() {
   const { t, i18n } = useTranslation();
@@ -173,8 +174,8 @@ export default function Settings() {
                 <h2 className="font-semibold text-foreground">{t('settings.adultDefibrillator')}</h2>
                 <p className="text-sm text-muted-foreground">{t('settings.adultDefibrillatorDesc')}</p>
               </div>
-              <Select 
-                value={String(settings.adultDefibrillatorEnergy)} 
+              <Select
+                value={String(settings.adultDefibrillatorEnergy)}
                 onValueChange={(val) => updateSetting('adultDefibrillatorEnergy', Number(val) as AdultDefibrillatorEnergy)}
               >
                 <SelectTrigger className="w-[100px]">
@@ -191,16 +192,31 @@ export default function Settings() {
             </div>
           </div>
 
-          {/* Pediatric Defibrillator Energy Info */}
+          {/* Epinephrine Interval Section */}
           <div className="bg-card rounded-lg border border-border p-4">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-pals-primary/10 flex items-center justify-center">
-                <Zap className="h-5 w-5 text-pals-primary" />
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <Clock className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1">
-                <h2 className="font-semibold text-foreground">{t('settings.pediatricDefibrillator')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.defibrillatorDescPALS')}</p>
+                <h2 className="font-semibold text-foreground">{t('settings.epinephrineInterval')}</h2>
+                <p className="text-sm text-muted-foreground">{t('settings.epinephrineIntervalDesc')}</p>
               </div>
+              <Select
+                value={String(settings.epinephrineIntervalMinutes)}
+                onValueChange={(val) => updateSetting('epinephrineIntervalMinutes', Number(val) as EpinephrineIntervalMinutes)}
+              >
+                <SelectTrigger className="w-[120px]">
+                  <SelectValue>{settings.epinephrineIntervalMinutes} {t('settings.minutes')}</SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {epinephrineIntervalOptions.map((interval) => (
+                    <SelectItem key={interval} value={String(interval)}>
+                      {interval} {t('settings.minutes')}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 

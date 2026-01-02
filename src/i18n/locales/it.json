@@ -302,7 +302,9 @@
     "lightMode": "Modalità Chiara",
     "adultDefibrillator": "Energia Defibrillatore Adulti",
     "adultDefibrillatorDesc": "Seleziona energia shock per pazienti adulti",
-    "pediatricDefibrillator": "Energia Defibrillatore Pediatrico"
+    "epinephrineInterval": "Intervallo Epinefrina/Adrenalina",
+    "epinephrineIntervalDesc": "Tempo tra le dosi di epinefrina (AHA raccomanda 3-5 min)",
+    "minutes": "min"
   },
   "resume": {
     "title": "Codice Attivo Rilevato",

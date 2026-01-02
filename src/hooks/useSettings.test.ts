@@ -20,6 +20,7 @@ describe('useSettings Hook', () => {
         preferLidocaine: false,
         theme: 'dark',
         adultDefibrillatorEnergy: 200,
+        epinephrineIntervalMinutes: 4,
       });
     });
 
@@ -33,6 +34,7 @@ describe('useSettings Hook', () => {
         preferLidocaine: true,
         theme: 'light',
         adultDefibrillatorEnergy: 360,
+        epinephrineIntervalMinutes: 4,
       };
 
       localStorage.setItem('acls-settings', JSON.stringify(savedSettings));
@@ -151,6 +153,7 @@ describe('useSettings Hook', () => {
         preferLidocaine: false,
         theme: 'dark',
         adultDefibrillatorEnergy: 200,
+        epinephrineIntervalMinutes: 4,
       });
     });
 
