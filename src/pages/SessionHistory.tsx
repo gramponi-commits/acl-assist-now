@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getAllSessions, deleteSession, StoredSession } from '@/lib/sessionStorage';
+import { getAllSessions, deleteSession, deleteSessions, StoredSession } from '@/lib/sessionStorage';
 import { exportSessionToPDF } from '@/lib/pdfExport';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Trash2, Heart, XCircle, Clock, Zap, Syringe, ChevronDown, ChevronUp, Activity, AlertTriangle, User, Baby, Filter, Download } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -18,10 +19,16 @@ export default function SessionHistory() {
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [filterMode, setFilterMode] = useState<FilterMode>('all');
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     loadSessions();
   }, []);
+
+  // Clear selections when filter changes
+  useEffect(() => {
+    setSelectedIds(new Set());
+  }, [filterMode]);
 
   const loadSessions = async () => {
     try {
@@ -36,13 +43,60 @@ export default function SessionHistory() {
 
   const handleDelete = async (id: string) => {
     if (!confirm(t('history.confirmDelete'))) return;
-    
+
     try {
       await deleteSession(id);
       setSessions(sessions.filter(s => s.id !== id));
+      setSelectedIds(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(id);
+        return newSet;
+      });
       toast.success(t('history.sessionDeleted'));
     } catch (error) {
       toast.error(t('history.deleteFailed'));
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    const count = selectedIds.size;
+    if (count === 0) return;
+
+    const confirmMessage = count === 1
+      ? t('history.confirmDelete')
+      : t('history.confirmDeleteMultiple', { count });
+
+    if (!confirm(confirmMessage)) return;
+
+    try {
+      await deleteSessions(Array.from(selectedIds));
+      setSessions(sessions.filter(s => !selectedIds.has(s.id)));
+      setSelectedIds(new Set());
+      toast.success(t('history.sessionsDeleted', { count }));
+    } catch (error) {
+      toast.error(t('history.deleteFailed'));
+    }
+  };
+
+  const toggleSelection = (id: string) => {
+    setSelectedIds(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.size === filteredSessions.length && filteredSessions.length > 0) {
+      // Deselect all
+      setSelectedIds(new Set());
+    } else {
+      // Select all filtered sessions
+      setSelectedIds(new Set(filteredSessions.map(s => s.id)));
     }
   };
 
@@ -140,7 +194,38 @@ export default function SessionHistory() {
     <div className="min-h-screen bg-background">
       <div className="p-4 border-b border-border">
         <h1 className="text-2xl font-bold text-foreground mb-3">{t('history.title')}</h1>
-        
+
+        {/* Bulk actions */}
+        {filteredSessions.length > 0 && (
+          <div className="flex items-center justify-between mb-3 pb-3 border-b border-border">
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="select-all"
+                checked={selectedIds.size === filteredSessions.length && filteredSessions.length > 0}
+                onCheckedChange={toggleSelectAll}
+              />
+              <label
+                htmlFor="select-all"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+              >
+                {t('history.selectAll')}
+                {selectedIds.size > 0 && ` (${selectedIds.size})`}
+              </label>
+            </div>
+            {selectedIds.size > 0 && (
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={handleBulkDelete}
+                className="gap-2"
+              >
+                <Trash2 className="h-4 w-4" />
+                {t('history.deleteSelected', { count: selectedIds.size })}
+              </Button>
+            )}
+          </div>
+        )}
+
         {/* Filter buttons */}
         <div className="flex gap-2">
           <Button
@@ -220,11 +305,19 @@ export default function SessionHistory() {
                 >
                   <div className={cn(
                     "bg-card rounded-lg border p-4 space-y-3",
-                    pathwayMode === 'adult' ? 'border-acls-adult/30' : 'border-acls-pediatric/30'
+                    pathwayMode === 'adult' ? 'border-acls-adult/30' : 'border-acls-pediatric/30',
+                    selectedIds.has(session.id) && 'ring-2 ring-primary'
                   )}>
                     {/* Header */}
-                    <div className="flex items-start justify-between">
-                      <div className="space-y-1">
+                    <div className="flex items-start gap-3">
+                      <Checkbox
+                        checked={selectedIds.has(session.id)}
+                        onCheckedChange={() => toggleSelection(session.id)}
+                        className="mt-1"
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                      <div className="flex-1 flex items-start justify-between">
+                        <div className="space-y-1">
                         <div className="flex items-center gap-2">
                           {/* Show Rhythm badge for bradytachy sessions */}
                           {(sessionType === 'bradytachy' || sessionType === 'bradytachy-arrest') && (
@@ -313,6 +406,7 @@ export default function SessionHistory() {
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
+                      </div>
                       </div>
                     </div>
 
