@@ -23,14 +23,6 @@ export function SinusEvaluationScreen({ session, actions }: SinusEvaluationScree
 
   return (
     <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-3xl mx-auto">
-      {/* Header */}
-      <div className="text-center">
-        <h1 className="text-xl sm:text-2xl font-bold">{t('bradyTachy.pedsSinusVsSVT')}</h1>
-        <p className="text-xs sm:text-sm text-muted-foreground mt-2">
-          {t('bradyTachy.differentiateRhythmDesc')}
-        </p>
-      </div>
-
       {/* Option A: Probable Sinus Tachycardia */}
       <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border overflow-hidden">
         <h3 className="font-bold text-base sm:text-lg break-words mb-3">
@@ -46,13 +38,6 @@ export function SinusEvaluationScreen({ session, actions }: SinusEvaluationScree
             <li>{t('bradyTachy.pedsSinusChildRate')}</li>
           </ul>
         </div>
-
-          <div className="bg-muted rounded p-2 sm:p-3 my-3 text-xs sm:text-sm">
-            <p className="font-medium mb-1">{t('bradyTachy.pedsSinusTreatCause')}</p>
-            <p className="text-xs text-muted-foreground break-words">
-              {t('bradyTachy.searchCausesDesc')}
-            </p>
-          </div>
 
           <Button
             onClick={handleProbableSinus}
@@ -72,15 +57,8 @@ export function SinusEvaluationScreen({ session, actions }: SinusEvaluationScree
             {t('bradyTachy.orCompromiseSuspected')}
           </p>
 
-          <div className="bg-muted rounded p-2 sm:p-3 mb-3 text-xs sm:text-sm">
-            <p className="text-xs text-muted-foreground break-words">
-              {t('bradyTachy.pedsSVTContinue')}
-            </p>
-          </div>
-
           <Button
             onClick={handleConcerningRhythm}
-            variant="outline"
             className="w-full min-h-11 sm:min-h-12 h-auto px-4 py-3 sm:py-3.5 text-sm sm:text-lg font-bold whitespace-normal text-center leading-snug"
           >
             <span className="whitespace-normal break-words">
