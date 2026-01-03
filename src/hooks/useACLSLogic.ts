@@ -222,6 +222,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
               pregnancyActive: sessionSnapshot.pregnancyActive,
               pregnancyCauses: sessionSnapshot.pregnancyActive ? sessionSnapshot.pregnancyCauses : undefined,
               pregnancyInterventions: sessionSnapshot.pregnancyActive ? sessionSnapshot.pregnancyInterventions : undefined,
+              bradyTachyStartTime: sessionSnapshot.bradyTachyStartTime,
             };
 
             await saveSession(storedSession);
@@ -599,6 +600,11 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       ? (timerState.totalCPRTime / timerState.totalElapsed) * 100
       : 0;
     
+    // Check if this session started from bradytachy (contains a switch marker)
+    const hasBradyTachySwitch = session.interventions.some(
+      i => i.type === 'note' && i.details.toLowerCase().includes('switched') && i.details.toLowerCase().includes('arrest')
+    );
+
     // Convert current session to StoredSession format for PDF export
     const storedSession: StoredSession = {
       id: session.id,
@@ -614,7 +620,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       epinephrineCount: session.epinephrineCount,
       amiodaroneCount: session.amiodaroneCount,
       lidocaineCount: session.lidocaineCount,
-      sessionType: 'cardiac-arrest',
+      sessionType: hasBradyTachySwitch ? 'bradytachy-arrest' : 'cardiac-arrest',
       pathwayMode: session.pathwayMode,
       patientWeight: session.patientWeight,
       interventions: session.interventions.map(i => ({
@@ -635,6 +641,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       pregnancyActive: session.pregnancyActive,
       pregnancyCauses: session.pregnancyActive ? session.pregnancyCauses : undefined,
       pregnancyInterventions: session.pregnancyActive ? session.pregnancyInterventions : undefined,
+      bradyTachyStartTime: session.bradyTachyStartTime,
     };
     
     exportSessionToPDF(storedSession);

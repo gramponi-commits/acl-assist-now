@@ -133,8 +133,10 @@ export default function SessionHistory() {
 
   const formatTime = (timestamp: number, referenceTime: number) => {
     const elapsed = timestamp - referenceTime;
-    const min = Math.floor(elapsed / 60000);
-    const sec = Math.floor((elapsed % 60000) / 1000);
+    // Ensure non-negative time - if negative, show 00:00
+    const safeElapsed = Math.max(0, elapsed);
+    const min = Math.floor(safeElapsed / 60000);
+    const sec = Math.floor((safeElapsed % 60000) / 1000);
     return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
   };
 
