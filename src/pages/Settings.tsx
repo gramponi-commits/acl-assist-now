@@ -48,42 +48,42 @@ export default function Settings() {
       </div>
 
       <ScrollArea className="h-[calc(100vh-73px)]">
-        <div className="p-4 space-y-6 max-w-2xl mx-auto">
+        <div className="p-2 sm:p-4 space-y-4 sm:space-y-6 max-w-2xl mx-auto">
           {/* Theme Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+          <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                 {settings.theme === 'dark' ? (
-                  <Moon className="h-5 w-5 text-primary" />
+                  <Moon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                 ) : (
-                  <Sun className="h-5 w-5 text-primary" />
+                  <Sun className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                 )}
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.theme')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.themeDesc')}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">{t('settings.themeDesc')}</p>
               </div>
               <Switch
                 checked={settings.theme === 'dark'}
                 onCheckedChange={handleThemeToggle}
               />
             </div>
-            <div className="mt-2 pl-[52px]">
-              <span className="text-sm text-muted-foreground">
+            <div className="mt-2 pl-[42px] sm:pl-[52px]">
+              <span className="text-xs sm:text-sm text-muted-foreground">
                 {settings.theme === 'dark' ? t('settings.darkMode') : t('settings.lightMode')}
               </span>
             </div>
           </div>
 
           {/* Audio Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Volume2 className="h-5 w-5 text-primary" />
+          <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3 mb-4">
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Volume2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.audio')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.audioDesc')}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">{t('settings.audioDesc')}</p>
               </div>
               <Switch
                 checked={settings.soundEnabled}
@@ -93,14 +93,14 @@ export default function Settings() {
           </div>
 
           {/* Voice Announcements Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Mic className="h-5 w-5 text-primary" />
+          <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Mic className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.voice')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.voiceDesc')}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">{t('settings.voiceDesc')}</p>
               </div>
               <Switch
                 checked={settings.voiceAnnouncementsEnabled}
@@ -110,14 +110,14 @@ export default function Settings() {
           </div>
 
           {/* Vibration Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Vibrate className="h-5 w-5 text-primary" />
+          <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Vibrate className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.vibration')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.vibrationDesc')}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">{t('settings.vibrationDesc')}</p>
               </div>
               <Switch
                 checked={settings.vibrationEnabled}
@@ -127,14 +127,14 @@ export default function Settings() {
           </div>
 
           {/* Metronome Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+          <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3 mb-2">
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <Music className="h-5 w-5 text-primary" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.metronome')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.metronomeDesc')}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">{t('settings.metronomeDesc')}</p>
               </div>
               <Switch
                 checked={settings.metronomeEnabled}
@@ -142,7 +142,7 @@ export default function Settings() {
               />
             </div>
             {settings.metronomeEnabled && (
-              <div className="mt-4 pl-[52px] space-y-3">
+              <div className="mt-4 pl-[42px] sm:pl-[52px] space-y-3">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">{t('settings.metronomeBPM')}:</span>
                   <span className="font-mono font-bold text-foreground text-lg">{settings.metronomeBPM}</span>
@@ -165,20 +165,20 @@ export default function Settings() {
           </div>
 
           {/* Adult Defibrillator Energy Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-acls-critical/10 flex items-center justify-center">
+          <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-acls-critical/10 flex items-center justify-center flex-shrink-0">
                 <Zap className="h-5 w-5 text-acls-critical" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.adultDefibrillator')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.adultDefibrillatorDesc')}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">{t('settings.adultDefibrillatorDesc')}</p>
               </div>
               <Select
                 value={String(settings.adultDefibrillatorEnergy)}
                 onValueChange={(val) => updateSetting('adultDefibrillatorEnergy', Number(val) as AdultDefibrillatorEnergy)}
               >
-                <SelectTrigger className="w-[100px]">
+                <SelectTrigger className="w-auto flex-shrink-0">
                   <SelectValue>{settings.adultDefibrillatorEnergy}J</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -193,20 +193,20 @@ export default function Settings() {
           </div>
 
           {/* Epinephrine Interval Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Clock className="h-5 w-5 text-primary" />
+          <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.epinephrineInterval')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.epinephrineIntervalDesc')}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">{t('settings.epinephrineIntervalDesc')}</p>
               </div>
               <Select
                 value={String(settings.epinephrineIntervalMinutes)}
                 onValueChange={(val) => updateSetting('epinephrineIntervalMinutes', Number(val) as EpinephrineIntervalMinutes)}
               >
-                <SelectTrigger className="w-[120px]">
+                <SelectTrigger className="w-auto flex-shrink-0">
                   <SelectValue>{settings.epinephrineIntervalMinutes} {t('settings.minutes')}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -221,39 +221,39 @@ export default function Settings() {
           </div>
 
           {/* Antiarrhythmic Preference Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Pill className="h-5 w-5 text-primary" />
+          <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Pill className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.antiarrhythmic')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.antiarrhythmicDesc')}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">{t('settings.antiarrhythmicDesc')}</p>
               </div>
               <Switch
                 checked={settings.preferLidocaine}
                 onCheckedChange={(checked) => updateSetting('preferLidocaine', checked)}
               />
             </div>
-            <div className="mt-2 pl-[52px]">
-              <span className="text-sm text-muted-foreground">
+            <div className="mt-2 pl-[42px] sm:pl-[52px]">
+              <span className="text-xs sm:text-sm text-muted-foreground">
                 {settings.preferLidocaine ? t('settings.usingLidocaine') : t('settings.usingAmiodarone')}
               </span>
             </div>
           </div>
 
           {/* Language Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Globe className="h-5 w-5 text-primary" />
+          <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Globe className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.language')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.languageDesc')}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">{t('settings.languageDesc')}</p>
               </div>
               <Select value={i18n.language} onValueChange={handleLanguageChange}>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-auto flex-shrink-0">
                   <SelectValue>
                     {languages.find(l => l.code === i18n.language)?.flag}{' '}
                     {languages.find(l => l.code === i18n.language)?.nativeName}
