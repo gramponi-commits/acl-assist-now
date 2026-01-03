@@ -207,60 +207,61 @@ export function useBradyTachyLogic() {
 
   // Treatment actions
   const giveAtropine = useCallback((dose: string, doseNumber: number) => {
-    addIntervention('atropine', t('bradyTachy.treatmentGiven', { treatment: 'Atropine' }), dose, doseNumber, dose, 'bradyTachy.treatmentGiven', { treatment: 'Atropine' });
+    addIntervention('atropine', t('bradyTachy.atropineGiven'), dose, doseNumber, dose, 'bradyTachy.atropineGiven');
   }, [addIntervention, t]);
 
   const giveAdenosine = useCallback((dose: string, doseNumber: 1 | 2) => {
-    addIntervention('adenosine', t('bradyTachy.treatmentGiven', { treatment: `Adenosine (dose ${doseNumber})` }), dose, doseNumber, dose, 'bradyTachy.treatmentGiven', { treatment: `Adenosine (dose ${doseNumber})` });
+    const translationKey = doseNumber === 1 ? 'bradyTachy.adenosineDose1Given' : 'bradyTachy.adenosineDose2Given';
+    addIntervention('adenosine', t(translationKey), dose, doseNumber, dose, translationKey);
   }, [addIntervention, t]);
 
   const giveCardioversion = useCallback((energy: string) => {
-    addIntervention('cardioversion', t('bradyTachy.treatmentGiven', { treatment: 'Cardioversion' }), energy, undefined, energy, 'bradyTachy.treatmentGiven', { treatment: 'Cardioversion' });
+    addIntervention('cardioversion', t('bradyTachy.cardioversionGiven'), energy, undefined, energy, 'bradyTachy.cardioversionGiven');
   }, [addIntervention, t]);
 
   const giveDopamine = useCallback((dose: string) => {
-    addIntervention('dopamine', t('bradyTachy.treatmentGiven', { treatment: 'Dopamine infusion' }), dose, undefined, dose, 'bradyTachy.treatmentGiven', { treatment: 'Dopamine infusion' });
+    addIntervention('dopamine', t('bradyTachy.dopamineGiven'), dose, undefined, dose, 'bradyTachy.dopamineGiven');
   }, [addIntervention, t]);
 
   const giveEpinephrineInfusion = useCallback((dose: string) => {
-    addIntervention('epi_infusion', t('bradyTachy.treatmentGiven', { treatment: 'Epinephrine infusion' }), dose, undefined, dose, 'bradyTachy.treatmentGiven', { treatment: 'Epinephrine infusion' });
+    addIntervention('epi_infusion', t('bradyTachy.epiInfusionGiven'), dose, undefined, dose, 'bradyTachy.epiInfusionGiven');
   }, [addIntervention, t]);
 
   const giveBetaBlocker = useCallback(() => {
-    addIntervention('beta_blocker', t('bradyTachy.treatmentGiven', { treatment: 'Beta-blocker' }), undefined, undefined, undefined, 'bradyTachy.treatmentGiven', { treatment: 'Beta-blocker' });
+    addIntervention('beta_blocker', t('bradyTachy.betaBlockerGiven'), undefined, undefined, undefined, 'bradyTachy.betaBlockerGiven');
   }, [addIntervention, t]);
 
   const giveCalciumBlocker = useCallback(() => {
-    addIntervention('calcium_blocker', t('bradyTachy.treatmentGiven', { treatment: 'Calcium channel blocker' }), undefined, undefined, undefined, 'bradyTachy.treatmentGiven', { treatment: 'Calcium channel blocker' });
+    addIntervention('calcium_blocker', t('bradyTachy.calciumBlockerGiven'), undefined, undefined, undefined, 'bradyTachy.calciumBlockerGiven');
   }, [addIntervention, t]);
 
   const giveProcainamide = useCallback((dose: string) => {
-    addIntervention('procainamide', t('bradyTachy.treatmentGiven', { treatment: 'Procainamide' }), dose, undefined, dose, 'bradyTachy.treatmentGiven', { treatment: 'Procainamide' });
+    addIntervention('procainamide', t('bradyTachy.procainamideGiven'), dose, undefined, dose, 'bradyTachy.procainamideGiven');
   }, [addIntervention, t]);
 
   const giveAmiodarone = useCallback((dose: string) => {
-    addIntervention('amiodarone', t('bradyTachy.treatmentGiven', { treatment: 'Amiodarone' }), dose, undefined, dose, 'bradyTachy.treatmentGiven', { treatment: 'Amiodarone' });
+    addIntervention('amiodarone', t('bradyTachy.amiodaroneBTGiven'), dose, undefined, dose, 'bradyTachy.amiodaroneBTGiven');
   }, [addIntervention, t]);
 
   const performVagalManeuver = useCallback(() => {
-    addIntervention('vagal_maneuver', t('bradyTachy.treatmentGiven', { treatment: 'Vagal maneuvers' }), undefined, undefined, undefined, 'bradyTachy.treatmentGiven', { treatment: 'Vagal maneuvers' });
+    addIntervention('vagal_maneuver', t('bradyTachy.vagalManeuverGiven'), undefined, undefined, undefined, 'bradyTachy.vagalManeuverGiven');
   }, [addIntervention, t]);
 
   // Specific medication actions for second-line narrow-complex tachycardia
   const giveDiltiazem = useCallback((dose: string) => {
-    addIntervention('diltiazem', t('bradyTachy.treatmentGiven', { treatment: 'Diltiazem' }), dose, undefined, dose, 'bradyTachy.treatmentGiven', { treatment: 'Diltiazem' });
+    addIntervention('diltiazem', t('bradyTachy.diltiazemGiven'), dose, undefined, dose, 'bradyTachy.diltiazemGiven');
   }, [addIntervention, t]);
 
   const giveVerapamil = useCallback((dose: string) => {
-    addIntervention('verapamil', t('bradyTachy.treatmentGiven', { treatment: 'Verapamil' }), dose, undefined, dose, 'bradyTachy.treatmentGiven', { treatment: 'Verapamil' });
+    addIntervention('verapamil', t('bradyTachy.verapamilGiven'), dose, undefined, dose, 'bradyTachy.verapamilGiven');
   }, [addIntervention, t]);
 
   const giveMetoprolol = useCallback((dose: string) => {
-    addIntervention('metoprolol', t('bradyTachy.treatmentGiven', { treatment: 'Metoprolol' }), dose, undefined, dose, 'bradyTachy.treatmentGiven', { treatment: 'Metoprolol' });
+    addIntervention('metoprolol', t('bradyTachy.metoprololGiven'), dose, undefined, dose, 'bradyTachy.metoprololGiven');
   }, [addIntervention, t]);
 
   const giveEsmolol = useCallback((dose: string) => {
-    addIntervention('esmolol', t('bradyTachy.treatmentGiven', { treatment: 'Esmolol' }), dose, undefined, dose, 'bradyTachy.treatmentGiven', { treatment: 'Esmolol' });
+    addIntervention('esmolol', t('bradyTachy.esmololGiven'), dose, undefined, dose, 'bradyTachy.esmololGiven');
   }, [addIntervention, t]);
 
   // Set cardioversion rhythm type
@@ -319,7 +320,7 @@ export function useBradyTachyLogic() {
     
     // Update the session state
     setSession(finalSession);
-    addIntervention('switch_to_arrest', t('bradyTachy.switchedToArrest'));
+    addIntervention('switch_to_arrest', t('bradyTachy.switchedToArrest'), undefined, undefined, undefined, 'bradyTachy.switchedToArrest');
     
     // Note: We do NOT clear the session here - it will be cleared after merging in CodeScreen
     return true; // Signal to parent to switch to arrest mode
