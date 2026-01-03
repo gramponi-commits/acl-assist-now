@@ -48,7 +48,7 @@ export default function Settings() {
       </div>
 
       <ScrollArea className="h-[calc(100vh-73px)]">
-        <div className="p-4 space-y-6 max-w-2xl mx-auto w-full box-border">
+        <div className="px-2 py-4 sm:px-4 space-y-6 max-w-2xl mx-auto w-full box-border">
           {/* Theme Section */}
           <div className="bg-card rounded-lg border border-border p-4 overflow-hidden">
             <div className="flex items-center gap-3">
