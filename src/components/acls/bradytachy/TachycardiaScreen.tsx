@@ -331,7 +331,6 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
               </Button>
               <Button
                 onClick={() => actions.setQRSWidth('wide')}
-                variant="outline"
                 className="h-16 text-lg font-bold"
               >
                 {t('bradyTachy.tachyWideQRSPath')} (≥0.12 s)
