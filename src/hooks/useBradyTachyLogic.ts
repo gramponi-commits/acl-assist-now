@@ -138,7 +138,8 @@ export function useBradyTachyLogic() {
         qrsWidth,
       },
     }));
-    addIntervention('assessment', t('bradyTachy.assessmentLogged', { assessment: `QRS: ${qrsWidth}` }), undefined, undefined, undefined, 'bradyTachy.assessmentLogged', { assessment: `QRS: ${qrsWidth}` });
+    const translationKey = qrsWidth === 'wide' ? 'bradyTachy.qrsWide' : 'bradyTachy.qrsNarrow';
+    addIntervention('assessment', t(translationKey), qrsWidth, undefined, undefined, translationKey);
   }, [addIntervention, t]);
 
   // Set rhythm regularity
@@ -150,7 +151,8 @@ export function useBradyTachyLogic() {
         rhythmRegular: regular,
       },
     }));
-    addIntervention('assessment', t('bradyTachy.assessmentLogged', { assessment: `Rhythm: ${regular}` }), undefined, undefined, undefined, 'bradyTachy.assessmentLogged', { assessment: `Rhythm: ${regular}` });
+    const translationKey = regular === 'regular' ? 'bradyTachy.rhythmRegular' : 'bradyTachy.rhythmIrregular';
+    addIntervention('assessment', t(translationKey), regular, undefined, undefined, translationKey);
   }, [addIntervention, t]);
 
   // Set monomorphic status
@@ -162,7 +164,8 @@ export function useBradyTachyLogic() {
         monomorphic,
       },
     }));
-    addIntervention('assessment', t('bradyTachy.assessmentLogged', { assessment: `Monomorphic: ${monomorphic ? 'yes' : 'no'}` }), undefined, undefined, undefined, 'bradyTachy.assessmentLogged', { assessment: `Monomorphic: ${monomorphic ? 'yes' : 'no'}` });
+    const translationKey = monomorphic ? 'bradyTachy.monomorphicYes' : 'bradyTachy.monomorphicNo';
+    addIntervention('assessment', t(translationKey), undefined, undefined, undefined, translationKey);
   }, [addIntervention, t]);
 
   // Set pediatric sinus vs SVT choice
@@ -177,7 +180,8 @@ export function useBradyTachyLogic() {
         ...(choice === 'probable_svt' && criteria ? { svtCriteria: criteria as { pWavesAbnormal: boolean; fixedRR: boolean; inappropriateRate: boolean; abruptRateChange: boolean } } : {}),
       },
     }));
-    addIntervention('decision', t('bradyTachy.decisionLogged', { decision: `Pediatric rhythm: ${choice}` }), undefined, undefined, undefined, 'bradyTachy.decisionLogged', { decision: `Pediatric rhythm: ${choice}` });
+    const translationKey = choice === 'probable_sinus' ? 'bradyTachy.pedsSinusTachyIdentified' : 'bradyTachy.pedsSVTIdentified';
+    addIntervention('decision', t(translationKey), choice, undefined, undefined, translationKey);
   }, [addIntervention, t]);
 
   // New: Select pediatric sinus tachycardia (treat cause pathway)
@@ -189,7 +193,7 @@ export function useBradyTachyLogic() {
         pedsSinusVsSVTChoice: 'probable_sinus',
       },
     }));
-    addIntervention('decision', t('bradyTachy.decisionLogged', { decision: 'Pediatric sinus tachycardia identified - treat cause' }), undefined, undefined, undefined, 'bradyTachy.decisionLogged', { decision: 'Pediatric sinus tachycardia identified - treat cause' });
+    addIntervention('decision', t('bradyTachy.pedsSinusTachyIdentified'), undefined, undefined, undefined, 'bradyTachy.pedsSinusTachyIdentified');
   }, [addIntervention, t]);
 
   // New: Advance to compromise assessment phase
@@ -198,7 +202,7 @@ export function useBradyTachyLogic() {
       ...prev,
       phase: 'tachycardia_compromise_assessment',
     }));
-    addIntervention('decision', t('bradyTachy.decisionLogged', { decision: 'Concerning rhythm - proceeding to compromise assessment' }), undefined, undefined, undefined, 'bradyTachy.decisionLogged', { decision: 'Concerning rhythm - proceeding to compromise assessment' });
+    addIntervention('decision', t('bradyTachy.concerningRhythmProceedingToCompromise'), undefined, undefined, undefined, 'bradyTachy.concerningRhythmProceedingToCompromise');
   }, [addIntervention, t]);
 
   // Treatment actions
