@@ -42,30 +42,31 @@ export default function Settings() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <div className="p-4 border-b border-border">
         <h1 className="text-2xl font-bold text-foreground">{t('settings.title')}</h1>
       </div>
 
       <ScrollArea className="h-[calc(100vh-73px)]">
-        <div className="p-4 space-y-6 max-w-2xl mx-auto">
+        <div className="p-4 space-y-6 max-w-2xl mx-auto w-full box-border">
           {/* Theme Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="bg-card rounded-lg border border-border p-4 overflow-hidden">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                 {settings.theme === 'dark' ? (
                   <Moon className="h-5 w-5 text-primary" />
                 ) : (
                   <Sun className="h-5 w-5 text-primary" />
                 )}
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.theme')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.themeDesc')}</p>
+                <p className="text-sm text-muted-foreground truncate">{t('settings.themeDesc')}</p>
               </div>
               <Switch
                 checked={settings.theme === 'dark'}
                 onCheckedChange={handleThemeToggle}
+                className="flex-shrink-0"
               />
             </div>
             <div className="mt-2 pl-[52px]">
@@ -76,69 +77,73 @@ export default function Settings() {
           </div>
 
           {/* Audio Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="bg-card rounded-lg border border-border p-4 overflow-hidden">
             <div className="flex items-center gap-3 mb-4">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <Volume2 className="h-5 w-5 text-primary" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.audio')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.audioDesc')}</p>
+                <p className="text-sm text-muted-foreground truncate">{t('settings.audioDesc')}</p>
               </div>
               <Switch
                 checked={settings.soundEnabled}
                 onCheckedChange={(checked) => updateSetting('soundEnabled', checked)}
+                className="flex-shrink-0"
               />
             </div>
           </div>
 
           {/* Voice Announcements Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="bg-card rounded-lg border border-border p-4 overflow-hidden">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <Mic className="h-5 w-5 text-primary" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.voice')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.voiceDesc')}</p>
+                <p className="text-sm text-muted-foreground truncate">{t('settings.voiceDesc')}</p>
               </div>
               <Switch
                 checked={settings.voiceAnnouncementsEnabled}
                 onCheckedChange={(checked) => updateSetting('voiceAnnouncementsEnabled', checked)}
+                className="flex-shrink-0"
               />
             </div>
           </div>
 
           {/* Vibration Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="bg-card rounded-lg border border-border p-4 overflow-hidden">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <Vibrate className="h-5 w-5 text-primary" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.vibration')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.vibrationDesc')}</p>
+                <p className="text-sm text-muted-foreground truncate">{t('settings.vibrationDesc')}</p>
               </div>
               <Switch
                 checked={settings.vibrationEnabled}
                 onCheckedChange={(checked) => updateSetting('vibrationEnabled', checked)}
+                className="flex-shrink-0"
               />
             </div>
           </div>
 
           {/* Metronome Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="bg-card rounded-lg border border-border p-4 overflow-hidden">
             <div className="flex items-center gap-3 mb-2">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <Music className="h-5 w-5 text-primary" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.metronome')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.metronomeDesc')}</p>
+                <p className="text-sm text-muted-foreground truncate">{t('settings.metronomeDesc')}</p>
               </div>
               <Switch
                 checked={settings.metronomeEnabled}
                 onCheckedChange={(checked) => updateSetting('metronomeEnabled', checked)}
+                className="flex-shrink-0"
               />
             </div>
             {settings.metronomeEnabled && (
@@ -165,20 +170,20 @@ export default function Settings() {
           </div>
 
           {/* Adult Defibrillator Energy Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="bg-card rounded-lg border border-border p-4 overflow-hidden">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-acls-critical/10 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-full bg-acls-critical/10 flex items-center justify-center flex-shrink-0">
                 <Zap className="h-5 w-5 text-acls-critical" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.adultDefibrillator')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.adultDefibrillatorDesc')}</p>
+                <p className="text-sm text-muted-foreground truncate">{t('settings.adultDefibrillatorDesc')}</p>
               </div>
               <Select
                 value={String(settings.adultDefibrillatorEnergy)}
                 onValueChange={(val) => updateSetting('adultDefibrillatorEnergy', Number(val) as AdultDefibrillatorEnergy)}
               >
-                <SelectTrigger className="w-[100px]">
+                <SelectTrigger className="w-[100px] flex-shrink-0">
                   <SelectValue>{settings.adultDefibrillatorEnergy}J</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -193,20 +198,20 @@ export default function Settings() {
           </div>
 
           {/* Epinephrine Interval Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="bg-card rounded-lg border border-border p-4 overflow-hidden">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <Clock className="h-5 w-5 text-primary" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.epinephrineInterval')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.epinephrineIntervalDesc')}</p>
+                <p className="text-sm text-muted-foreground truncate">{t('settings.epinephrineIntervalDesc')}</p>
               </div>
               <Select
                 value={String(settings.epinephrineIntervalMinutes)}
                 onValueChange={(val) => updateSetting('epinephrineIntervalMinutes', Number(val) as EpinephrineIntervalMinutes)}
               >
-                <SelectTrigger className="w-[120px]">
+                <SelectTrigger className="w-[120px] flex-shrink-0">
                   <SelectValue>{settings.epinephrineIntervalMinutes} {t('settings.minutes')}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -221,18 +226,19 @@ export default function Settings() {
           </div>
 
           {/* Antiarrhythmic Preference Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="bg-card rounded-lg border border-border p-4 overflow-hidden">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <Pill className="h-5 w-5 text-primary" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.antiarrhythmic')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.antiarrhythmicDesc')}</p>
+                <p className="text-sm text-muted-foreground truncate">{t('settings.antiarrhythmicDesc')}</p>
               </div>
               <Switch
                 checked={settings.preferLidocaine}
                 onCheckedChange={(checked) => updateSetting('preferLidocaine', checked)}
+                className="flex-shrink-0"
               />
             </div>
             <div className="mt-2 pl-[52px]">
@@ -243,17 +249,17 @@ export default function Settings() {
           </div>
 
           {/* Language Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="bg-card rounded-lg border border-border p-4 overflow-hidden">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <Globe className="h-5 w-5 text-primary" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.language')}</h2>
-                <p className="text-sm text-muted-foreground">{t('settings.languageDesc')}</p>
+                <p className="text-sm text-muted-foreground truncate">{t('settings.languageDesc')}</p>
               </div>
               <Select value={i18n.language} onValueChange={handleLanguageChange}>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-[180px] flex-shrink-0">
                   <SelectValue>
                     {languages.find(l => l.code === i18n.language)?.flag}{' '}
                     {languages.find(l => l.code === i18n.language)?.nativeName}
