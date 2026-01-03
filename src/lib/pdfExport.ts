@@ -14,7 +14,9 @@ declare module 'jspdf' {
 }
 
 const formatTime = (ms: number) => {
-  const totalSec = Math.floor(ms / 1000);
+  // Ensure non-negative time - if negative, show 00:00
+  const safeMs = Math.max(0, ms);
+  const totalSec = Math.floor(safeMs / 1000);
   const min = Math.floor(totalSec / 60);
   const sec = totalSec % 60;
   return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
@@ -386,8 +388,8 @@ function addFooter(pdf: jsPDF, t: (key: string, params?: any) => string): void {
 }
 
 export function exportSessionToPDF(session: StoredSession): void {
-  // Get current language translation function
-  const t = (key: string, params?: any) => i18n.t(key, params);
+  // Get current language translation function - cast to string for PDF use
+  const t = (key: string, params?: any): string => String(i18n.t(key, params));
 
   const pdf = new jsPDF();
   const startDate = new Date(session.startTime);

@@ -110,6 +110,7 @@ export async function saveBradyTachyToHistory(session: StoredBradyTachySession):
       postROSCChecklist: null,
       postROSCVitals: null,
       airwayStatus: 'ambu',
+      bradyTachyStartTime: session.startTime,
     };
     
     await saveSession(historySession);
