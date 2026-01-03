@@ -29,12 +29,6 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
   if (session.phase === 'bradycardia_assessment') {
     return (
       <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-3xl mx-auto">
-        {/* Header */}
-        <div className="text-center">
-          <h1 className="text-xl sm:text-2xl font-bold">{t('bradyTachy.bradycardia')}</h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-1">{t('bradyTachy.assessment')}</p>
-        </div>
-
         {/* Initial Assessment Checklist */}
         <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border">
           <h3 className="font-bold text-base sm:text-lg mb-3">
@@ -101,14 +95,12 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
             <div className="grid grid-cols-1 gap-3 mt-4">
               <Button
                 onClick={() => actions.setStability('unstable')}
-                variant="destructive"
-                className="min-h-14 sm:h-16 h-auto px-4 py-3 text-base sm:text-lg font-bold whitespace-normal text-center leading-snug"
+                className="min-h-14 sm:h-16 h-auto px-4 py-3 text-base sm:text-lg font-bold whitespace-normal text-center leading-snug bg-destructive text-destructive-foreground hover:bg-destructive/90"
               >
                 {t('bradyTachy.compromiseYes')}
               </Button>
               <Button
                 onClick={() => actions.setStability('stable')}
-                variant="outline"
                 className="min-h-14 sm:h-16 h-auto px-4 py-3 text-base sm:text-lg font-bold whitespace-normal text-center leading-snug"
               >
                 {t('bradyTachy.compromiseNo')}
@@ -124,11 +116,6 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
     // No compromise - observe and treat cause
     return (
       <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-3xl mx-auto">
-        <div className="text-center">
-          <h1 className="text-xl sm:text-2xl font-bold">{t('bradyTachy.bradyNoCompromise')}</h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-1">{t('bradyTachy.compromiseNo')}</p>
-        </div>
-
         <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border">
           <h3 className="font-bold text-base sm:text-lg mb-3">
             {t('bradyTachy.treatment')}
@@ -172,11 +159,6 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
   // Unstable - treatment needed
   return (
     <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-w-3xl mx-auto">
-      <div className="text-center">
-        <h1 className="text-xl sm:text-2xl font-bold">{t('bradyTachy.bradyCompromiseYes')}</h1>
-        <p className="text-xs sm:text-sm text-muted-foreground mt-1">{t('bradyTachy.compromiseYes')}</p>
-      </div>
-
         {/* Pediatric Treatment */}
         {isPediatric ? (
           <>
@@ -253,14 +235,13 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
                 {/* Pacing */}
                 <div>
                   <p className="text-sm font-medium mb-2">{t('bradyTachy.bradyPacing')}</p>
-                  <p className="text-xs text-muted-foreground mb-2 italic">
+                  <p className="text-xs text-muted-foreground mb-2">
                     {t('bradyTachy.bradyPacingInstructions')}
                   </p>
                   <Button
                     onClick={() => {
                       actions.addIntervention('note', t('bradyTachy.pacingInitiated'));
                     }}
-                    variant="outline"
                     className="w-full h-10"
                   >
                     {t('bradyTachy.givePacing')}
@@ -300,17 +281,6 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
                     {t('bradyTachy.giveEpiInfusion')}
                   </Button>
                 </div>
-              </div>
-            </div>
-
-            {/* Consider */}
-            <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border">
-              <h3 className="font-bold text-base sm:text-lg mb-2">
-                {t('bradyTachy.bradyConsider')}
-              </h3>
-              <div className="space-y-1 text-sm">
-                <p>• {t('bradyTachy.bradyExpertConsult')}</p>
-                <p>• {t('bradyTachy.bradyTransvenousPacing')}</p>
               </div>
             </div>
 

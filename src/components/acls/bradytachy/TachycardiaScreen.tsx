@@ -43,11 +43,6 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
   if (isPediatric && pedsSinusVsSVTChoice === 'probable_sinus') {
     return (
       <div className="p-6 space-y-6 max-w-3xl mx-auto">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold">{t('bradyTachy.pedsSinusTreatCause')}</h1>
-            <p className="text-sm text-muted-foreground mt-1">{t('bradyTachy.pedsProbableSinus')}</p>
-          </div>
-
           <div className="bg-card rounded-lg p-4 border-2 border-border">
             <p className="text-sm">
               {t('bradyTachy.sinusTachyDescription')}
@@ -80,12 +75,6 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
   if (!isPediatric && session.phase === 'tachycardia_assessment') {
     return (
       <div className="p-6 space-y-6 max-w-3xl mx-auto">
-        {/* Header */}
-        <div className="text-center">
-          <h1 className="text-2xl font-bold">{t('bradyTachy.tachycardia')}</h1>
-          <p className="text-sm text-muted-foreground mt-1">{t('bradyTachy.assessment')}</p>
-        </div>
-
         {/* Initial Assessment Checklist */}
         <div className="bg-card rounded-lg p-3 sm:p-4 border-2 border-border">
           <h3 className="font-bold text-base sm:text-lg mb-3">
@@ -147,14 +136,12 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
             <div className="grid grid-cols-1 gap-3 mt-4">
               <Button
                 onClick={() => actions.setStability('unstable')}
-                variant="destructive"
-                className="h-16 text-lg font-bold"
+                className="h-16 text-lg font-bold bg-destructive text-destructive-foreground hover:bg-destructive/90"
               >
                 {t('bradyTachy.tachyUnstable')}
               </Button>
               <Button
                 onClick={() => actions.setStability('stable')}
-                variant="outline"
                 className="h-16 text-lg font-bold"
               >
                 {t('bradyTachy.tachyStable')}
@@ -169,11 +156,6 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
   if (stability === 'unstable') {
     return (
       <div className="p-6 space-y-6 max-w-3xl mx-auto">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold">{t('bradyTachy.treatment')}</h1>
-            <p className="text-sm text-muted-foreground mt-1">{t('bradyTachy.tachyUnstable')}</p>
-          </div>
-
           {/* SYNC Mode Reminder Banner */}
           {showSyncReminder && (
             <Alert className="border-red-600 bg-red-600/10">
@@ -196,36 +178,31 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
               <div className="space-y-2">
                 <Button
                   onClick={() => actions.setCardioversionRhythmType('afib')}
-                  variant="outline"
                   className="w-full h-12 justify-start"
                 >
                   {t('bradyTachy.rhythmAtrialFib')} - 200 J
                 </Button>
                 <Button
                   onClick={() => actions.setCardioversionRhythmType('aflutter')}
-                  variant="outline"
                   className="w-full h-12 justify-start"
                 >
                   {t('bradyTachy.rhythmAtrialFlutter')} - 200 J
                 </Button>
                 <Button
                   onClick={() => actions.setCardioversionRhythmType('narrow')}
-                  variant="outline"
                   className="w-full h-12 justify-start"
                 >
                   {t('bradyTachy.rhythmNarrowComplex')} - 100 J
                 </Button>
                 <Button
                   onClick={() => actions.setCardioversionRhythmType('monomorphic_vt')}
-                  variant="outline"
                   className="w-full h-12 justify-start"
                 >
                   {t('bradyTachy.rhythmMonomorphicVT')} - 100 J
                 </Button>
                 <Button
                   onClick={() => actions.setCardioversionRhythmType('polymorphic_vt')}
-                  variant="destructive"
-                  className="w-full h-12 justify-start"
+                  className="w-full h-12 justify-start bg-destructive text-destructive-foreground hover:bg-destructive/90"
                 >
                   {t('bradyTachy.rhythmPolymorphicVT')}
                 </Button>
@@ -277,7 +254,6 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
                         const energy = calculatePedsTachyCardioversion(weightKg, 2);
                         actions.giveCardioversion(energy.display);
                       }}
-                      variant="outline"
                       className="w-full h-12"
                     >
                       {t('bradyTachy.giveCardioversion')} (Higher) - {calculatePedsTachyCardioversion(weightKg, 2).display}
@@ -305,8 +281,7 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
                       onSwitchToArrest();
                     }, 100);
                   }}
-                  variant="destructive"
-                  className="w-full h-12 mt-3"
+                  className="w-full h-12 mt-3 bg-destructive text-destructive-foreground hover:bg-destructive/90"
                 >
                   {t('bradyTachy.deliverDefibrillation')}
                 </Button>
@@ -343,11 +318,6 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
   if (qrsWidth === null) {
     return (
       <div className="p-6 space-y-6 max-w-3xl mx-auto">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold">{t('bradyTachy.tachyWideQRS')}</h1>
-            <p className="text-sm text-muted-foreground mt-1">{t('bradyTachy.tachyStable')}</p>
-          </div>
-
           <div className="bg-card rounded-lg p-4 border-2 border-border">
             <p className="text-sm text-muted-foreground mb-4">
               {t('bradyTachy.qrsWidthDesc')}
@@ -376,17 +346,11 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
   if (qrsWidth === 'narrow') {
     return (
       <div className="p-4 md:p-6 space-y-4 md:space-y-6 max-w-3xl mx-auto">
-          <div className="text-center">
-            <h1 className="text-xl md:text-2xl font-bold">{t('bradyTachy.treatment')}</h1>
-            <p className="text-sm text-muted-foreground mt-1">{t('bradyTachy.tachyNarrowQRS')}</p>
-          </div>
-
           {/* Vagal Maneuvers */}
           <div className="bg-card rounded-lg p-3 md:p-4 border-2 border-border">
             <h3 className="font-bold text-base md:text-lg mb-2 break-words">{t('bradyTachy.tachyNarrowVagal')}</h3>
             <Button
               onClick={() => actions.performVagalManeuver()}
-              variant="outline"
               className="w-full h-12 text-xs md:text-sm"
             >
               {t('bradyTachy.performVagal')}
@@ -580,11 +544,6 @@ export function TachycardiaScreen({ session, actions, onSwitchToArrest }: Tachyc
   // Wide QRS treatment (adult only - pediatric wouldn't typically reach here)
   return (
     <div className="p-4 md:p-6 space-y-4 md:space-y-6 max-w-3xl mx-auto">
-        <div className="text-center">
-          <h1 className="text-xl md:text-2xl font-bold">{t('bradyTachy.treatment')}</h1>
-          <p className="text-sm text-muted-foreground mt-1">{t('bradyTachy.tachyWideQRSPath')}</p>
-        </div>
-
         {/* Adenosine (only if regular and monomorphic) */}
         <div className="bg-card rounded-lg p-3 md:p-4 border-2 border-border">
           <h3 className="font-bold text-base md:text-lg mb-2 break-words">{t('bradyTachy.tachyWideAdenosine')}</h3>
