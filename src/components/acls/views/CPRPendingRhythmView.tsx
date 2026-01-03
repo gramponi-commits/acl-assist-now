@@ -25,6 +25,7 @@ interface CPRPendingRhythmViewProps {
   hsAndTs: HsAndTsState;
   interventions: Intervention[];
   startTime: number | null;
+  bradyTachyStartTime?: number | null;
   pregnancyActive?: boolean;
   pregnancyCauses?: PregnancyCauses;
   pregnancyInterventions?: PregnancyInterventions;
@@ -62,6 +63,7 @@ export const CPRPendingRhythmView = memo<CPRPendingRhythmViewProps>(({
   hsAndTs,
   interventions,
   startTime,
+  bradyTachyStartTime,
   pregnancyActive,
   pregnancyCauses,
   pregnancyInterventions,
@@ -175,6 +177,7 @@ export const CPRPendingRhythmView = memo<CPRPendingRhythmViewProps>(({
       <CodeTimeline
         interventions={interventions}
         startTime={startTime}
+        bradyTachyStartTime={bradyTachyStartTime}
       />
 
       {/* Session Controls - End Code Options */}

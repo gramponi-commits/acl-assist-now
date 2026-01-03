@@ -106,8 +106,10 @@ export default function SessionHistory() {
     return `${min}:${sec.toString().padStart(2, '0')}`;
   };
 
-  const formatTime = (timestamp: number, startTime: number) => {
-    const elapsed = timestamp - startTime;
+  const formatTime = (timestamp: number, startTime: number, bradyTachyStartTime?: number | null) => {
+    // Use bradyTachyStartTime if present and earlier than startTime
+    const referenceTime = bradyTachyStartTime && bradyTachyStartTime < startTime ? bradyTachyStartTime : startTime;
+    const elapsed = timestamp - referenceTime;
     const min = Math.floor(elapsed / 60000);
     const sec = Math.floor((elapsed % 60000) / 1000);
     return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
@@ -484,7 +486,7 @@ export default function SessionHistory() {
                           <div className="flex flex-wrap gap-2">
                             {session.etco2Readings.map((reading, idx) => (
                               <Badge key={idx} variant="secondary" className="font-mono">
-                                {formatTime(reading.timestamp, session.startTime)}: {reading.value} mmHg
+                                {formatTime(reading.timestamp, session.startTime, session.bradyTachyStartTime)}: {reading.value} mmHg
                               </Badge>
                             ))}
                           </div>
@@ -596,7 +598,7 @@ export default function SessionHistory() {
                               return (
                                 <div key={idx} className="flex items-start gap-2 text-xs">
                                   <span className="font-mono text-muted-foreground whitespace-nowrap">
-                                    {formatTime(intervention.timestamp, session.startTime)}
+                                    {formatTime(intervention.timestamp, session.startTime, session.bradyTachyStartTime)}
                                   </span>
                                   <span className="text-foreground">{displayText}</span>
                                 </div>

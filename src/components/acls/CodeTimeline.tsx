@@ -9,14 +9,17 @@ import { cn } from '@/lib/utils';
 interface CodeTimelineProps {
   interventions: Intervention[];
   startTime: number;
+  bradyTachyStartTime?: number | null;
 }
 
-function formatTimestamp(timestamp: number, startTime: number): string {
-  const elapsed = Math.floor((timestamp - startTime) / 1000);
+function formatTimestamp(timestamp: number, startTime: number, bradyTachyStartTime?: number | null): string {
+  // Use bradyTachyStartTime if present and earlier than startTime
+  const referenceTime = bradyTachyStartTime && bradyTachyStartTime < startTime ? bradyTachyStartTime : startTime;
+  const elapsed = Math.floor((timestamp - referenceTime) / 1000);
   const hours = Math.floor(elapsed / 3600);
   const minutes = Math.floor((elapsed % 3600) / 60);
   const seconds = elapsed % 60;
-  
+
   if (hours > 0) {
     return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }
@@ -62,7 +65,7 @@ function getInterventionIcon(type: Intervention['type']) {
   }
 }
 
-export function CodeTimeline({ interventions, startTime }: CodeTimelineProps) {
+export function CodeTimeline({ interventions, startTime, bradyTachyStartTime }: CodeTimelineProps) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(true);
   const sortedInterventions = [...interventions].sort((a, b) => b.timestamp - a.timestamp);
@@ -82,7 +85,7 @@ export function CodeTimeline({ interventions, startTime }: CodeTimelineProps) {
           )} />
         </div>
       </CollapsibleTrigger>
-      
+
       <CollapsibleContent>
         <ScrollArea className="h-48 mt-2 rounded-lg border border-border bg-card">
           <div className="p-3 space-y-2">
@@ -102,7 +105,7 @@ export function CodeTimeline({ interventions, startTime }: CodeTimelineProps) {
                     className="flex items-start gap-3 p-2 rounded bg-muted/30"
                   >
                     <div className="font-mono text-xs text-muted-foreground whitespace-nowrap pt-0.5">
-                      {formatTimestamp(intervention.timestamp, startTime)}
+                      {formatTimestamp(intervention.timestamp, startTime, bradyTachyStartTime)}
                     </div>
                     <div className="pt-0.5">
                       {getInterventionIcon(intervention.type)}

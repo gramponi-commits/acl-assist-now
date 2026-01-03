@@ -311,7 +311,7 @@ export function CodeScreen() {
 
     // Import brady/tachy interventions BEFORE starting CPR to preserve timeline
     if (bradyTachySession?.interventions && bradyTachySession.interventions.length > 0) {
-      actions.importInterventions(bradyTachySession.interventions);
+      actions.importInterventions(bradyTachySession.interventions, bradyTachySession.startTime);
     }
 
     clearBradyTachySession();
@@ -408,6 +408,7 @@ export function CodeScreen() {
                 hsAndTs={session.hsAndTs}
                 interventions={session.interventions}
                 startTime={session.startTime}
+                bradyTachyStartTime={session.bradyTachyStartTime}
                 pregnancyActive={session.pregnancyActive}
                 pregnancyCauses={session.pregnancyCauses}
                 pregnancyInterventions={session.pregnancyInterventions}
@@ -444,6 +445,7 @@ export function CodeScreen() {
                 hsAndTs={session.hsAndTs}
                 interventions={session.interventions}
                 startTime={session.startTime}
+                bradyTachyStartTime={session.bradyTachyStartTime}
                 pregnancyActive={session.pregnancyActive}
                 pregnancyCauses={session.pregnancyCauses}
                 pregnancyInterventions={session.pregnancyInterventions}
@@ -507,7 +509,7 @@ export function CodeScreen() {
             {/* Post-ROSC Screen */}
             {isPostROSC && (
               <>
-                <CodeTimeline interventions={session.interventions} startTime={session.startTime} />
+                <CodeTimeline interventions={session.interventions} startTime={session.startTime} bradyTachyStartTime={session.bradyTachyStartTime} />
                 <PostROSCScreen
                   checklist={session.postROSCChecklist}
                   vitals={session.postROSCVitals}
@@ -524,6 +526,7 @@ export function CodeScreen() {
               <CodeEndedView
                 interventions={session.interventions}
                 startTime={session.startTime}
+                bradyTachyStartTime={session.bradyTachyStartTime}
                 endTime={session.endTime}
                 totalElapsed={timerState.totalElapsed}
                 totalCPRTime={timerState.totalCPRTime}

@@ -158,6 +158,8 @@ export interface ACLSSession {
   pregnancyCauses: PregnancyCauses;
   pregnancyInterventions: PregnancyInterventions;
   pregnancyStartTime: number | null;
+  // BradyTachy-specific field (for combined sessions)
+  bradyTachyStartTime: number | null;
 }
 
 export interface ACLSConfig {
@@ -252,6 +254,7 @@ export function createInitialSession(): ACLSSession {
     pregnancyCauses: { ...DEFAULT_PREGNANCY_CAUSES },
     pregnancyInterventions: { ...DEFAULT_PREGNANCY_INTERVENTIONS },
     pregnancyStartTime: null,
+    bradyTachyStartTime: null,
   };
 }
 
