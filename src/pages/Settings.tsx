@@ -52,11 +52,11 @@ export default function Settings() {
           {/* Theme Section */}
           <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                 {settings.theme === 'dark' ? (
-                  <Moon className="h-5 w-5 text-primary" />
+                  <Moon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                 ) : (
-                  <Sun className="h-5 w-5 text-primary" />
+                  <Sun className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                 )}
               </div>
               <div className="flex-1 min-w-0">
@@ -78,8 +78,8 @@ export default function Settings() {
           {/* Audio Section */}
           <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
             <div className="flex items-center gap-2 sm:gap-3 mb-4">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <Volume2 className="h-5 w-5 text-primary" />
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Volume2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
               <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.audio')}</h2>
@@ -95,8 +95,8 @@ export default function Settings() {
           {/* Voice Announcements Section */}
           <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <Mic className="h-5 w-5 text-primary" />
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Mic className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
               <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.voice')}</h2>
@@ -112,8 +112,8 @@ export default function Settings() {
           {/* Vibration Section */}
           <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <Vibrate className="h-5 w-5 text-primary" />
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Vibrate className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
               <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.vibration')}</h2>
@@ -129,7 +129,7 @@ export default function Settings() {
           {/* Metronome Section */}
           <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
             <div className="flex items-center gap-2 sm:gap-3 mb-2">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <Music className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1 min-w-0">
@@ -167,7 +167,7 @@ export default function Settings() {
           {/* Adult Defibrillator Energy Section */}
           <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="h-10 w-10 rounded-full bg-acls-critical/10 flex items-center justify-center flex-shrink-0">
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-acls-critical/10 flex items-center justify-center flex-shrink-0">
                 <Zap className="h-5 w-5 text-acls-critical" />
               </div>
               <div className="flex-1 min-w-0">
@@ -195,8 +195,8 @@ export default function Settings() {
           {/* Epinephrine Interval Section */}
           <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <Clock className="h-5 w-5 text-primary" />
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
               <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.epinephrineInterval')}</h2>
@@ -223,8 +223,8 @@ export default function Settings() {
           {/* Antiarrhythmic Preference Section */}
           <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <Pill className="h-5 w-5 text-primary" />
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Pill className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
               <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.antiarrhythmic')}</h2>
@@ -245,8 +245,8 @@ export default function Settings() {
           {/* Language Section */}
           <div className="bg-card rounded-lg border border-border p-3 sm:p-4">
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <Globe className="h-5 w-5 text-primary" />
+              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Globe className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               </div>
               <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.language')}</h2>
