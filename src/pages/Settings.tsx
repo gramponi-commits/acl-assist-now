@@ -167,10 +167,10 @@ export default function Settings() {
           {/* Adult Defibrillator Energy Section */}
           <div className="bg-card rounded-lg border border-border p-4">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-acls-critical/10 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-full bg-acls-critical/10 flex items-center justify-center flex-shrink-0">
                 <Zap className="h-5 w-5 text-acls-critical" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.adultDefibrillator')}</h2>
                 <p className="text-sm text-muted-foreground">{t('settings.adultDefibrillatorDesc')}</p>
               </div>
@@ -178,7 +178,7 @@ export default function Settings() {
                 value={String(settings.adultDefibrillatorEnergy)}
                 onValueChange={(val) => updateSetting('adultDefibrillatorEnergy', Number(val) as AdultDefibrillatorEnergy)}
               >
-                <SelectTrigger className="w-auto min-w-[100px]">
+                <SelectTrigger className="w-[100px] flex-shrink-0">
                   <SelectValue>{settings.adultDefibrillatorEnergy}J</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -195,10 +195,10 @@ export default function Settings() {
           {/* Epinephrine Interval Section */}
           <div className="bg-card rounded-lg border border-border p-4">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <Clock className="h-5 w-5 text-primary" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.epinephrineInterval')}</h2>
                 <p className="text-sm text-muted-foreground">{t('settings.epinephrineIntervalDesc')}</p>
               </div>
@@ -206,7 +206,7 @@ export default function Settings() {
                 value={String(settings.epinephrineIntervalMinutes)}
                 onValueChange={(val) => updateSetting('epinephrineIntervalMinutes', Number(val) as EpinephrineIntervalMinutes)}
               >
-                <SelectTrigger className="w-auto min-w-[120px]">
+                <SelectTrigger className="w-[120px] flex-shrink-0">
                   <SelectValue>{settings.epinephrineIntervalMinutes} {t('settings.minutes')}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -245,15 +245,15 @@ export default function Settings() {
           {/* Language Section */}
           <div className="bg-card rounded-lg border border-border p-4">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                 <Globe className="h-5 w-5 text-primary" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <h2 className="font-semibold text-foreground">{t('settings.language')}</h2>
                 <p className="text-sm text-muted-foreground">{t('settings.languageDesc')}</p>
               </div>
               <Select value={i18n.language} onValueChange={handleLanguageChange}>
-                <SelectTrigger className="w-auto min-w-[180px]">
+                <SelectTrigger className="w-[140px] flex-shrink-0">
                   <SelectValue>
                     {languages.find(l => l.code === i18n.language)?.flag}{' '}
                     {languages.find(l => l.code === i18n.language)?.nativeName}
