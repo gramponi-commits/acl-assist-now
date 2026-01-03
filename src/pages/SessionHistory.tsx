@@ -106,9 +106,32 @@ export default function SessionHistory() {
     return `${min}:${sec.toString().padStart(2, '0')}`;
   };
 
-  const formatTime = (timestamp: number, startTime: number, bradyTachyStartTime?: number | null) => {
-    // Use bradyTachyStartTime if present and earlier than startTime
-    const referenceTime = bradyTachyStartTime && bradyTachyStartTime < startTime ? bradyTachyStartTime : startTime;
+  // Helper to determine reference time for elapsed time calculations
+  const getReferenceTime = (session: StoredSession): number => {
+    const { startTime, bradyTachyStartTime, interventions } = session;
+
+    // If bradyTachyStartTime is explicitly set and earlier than startTime, use it
+    if (bradyTachyStartTime && bradyTachyStartTime < startTime) {
+      return bradyTachyStartTime;
+    }
+
+    // Otherwise, auto-detect by finding the earliest intervention timestamp
+    // This handles old sessions that don't have bradyTachyStartTime set
+    if (interventions.length > 0) {
+      const earliestTimestamp = Math.min(...interventions.map(i => i.timestamp));
+
+      // If the earliest intervention is before startTime, use it as reference
+      // This indicates a BradyTachy-to-arrest transition in an old session
+      if (earliestTimestamp < startTime) {
+        return earliestTimestamp;
+      }
+    }
+
+    // Default to startTime
+    return startTime;
+  };
+
+  const formatTime = (timestamp: number, referenceTime: number) => {
     const elapsed = timestamp - referenceTime;
     const min = Math.floor(elapsed / 60000);
     const sec = Math.floor((elapsed % 60000) / 1000);
@@ -298,6 +321,8 @@ export default function SessionHistory() {
               const pathwayMode = session.pathwayMode || 'adult';
               // Default to 'cardiac-arrest' for old sessions without sessionType
               const sessionType = session.sessionType || 'cardiac-arrest';
+              // Calculate reference time once for this session
+              const referenceTime = getReferenceTime(session);
 
               return (
                 <Collapsible
@@ -486,7 +511,7 @@ export default function SessionHistory() {
                           <div className="flex flex-wrap gap-2">
                             {session.etco2Readings.map((reading, idx) => (
                               <Badge key={idx} variant="secondary" className="font-mono">
-                                {formatTime(reading.timestamp, session.startTime, session.bradyTachyStartTime)}: {reading.value} mmHg
+                                {formatTime(reading.timestamp, referenceTime)}: {reading.value} mmHg
                               </Badge>
                             ))}
                           </div>
@@ -598,7 +623,7 @@ export default function SessionHistory() {
                               return (
                                 <div key={idx} className="flex items-start gap-2 text-xs">
                                   <span className="font-mono text-muted-foreground whitespace-nowrap">
-                                    {formatTime(intervention.timestamp, session.startTime, session.bradyTachyStartTime)}
+                                    {formatTime(intervention.timestamp, referenceTime)}
                                   </span>
                                   <span className="text-foreground">{displayText}</span>
                                 </div>

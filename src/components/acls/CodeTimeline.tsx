@@ -12,9 +12,30 @@ interface CodeTimelineProps {
   bradyTachyStartTime?: number | null;
 }
 
-function formatTimestamp(timestamp: number, startTime: number, bradyTachyStartTime?: number | null): string {
-  // Use bradyTachyStartTime if present and earlier than startTime
-  const referenceTime = bradyTachyStartTime && bradyTachyStartTime < startTime ? bradyTachyStartTime : startTime;
+// Helper function to determine the reference time for elapsed time calculations
+function getReferenceTime(interventions: Intervention[], startTime: number, bradyTachyStartTime?: number | null): number {
+  // If bradyTachyStartTime is explicitly set and earlier than startTime, use it
+  if (bradyTachyStartTime && bradyTachyStartTime < startTime) {
+    return bradyTachyStartTime;
+  }
+
+  // Otherwise, auto-detect by finding the earliest intervention timestamp
+  // This handles old sessions that don't have bradyTachyStartTime set
+  if (interventions.length > 0) {
+    const earliestTimestamp = Math.min(...interventions.map(i => i.timestamp));
+
+    // If the earliest intervention is before startTime, use it as reference
+    // This indicates a BradyTachy-to-arrest transition in an old session
+    if (earliestTimestamp < startTime) {
+      return earliestTimestamp;
+    }
+  }
+
+  // Default to startTime
+  return startTime;
+}
+
+function formatTimestamp(timestamp: number, referenceTime: number): string {
   const elapsed = Math.floor((timestamp - referenceTime) / 1000);
   const hours = Math.floor(elapsed / 3600);
   const minutes = Math.floor((elapsed % 3600) / 60);
@@ -70,6 +91,9 @@ export function CodeTimeline({ interventions, startTime, bradyTachyStartTime }: 
   const [isOpen, setIsOpen] = useState(true);
   const sortedInterventions = [...interventions].sort((a, b) => b.timestamp - a.timestamp);
 
+  // Calculate reference time once for all interventions
+  const referenceTime = getReferenceTime(interventions, startTime, bradyTachyStartTime);
+
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
       <CollapsibleTrigger className="w-full">
@@ -105,7 +129,7 @@ export function CodeTimeline({ interventions, startTime, bradyTachyStartTime }: 
                     className="flex items-start gap-3 p-2 rounded bg-muted/30"
                   >
                     <div className="font-mono text-xs text-muted-foreground whitespace-nowrap pt-0.5">
-                      {formatTimestamp(intervention.timestamp, startTime, bradyTachyStartTime)}
+                      {formatTimestamp(intervention.timestamp, referenceTime)}
                     </div>
                     <div className="pt-0.5">
                       {getInterventionIcon(intervention.type)}

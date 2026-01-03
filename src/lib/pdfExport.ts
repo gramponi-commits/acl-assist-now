@@ -291,6 +291,31 @@ function drawSummarySection(pdf: jsPDF, session: StoredSession, y: number, t: (k
   return y + 5;
 }
 
+// Helper function to determine the reference time for elapsed time calculations
+function getReferenceTime(session: StoredSession): number {
+  const { startTime, bradyTachyStartTime, interventions } = session;
+
+  // If bradyTachyStartTime is explicitly set and earlier than startTime, use it
+  if (bradyTachyStartTime && bradyTachyStartTime < startTime) {
+    return bradyTachyStartTime;
+  }
+
+  // Otherwise, auto-detect by finding the earliest intervention timestamp
+  // This handles old sessions that don't have bradyTachyStartTime set
+  if (interventions.length > 0) {
+    const earliestTimestamp = Math.min(...interventions.map(i => i.timestamp));
+
+    // If the earliest intervention is before startTime, use it as reference
+    // This indicates a BradyTachy-to-arrest transition in an old session
+    if (earliestTimestamp < startTime) {
+      return earliestTimestamp;
+    }
+  }
+
+  // Default to startTime
+  return startTime;
+}
+
 function drawTimelineTable(pdf: jsPDF, session: StoredSession, y: number, t: (key: string, params?: any) => string): void {
   // Section title
   pdf.setFontSize(11);
@@ -300,10 +325,7 @@ function drawTimelineTable(pdf: jsPDF, session: StoredSession, y: number, t: (ke
   y += 5;
 
   // Determine reference time for elapsed calculations
-  // Use bradyTachyStartTime if present and earlier than startTime
-  const referenceTime = session.bradyTachyStartTime && session.bradyTachyStartTime < session.startTime
-    ? session.bradyTachyStartTime
-    : session.startTime;
+  const referenceTime = getReferenceTime(session);
 
   // Prepare table data
   const tableData = session.interventions.map((intervention) => {
