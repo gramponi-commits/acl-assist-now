@@ -111,9 +111,42 @@ export async function deleteSession(id: string): Promise<void> {
     const transaction = db.transaction(STORE_NAME, 'readwrite');
     const store = transaction.objectStore(STORE_NAME);
     const request = store.delete(id);
-    
+
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve();
+  });
+}
+
+export async function deleteSessions(ids: string[]): Promise<void> {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_NAME, 'readwrite');
+    const store = transaction.objectStore(STORE_NAME);
+
+    // Delete all sessions in a single transaction
+    let completed = 0;
+    let hasError = false;
+
+    ids.forEach(id => {
+      const request = store.delete(id);
+      request.onerror = () => {
+        if (!hasError) {
+          hasError = true;
+          reject(request.error);
+        }
+      };
+      request.onsuccess = () => {
+        completed++;
+        if (completed === ids.length && !hasError) {
+          resolve();
+        }
+      };
+    });
+
+    // Handle empty array case
+    if (ids.length === 0) {
+      resolve();
+    }
   });
 }
 
