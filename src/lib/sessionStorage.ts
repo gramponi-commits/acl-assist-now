@@ -52,6 +52,8 @@ export interface StoredSession {
   pregnancyActive?: boolean;
   pregnancyCauses?: PregnancyCauses;
   pregnancyInterventions?: PregnancyInterventions;
+  // BradyTachy data (for combined sessions)
+  bradyTachyStartTime?: number | null;
 }
 
 function openDB(): Promise<IDBDatabase> {

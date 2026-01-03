@@ -8,6 +8,7 @@ import type { Intervention } from '@/types/acls';
 interface CodeEndedViewProps {
   interventions: Intervention[];
   startTime: number | null;
+  bradyTachyStartTime?: number | null;
   endTime: number | null;
   totalElapsed: number;
   totalCPRTime: number;
@@ -25,6 +26,7 @@ interface CodeEndedViewProps {
 export const CodeEndedView = memo<CodeEndedViewProps>(({
   interventions,
   startTime,
+  bradyTachyStartTime,
   endTime,
   totalElapsed,
   totalCPRTime,
@@ -97,7 +99,7 @@ export const CodeEndedView = memo<CodeEndedViewProps>(({
         </div>
       </div>
 
-      <CodeTimeline interventions={interventions} startTime={startTime} />
+      <CodeTimeline interventions={interventions} startTime={startTime} bradyTachyStartTime={bradyTachyStartTime} />
 
       {/* Actions */}
       <div className="space-y-3 pt-2">

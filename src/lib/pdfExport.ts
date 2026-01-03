@@ -299,9 +299,15 @@ function drawTimelineTable(pdf: jsPDF, session: StoredSession, y: number, t: (ke
 
   y += 5;
 
+  // Determine reference time for elapsed calculations
+  // Use bradyTachyStartTime if present and earlier than startTime
+  const referenceTime = session.bradyTachyStartTime && session.bradyTachyStartTime < session.startTime
+    ? session.bradyTachyStartTime
+    : session.startTime;
+
   // Prepare table data
   const tableData = session.interventions.map((intervention) => {
-    const relativeTime = intervention.timestamp - session.startTime;
+    const relativeTime = intervention.timestamp - referenceTime;
     const deviceTime = formatDeviceTime(intervention.timestamp);
     const elapsed = formatTime(relativeTime);
 

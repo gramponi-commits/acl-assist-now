@@ -240,7 +240,7 @@ export function BradycardiaScreen({ session, actions }: BradycardiaScreenProps) 
                   </p>
                   <Button
                     onClick={() => {
-                      actions.addIntervention('note', t('bradyTachy.pacingInitiated'));
+                      actions.addIntervention('note', t('bradyTachy.pacingInitiated'), undefined, undefined, undefined, 'bradyTachy.pacingInitiated');
                     }}
                     className="w-full h-10"
                   >

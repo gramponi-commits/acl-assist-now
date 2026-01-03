@@ -293,7 +293,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
     value?: number | string;
     translationKey?: string;
     translationParams?: Record<string, string | number>;
-  }>) => {
+  }>, bradyTachyStartTime?: number) => {
     setSession(prev => ({
       ...prev,
       interventions: interventions.map(i => ({
@@ -305,6 +305,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
         translationKey: i.translationKey,
         translationParams: i.translationParams,
       })),
+      bradyTachyStartTime: bradyTachyStartTime || null,
     }));
   }, []);
 

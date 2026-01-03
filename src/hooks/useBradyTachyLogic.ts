@@ -109,22 +109,24 @@ export function useBradyTachyLogic() {
         branch,
       },
     }));
-    addIntervention('decision', t('bradyTachy.decisionLogged', { decision: `Branch selected: ${branch}` }), undefined, undefined, undefined, 'bradyTachy.decisionLogged', { decision: `Branch selected: ${branch}` });
+    const translationKey = branch === 'bradycardia' ? 'bradyTachy.branchSelectedBradycardia' : 'bradyTachy.branchSelectedTachycardia';
+    addIntervention('decision', t(translationKey), undefined, undefined, undefined, translationKey);
   }, [addIntervention, t]);
 
   // Set stability status
   const setStability = useCallback((stability: StabilityStatus) => {
     setSession(prev => ({
       ...prev,
-      phase: prev.decisionContext.branch === 'bradycardia' 
-        ? 'bradycardia_treatment' 
+      phase: prev.decisionContext.branch === 'bradycardia'
+        ? 'bradycardia_treatment'
         : 'tachycardia_treatment',
       decisionContext: {
         ...prev.decisionContext,
         stability,
       },
     }));
-    addIntervention('assessment', t('bradyTachy.assessmentLogged', { assessment: `Stability: ${stability}` }), undefined, undefined, undefined, 'bradyTachy.assessmentLogged', { assessment: `Stability: ${stability}` });
+    const translationKey = stability === 'unstable' ? 'bradyTachy.stabilityUnstable' : 'bradyTachy.stabilityStable';
+    addIntervention('assessment', t(translationKey), undefined, undefined, undefined, translationKey);
   }, [addIntervention, t]);
 
   // Set QRS width
