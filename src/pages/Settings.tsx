@@ -178,7 +178,7 @@ export default function Settings() {
                 value={String(settings.adultDefibrillatorEnergy)}
                 onValueChange={(val) => updateSetting('adultDefibrillatorEnergy', Number(val) as AdultDefibrillatorEnergy)}
               >
-                <SelectTrigger className="min-w-[100px] flex-shrink">
+                <SelectTrigger className="min-w-[100px] shrink">
                   <SelectValue>{settings.adultDefibrillatorEnergy}J</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -206,7 +206,7 @@ export default function Settings() {
                 value={String(settings.epinephrineIntervalMinutes)}
                 onValueChange={(val) => updateSetting('epinephrineIntervalMinutes', Number(val) as EpinephrineIntervalMinutes)}
               >
-                <SelectTrigger className="min-w-[100px] flex-shrink">
+                <SelectTrigger className="min-w-[100px] shrink">
                   <SelectValue>{settings.epinephrineIntervalMinutes} {t('settings.minutes')}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -253,7 +253,7 @@ export default function Settings() {
                 <p className="text-sm text-muted-foreground">{t('settings.languageDesc')}</p>
               </div>
               <Select value={i18n.language} onValueChange={handleLanguageChange}>
-                <SelectTrigger className="min-w-[140px] flex-shrink">
+                <SelectTrigger className="min-w-[140px] shrink">
                   <SelectValue>
                     {languages.find(l => l.code === i18n.language)?.flag}{' '}
                     {languages.find(l => l.code === i18n.language)?.nativeName}
