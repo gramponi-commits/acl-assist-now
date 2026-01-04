@@ -50,7 +50,7 @@ export default function Settings() {
       <ScrollArea className="h-[calc(100vh-73px)]">
         <div className="p-4 space-y-6 max-w-2xl mx-auto">
           {/* Theme Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="p-4">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
                 {settings.theme === 'dark' ? (
@@ -76,7 +76,7 @@ export default function Settings() {
           </div>
 
           {/* Audio Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="p-4">
             <div className="flex items-center gap-3 mb-4">
               <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
                 <Volume2 className="h-5 w-5 text-primary" />
@@ -93,7 +93,7 @@ export default function Settings() {
           </div>
 
           {/* Voice Announcements Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="p-4">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
                 <Mic className="h-5 w-5 text-primary" />
@@ -110,7 +110,7 @@ export default function Settings() {
           </div>
 
           {/* Vibration Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="p-4">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
                 <Vibrate className="h-5 w-5 text-primary" />
@@ -127,7 +127,7 @@ export default function Settings() {
           </div>
 
           {/* Metronome Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="p-4">
             <div className="flex items-center gap-3 mb-2">
               <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
                 <Music className="h-5 w-5 text-primary" />
@@ -165,7 +165,7 @@ export default function Settings() {
           </div>
 
           {/* Adult Defibrillator Energy Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="p-4">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-full bg-acls-critical/10 flex items-center justify-center">
                 <Zap className="h-5 w-5 text-acls-critical" />
@@ -193,7 +193,7 @@ export default function Settings() {
           </div>
 
           {/* Epinephrine Interval Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="p-4">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
                 <Clock className="h-5 w-5 text-primary" />
@@ -221,7 +221,7 @@ export default function Settings() {
           </div>
 
           {/* Antiarrhythmic Preference Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="p-4">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
                 <Pill className="h-5 w-5 text-primary" />
@@ -243,7 +243,7 @@ export default function Settings() {
           </div>
 
           {/* Language Section */}
-          <div className="bg-card rounded-lg border border-border p-4">
+          <div className="p-4">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
                 <Globe className="h-5 w-5 text-primary" />
