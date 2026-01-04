@@ -48,7 +48,7 @@ export default function Settings() {
       </div>
 
       <ScrollArea className="h-[calc(100vh-73px)]">
-        <div className="p-2 space-y-6 max-w-2xl mx-auto">
+        <div className="p-8 space-y-6 max-w-2xl mx-auto">
           {/* Theme Section */}
           <div className="p-4">
             <div className="flex items-center gap-3">
