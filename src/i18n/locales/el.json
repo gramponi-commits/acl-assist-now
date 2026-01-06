@@ -4,8 +4,8 @@
     "selectDescription": "Επιλέξτε το κατάλληλο πρωτόκολλο αναζωογόνησης",
     "adult": "Ενήλικας",
     "pediatric": "Παιδιατρικός",
-    "adultACLS": "Ενήλικας (ACLS)",
-    "pediatricPALS": "Παιδιατρικός (PALS)",
+    "adultACLS": "Ενήλικας",
+    "pediatricPALS": "Παιδιατρικός",
     "adultDescription": "Σταθερή δόση - Αδρεναλίνη 1mg, Αμιο 300/150mg",
     "pediatricDescription": "Δόση βάσει βάρους",
     "setWeight": "Ορισμός Βάρους Ασθενούς",
@@ -36,7 +36,7 @@
   },
   "rhythm": {
     "identify": "ΑΝΑΓΝΩΡΙΣΗ ΡΥΘΜΟΥ",
-    "selectInitial": "Επιλέξτε αρχικό ρυθμό για να ξεκινήσει το πρωτόκολλο ACLS",
+    "selectInitial": "Επιλέξτε αρχικό ρυθμό για να ξεκινήσει το πρωτόκολλο",
     "changeRhythm": "Αλλαγή Ρυθμού",
     "vfPvt": "VF / pVT",
     "shockable": "Απινιδώσιμος Ρυθμός",
@@ -350,7 +350,7 @@
     "cprActive": "ΚΑΡΠΑ ΕΝΕΡΓΗ",
     "analyzeRhythmWhenReady": "Αναλύστε ρυθμό όταν είναι δυνατό - επιλέξτε ρυθμό παρακάτω",
     "identifyRhythm": "ΑΝΑΓΝΩΡΙΣΗ ΡΥΘΜΟΥ",
-    "selectRhythm": "Επιλέξτε αρχικό ρυθμό για έναρξη πρωτοκόλλου ACLS",
+    "selectRhythm": "Επιλέξτε αρχικό ρυθμό για έναρξη πρωτοκόλλου",
     "roscAchieved": "ΕΠΙΤΕΥΧΘΗΚΕ ROSC",
     "beginPostCare": "Έναρξη φροντίδας μετά την καρδιακή ανακοπή",
     "rhythmCheckVfPvt": "⚡ ΕΛΕΓΧΟΣ ΡΥΘΜΟΥ - VF/pVT;",
@@ -371,7 +371,7 @@
     "asystoleEpi": "Ασυστολία - Επινεφρίνη αμέσως",
     "peaEpi": "PEA - Επινεφρίνη αμέσως",
     "considerHsTs": "Έλεγχος ρυθμού σε {{seconds}}δ | Εξετάστε H's & T's",
-    "aclsInProgress": "ACLS ΣΕ ΕΞΕΛΙΞΗ"
+    "aclsInProgress": "ΠΡΩΤΟΚΟΛΛΟ ΣΕ ΕΞΕΛΙΞΗ"
   },
   "interventions": {
     "rhythmIdentified": "Αναγνωρίστηκε ρυθμός: {{rhythm}}",
@@ -691,8 +691,8 @@
     "sessionDate": "Ημερομηνία Συνεδρίας",
     "sessionTime": "Ώρα Συνεδρίας",
     "protocol": "Πρωτόκολλο",
-    "protocolACLS": "ACLS (Ενήλικας)",
-    "protocolPALS": "PALS (Παιδιατρικό)",
+    "protocolACLS": "Καρδιακή Ανακοπή Ενηλίκων",
+    "protocolPALS": "Καρδιακή Ανακοπή Παιδιατρική",
     "protocolBradyTachy": "Βραδυκαρδία/Ταχυκαρδία",
     "protocolCardiacArrest": "Καρδιακή Ανακοπή",
     "protocolCombined": "Βραδυκαρδία/Ταχυκαρδία → Καρδιακή Ανακοπή",

@@ -4,8 +4,8 @@
     "selectDescription": "Elige el protocolo de reanimación apropiado",
     "adult": "Adulto",
     "pediatric": "Pediátrico",
-    "adultACLS": "Adulto (ACLS)",
-    "pediatricPALS": "Pediátrico (PALS)",
+    "adultACLS": "Adulto",
+    "pediatricPALS": "Pediátrico",
     "adultDescription": "Dosis fija - Epi 1mg, Amio 300/150mg",
     "pediatricDescription": "Dosis basada en peso",
     "setWeight": "Establecer Peso del Paciente",
@@ -36,7 +36,7 @@
   },
   "rhythm": {
     "identify": "IDENTIFICAR RITMO",
-    "selectInitial": "Seleccione el ritmo inicial para comenzar el protocolo ACLS",
+    "selectInitial": "Seleccione el ritmo inicial para comenzar el protocolo",
     "changeRhythm": "Cambiar Ritmo",
     "vfPvt": "FV / TVsp",
     "shockable": "Ritmo Desfibrilable",
@@ -350,7 +350,7 @@
     "cprActive": "RCP ACTIVA",
     "analyzeRhythmWhenReady": "Analizar ritmo cuando sea posible - seleccione ritmo abajo",
     "identifyRhythm": "IDENTIFICAR RITMO",
-    "selectRhythm": "Seleccione ritmo inicial para comenzar protocolo ACLS",
+    "selectRhythm": "Seleccione ritmo inicial para comenzar protocolo",
     "roscAchieved": "RCE LOGRADO",
     "beginPostCare": "Iniciar cuidados post-paro cardíaco",
     "rhythmCheckVfPvt": "⚡ ANÁLISIS RITMO - ¿FV/TVsp?",
@@ -371,7 +371,7 @@
     "asystoleEpi": "Asistolia - Adrenalina inmediatamente",
     "peaEpi": "AESP - Adrenalina inmediatamente",
     "considerHsTs": "Análisis de ritmo en {{seconds}}s | Considerar H's y T's",
-    "aclsInProgress": "ACLS EN PROGRESO"
+    "aclsInProgress": "PROTOCOLO EN PROGRESO"
   },
   "interventions": {
     "rhythmIdentified": "Ritmo identificado: {{rhythm}}",
@@ -691,8 +691,8 @@
     "sessionDate": "Fecha de Sesión",
     "sessionTime": "Hora de Sesión",
     "protocol": "Protocolo",
-    "protocolACLS": "ACLS (Adulto)",
-    "protocolPALS": "PALS (Pediátrico)",
+    "protocolACLS": "Paro Cardíaco Adulto",
+    "protocolPALS": "Paro Cardíaco Pediátrico",
     "protocolBradyTachy": "Bradicardia/Taquicardia",
     "protocolCardiacArrest": "Paro Cardíaco",
     "protocolCombined": "Bradicardia/Taquicardia → Paro Cardíaco",

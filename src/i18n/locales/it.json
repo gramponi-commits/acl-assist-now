@@ -4,8 +4,8 @@
     "selectDescription": "Scegli il protocollo di rianimazione appropriato",
     "adult": "Adulto",
     "pediatric": "Pediatrico",
-    "adultACLS": "Adulto (ACLS)",
-    "pediatricPALS": "Pediatrico (PALS)",
+    "adultACLS": "Adulto",
+    "pediatricPALS": "Pediatrico",
     "adultDescription": "Dosaggio fisso - Adrenalina 1mg, Amio 300/150mg",
     "pediatricDescription": "Dosaggio basato sul peso",
     "setWeight": "Imposta Peso Paziente",
@@ -36,7 +36,7 @@
   },
   "rhythm": {
     "identify": "IDENTIFICA RITMO",
-    "selectInitial": "Seleziona il ritmo iniziale per iniziare il protocollo ACLS",
+    "selectInitial": "Seleziona il ritmo iniziale per iniziare il protocollo",
     "changeRhythm": "Cambia Ritmo",
     "vfPvt": "FV / TVp",
     "shockable": "Ritmo Defibrillabile",
@@ -368,7 +368,7 @@
     "cprActive": "RCP ATTIVA",
     "analyzeRhythmWhenReady": "Analizza il ritmo appena possibile - seleziona sotto",
     "identifyRhythm": "IDENTIFICA RITMO",
-    "selectRhythm": "Seleziona il ritmo iniziale per iniziare il protocollo ACLS",
+    "selectRhythm": "Seleziona il ritmo iniziale per iniziare il protocollo",
     "roscAchieved": "ROSC RAGGIUNTO",
     "beginPostCare": "Inizia cure post-arresto cardiaco",
     "rhythmCheckVfPvt": "⚡ CONTROLLO RITMO - FV/TVp?",
@@ -389,7 +389,7 @@
     "asystoleEpi": "Asistolia - Adrenalina subito",
     "peaEpi": "P.E.A. - Adrenalina subito",
     "considerHsTs": "Controllo ritmo tra {{seconds}}s | Considera H's & T's",
-    "aclsInProgress": "ACLS IN CORSO"
+    "aclsInProgress": "PROTOCOLLO IN CORSO"
   },
   "interventions": {
     "rhythmIdentified": "Ritmo identificato: {{rhythm}}",
@@ -691,8 +691,8 @@
     "sessionDate": "Data Sessione",
     "sessionTime": "Ora Sessione",
     "protocol": "Protocollo",
-    "protocolACLS": "ACLS (Adulto)",
-    "protocolPALS": "PALS (Pediatrico)",
+    "protocolACLS": "Arresto Cardiaco Adulto",
+    "protocolPALS": "Arresto Cardiaco Pediatrico",
     "protocolBradyTachy": "Bradicardia/Tachicardia",
     "protocolCardiacArrest": "Arresto Cardiaco",
     "protocolCombined": "Bradicardia/Tachicardia → Arresto Cardiaco",

@@ -4,8 +4,8 @@
     "selectDescription": "Choose the appropriate resuscitation protocol",
     "adult": "Adult",
     "pediatric": "Pediatric",
-    "adultACLS": "Adult (ACLS)",
-    "pediatricPALS": "Pediatric (PALS)",
+    "adultACLS": "Adult",
+    "pediatricPALS": "Pediatric",
     "adultDescription": "Fixed dosing - Epi 1mg, Amio 300/150mg",
     "pediatricDescription": "Weight-based dosing",
     "setWeight": "Set Patient Weight",
@@ -36,7 +36,7 @@
   },
   "rhythm": {
     "identify": "IDENTIFY RHYTHM",
-    "selectInitial": "Select initial rhythm to begin ACLS protocol",
+    "selectInitial": "Select initial rhythm to begin protocol",
     "changeRhythm": "Change Rhythm",
     "vfPvt": "VF / pVT",
     "shockable": "Shockable Rhythm",
@@ -368,7 +368,7 @@
     "cprActive": "CPR ACTIVE",
     "analyzeRhythmWhenReady": "Analyze rhythm when possible - select rhythm below",
     "identifyRhythm": "IDENTIFY RHYTHM",
-    "selectRhythm": "Select initial rhythm to begin ACLS protocol",
+    "selectRhythm": "Select initial rhythm to begin protocol",
     "roscAchieved": "ROSC ACHIEVED",
     "beginPostCare": "Begin post-cardiac arrest care",
     "rhythmCheckVfPvt": "⚡ RHYTHM CHECK - VF/pVT?",
@@ -389,7 +389,7 @@
     "asystoleEpi": "Asystole - Epi immediately",
     "peaEpi": "PEA - Epi immediately",
     "considerHsTs": "Rhythm check in {{seconds}}s | Consider H's & T's",
-    "aclsInProgress": "ACLS IN PROGRESS"
+    "aclsInProgress": "PROTOCOL IN PROGRESS"
   },
   "interventions": {
     "rhythmIdentified": "Rhythm identified: {{rhythm}}",
@@ -691,8 +691,8 @@
     "sessionDate": "Session Date",
     "sessionTime": "Session Time",
     "protocol": "Protocol",
-    "protocolACLS": "ACLS (Adult)",
-    "protocolPALS": "PALS (Pediatric)",
+    "protocolACLS": "Adult Cardiac Arrest",
+    "protocolPALS": "Pediatric Cardiac Arrest",
     "protocolBradyTachy": "Bradycardia/Tachycardia",
     "protocolCardiacArrest": "Cardiac Arrest",
     "protocolCombined": "Bradycardia/Tachycardia → Cardiac Arrest",

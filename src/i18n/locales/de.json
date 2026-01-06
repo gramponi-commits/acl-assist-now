@@ -4,8 +4,8 @@
     "selectDescription": "Wählen Sie das passende Reanimationsprotokoll",
     "adult": "Erwachsener",
     "pediatric": "Pädiatrisch",
-    "adultACLS": "Erwachsener (ACLS)",
-    "pediatricPALS": "Pädiatrisch (PALS)",
+    "adultACLS": "Erwachsener",
+    "pediatricPALS": "Pädiatrisch",
     "adultDescription": "Feste Dosierung - Epi 1mg, Amio 300/150mg",
     "pediatricDescription": "Gewichtsbasierte Dosierung",
     "setWeight": "Patientengewicht Einstellen",
@@ -36,7 +36,7 @@
   },
   "rhythm": {
     "identify": "RHYTHMUS IDENTIFIZIEREN",
-    "selectInitial": "Wählen Sie den Ausgangsrhythmus, um das ACLS-Protokoll zu starten",
+    "selectInitial": "Wählen Sie den Ausgangsrhythmus, um das Protokoll zu starten",
     "changeRhythm": "Rhythmus Ändern",
     "vfPvt": "VF / pVT",
     "shockable": "Schockbarer Rhythmus",
@@ -350,7 +350,7 @@
     "cprActive": "HLW AKTIV",
     "analyzeRhythmWhenReady": "Rhythmus analysieren wenn möglich - Rhythmus unten wählen",
     "identifyRhythm": "RHYTHMUS IDENTIFIZIEREN",
-    "selectRhythm": "Ausgangsrhythmus wählen, um ACLS-Protokoll zu starten",
+    "selectRhythm": "Ausgangsrhythmus wählen, um Protokoll zu starten",
     "roscAchieved": "ROSC ERREICHT",
     "beginPostCare": "Post-Reanimationsbehandlung beginnen",
     "rhythmCheckVfPvt": "⚡ RHYTHMUSANALYSE - VF/pVT?",
@@ -371,7 +371,7 @@
     "asystoleEpi": "Asystolie - Adrenalin sofort",
     "peaEpi": "PEA - Adrenalin sofort",
     "considerHsTs": "Rhythmusanalyse in {{seconds}}s | H's & T's bedenken",
-    "aclsInProgress": "ACLS LÄUFT"
+    "aclsInProgress": "PROTOKOLL LÄUFT"
   },
   "interventions": {
     "rhythmIdentified": "Rhythmus identifiziert: {{rhythm}}",
@@ -691,8 +691,8 @@
     "sessionDate": "Sitzungsdatum",
     "sessionTime": "Sitzungszeit",
     "protocol": "Protokoll",
-    "protocolACLS": "ACLS (Erwachsene)",
-    "protocolPALS": "PALS (Pädiatrisch)",
+    "protocolACLS": "Herzstillstand Erwachsene",
+    "protocolPALS": "Herzstillstand Pädiatrisch",
     "protocolBradyTachy": "Bradykardie/Tachykardie",
     "protocolCardiacArrest": "Herzstillstand",
     "protocolCombined": "Bradykardie/Tachykardie → Herzstillstand",
