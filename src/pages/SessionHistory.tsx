@@ -200,7 +200,7 @@ export default function SessionHistory() {
       return session.sessionType === 'bradytachy' || session.sessionType === 'bradytachy-arrest';
     }
 
-    // ACLS/PALS filters: show cardiac-arrest sessions + bradytachy-arrest (hybrid)
+    // Adult/Pediatric filters: show cardiac-arrest sessions + bradytachy-arrest (hybrid)
     const mode = session.pathwayMode || 'adult';
     if (mode === filterMode) {
       return session.sessionType === 'cardiac-arrest' || session.sessionType === 'bradytachy-arrest';
@@ -358,7 +358,7 @@ export default function SessionHistory() {
                               {t('history.rhythm')}
                             </Badge>
                           )}
-                          {/* Show ACLS/PALS badge for cardiac arrest sessions (including hybrid) */}
+                          {/* Show Adult/Pediatric badge for cardiac arrest sessions (including hybrid) */}
                           {(sessionType === 'cardiac-arrest' || sessionType === 'bradytachy-arrest') && (
                             <Badge
                               variant="outline"
@@ -370,9 +370,9 @@ export default function SessionHistory() {
                               )}
                             >
                               {pathwayMode === 'adult' ? (
-                                <><User className="h-3 w-3 mr-1" />ACLS</>
+                                <><User className="h-3 w-3 mr-1" />{t('history.adult')}</>
                               ) : (
-                                <><Baby className="h-3 w-3 mr-1" />PALS</>
+                                <><Baby className="h-3 w-3 mr-1" />{t('history.pediatric')}</>
                               )}
                             </Badge>
                           )}

@@ -62,7 +62,7 @@ export function PathwaySelector({
         </div>
 
         <div className="w-full max-w-sm space-y-4">
-          {/* Adult ACLS Button */}
+          {/* Adult Button */}
           <Button
             onClick={handleAdultSelect}
             className={cn(
@@ -75,7 +75,7 @@ export function PathwaySelector({
             <span className="text-xl font-bold">{t('pathway.adultACLS')}</span>
           </Button>
 
-          {/* Pediatric PALS Button */}
+          {/* Pediatric Button */}
           <Button
             onClick={handlePediatricSelect}
             className={cn(
