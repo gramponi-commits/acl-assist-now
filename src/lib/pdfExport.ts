@@ -245,7 +245,7 @@ function drawSummarySection(pdf: jsPDF, session: StoredSession, y: number, t: (k
           pdf.setFont('helvetica', 'bold');
           pdf.text(`${t('pdf.vitalsRecorded')}:`, 15, y);
           pdf.setFont('helvetica', 'normal');
-          pdf.text(vitalsText.join(' • '), 55, y);
+          pdf.text(vitalsText.join(' - '), 55, y);
           y += 6;
         }
       }
