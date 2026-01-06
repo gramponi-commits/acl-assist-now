@@ -235,8 +235,8 @@ function drawSummarySection(pdf: jsPDF, session: StoredSession, y: number, t: (k
       if (session.postROSCVitals) {
         const vitals = session.postROSCVitals;
         const vitalsText: string[] = [];
-        if (vitals.spo2) vitalsText.push(`SpO₂: ${vitals.spo2}%`);
-        if (vitals.paco2) vitalsText.push(`PaCO₂: ${vitals.paco2}`);
+        if (vitals.spo2) vitalsText.push(`SpO2: ${vitals.spo2}%`);
+        if (vitals.paco2) vitalsText.push(`PaCO2: ${vitals.paco2}`);
         if (vitals.map) vitalsText.push(`MAP: ${vitals.map}`);
         if (vitals.temperature) vitalsText.push(`Temp: ${vitals.temperature}°C`);
         if (vitals.glucose) vitalsText.push(`Glucose: ${vitals.glucose}`);
