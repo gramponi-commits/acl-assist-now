@@ -266,6 +266,8 @@
     "selectAll": "Tout Sélectionner",
     "deleteSelected": "Supprimer Sélectionnées ({{count}})",
     "all": "Tous",
+    "adult": "Adulte",
+    "pediatric": "Pédiatrique",
     "rhythm": "Rythme",
     "showMore": "Afficher Détails",
     "showLess": "Masquer Détails",
