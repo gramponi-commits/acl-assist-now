@@ -3,6 +3,7 @@
 import { PathwayMode } from '@/types/acls';
 import { saveSession, StoredSession } from './sessionStorage';
 import { logger } from '@/utils/logger';
+import { encryptedStorage } from './crypto';
 
 export interface StoredBradyTachySession {
   id: string;
@@ -27,18 +28,18 @@ export interface StoredBradyTachySession {
 
 const BRADY_TACHY_SESSION_KEY = 'acls_bradytachy_active_session';
 
-export function saveBradyTachySession(session: StoredBradyTachySession): void {
+export async function saveBradyTachySession(session: StoredBradyTachySession): Promise<void> {
   try {
-    localStorage.setItem(BRADY_TACHY_SESSION_KEY, JSON.stringify(session));
+    await encryptedStorage.setItem(BRADY_TACHY_SESSION_KEY, JSON.stringify(session));
     logger.sessionEvent('Brady/Tachy session saved');
   } catch (e) {
     logger.error('Failed to save Brady/Tachy session', e);
   }
 }
 
-export function getBradyTachySession(): StoredBradyTachySession | null {
+export async function getBradyTachySession(): Promise<StoredBradyTachySession | null> {
   try {
-    const data = localStorage.getItem(BRADY_TACHY_SESSION_KEY);
+    const data = await encryptedStorage.getItem(BRADY_TACHY_SESSION_KEY);
     return data ? JSON.parse(data) : null;
   } catch (e) {
     logger.error('Failed to retrieve Brady/Tachy session', e);
@@ -48,7 +49,7 @@ export function getBradyTachySession(): StoredBradyTachySession | null {
 
 export function clearBradyTachySession(): void {
   try {
-    localStorage.removeItem(BRADY_TACHY_SESSION_KEY);
+    encryptedStorage.removeItem(BRADY_TACHY_SESSION_KEY);
     logger.sessionEvent('Brady/Tachy session cleared');
   } catch (e) {
     logger.error('Failed to clear Brady/Tachy session', e);

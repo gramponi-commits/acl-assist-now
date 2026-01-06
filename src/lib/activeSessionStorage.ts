@@ -1,5 +1,6 @@
 // Storage for active (in-progress) sessions to enable resume functionality
 import { ACLSSession } from '@/types/acls';
+import { encryptedStorage, isCryptoAvailable } from './crypto';
 
 const ACTIVE_SESSION_KEY = 'acls-active-session';
 const TIMER_STATE_KEY = 'acls-timer-state';
@@ -12,19 +13,19 @@ export interface SavedTimerState {
   savedAt: number;
 }
 
-export function saveActiveSession(session: ACLSSession, timerState: SavedTimerState): void {
+export async function saveActiveSession(session: ACLSSession, timerState: SavedTimerState): Promise<void> {
   try {
-    localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(session));
-    localStorage.setItem(TIMER_STATE_KEY, JSON.stringify(timerState));
+    await encryptedStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(session));
+    await encryptedStorage.setItem(TIMER_STATE_KEY, JSON.stringify(timerState));
   } catch (e) {
     console.error('Failed to save active session:', e);
   }
 }
 
-export function getActiveSession(): { session: ACLSSession; timerState: SavedTimerState } | null {
+export async function getActiveSession(): Promise<{ session: ACLSSession; timerState: SavedTimerState } | null> {
   try {
-    const sessionStr = localStorage.getItem(ACTIVE_SESSION_KEY);
-    const timerStr = localStorage.getItem(TIMER_STATE_KEY);
+    const sessionStr = await encryptedStorage.getItem(ACTIVE_SESSION_KEY);
+    const timerStr = await encryptedStorage.getItem(TIMER_STATE_KEY);
     
     if (sessionStr && timerStr) {
       const session = JSON.parse(sessionStr) as ACLSSession;
@@ -43,13 +44,13 @@ export function getActiveSession(): { session: ACLSSession; timerState: SavedTim
 
 export function clearActiveSession(): void {
   try {
-    localStorage.removeItem(ACTIVE_SESSION_KEY);
-    localStorage.removeItem(TIMER_STATE_KEY);
+    encryptedStorage.removeItem(ACTIVE_SESSION_KEY);
+    encryptedStorage.removeItem(TIMER_STATE_KEY);
   } catch (e) {
     console.error('Failed to clear active session:', e);
   }
 }
 
-export function hasActiveSession(): boolean {
-  return getActiveSession() !== null;
+export async function hasActiveSession(): Promise<boolean> {
+  return (await getActiveSession()) !== null;
 }
