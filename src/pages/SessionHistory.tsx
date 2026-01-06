@@ -274,7 +274,7 @@ export default function SessionHistory() {
             )}
           >
             <User className="h-3 w-3" />
-            ACLS
+            {t('history.adult')}
           </Button>
           <Button
             size="sm"
@@ -286,7 +286,7 @@ export default function SessionHistory() {
             )}
           >
             <Baby className="h-3 w-3" />
-            PALS
+            {t('history.pediatric')}
           </Button>
           <Button
             size="sm"
