@@ -4,5 +4,5 @@
     <string name="title_activity_main">ResusBuddy</string>
     <string name="package_name">com.resusbuddy.training</string>
     <string name="custom_url_scheme">com.resusbuddy.training</string>
-    <string name="app_description">ACLS/PALS Training Tool - For Educational Purposes Only</string>
+    <string name="app_description">Resuscitation Training Tool - For Educational Purposes Only</string>
 </resources>

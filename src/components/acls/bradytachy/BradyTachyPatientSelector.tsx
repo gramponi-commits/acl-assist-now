@@ -52,7 +52,7 @@ export function BradyTachyPatientSelector({ session, actions }: BradyTachyPatien
         </div>
 
         <div className="w-full max-w-sm space-y-4">
-          {/* Adult ACLS Button */}
+          {/* Adult Button */}
           <Button
             onClick={() => handlePatientGroupSelect('adult')}
             className={cn(
@@ -68,7 +68,7 @@ export function BradyTachyPatientSelector({ session, actions }: BradyTachyPatien
             </div>
           </Button>
 
-          {/* Pediatric PALS Button */}
+          {/* Pediatric Button */}
           <Button
             onClick={() => handlePatientGroupSelect('pediatric')}
             className={cn(

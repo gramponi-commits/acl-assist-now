@@ -1,13 +1,13 @@
 # ResusBuddy
 
-A clinical-grade ACLS (Advanced Cardiac Life Support) and PALS (Pediatric Advanced Life Support) intelligent decision support application implementing the 2025 AHA Cardiac Arrest Algorithm for hospital code teams and training scenarios.
+A clinical-grade intelligent decision support application implementing the 2025 AHA Cardiac Arrest Algorithm for adult and pediatric resuscitation in hospital code teams and training scenarios.
 
 ## Overview
 
 ResusBuddy is a Progressive Web App (PWA) designed to assist healthcare professionals during cardiac arrest situations by providing real-time guidance following American Heart Association guidelines. The app features:
 
 - **Real-time Code Management**: Track cardiac arrest events with automated timing and rhythm checks
-- **ACLS & PALS Protocols**: Complete implementation of adult and pediatric resuscitation algorithms
+- **Adult & Pediatric Protocols**: Complete implementation of adult and pediatric resuscitation algorithms
 - **Bradycardia & Tachycardia Modules**: Guided pathways for stable and unstable arrhythmias
 - **CPR Quality Tracking**: Monitor compression timing and ensure guideline compliance
 - **Post-ROSC Care**: Structured checklist for return of spontaneous circulation
@@ -21,12 +21,12 @@ ResusBuddy is a Progressive Web App (PWA) designed to assist healthcare professi
 
 This application is intended for:
 - Educational training scenarios
-- ACLS/PALS certification practice
+- Resuscitation certification practice
 - Reference during simulations
 
 This tool is **NOT** intended to replace:
 - Clinical judgment
-- Formal ACLS/PALS training and certification
+- Formal resuscitation training and certification
 - Established hospital protocols
 - Real-time physician oversight during actual resuscitation
 
@@ -195,4 +195,4 @@ For issues or feature requests, please use the GitHub issue tracker.
 
 ---
 
-**Remember**: This is a training and reference tool. Always prioritize formal ACLS/PALS training, clinical judgment, and institutional protocols in real patient care scenarios.
+**Remember**: This is a training and reference tool. Always prioritize formal resuscitation training, clinical judgment, and institutional protocols in real patient care scenarios.
