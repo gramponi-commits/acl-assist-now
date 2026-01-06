@@ -68,9 +68,9 @@ export function CodeScreen() {
   const [showBradyTachyModule, setShowBradyTachyModule] = useState(false);
   const [showResumeDialog, setShowResumeDialog] = useState(false);
   const [showNoteDialog, setShowNoteDialog] = useState(false);
-  const [pendingResumeSession, setPendingResumeSession] = useState<ReturnType<
+  const [pendingResumeSession, setPendingResumeSession] = useState<Awaited<ReturnType<
     typeof getActiveSession
-  >>(null);
+  >>>(null);
 
   // Calculate shock energy based on pathway mode and patient weight
   const shockEnergy =
@@ -96,21 +96,25 @@ export function CodeScreen() {
 
   // Check for active session on mount and show disclaimer if needed
   useEffect(() => {
-    const activeSession = getActiveSession();
-    if (activeSession) {
-      logger.sessionEvent('Found active session, prompting user to resume');
-      setPendingResumeSession(activeSession);
-      setShowResumeDialog(true);
-    } else {
-      // Show disclaimer notification only if not already dismissed in this session
-      const disclaimerDismissed = sessionStorage.getItem('disclaimerDismissed');
-      if (!disclaimerDismissed) {
-        toast.warning(t('about.disclaimerNotification'), {
-          duration: Infinity,
-          id: 'disclaimer-toast',
-        });
+    const checkForActiveSession = async () => {
+      const activeSession = await getActiveSession();
+      if (activeSession) {
+        logger.sessionEvent('Found active session, prompting user to resume');
+        setPendingResumeSession(activeSession);
+        setShowResumeDialog(true);
+      } else {
+        // Show disclaimer notification only if not already dismissed in this session
+        const disclaimerDismissed = sessionStorage.getItem('disclaimerDismissed');
+        if (!disclaimerDismissed) {
+          toast.warning(t('about.disclaimerNotification'), {
+            duration: Infinity,
+            id: 'disclaimer-toast',
+          });
+        }
       }
-    }
+    };
+    
+    checkForActiveSession();
 
     // Cleanup: dismiss disclaimer when navigating away from this screen
     return () => {
@@ -298,8 +302,8 @@ export function CodeScreen() {
     logger.sessionEvent('Brady/Tachy module closed');
   };
 
-  const handleSwitchToArrestFromBradyTachy = (patientGroup: 'adult' | 'pediatric') => {
-    const bradyTachySession = getBradyTachySession();
+  const handleSwitchToArrestFromBradyTachy = async (patientGroup: 'adult' | 'pediatric') => {
+    const bradyTachySession = await getBradyTachySession();
 
     setShowBradyTachyModule(false);
     actions.setPathwayMode(patientGroup);

@@ -15,6 +15,8 @@ import {
   calculateAmiodaroneDose,
   calculateShockEnergy,
 } from '@/lib/palsDosing';
+import { parseWeight, isValidWeightInput } from '@/lib/weightValidation';
+import { toast } from 'sonner';
 
 interface WeightInputProps {
   currentWeight: number | null;
@@ -41,10 +43,12 @@ export function WeightInput({
   const setOpen = onOpenChange ?? setLocalOpen;
 
   const handleSubmit = () => {
-    const weight = parseFloat(inputValue);
-    if (!isNaN(weight) && weight > 0) {
-      onWeightChange(weight);
+    const result = parseWeight(inputValue);
+    if (result.success === true) {
+      onWeightChange(result.weight);
       setOpen(false);
+    } else {
+      toast.error(result.error);
     }
   };
 
@@ -144,7 +148,7 @@ export function WeightInput({
             <div className="flex gap-2">
               <Button
                 onClick={handleSubmit}
-                disabled={!inputValue || isNaN(parseFloat(inputValue)) || parseFloat(inputValue) <= 0}
+                disabled={!isValidWeightInput(inputValue)}
                 className="flex-1 h-12"
               >
                 {t('weight.confirm')}
