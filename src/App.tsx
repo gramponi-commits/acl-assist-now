@@ -8,14 +8,15 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { SidebarProvider, useSidebar } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { MobileHeader } from "@/components/MobileHeader";
+import { TermsOfServiceModal } from "@/components/TermsOfServiceModal";
 import Index from "./pages/Index";
 import SessionHistory from "./pages/SessionHistory";
 import Settings from "./pages/Settings";
 import InstallHelp from "./pages/InstallHelp";
 import About from "./pages/About";
-import TermsOfService from "./pages/TermsOfService";
 import NotFound from "./pages/NotFound";
 import { useIsNativeApp } from "@/hooks/useIsNativeApp";
+import { useTosAcceptance } from "@/hooks/useTosAcceptance";
 import "@/i18n";
 
 const queryClient = new QueryClient();
@@ -82,6 +83,7 @@ function useInitialTheme() {
 function AppLayout() {
   const { open, setOpen, isMobile } = useSidebar();
   const isNativeApp = useIsNativeApp();
+  const { hasAccepted, isLoading, acceptTos } = useTosAcceptance();
 
   // Swipe gesture handlers - only active on mobile
   const swipeHandlers = useSwipeable({
@@ -102,26 +104,44 @@ function AppLayout() {
     delta: 50, // Minimum distance for swipe
   });
 
+  // Show loading state while checking TOS acceptance
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-pulse text-muted-foreground">Loading...</div>
+      </div>
+    );
+  }
+
   return (
-    <div {...swipeHandlers} className="min-h-screen flex w-full pb-safe">
-      <AppSidebar />
-      <MobileHeader />
-      <main className="flex-1 overflow-auto pt-[calc(3.5rem+env(safe-area-inset-top,0px))] md:pt-0">
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/history" element={<SessionHistory />} />
-          <Route path="/settings" element={<Settings />} />
-          {/* Hide install page in native apps (Android/iOS wrappers) */}
-          <Route
-            path="/install"
-            element={isNativeApp ? <Navigate to="/" replace /> : <InstallHelp />}
-          />
-          <Route path="/about" element={<About />} />
-          <Route path="/terms" element={<TermsOfService />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
-    </div>
+    <>
+      {/* First-time TOS acceptance modal */}
+      <TermsOfServiceModal
+        open={!hasAccepted}
+        onOpenChange={() => {}} // Prevent closing without acceptance
+        requireAcceptance={true}
+        onAccept={acceptTos}
+      />
+
+      <div {...swipeHandlers} className="min-h-screen flex w-full pb-safe">
+        <AppSidebar />
+        <MobileHeader />
+        <main className="flex-1 overflow-auto pt-[calc(3.5rem+env(safe-area-inset-top,0px))] md:pt-0">
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/history" element={<SessionHistory />} />
+            <Route path="/settings" element={<Settings />} />
+            {/* Hide install page in native apps (Android/iOS wrappers) */}
+            <Route
+              path="/install"
+              element={isNativeApp ? <Navigate to="/" replace /> : <InstallHelp />}
+            />
+            <Route path="/about" element={<About />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
+      </div>
+    </>
   );
 }
 

@@ -32,8 +32,7 @@
     "history": "Session History",
     "settings": "Settings",
     "install": "Install App",
-    "about": "Info",
-    "terms": "Terms of Use"
+    "about": "Info"
   },
   "rhythm": {
     "identify": "IDENTIFY RHYTHM",
@@ -808,7 +807,12 @@
     "governingLawTitle": "Governing Law",
     "governingLawP1": "These Terms shall be governed by and construed in accordance with applicable laws, without regard to conflict of law principles.",
     "contactTitle": "Contact",
-    "contactP1": "Questions or concerns about these Terms may be directed to the developer through the following channels:",
-    "finalNotice": "By using ResusBuddy, you confirm that you understand this is an unofficial training tool only, not affiliated with any official medical organization, and must never be used for actual patient care. Always use official, approved resources and follow institutional protocols during real medical emergencies."
+    "contactP1": "Questions or concerns about these Terms may be directed to the developer at:",
+    "contactEmail": "rocefin2g@gmail.com",
+    "finalNotice": "By using ResusBuddy, you confirm that you understand this is an unofficial training tool only, not affiliated with any official medical organization, and must never be used for actual patient care. Always use official, approved resources and follow institutional protocols during real medical emergencies.",
+    "scrollToAccept": "Please scroll to the bottom to accept the terms",
+    "acceptButton": "I Accept",
+    "acceptedButton": "Accepted",
+    "viewTerms": "View Terms of Use"
   }
 }
