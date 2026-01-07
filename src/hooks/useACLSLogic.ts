@@ -19,6 +19,7 @@ import {
 } from '@/types/acls';
 import { StoredSession, saveSession } from '@/lib/sessionStorage';
 import { exportSessionToPDF } from '@/lib/pdfExport';
+import { logger } from '@/utils/logger';
 import {
   calculateEpinephrineDose,
   calculateAmiodaroneDose,
@@ -226,7 +227,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
             };
 
             await saveSession(storedSession);
-            console.log('✅ Session auto-saved successfully!', {
+            logger.sessionEvent('Session auto-saved successfully', {
               id: storedSession.id,
               outcome: storedSession.outcome,
               phase: sessionSnapshot.phase,
@@ -235,7 +236,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
               postROSCData: storedSession.postROSCChecklist ? 'included' : 'not included'
             });
           } catch (error) {
-            console.error('❌ Failed to auto-save session:', error);
+            logger.error('Failed to auto-save session', error);
           }
         }, 2000);
       }
@@ -258,7 +259,7 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
   useEffect(() => {
     if (session.phase === 'initial' || session.phase === 'rhythm_selection' || session.phase === 'pathway_selection' || session.phase === 'cpr_pending_rhythm') {
       if (hasAutoSavedRef.current) {
-        console.log('Resetting auto-save flag - new session started');
+        logger.sessionEvent('Resetting auto-save flag - new session started');
         hasAutoSavedRef.current = false;
       }
     }

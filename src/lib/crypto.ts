@@ -1,6 +1,8 @@
 // Web Crypto API utilities for encrypting/decrypting sensitive session data
 // Uses AES-GCM with a device-bound key stored in IndexedDB
 
+import { logger } from '@/utils/logger';
+
 const CRYPTO_DB_NAME = 'acls_crypto';
 const CRYPTO_STORE_NAME = 'keys';
 const KEY_ID = 'session-encryption-key';
@@ -103,7 +105,7 @@ export async function encryptData(data: string): Promise<string> {
     
     return btoa(String.fromCharCode(...combined));
   } catch (err) {
-    console.error('Encryption failed:', err);
+    logger.error('Encryption failed', err);
     throw err;
   }
 }
@@ -129,7 +131,7 @@ export async function decryptData(encryptedData: string): Promise<string> {
     const decoder = new TextDecoder();
     return decoder.decode(decrypted);
   } catch (err) {
-    console.error('Decryption failed:', err);
+    logger.error('Decryption failed', err);
     throw err;
   }
 }

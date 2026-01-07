@@ -10,6 +10,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { Trash2, Heart, XCircle, Clock, Zap, Syringe, ChevronDown, ChevronUp, Activity, AlertTriangle, User, Baby, Filter, Download } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
 
 type FilterMode = 'all' | 'adult' | 'pediatric' | 'rhythm';
 
@@ -35,7 +36,7 @@ export default function SessionHistory() {
       const data = await getAllSessions();
       setSessions(data);
     } catch (error) {
-      console.error('Failed to load sessions:', error);
+      logger.error('Failed to load sessions', error);
     } finally {
       setLoading(false);
     }

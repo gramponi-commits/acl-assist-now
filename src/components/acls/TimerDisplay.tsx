@@ -142,9 +142,9 @@ export function CodeTimers({ totalElapsed, totalCPRTime }: CodeTimersProps) {
       {/* CPR Fraction */}
       <div className={cn(
         'rounded-lg p-2 text-center border',
-        parseInt(cprFraction) >= 80 
-          ? 'bg-acls-success/10 border-acls-success' 
-          : parseInt(cprFraction) >= 60 
+        parseInt(cprFraction, 10) >= 80
+          ? 'bg-acls-success/10 border-acls-success'
+          : parseInt(cprFraction, 10) >= 60
           ? 'bg-acls-warning/10 border-acls-warning'
           : 'bg-acls-critical/10 border-acls-critical'
       )}>
@@ -153,9 +153,9 @@ export function CodeTimers({ totalElapsed, totalCPRTime }: CodeTimersProps) {
         </div>
         <div className={cn(
           'text-lg font-mono font-bold',
-          parseInt(cprFraction) >= 80 
-            ? 'text-acls-success' 
-            : parseInt(cprFraction) >= 60 
+          parseInt(cprFraction, 10) >= 80
+            ? 'text-acls-success'
+            : parseInt(cprFraction, 10) >= 60
             ? 'text-acls-warning'
             : 'text-acls-critical'
         )}>

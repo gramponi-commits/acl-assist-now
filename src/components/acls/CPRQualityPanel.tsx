@@ -28,7 +28,7 @@ export function CPRQualityPanel({
   const [lastRecordedValue, setLastRecordedValue] = useState<number | null>(null);
 
   const handleETCO2Submit = () => {
-    const numValue = parseInt(etco2);
+    const numValue = parseInt(etco2, 10);
     if (!isNaN(numValue) && numValue > 0 && numValue !== lastRecordedValue && onETCO2Record) {
       onETCO2Record(numValue);
       setLastRecordedValue(numValue);
@@ -41,7 +41,7 @@ export function CPRQualityPanel({
     }
   };
 
-  const etco2Value = parseInt(etco2);
+  const etco2Value = parseInt(etco2, 10);
   const etco2Status = isNaN(etco2Value) ? null : etco2Value >= 10 ? 'good' : 'low';
 
   const isAdult = pathwayMode === 'adult';
@@ -77,7 +77,7 @@ export function CPRQualityPanel({
             />
             <Button
               onClick={handleETCO2Submit}
-              disabled={!etco2 || isNaN(parseInt(etco2)) || parseInt(etco2) <= 0}
+              disabled={!etco2 || isNaN(parseInt(etco2, 10)) || parseInt(etco2, 10) <= 0}
               size="sm"
               className="h-9 px-2"
             >
