@@ -1,12 +1,15 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlertTriangle, User, Gift, BookOpen, Shield, Info, ExternalLink, Share2, Copy, Mail, MessageCircle } from 'lucide-react';
+import { AlertTriangle, User, Gift, BookOpen, Shield, Info, ExternalLink, Share2, Copy, Mail, MessageCircle, ScrollText } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
+import { TermsOfServiceModal } from '@/components/TermsOfServiceModal';
 
 const About = () => {
   const { t } = useTranslation();
+  const [tosModalOpen, setTosModalOpen] = useState(false);
   const appUrl = window.location.origin;
 
   const handleCopyLink = async () => {
@@ -144,7 +147,7 @@ const About = () => {
       </Card>
 
       {/* References */}
-      <Card>
+      <Card className="mb-4">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-lg">
             <BookOpen className="h-5 w-5 text-primary" />
@@ -174,6 +177,32 @@ const About = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Terms of Service */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <ScrollText className="h-5 w-5 text-primary" />
+            {t('tos.title')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Button
+            variant="outline"
+            onClick={() => setTosModalOpen(true)}
+            className="w-full"
+          >
+            <ScrollText className="h-4 w-4 mr-2" />
+            {t('tos.viewTerms')}
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* TOS Modal */}
+      <TermsOfServiceModal
+        open={tosModalOpen}
+        onOpenChange={setTosModalOpen}
+      />
 
       {/* Version */}
       <p className="text-center text-xs text-muted-foreground mt-6">
