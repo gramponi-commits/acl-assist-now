@@ -13,6 +13,7 @@ import SessionHistory from "./pages/SessionHistory";
 import Settings from "./pages/Settings";
 import InstallHelp from "./pages/InstallHelp";
 import About from "./pages/About";
+import TermsOfService from "./pages/TermsOfService";
 import NotFound from "./pages/NotFound";
 import { useIsNativeApp } from "@/hooks/useIsNativeApp";
 import "@/i18n";
@@ -116,6 +117,7 @@ function AppLayout() {
             element={isNativeApp ? <Navigate to="/" replace /> : <InstallHelp />}
           />
           <Route path="/about" element={<About />} />
+          <Route path="/terms" element={<TermsOfService />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
