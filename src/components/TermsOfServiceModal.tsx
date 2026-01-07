@@ -30,20 +30,27 @@ export function TermsOfServiceModal({
   const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Reset scroll state when modal opens
+  // Reset scroll state when modal opens and attach scroll listener
   useEffect(() => {
     if (open) {
       setHasScrolledToEnd(false);
+
+      // Find the viewport element inside the ScrollArea (Radix UI creates this)
+      const viewport = scrollRef.current?.querySelector('[data-radix-scroll-area-viewport]') as HTMLDivElement;
+
+      if (viewport) {
+        const handleScroll = () => {
+          const isAtBottom = viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight < 50;
+          if (isAtBottom) {
+            setHasScrolledToEnd(true);
+          }
+        };
+
+        viewport.addEventListener('scroll', handleScroll);
+        return () => viewport.removeEventListener('scroll', handleScroll);
+      }
     }
   }, [open]);
-
-  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLDivElement;
-    const isAtBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 50;
-    if (isAtBottom && !hasScrolledToEnd) {
-      setHasScrolledToEnd(true);
-    }
-  };
 
   const handleAccept = () => {
     onAccept?.();
@@ -73,7 +80,6 @@ export function TermsOfServiceModal({
 
         <ScrollArea
           className="flex-1 pr-4 max-h-[60vh]"
-          onScrollCapture={handleScroll}
           ref={scrollRef}
         >
           <div className="space-y-4 pb-4">
