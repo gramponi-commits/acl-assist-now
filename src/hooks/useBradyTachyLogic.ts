@@ -14,6 +14,7 @@ import {
   createInitialBradyTachySession,
 } from '@/types/acls';
 import { saveBradyTachySession, clearBradyTachySession, StoredBradyTachySession, saveBradyTachyToHistory } from '@/lib/bradyTachyStorage';
+import { logger } from '@/utils/logger';
 
 export function useBradyTachyLogic() {
   const { t } = useTranslation();
@@ -315,7 +316,7 @@ export function useBradyTachyLogic() {
     try {
       await saveBradyTachyToHistory(sessionForHistory);
     } catch (err) {
-      console.error('Failed to save session to history before arrest switch:', err);
+      logger.error('Failed to save session to history before arrest switch', err);
     }
     
     // Update the session state
@@ -361,7 +362,7 @@ export function useBradyTachyLogic() {
       
       // Save to history (async, but don't wait)
       saveBradyTachyToHistory(sessionForHistory).catch(err => {
-        console.error('Failed to save session to history:', err);
+        logger.error('Failed to save session to history', err);
       });
       
       return updated;
