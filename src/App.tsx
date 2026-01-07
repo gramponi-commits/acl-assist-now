@@ -102,10 +102,10 @@ function AppLayout() {
   });
 
   return (
-    <div {...swipeHandlers} className="min-h-screen flex w-full">
+    <div {...swipeHandlers} className="min-h-screen flex w-full pb-safe">
       <AppSidebar />
       <MobileHeader />
-      <main className="flex-1 overflow-auto pt-14 md:pt-0">
+      <main className="flex-1 overflow-auto pt-[calc(3.5rem+env(safe-area-inset-top,0px))] md:pt-0">
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/history" element={<SessionHistory />} />

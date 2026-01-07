@@ -22,7 +22,7 @@ export const FooterStatsBar = memo<FooterStatsBarProps>(({
   const { t } = useTranslation();
 
   return (
-    <div className="surface-1 border-t border-moderate p-2 sm:p-3">
+    <div className="surface-1 border-t border-moderate p-2 sm:p-3 pb-safe">
       <div className="flex justify-around text-center text-clinical-xs sm:text-clinical-sm max-w-lg mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center sm:gap-1">
           <span className="text-muted-foreground">{t('codeEnded.epi')}</span>

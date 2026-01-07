@@ -37,7 +37,7 @@ export function AppSidebar() {
   return (
     <Sidebar
       className={cn(
-        'bg-card border-r border-border transition-all duration-300',
+        'bg-card border-r border-border transition-all duration-300 pt-safe',
         collapsed ? 'w-14' : 'w-56'
       )}
       collapsible="icon"
