@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlertTriangle, User, Gift, BookOpen, Shield, Info, ExternalLink, Share2, Copy, Mail, MessageCircle, ScrollText } from 'lucide-react';
+import { User, Gift, BookOpen, Shield, Info, ExternalLink, Share2, Copy, Mail, MessageCircle, ScrollText } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import { TermsOfServiceModal } from '@/components/TermsOfServiceModal';
@@ -52,19 +51,6 @@ const About = () => {
         <Info className="h-8 w-8 text-primary" />
         <h1 className="text-2xl font-bold">{t('about.title')}</h1>
       </div>
-
-      {/* Disclaimer - Prominent Warning */}
-      <Alert variant="destructive" className="mb-6 border-2">
-        <AlertTriangle className="h-5 w-5" />
-        <AlertDescription className="ml-2">
-          <p className="font-bold text-base mb-2">{t('about.disclaimerTitle')}</p>
-          <ul className="list-disc list-inside space-y-1 text-sm">
-            <li>{t('about.disclaimerEducational')}</li>
-            <li>{t('about.disclaimerNotReal')}</li>
-            <li>{t('about.disclaimerResponsibility')}</li>
-          </ul>
-        </AlertDescription>
-      </Alert>
 
       {/* Share */}
       <Card className="mb-4">

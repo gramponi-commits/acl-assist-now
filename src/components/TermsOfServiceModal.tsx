@@ -62,7 +62,7 @@ export function TermsOfServiceModal({
   return (
     <Dialog open={open} onOpenChange={canClose ? onOpenChange : undefined}>
       <DialogContent
-        className="max-w-2xl max-h-[90vh] flex flex-col"
+        className={`max-w-2xl max-h-[90vh] flex flex-col ${requireAcceptance ? '[&>button]:hidden' : ''}`}
         onPointerDownOutside={(e) => {
           if (requireAcceptance && !hasScrolledToEnd) {
             e.preventDefault();
@@ -79,7 +79,7 @@ export function TermsOfServiceModal({
         </DialogHeader>
 
         <ScrollArea
-          className="flex-1 pr-4 max-h-[60vh]"
+          className="flex-1 pr-4 h-[60vh]"
           ref={scrollRef}
         >
           <div className="space-y-4 pb-4">
