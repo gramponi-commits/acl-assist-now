@@ -79,7 +79,7 @@ export function TermsOfServiceModal({
         </DialogHeader>
 
         <ScrollArea
-          className="flex-1 pr-4 h-[60vh]"
+          className="flex-1 pr-4 min-h-0 max-h-[60vh] overflow-auto"
           ref={scrollRef}
         >
           <div className="space-y-4 pb-4">
@@ -97,7 +97,7 @@ export function TermsOfServiceModal({
             </Alert>
 
             <p className="text-muted-foreground text-xs">
-              {t('tos.lastUpdated')}: January 2025
+              {t('tos.lastUpdated')}: {t('tos.lastUpdatedDate')}
             </p>
 
             {/* Background */}
