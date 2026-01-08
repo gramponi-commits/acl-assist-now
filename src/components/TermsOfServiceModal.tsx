@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlertTriangle, Shield, Smartphone, Scale, Mail, Check } from 'lucide-react';
+import { Shield, Smartphone, Scale, Mail, Check } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -9,9 +9,7 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface TermsOfServiceModalProps {
   open: boolean;
@@ -78,17 +76,14 @@ export function TermsOfServiceModal({
         >
           <div className="space-y-4 pb-4">
             {/* Critical Warning */}
-            <Alert variant="destructive" className="border-2">
-              <AlertTriangle className="h-5 w-5" />
-              <AlertDescription className="ml-2">
-                <p className="font-bold text-base mb-2">{t('tos.criticalWarningTitle')}</p>
-                <ul className="list-disc list-inside space-y-1 text-sm">
-                  <li>{t('tos.criticalWarning1')}</li>
-                  <li>{t('tos.criticalWarning2')}</li>
-                  <li>{t('tos.criticalWarning3')}</li>
-                </ul>
-              </AlertDescription>
-            </Alert>
+            <section>
+              <h3 className="font-semibold mb-2">{t('tos.criticalWarningTitle')}</h3>
+              <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                <li>{t('tos.criticalWarning1')}</li>
+                <li>{t('tos.criticalWarning2')}</li>
+                <li>{t('tos.criticalWarning3')}</li>
+              </ul>
+            </section>
 
             <p className="text-muted-foreground text-xs">
               {t('tos.lastUpdated')}: {t('tos.lastUpdatedDate')}
@@ -99,7 +94,7 @@ export function TermsOfServiceModal({
               <h3 className="font-semibold mb-2">{t('tos.backgroundTitle')}</h3>
               <div className="text-sm text-muted-foreground space-y-2">
                 <p>{t('tos.backgroundP1')}</p>
-                <p className="font-semibold text-destructive">{t('tos.backgroundP2')}</p>
+                <p className="font-semibold">{t('tos.backgroundP2')}</p>
                 <p>{t('tos.backgroundP3')}</p>
               </div>
             </section>
@@ -128,7 +123,7 @@ export function TermsOfServiceModal({
                   <li>{t('tos.intendedUseList3')}</li>
                   <li>{t('tos.intendedUseList4')}</li>
                 </ul>
-                <p className="font-semibold text-destructive">{t('tos.intendedUseWarning')}</p>
+                <p className="font-semibold">{t('tos.intendedUseWarning')}</p>
               </div>
             </section>
 
@@ -215,10 +210,10 @@ export function TermsOfServiceModal({
                 {t('tos.disclaimersTitle')}
               </h3>
               <div className="text-sm text-muted-foreground space-y-2">
-                <p className="uppercase font-semibold">{t('tos.disclaimersP1')}</p>
+                <p className="font-semibold">{t('tos.disclaimersP1')}</p>
                 <p>{t('tos.disclaimersP2')}</p>
                 <p>{t('tos.disclaimersP3')}</p>
-                <p className="uppercase">{t('tos.disclaimersP4')}</p>
+                <p>{t('tos.disclaimersP4')}</p>
               </div>
             </section>
 
@@ -228,7 +223,7 @@ export function TermsOfServiceModal({
             <section>
               <h3 className="font-semibold mb-2">{t('tos.limitationTitle')}</h3>
               <div className="text-sm text-muted-foreground space-y-2">
-                <p className="uppercase">{t('tos.limitationP1')}</p>
+                <p>{t('tos.limitationP1')}</p>
                 <p>{t('tos.limitationP2')}</p>
               </div>
             </section>
@@ -273,26 +268,25 @@ export function TermsOfServiceModal({
                 <Mail className="h-4 w-4 text-primary" />
                 {t('tos.contactTitle')}
               </h3>
-              <div className="text-sm text-muted-foreground">
-                <p>{t('tos.contactP1')}</p>
+              <p className="text-sm text-muted-foreground">
+                {t('tos.contactP1')}{' '}
                 <a
                   href={`mailto:${t('tos.contactEmail')}`}
                   className="text-primary hover:underline"
                 >
-                  {t('tos.contactEmail')}
+                  {t('tos.contactByEmail')}
                 </a>
-              </div>
+              </p>
             </section>
 
             <Separator />
 
             {/* Final Notice */}
-            <Alert className="border-primary">
-              <AlertTriangle className="h-5 w-5" />
-              <AlertDescription className="ml-2 text-sm">
+            <section>
+              <p className="text-sm text-muted-foreground">
                 {t('tos.finalNotice')}
-              </AlertDescription>
-            </Alert>
+              </p>
+            </section>
           </div>
         </div>
 
