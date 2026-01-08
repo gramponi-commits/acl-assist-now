@@ -178,6 +178,7 @@ const About = () => {
             onClick={() => setTosModalOpen(true)}
             className="w-full"
           >
+            <ScrollText className="h-4 w-4 mr-2" />
             {t('tos.viewTerms')}
           </Button>
         </CardContent>
