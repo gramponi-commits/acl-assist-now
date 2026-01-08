@@ -28,29 +28,22 @@ export function TermsOfServiceModal({
 }: TermsOfServiceModalProps) {
   const { t } = useTranslation();
   const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Reset scroll state when modal opens and attach scroll listener
+  // Reset scroll state when modal opens
   useEffect(() => {
     if (open) {
       setHasScrolledToEnd(false);
-
-      // Find the viewport element inside the ScrollArea (Radix UI creates this)
-      const viewport = scrollRef.current?.querySelector('[data-radix-scroll-area-viewport]') as HTMLDivElement;
-
-      if (viewport) {
-        const handleScroll = () => {
-          const isAtBottom = viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight < 50;
-          if (isAtBottom) {
-            setHasScrolledToEnd(true);
-          }
-        };
-
-        viewport.addEventListener('scroll', handleScroll);
-        return () => viewport.removeEventListener('scroll', handleScroll);
-      }
     }
   }, [open]);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.currentTarget;
+    const isAtBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 50;
+    if (isAtBottom) {
+      setHasScrolledToEnd(true);
+    }
+  };
 
   const handleAccept = () => {
     onAccept?.();
@@ -78,9 +71,10 @@ export function TermsOfServiceModal({
           <DialogTitle className="text-xl">{t('tos.title')}</DialogTitle>
         </DialogHeader>
 
-        <ScrollArea
-          className="flex-1 pr-4 min-h-0 max-h-[60vh] overflow-auto"
-          ref={scrollRef}
+        <div
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+          className="flex-1 pr-4 min-h-0 max-h-[60vh] overflow-y-auto"
         >
           <div className="space-y-4 pb-4">
             {/* Critical Warning */}
@@ -300,7 +294,7 @@ export function TermsOfServiceModal({
               </AlertDescription>
             </Alert>
           </div>
-        </ScrollArea>
+        </div>
 
         <DialogFooter className="flex-col sm:flex-row gap-2">
           {requireAcceptance && !hasScrolledToEnd && (
