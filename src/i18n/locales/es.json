@@ -446,11 +446,6 @@
   },
   "about": {
     "title": "Info",
-    "disclaimerTitle": "Aviso Legal",
-    "disclaimerEducational": "Esta app está destinada únicamente para propósitos educativos y de entrenamiento en simulaciones",
-    "disclaimerNotReal": "No usar en pacientes reales - siempre siga los protocolos locales y el juicio clínico",
-    "disclaimerResponsibility": "El usuario es el único responsable de las decisiones clínicas tomadas durante reanimaciones reales",
-    "disclaimerNotification": "Solo para Entrenamiento - No usar en pacientes reales. Seguir siempre los protocolos locales.",
     "developerTitle": "Desarrollador",
     "developerName": "Desarrollado por el Dr. Giacomo Ramponi",
     "usageTitle": "Uso",
