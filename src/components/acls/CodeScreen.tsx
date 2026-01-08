@@ -94,7 +94,7 @@ export function CodeScreen() {
   const isPathwaySelection = session.phase === 'pathway_selection';
   const isInitial = session.phase === 'initial' || session.phase === 'rhythm_selection';
 
-  // Check for active session on mount and show disclaimer if needed
+  // Check for active session on mount
   useEffect(() => {
     const checkForActiveSession = async () => {
       const activeSession = await getActiveSession();
@@ -102,29 +102,11 @@ export function CodeScreen() {
         logger.sessionEvent('Found active session, prompting user to resume');
         setPendingResumeSession(activeSession);
         setShowResumeDialog(true);
-      } else {
-        // Show disclaimer notification only if not already dismissed in this session
-        const disclaimerDismissed = sessionStorage.getItem('disclaimerDismissed');
-        if (!disclaimerDismissed) {
-          toast.warning(t('about.disclaimerNotification'), {
-            duration: Infinity,
-            id: 'disclaimer-toast',
-          });
-        }
       }
     };
-    
-    checkForActiveSession();
 
-    // Cleanup: dismiss disclaimer when navigating away from this screen
-    return () => {
-      const disclaimerDismissed = sessionStorage.getItem('disclaimerDismissed');
-      if (!disclaimerDismissed) {
-        toast.dismiss('disclaimer-toast');
-        sessionStorage.setItem('disclaimerDismissed', 'true');
-      }
-    };
-  }, [t]);
+    checkForActiveSession();
+  }, []);
 
 
   // Enable audio alerts based on settings
@@ -249,17 +231,7 @@ export function CodeScreen() {
   }, [isPostROSC, playAlert, announce, vibrate, settings.vibrationEnabled]);
 
   // Handlers
-  const handlePathwaySelected = () => {
-    // Dismiss disclaimer toast immediately when any pathway is selected
-    const disclaimerDismissed = sessionStorage.getItem('disclaimerDismissed');
-    if (!disclaimerDismissed) {
-      toast.dismiss('disclaimer-toast');
-      sessionStorage.setItem('disclaimerDismissed', 'true');
-    }
-  };
-
   const handleSetPathwayMode = (mode: 'adult' | 'pediatric') => {
-    handlePathwaySelected();
     actions.setPathwayMode(mode);
   };
 
@@ -292,7 +264,6 @@ export function CodeScreen() {
   };
 
   const handleOpenBradyTachy = () => {
-    handlePathwaySelected();
     setShowBradyTachyModule(true);
     logger.sessionEvent('Brady/Tachy module opened');
   };
