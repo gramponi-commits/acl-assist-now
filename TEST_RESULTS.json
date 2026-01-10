@@ -1,0 +1,391 @@
+{
+  "date": "2026-01-08T20:55:28.984Z",
+  "languages": [
+    "en",
+    "it",
+    "es",
+    "fr",
+    "de",
+    "el",
+    "ru",
+    "uk",
+    "zh-CN",
+    "ja",
+    "ko",
+    "pt",
+    "id",
+    "nl",
+    "da",
+    "sv",
+    "no",
+    "pl",
+    "tr",
+    "vi",
+    "tl",
+    "ar",
+    "fa",
+    "th"
+  ],
+  "results": [
+    {
+      "langCode": "en",
+      "langName": "English",
+      "group": "Latin",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 26759,
+        "averageStringLength": 35,
+        "maxStringLength": 522,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "it",
+      "langName": "Italian",
+      "group": "Latin",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 29724,
+        "averageStringLength": 39,
+        "maxStringLength": 514,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "es",
+      "langName": "Spanish",
+      "group": "Latin",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 30127,
+        "averageStringLength": 39,
+        "maxStringLength": 540,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "fr",
+      "langName": "French",
+      "group": "Latin",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 30886,
+        "averageStringLength": 40,
+        "maxStringLength": 554,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "de",
+      "langName": "German",
+      "group": "Latin",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 30246,
+        "averageStringLength": 40,
+        "maxStringLength": 511,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "el",
+      "langName": "Greek",
+      "group": "Latin",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 30941,
+        "averageStringLength": 40,
+        "maxStringLength": 538,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "ru",
+      "langName": "Russian",
+      "group": "Cyrillic",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 30684,
+        "averageStringLength": 40,
+        "maxStringLength": 544,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "uk",
+      "langName": "Ukrainian",
+      "group": "Cyrillic",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 29751,
+        "averageStringLength": 39,
+        "maxStringLength": 524,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "zh-CN",
+      "langName": "Chinese (Simplified)",
+      "group": "CJK",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 9227,
+        "averageStringLength": 12,
+        "maxStringLength": 142,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "ja",
+      "langName": "Japanese",
+      "group": "CJK",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 12385,
+        "averageStringLength": 16,
+        "maxStringLength": 229,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "ko",
+      "langName": "Korean",
+      "group": "CJK",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 12903,
+        "averageStringLength": 17,
+        "maxStringLength": 216,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "pt",
+      "langName": "Portuguese",
+      "group": "Latin",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 29346,
+        "averageStringLength": 38,
+        "maxStringLength": 508,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "id",
+      "langName": "Indonesian",
+      "group": "Latin",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 27994,
+        "averageStringLength": 37,
+        "maxStringLength": 508,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "nl",
+      "langName": "Dutch",
+      "group": "Latin",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 29251,
+        "averageStringLength": 38,
+        "maxStringLength": 560,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "da",
+      "langName": "Danish",
+      "group": "Latin",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 27110,
+        "averageStringLength": 35,
+        "maxStringLength": 510,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "sv",
+      "langName": "Swedish",
+      "group": "Latin",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 27286,
+        "averageStringLength": 36,
+        "maxStringLength": 522,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "no",
+      "langName": "Norwegian",
+      "group": "Latin",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 26876,
+        "averageStringLength": 35,
+        "maxStringLength": 495,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "pl",
+      "langName": "Polish",
+      "group": "Latin",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 29721,
+        "averageStringLength": 39,
+        "maxStringLength": 535,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "tr",
+      "langName": "Turkish",
+      "group": "Latin",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 27640,
+        "averageStringLength": 36,
+        "maxStringLength": 496,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "vi",
+      "langName": "Vietnamese",
+      "group": "Latin",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 27766,
+        "averageStringLength": 36,
+        "maxStringLength": 509,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "tl",
+      "langName": "Filipino/Tagalog",
+      "group": "Latin",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 31949,
+        "averageStringLength": 42,
+        "maxStringLength": 558,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "ar",
+      "langName": "Arabic",
+      "group": "RTL",
+      "status": "WARNING",
+      "errors": 0,
+      "warnings": 1,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 26445,
+        "averageStringLength": 35,
+        "maxStringLength": 390,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "fa",
+      "langName": "Persian/Farsi",
+      "group": "RTL",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 26722,
+        "averageStringLength": 35,
+        "maxStringLength": 422,
+        "placeholderCount": 34
+      }
+    },
+    {
+      "langCode": "th",
+      "langName": "Thai",
+      "group": "Complex Script",
+      "status": "PASSED",
+      "errors": 0,
+      "warnings": 0,
+      "stats": {
+        "totalKeys": 764,
+        "totalCharacters": 26201,
+        "averageStringLength": 34,
+        "maxStringLength": 432,
+        "placeholderCount": 34
+      }
+    }
+  ]
+}

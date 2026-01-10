@@ -1,9 +1,11 @@
 // Storage for active (in-progress) sessions to enable resume functionality
-import { ACLSSession } from '@/types/acls';
+import { ACLSSession, PathwayMode } from '@/types/acls';
 import { encryptedStorage, isCryptoAvailable } from './crypto';
 
 const ACTIVE_SESSION_KEY = 'acls-active-session';
 const TIMER_STATE_KEY = 'acls-timer-state';
+const PATHWAY_MODE_KEY = 'acls-pathway-mode';
+const PATHWAY_WEIGHT_KEY = 'acls-pathway-weight';
 
 export interface SavedTimerState {
   cprCycleRemaining: number;
@@ -53,4 +55,48 @@ export function clearActiveSession(): void {
 
 export async function hasActiveSession(): Promise<boolean> {
   return (await getActiveSession()) !== null;
+}
+
+// Pathway mode persistence (for CodeScreen toggle)
+export function savePathwayMode(mode: PathwayMode): void {
+  try {
+    localStorage.setItem(PATHWAY_MODE_KEY, mode);
+  } catch (e) {
+    console.error('Failed to save pathway mode:', e);
+  }
+}
+
+export function getPathwayMode(): PathwayMode {
+  try {
+    const mode = localStorage.getItem(PATHWAY_MODE_KEY);
+    if (mode === 'pediatric') return 'pediatric';
+  } catch (e) {
+    console.error('Failed to get pathway mode:', e);
+  }
+  return 'adult'; // Default to adult
+}
+
+export function savePathwayWeight(weight: number | null): void {
+  try {
+    if (weight === null) {
+      localStorage.removeItem(PATHWAY_WEIGHT_KEY);
+    } else {
+      localStorage.setItem(PATHWAY_WEIGHT_KEY, String(weight));
+    }
+  } catch (e) {
+    console.error('Failed to save pathway weight:', e);
+  }
+}
+
+export function getPathwayWeight(): number | null {
+  try {
+    const weight = localStorage.getItem(PATHWAY_WEIGHT_KEY);
+    if (weight) {
+      const parsed = parseFloat(weight);
+      if (!isNaN(parsed)) return parsed;
+    }
+  } catch (e) {
+    console.error('Failed to get pathway weight:', e);
+  }
+  return null;
 }

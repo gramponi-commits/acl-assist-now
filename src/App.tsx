@@ -14,10 +14,11 @@ import SessionHistory from "./pages/SessionHistory";
 import Settings from "./pages/Settings";
 import InstallHelp from "./pages/InstallHelp";
 import About from "./pages/About";
+import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 import { useIsNativeApp } from "@/hooks/useIsNativeApp";
 import { useTosAcceptance } from "@/hooks/useTosAcceptance";
-import "@/i18n";
+import i18n, { isRTL } from "@/i18n";
 
 const queryClient = new QueryClient();
 
@@ -123,7 +124,7 @@ function AppLayout() {
         onAccept={acceptTos}
       />
 
-      <div {...swipeHandlers} className="min-h-screen flex w-full pb-safe">
+      <div {...swipeHandlers} className="min-h-screen flex w-full pb-safe" dir={isRTL(i18n.language) ? 'rtl' : 'ltr'}>
         <AppSidebar />
         <MobileHeader />
         <main className="flex-1 overflow-auto pt-[calc(3.5rem+env(safe-area-inset-top,0px))] md:pt-0">
@@ -137,6 +138,7 @@ function AppLayout() {
               element={isNativeApp ? <Navigate to="/" replace /> : <InstallHelp />}
             />
             <Route path="/about" element={<About />} />
+            <Route path="/privacy" element={<Privacy />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

@@ -101,12 +101,9 @@ export function BradyTachyPatientSelector({ session, actions }: BradyTachyPatien
           {patientGroup === 'pediatric' ? <Baby className="h-4 w-4" /> : <User className="h-4 w-4" />}
           {patientGroup === 'pediatric' ? t('bradyTachy.pediatric') : t('bradyTachy.adult')}
         </div>
-        <h1 className="text-2xl font-bold text-foreground mb-2">
-          {t('bradyTachy.selectBranch')}
-        </h1>
       </div>
 
-      {/* Weight Input for Pediatric (Optional) */}
+      {/* Weight Input for Pediatric (Optional) - Same style as Cardiac Arrest pathway */}
       {patientGroup === 'pediatric' && (
         <div className="w-full max-w-sm mb-4">
           <Button
@@ -118,11 +115,8 @@ export function BradyTachyPatientSelector({ session, actions }: BradyTachyPatien
             )}
           >
             <Scale className="h-6 w-6" />
-            <div className="text-left">
-              <div className="text-lg font-bold">
-                {currentWeight ? `${currentWeight} kg` : t('bradyTachy.optionalWeight')}
-              </div>
-              <div className="text-sm opacity-70">{t('bradyTachy.weightForDosing')}</div>
+            <div className="text-lg font-bold">
+              {currentWeight ? `${currentWeight} kg` : t('weight.setWeight')}
             </div>
           </Button>
 
@@ -133,6 +127,10 @@ export function BradyTachyPatientSelector({ session, actions }: BradyTachyPatien
             onOpenChange={setShowWeightDialog}
             showTrigger={false}
           />
+
+          <p className="text-xs text-muted-foreground text-center mt-2">
+            {t('pathway.weightCanBeSetLater')}
+          </p>
         </div>
       )}
 

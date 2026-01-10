@@ -276,7 +276,7 @@ export function PregnancyChecklist({
                 {pregnancyActive ? t('pregnancy.protocolActive') : t('pregnancy.activatePregnancy')}
               </div>
               <div className="text-xs text-muted-foreground">
-                {pregnancyActive ? t('pregnancy.cannotDeactivate') : t('pregnancy.activateDesc')}
+                {t('pregnancy.activateDesc')}
               </div>
             </div>
             {pregnancyActive && (

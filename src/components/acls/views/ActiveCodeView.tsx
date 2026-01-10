@@ -8,8 +8,18 @@ import { CycleTimers, CodeTimers } from '../TimerDisplay';
 import { CPRQualityPanel } from '../CPRQualityPanel';
 import { HsAndTsChecklist } from '../HsAndTsChecklist';
 import { PregnancyChecklist } from '../PregnancyChecklist';
+import { SpecialCircumstancesChecklist } from '../SpecialCircumstancesChecklist';
 import { CodeTimeline } from '../CodeTimeline';
-import type { PathwayMode, Intervention, HsAndTs, AirwayStatus, PregnancyCauses, PregnancyInterventions, CPRRatio } from '@/types/acls';
+import type {
+  PathwayMode,
+  Intervention,
+  HsAndTs,
+  AirwayStatus,
+  PregnancyCauses,
+  PregnancyInterventions,
+  CPRRatio,
+  SpecialCircumstances,
+} from '@/types/acls';
 
 // Use HsAndTs directly instead of HsAndTsState alias
 type HsAndTsState = HsAndTs;
@@ -31,6 +41,8 @@ interface ActiveCodeViewProps {
   pregnancyCauses?: PregnancyCauses;
   pregnancyInterventions?: PregnancyInterventions;
   pregnancyStartTime?: number | null;
+  // Special Circumstances
+  specialCircumstances: SpecialCircumstances;
 
   // Timer state
   cprCycleRemaining: number;
@@ -64,6 +76,8 @@ interface ActiveCodeViewProps {
   onUpdatePregnancyCauses: (updates: Partial<PregnancyCauses>) => void;
   onUpdatePregnancyInterventions: (updates: Partial<PregnancyInterventions>) => void;
   onDeliveryAlert: () => void;
+  // Special Circumstances actions
+  onToggleSpecialCircumstance: (key: keyof SpecialCircumstances, active: boolean) => void;
   onAddNote: () => void;
   onExport: () => void;
   onNewCode: () => void;
@@ -92,6 +106,7 @@ export const ActiveCodeView = memo<ActiveCodeViewProps>(({
   pregnancyCauses,
   pregnancyInterventions,
   pregnancyStartTime,
+  specialCircumstances,
   cprCycleRemaining,
   epiRemaining,
   preShockAlert,
@@ -117,6 +132,7 @@ export const ActiveCodeView = memo<ActiveCodeViewProps>(({
   onUpdatePregnancyCauses,
   onUpdatePregnancyInterventions,
   onDeliveryAlert,
+  onToggleSpecialCircumstance,
   onAddNote,
   onExport,
   onNewCode,
@@ -206,6 +222,12 @@ export const ActiveCodeView = memo<ActiveCodeViewProps>(({
           onDeliveryAlert={onDeliveryAlert}
         />
       )}
+
+      {/* Special Circumstances - Both adult and pediatric */}
+      <SpecialCircumstancesChecklist
+        specialCircumstances={specialCircumstances}
+        onToggleCondition={onToggleSpecialCircumstance}
+      />
 
       {/* Code Timers - Total & CPR */}
       <CodeTimers

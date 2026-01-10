@@ -1,11 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { Scale, ArrowRight, Baby } from 'lucide-react';
+import { Scale } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { WeightInput } from './WeightInput';
+import { PediatricToggle } from './PediatricToggle';
+import { PathwayMode } from '@/types/acls';
+import {
+  getPathwayMode,
+  savePathwayMode,
+  getPathwayWeight,
+  savePathwayWeight,
+} from '@/lib/activeSessionStorage';
 
-export type PathwayMode = 'adult' | 'pediatric';
+export type { PathwayMode };
 
 interface PathwaySelectorProps {
   onSelectPathway: (mode: PathwayMode) => void;
@@ -15,162 +23,137 @@ interface PathwaySelectorProps {
   onSelectBradyTachy?: () => void;
 }
 
-type SelectionPhase = 'pathway' | 'pediatric_weight';
-
-export function PathwaySelector({ 
-  onSelectPathway, 
-  onStartCPR, 
+/**
+ * PathwaySelector - Redesigned with pediatric toggle at top
+ * - Single toggle controls adult/pediatric mode
+ * - Weight selector appears when pediatric is on
+ * - Cardiac Arrest button changes color based on mode
+ * - Brady/Tachy button stays yellow
+ */
+export function PathwaySelector({
+  onSelectPathway,
+  onStartCPR,
   onSetWeight,
   currentWeight,
-  onSelectBradyTachy 
+  onSelectBradyTachy,
 }: PathwaySelectorProps) {
   const { t } = useTranslation();
-  const [phase, setPhase] = useState<SelectionPhase>('pathway');
+  const [mode, setMode] = useState<PathwayMode>(() => getPathwayMode());
   const [showWeightDialog, setShowWeightDialog] = useState(false);
 
-  const handleAdultSelect = () => {
-    onSelectPathway('adult');
-    // Adult pathway starts CPR immediately
-    onStartCPR();
-  };
+  // Load persisted weight when mode changes to pediatric
+  useEffect(() => {
+    if (mode === 'pediatric') {
+      const savedWeight = getPathwayWeight();
+      if (savedWeight !== null && savedWeight !== currentWeight) {
+        onSetWeight(savedWeight);
+      }
+    }
+  }, [mode, currentWeight, onSetWeight]);
 
-  const handlePediatricSelect = () => {
-    onSelectPathway('pediatric');
-    setPhase('pediatric_weight');
+  const handleToggleMode = (newMode: PathwayMode) => {
+    setMode(newMode);
+    savePathwayMode(newMode);
+    onSelectPathway(newMode);
+
+    // Clear weight when switching to adult
+    if (newMode === 'adult' && currentWeight !== null) {
+      onSetWeight(null);
+      savePathwayWeight(null);
+    }
   };
 
   const handleWeightSet = (weight: number | null) => {
     onSetWeight(weight);
+    savePathwayWeight(weight);
     setShowWeightDialog(false);
   };
 
-  const handleStartPediatricCPR = () => {
+  const handleStartCardiacArrest = () => {
+    // Ensure parent has the correct mode before starting CPR
+    onSelectPathway(mode);
     onStartCPR();
   };
 
-  // Pathway Selection Phase
-  if (phase === 'pathway') {
-    return (
-      <div className="flex flex-col items-center justify-center pt-16 pb-8 space-y-6">
-        <div className="text-center mb-4">
-          <h1 className="text-2xl font-bold text-foreground mb-2">
-            {t('pathway.selectMode')}
-          </h1>
-          <p className="text-muted-foreground text-sm">
-            {t('pathway.selectDescription')}
-          </p>
-        </div>
+  const isPediatric = mode === 'pediatric';
 
-        <div className="w-full max-w-sm space-y-4">
-          {/* Adult Button */}
-          <Button
-            onClick={handleAdultSelect}
-            className={cn(
-              'w-full h-20 flex items-center justify-center px-6',
-              'bg-acls-critical hover:bg-acls-critical/90 text-white',
-              'shadow-lg shadow-acls-critical/30 transition-all',
-              'border-2 border-acls-critical'
-            )}
-          >
-            <span className="text-xl font-bold">{t('pathway.adultACLS')}</span>
-          </Button>
-
-          {/* Pediatric Button */}
-          <Button
-            onClick={handlePediatricSelect}
-            className={cn(
-              'w-full h-20 flex items-center justify-center px-6',
-              'bg-pals-primary hover:bg-pals-primary/90 text-white',
-              'shadow-lg shadow-pals-primary/30 transition-all',
-              'border-2 border-pals-primary'
-            )}
-          >
-            <span className="text-xl font-bold">{t('pathway.pediatricPALS')}</span>
-          </Button>
-
-          {/* Bradycardia / Tachycardia (With Pulse) Button */}
-          {onSelectBradyTachy && (
-            <Button
-              onClick={onSelectBradyTachy}
-              className={cn(
-                'w-full h-20 flex items-center justify-center px-6',
-                'bg-yellow-500 hover:bg-yellow-600 text-black',
-                'shadow-lg shadow-yellow-500/30 transition-all'
-              )}
-            >
-              <span className="text-xl font-bold">{t('bradyTachy.moduleTitle')}</span>
-            </Button>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  // Pediatric Weight Selection Phase
   return (
-    <div className="flex flex-col items-center justify-center pt-16 pb-8 space-y-6">
-      <div className="text-center mb-4">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pals-primary/20 text-pals-primary text-sm font-medium mb-4">
-          <Baby className="h-4 w-4" />
-          {t('pathway.pediatricPALS')}
-        </div>
-        <h1 className="text-2xl font-bold text-foreground mb-2">
-          {t('pathway.setWeight')}
-        </h1>
-        <p className="text-muted-foreground text-sm">
-          {t('pathway.weightDescription')}
-        </p>
-      </div>
-
+    <div className="flex flex-col items-center pt-6 pb-8">
       <div className="w-full max-w-sm space-y-4">
-        {/* Set Weight Button */}
+        {/* Pediatric Toggle - At the top */}
+        <PediatricToggle mode={mode} onToggle={handleToggleMode} />
+
+        {/* Weight Selector Area - Fixed height container */}
+        <div className="h-28 relative">
+          {isPediatric && (
+            <div className="absolute inset-0 animate-in fade-in slide-in-from-top-2 duration-200">
+              <Button
+                onClick={() => setShowWeightDialog(true)}
+                variant="outline"
+                className={cn(
+                  'w-full h-16 flex items-center justify-center gap-3',
+                  'border-2 border-pals-primary text-pals-primary hover:bg-pals-primary/10'
+                )}
+              >
+                <Scale className="h-6 w-6" />
+                <div className="text-lg font-bold">
+                  {currentWeight ? `${currentWeight} kg` : t('weight.setWeight')}
+                </div>
+              </Button>
+
+              <WeightInput
+                currentWeight={currentWeight}
+                onWeightChange={handleWeightSet}
+                isOpen={showWeightDialog}
+                onOpenChange={setShowWeightDialog}
+                showTrigger={false}
+              />
+
+              <p className="text-xs text-muted-foreground text-center mt-2">
+                {t('pathway.weightCanBeSetLater')}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Action Buttons */}
+        {/* Cardiac Arrest Button - Color changes based on mode */}
         <Button
-          onClick={() => setShowWeightDialog(true)}
-          variant="outline"
+          onClick={handleStartCardiacArrest}
           className={cn(
-            'w-full h-20 flex items-center justify-center gap-3',
-            'border-2 border-pals-primary text-pals-primary hover:bg-pals-primary/10'
+            'w-full h-20 flex flex-col items-center justify-center gap-1',
+            'shadow-lg transition-all',
+            'border-2',
+            isPediatric
+              ? 'bg-pals-primary hover:bg-pals-primary/90 text-white border-pals-primary shadow-pals-primary/30'
+              : 'bg-acls-critical hover:bg-acls-critical/90 text-white border-acls-critical shadow-acls-critical/30'
           )}
         >
-          <Scale className="h-8 w-8" />
-          <div className="text-left">
-            <div className="text-lg font-bold">
-              {currentWeight ? `${currentWeight} kg` : t('weight.setWeight')}
-            </div>
-            <div className="text-sm opacity-70">{t('pathway.tapToSetWeight')}</div>
-          </div>
+          <span className="text-xl font-bold">{t('pathway.cardiacArrest')}</span>
+          <span className="text-sm opacity-80">
+            {isPediatric
+              ? currentWeight
+                ? `${currentWeight} kg`
+                : t('weight.unknownWeight')
+              : t('pathway.adultDescription')}
+          </span>
         </Button>
 
-        {/* Weight Input Dialog */}
-        <WeightInput
-          currentWeight={currentWeight}
-          onWeightChange={handleWeightSet}
-          isOpen={showWeightDialog}
-          onOpenChange={setShowWeightDialog}
-          showTrigger={false}
-        />
-
-        {/* Start CPR Button */}
-        <Button
-          onClick={handleStartPediatricCPR}
-          className={cn(
-            'w-full h-24 flex items-center justify-center gap-3',
-            'bg-pals-primary hover:bg-pals-primary/90 text-white',
-            'shadow-lg shadow-pals-primary/30 transition-all'
-          )}
-        >
-          <ArrowRight className="h-8 w-8" />
-          <div className="text-center">
-            <div className="text-xl font-bold">{t('actions.startCPR')}</div>
-            <div className="text-sm opacity-90">
-              {currentWeight ? `${currentWeight} kg` : t('weight.unknownWeight')}
-            </div>
-          </div>
-        </Button>
-
-        <p className="text-xs text-muted-foreground text-center">
-          {t('pathway.weightCanBeSetLater')}
-        </p>
+        {/* Brady/Tachy Button - Stays yellow */}
+        {onSelectBradyTachy && (
+          <Button
+            onClick={onSelectBradyTachy}
+            className={cn(
+              'w-full h-20 flex items-center justify-center px-6',
+              'bg-yellow-500 hover:bg-yellow-600 text-black',
+              'shadow-lg shadow-yellow-500/30 transition-all'
+            )}
+          >
+            <span className="text-xl font-bold">
+              {t('bradyTachy.moduleTitle')}
+            </span>
+          </Button>
+        )}
       </div>
     </div>
   );

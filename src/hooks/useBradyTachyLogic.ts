@@ -16,9 +16,31 @@ import {
 import { saveBradyTachySession, clearBradyTachySession, StoredBradyTachySession, saveBradyTachyToHistory } from '@/lib/bradyTachyStorage';
 import { logger } from '@/utils/logger';
 
-export function useBradyTachyLogic() {
+export interface UseBradyTachyLogicOptions {
+  /** If provided, skips patient selection and starts at branch selection with this mode */
+  initialMode?: PathwayMode;
+  /** If provided, sets the initial weight (only used with pediatric mode) */
+  initialWeight?: number | null;
+}
+
+export function useBradyTachyLogic(options: UseBradyTachyLogicOptions = {}) {
   const { t } = useTranslation();
-  const [session, setSession] = useState<BradyTachySession>(createInitialBradyTachySession);
+  const [session, setSession] = useState<BradyTachySession>(() => {
+    const initial = createInitialBradyTachySession();
+    // If initialMode is provided, skip patient_selection and go directly to branch_selection
+    if (options.initialMode) {
+      return {
+        ...initial,
+        phase: 'branch_selection',
+        decisionContext: {
+          ...initial.decisionContext,
+          patientGroup: options.initialMode,
+          weightKg: options.initialMode === 'pediatric' ? (options.initialWeight ?? null) : null,
+        },
+      };
+    }
+    return initial;
+  });
 
   // Add intervention with enhanced logging
   const addIntervention = useCallback((

@@ -100,6 +100,138 @@ export const DEFAULT_PREGNANCY_INTERVENTIONS: PregnancyInterventions = {
   massiveTransfusion: false,
 };
 
+// ==================== SPECIAL CIRCUMSTANCES ====================
+// 8 special circumstances from 2025 AHA Guidelines (separate from pregnancy)
+
+export interface SpecialCircumstances {
+  anaphylaxis: boolean;
+  asthma: boolean;
+  hyperthermia: boolean;
+  opioidOverdose: boolean;
+  drowning: boolean;
+  electrocution: boolean;
+  lvadFailure: boolean;
+}
+
+export const DEFAULT_SPECIAL_CIRCUMSTANCES: SpecialCircumstances = {
+  anaphylaxis: false,
+  asthma: false,
+  hyperthermia: false,
+  opioidOverdose: false,
+  drowning: false,
+  electrocution: false,
+  lvadFailure: false,
+};
+
+// Per-condition checklists
+export interface AnaphylaxisChecklist {
+  identifyTrigger: boolean;
+  ivFluids: boolean;
+  epinephrine: boolean;
+  glucagonIfBetaBlocked: boolean;
+  considerECPR: boolean;
+}
+
+export interface AsthmaChecklist {
+  evaluateTensionPneumo: boolean;
+  lowTidalVolumeVent: boolean;
+  activeExhalation: boolean;
+  bronchodilators: boolean;
+  considerECLS: boolean;
+}
+
+export interface HyperthermiaChecklist {
+  measureCoreTemp: boolean;
+  iceWaterImmersion: boolean;
+  tepidWaterCooling: boolean;
+  monitorTempDuringCooling: boolean;
+  stopCoolingAt38_6: boolean;
+}
+
+export interface OpioidOverdoseChecklist {
+  ventilationFirst: boolean;
+  naloxoneAdministered: boolean;
+  repeatNaloxoneIfNeeded: boolean;
+  observeForRecurrence: boolean;
+}
+
+export interface DrowningChecklist {
+  earlyVentilation: boolean;
+  supplementalOxygen: boolean;
+  standardCPR: boolean;
+  considerSpinalPrecautions: boolean;
+}
+
+export interface ElectrocutionChecklist {
+  ensureSceneSafety: boolean;
+  rapidDefibrillation: boolean;
+  standardResuscitation: boolean;
+  prolongedCPRConsideration: boolean;
+}
+
+export interface LVADFailureChecklist {
+  startCompressionsImmediately: boolean;
+  auscultateForHum: boolean;
+  checkController: boolean;
+  checkDriveline: boolean;
+  checkPowerSource: boolean;
+  measureBPDoppler: boolean;
+}
+
+export const DEFAULT_ANAPHYLAXIS_CHECKLIST: AnaphylaxisChecklist = {
+  identifyTrigger: false,
+  ivFluids: false,
+  epinephrine: false,
+  glucagonIfBetaBlocked: false,
+  considerECPR: false,
+};
+
+export const DEFAULT_ASTHMA_CHECKLIST: AsthmaChecklist = {
+  evaluateTensionPneumo: false,
+  lowTidalVolumeVent: false,
+  activeExhalation: false,
+  bronchodilators: false,
+  considerECLS: false,
+};
+
+export const DEFAULT_HYPERTHERMIA_CHECKLIST: HyperthermiaChecklist = {
+  measureCoreTemp: false,
+  iceWaterImmersion: false,
+  tepidWaterCooling: false,
+  monitorTempDuringCooling: false,
+  stopCoolingAt38_6: false,
+};
+
+export const DEFAULT_OPIOID_OVERDOSE_CHECKLIST: OpioidOverdoseChecklist = {
+  ventilationFirst: false,
+  naloxoneAdministered: false,
+  repeatNaloxoneIfNeeded: false,
+  observeForRecurrence: false,
+};
+
+export const DEFAULT_DROWNING_CHECKLIST: DrowningChecklist = {
+  earlyVentilation: false,
+  supplementalOxygen: false,
+  standardCPR: false,
+  considerSpinalPrecautions: false,
+};
+
+export const DEFAULT_ELECTROCUTION_CHECKLIST: ElectrocutionChecklist = {
+  ensureSceneSafety: false,
+  rapidDefibrillation: false,
+  standardResuscitation: false,
+  prolongedCPRConsideration: false,
+};
+
+export const DEFAULT_LVAD_FAILURE_CHECKLIST: LVADFailureChecklist = {
+  startCompressionsImmediately: false,
+  auscultateForHum: false,
+  checkController: false,
+  checkDriveline: false,
+  checkPowerSource: false,
+  measureBPDoppler: false,
+};
+
 export interface PostROSCChecklist {
   airwaySecured: boolean;
   ventilationOptimized: boolean;
@@ -158,6 +290,15 @@ export interface ACLSSession {
   pregnancyCauses: PregnancyCauses;
   pregnancyInterventions: PregnancyInterventions;
   pregnancyStartTime: number | null;
+  // Special Circumstances (applies to both adult and pediatric)
+  specialCircumstances: SpecialCircumstances;
+  anaphylaxisChecklist: AnaphylaxisChecklist;
+  asthmaChecklist: AsthmaChecklist;
+  hyperthermiaChecklist: HyperthermiaChecklist;
+  opioidOverdoseChecklist: OpioidOverdoseChecklist;
+  drowningChecklist: DrowningChecklist;
+  electrocutionChecklist: ElectrocutionChecklist;
+  lvadFailureChecklist: LVADFailureChecklist;
   // BradyTachy-specific field (for combined sessions)
   bradyTachyStartTime: number | null;
 }
@@ -254,6 +395,14 @@ export function createInitialSession(): ACLSSession {
     pregnancyCauses: { ...DEFAULT_PREGNANCY_CAUSES },
     pregnancyInterventions: { ...DEFAULT_PREGNANCY_INTERVENTIONS },
     pregnancyStartTime: null,
+    specialCircumstances: { ...DEFAULT_SPECIAL_CIRCUMSTANCES },
+    anaphylaxisChecklist: { ...DEFAULT_ANAPHYLAXIS_CHECKLIST },
+    asthmaChecklist: { ...DEFAULT_ASTHMA_CHECKLIST },
+    hyperthermiaChecklist: { ...DEFAULT_HYPERTHERMIA_CHECKLIST },
+    opioidOverdoseChecklist: { ...DEFAULT_OPIOID_OVERDOSE_CHECKLIST },
+    drowningChecklist: { ...DEFAULT_DROWNING_CHECKLIST },
+    electrocutionChecklist: { ...DEFAULT_ELECTROCUTION_CHECKLIST },
+    lvadFailureChecklist: { ...DEFAULT_LVAD_FAILURE_CHECKLIST },
     bradyTachyStartTime: null,
   };
 }

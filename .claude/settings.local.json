@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "Task",
+      "WebFetch",
+      "WebSearch",
+      "NotebookEdit",
+      "TodoWrite",
+      "AskUserQuestion",
+      "Skill",
+      "EnterPlanMode",
+      "ExitPlanMode",
+      "KillShell",
+      "TaskOutput",
+      "Bash(java -version:*)",
+      "Bash(where java:*)",
+      "Bash(echo:*)"
+    ]
+  }
+}

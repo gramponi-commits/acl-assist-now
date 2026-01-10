@@ -141,9 +141,7 @@ export function ActionButtons({
             'w-full h-14 sm:h-16 text-base sm:text-lg font-bold gap-2 sm:gap-3 transition-all touch-target interactive-active',
             rhythmCheckDue
               ? 'bg-acls-critical hover:bg-acls-critical/90 text-white pulse-critical shadow-lg'
-              : isAdult
-              ? 'bg-acls-critical/80 hover:bg-acls-critical/70 text-white'
-              : 'bg-acls-info hover:bg-acls-info/90 text-white'
+              : 'bg-acls-critical/80 hover:bg-acls-critical/70 text-white'
           )}
           aria-label={rhythmCheckDue ? t('actions.rhythmCheckNow') : t('actions.rhythmCheck')}
           aria-live="polite"

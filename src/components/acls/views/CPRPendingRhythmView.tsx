@@ -8,8 +8,19 @@ import { CodeTimers } from '../TimerDisplay';
 import { CPRQualityPanel } from '../CPRQualityPanel';
 import { HsAndTsChecklist } from '../HsAndTsChecklist';
 import { PregnancyChecklist } from '../PregnancyChecklist';
+import { SpecialCircumstancesChecklist } from '../SpecialCircumstancesChecklist';
 import { CodeTimeline } from '../CodeTimeline';
-import type { PathwayMode, Intervention, HsAndTs, AirwayStatus, PregnancyCauses, PregnancyInterventions, CPRRatio, RhythmType } from '@/types/acls';
+import type {
+  PathwayMode,
+  Intervention,
+  HsAndTs,
+  AirwayStatus,
+  PregnancyCauses,
+  PregnancyInterventions,
+  CPRRatio,
+  RhythmType,
+  SpecialCircumstances,
+} from '@/types/acls';
 
 // Use HsAndTs directly instead of HsAndTsState alias
 type HsAndTsState = HsAndTs;
@@ -30,6 +41,8 @@ interface CPRPendingRhythmViewProps {
   pregnancyCauses?: PregnancyCauses;
   pregnancyInterventions?: PregnancyInterventions;
   pregnancyStartTime?: number | null;
+  // Special Circumstances
+  specialCircumstances: SpecialCircumstances;
   vibrationEnabled: boolean;
   onSetWeight: (weight: number | null) => void;
   onSelectRhythm: (rhythm: RhythmType) => void;
@@ -42,6 +55,8 @@ interface CPRPendingRhythmViewProps {
   onUpdatePregnancyCauses: (updates: Partial<PregnancyCauses>) => void;
   onUpdatePregnancyInterventions: (updates: Partial<PregnancyInterventions>) => void;
   onDeliveryAlert: () => void;
+  // Special Circumstances actions
+  onToggleSpecialCircumstance: (key: keyof SpecialCircumstances, active: boolean) => void;
   onAddNote: () => void;
   onNewCode: () => void;
   onROSC: () => void;
@@ -68,6 +83,7 @@ export const CPRPendingRhythmView = memo<CPRPendingRhythmViewProps>(({
   pregnancyCauses,
   pregnancyInterventions,
   pregnancyStartTime,
+  specialCircumstances,
   vibrationEnabled,
   onSetWeight,
   onSelectRhythm,
@@ -80,6 +96,7 @@ export const CPRPendingRhythmView = memo<CPRPendingRhythmViewProps>(({
   onUpdatePregnancyCauses,
   onUpdatePregnancyInterventions,
   onDeliveryAlert,
+  onToggleSpecialCircumstance,
   onAddNote,
   onNewCode,
   onROSC,
@@ -119,7 +136,7 @@ export const CPRPendingRhythmView = memo<CPRPendingRhythmViewProps>(({
             setShowRhythmSelector(true);
             onSetRhythmAnalysisActive(true);
           }}
-          className="h-14 sm:h-16 w-full text-lg sm:text-xl font-bold bg-acls-info hover:bg-acls-info/90 text-white touch-target interactive-active"
+          className="h-14 sm:h-16 w-full text-lg sm:text-xl font-bold bg-acls-critical hover:bg-acls-critical/90 text-white touch-target interactive-active"
           aria-label={t('actions.analyzeRhythm')}
         >
           <Stethoscope className="h-5 w-5 sm:h-6 sm:w-6 mr-2 sm:mr-3" />
@@ -172,6 +189,12 @@ export const CPRPendingRhythmView = memo<CPRPendingRhythmViewProps>(({
           onDeliveryAlert={onDeliveryAlert}
         />
       )}
+
+      {/* Special Circumstances Checklist */}
+      <SpecialCircumstancesChecklist
+        specialCircumstances={specialCircumstances}
+        onToggleCondition={onToggleSpecialCircumstance}
+      />
 
       {/* Code Timeline */}
       <CodeTimeline

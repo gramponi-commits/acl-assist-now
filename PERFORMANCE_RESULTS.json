@@ -1,0 +1,421 @@
+{
+  "date": "2026-01-08T20:55:41.299Z",
+  "totalSize": {
+    "bytes": 1349305,
+    "kilobytes": 1317.6806640625,
+    "megabytes": "1.29",
+    "gzippedKB": 395.3099999999999,
+    "gzippedMB": "0.39"
+  },
+  "averageParseTime": "0.42",
+  "results": [
+    {
+      "langCode": "en",
+      "langName": "English",
+      "fileSize": {
+        "bytes": 47435,
+        "kilobytes": 46.32,
+        "megabytes": 0.05,
+        "gzippedKilobytes": 13.9
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 1
+    },
+    {
+      "langCode": "it",
+      "langName": "Italian",
+      "fileSize": {
+        "bytes": 50490,
+        "kilobytes": 49.31,
+        "megabytes": 0.05,
+        "gzippedKilobytes": 14.79
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 0
+    },
+    {
+      "langCode": "es",
+      "langName": "Spanish",
+      "fileSize": {
+        "bytes": 51474,
+        "kilobytes": 50.27,
+        "megabytes": 0.05,
+        "gzippedKilobytes": 15.08
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 0
+    },
+    {
+      "langCode": "fr",
+      "langName": "French",
+      "fileSize": {
+        "bytes": 52599,
+        "kilobytes": 51.37,
+        "megabytes": 0.05,
+        "gzippedKilobytes": 15.41
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 0
+    },
+    {
+      "langCode": "de",
+      "langName": "German",
+      "fileSize": {
+        "bytes": 51325,
+        "kilobytes": 50.12,
+        "megabytes": 0.05,
+        "gzippedKilobytes": 15.04
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 0
+    },
+    {
+      "langCode": "el",
+      "langName": "Greek",
+      "fileSize": {
+        "bytes": 76952,
+        "kilobytes": 75.15,
+        "megabytes": 0.07,
+        "gzippedKilobytes": 22.54
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 1
+    },
+    {
+      "langCode": "ru",
+      "langName": "Russian",
+      "fileSize": {
+        "bytes": 76475,
+        "kilobytes": 74.68,
+        "megabytes": 0.07,
+        "gzippedKilobytes": 22.4
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 0
+    },
+    {
+      "langCode": "uk",
+      "langName": "Ukrainian",
+      "fileSize": {
+        "bytes": 74336,
+        "kilobytes": 72.59,
+        "megabytes": 0.07,
+        "gzippedKilobytes": 21.78
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 0
+    },
+    {
+      "langCode": "zh-CN",
+      "langName": "Chinese (Simplified)",
+      "fileSize": {
+        "bytes": 43415,
+        "kilobytes": 42.4,
+        "megabytes": 0.04,
+        "gzippedKilobytes": 12.72
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 0
+    },
+    {
+      "langCode": "ja",
+      "langName": "Japanese",
+      "fileSize": {
+        "bytes": 52833,
+        "kilobytes": 51.59,
+        "megabytes": 0.05,
+        "gzippedKilobytes": 15.48
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 1
+    },
+    {
+      "langCode": "ko",
+      "langName": "Korean",
+      "fileSize": {
+        "bytes": 48769,
+        "kilobytes": 47.63,
+        "megabytes": 0.05,
+        "gzippedKilobytes": 14.29
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 1
+    },
+    {
+      "langCode": "pt",
+      "langName": "Portuguese",
+      "fileSize": {
+        "bytes": 50175,
+        "kilobytes": 49,
+        "megabytes": 0.05,
+        "gzippedKilobytes": 14.7
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 1
+    },
+    {
+      "langCode": "id",
+      "langName": "Indonesian",
+      "fileSize": {
+        "bytes": 47850,
+        "kilobytes": 46.73,
+        "megabytes": 0.05,
+        "gzippedKilobytes": 14.02
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 0
+    },
+    {
+      "langCode": "nl",
+      "langName": "Dutch",
+      "fileSize": {
+        "bytes": 49200,
+        "kilobytes": 48.05,
+        "megabytes": 0.05,
+        "gzippedKilobytes": 14.41
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 0
+    },
+    {
+      "langCode": "da",
+      "langName": "Danish",
+      "fileSize": {
+        "bytes": 47482,
+        "kilobytes": 46.37,
+        "megabytes": 0.05,
+        "gzippedKilobytes": 13.91
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 0
+    },
+    {
+      "langCode": "sv",
+      "langName": "Swedish",
+      "fileSize": {
+        "bytes": 48072,
+        "kilobytes": 46.95,
+        "megabytes": 0.05,
+        "gzippedKilobytes": 14.08
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 1
+    },
+    {
+      "langCode": "no",
+      "langName": "Norwegian",
+      "fileSize": {
+        "bytes": 47098,
+        "kilobytes": 45.99,
+        "megabytes": 0.04,
+        "gzippedKilobytes": 13.8
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 0
+    },
+    {
+      "langCode": "pl",
+      "langName": "Polish",
+      "fileSize": {
+        "bytes": 50839,
+        "kilobytes": 49.65,
+        "megabytes": 0.05,
+        "gzippedKilobytes": 14.89
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 0
+    },
+    {
+      "langCode": "tr",
+      "langName": "Turkish",
+      "fileSize": {
+        "bytes": 49588,
+        "kilobytes": 48.43,
+        "megabytes": 0.05,
+        "gzippedKilobytes": 14.53
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 1
+    },
+    {
+      "langCode": "vi",
+      "langName": "Vietnamese",
+      "fileSize": {
+        "bytes": 56137,
+        "kilobytes": 54.82,
+        "megabytes": 0.05,
+        "gzippedKilobytes": 16.45
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 1
+    },
+    {
+      "langCode": "tl",
+      "langName": "Filipino/Tagalog",
+      "fileSize": {
+        "bytes": 51805,
+        "kilobytes": 50.59,
+        "megabytes": 0.05,
+        "gzippedKilobytes": 15.18
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 0
+    },
+    {
+      "langCode": "ar",
+      "langName": "Arabic",
+      "fileSize": {
+        "bytes": 67309,
+        "kilobytes": 65.73,
+        "megabytes": 0.06,
+        "gzippedKilobytes": 19.72
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 0
+    },
+    {
+      "langCode": "fa",
+      "langName": "Persian/Farsi",
+      "fileSize": {
+        "bytes": 67752,
+        "kilobytes": 66.16,
+        "megabytes": 0.06,
+        "gzippedKilobytes": 19.85
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 1
+    },
+    {
+      "langCode": "th",
+      "langName": "Thai",
+      "fileSize": {
+        "bytes": 89895,
+        "kilobytes": 87.79,
+        "megabytes": 0.09,
+        "gzippedKilobytes": 26.34
+      },
+      "structure": {
+        "totalKeys": 791,
+        "totalStrings": 764,
+        "maxDepth": 1,
+        "leafKeys": 764
+      },
+      "parseTime": 1
+    }
+  ]
+}

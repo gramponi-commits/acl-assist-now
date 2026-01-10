@@ -1,6 +1,6 @@
 // IndexedDB helper for storing ACLS session reports locally
 
-import { HsAndTs, PostROSCChecklist, PostROSCVitals, PathwayMode, PregnancyCauses, PregnancyInterventions } from '@/types/acls';
+import { HsAndTs, PostROSCChecklist, PostROSCVitals, PathwayMode, PregnancyCauses, PregnancyInterventions, SpecialCircumstances, AnaphylaxisChecklist, AsthmaChecklist, HyperthermiaChecklist, OpioidOverdoseChecklist, DrowningChecklist, ElectrocutionChecklist, LVADFailureChecklist } from '@/types/acls';
 
 const DB_NAME = 'acls_sessions';
 const DB_VERSION = 4; // Bump version for sessionType field
@@ -52,6 +52,15 @@ export interface StoredSession {
   pregnancyActive?: boolean;
   pregnancyCauses?: PregnancyCauses;
   pregnancyInterventions?: PregnancyInterventions;
+  // Special Circumstances data
+  specialCircumstances?: SpecialCircumstances;
+  anaphylaxisChecklist?: AnaphylaxisChecklist;
+  asthmaChecklist?: AsthmaChecklist;
+  hyperthermiaChecklist?: HyperthermiaChecklist;
+  opioidOverdoseChecklist?: OpioidOverdoseChecklist;
+  drowningChecklist?: DrowningChecklist;
+  electrocutionChecklist?: ElectrocutionChecklist;
+  lvadFailureChecklist?: LVADFailureChecklist;
   // BradyTachy data (for combined sessions)
   bradyTachyStartTime?: number | null;
 }

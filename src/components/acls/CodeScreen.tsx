@@ -29,6 +29,8 @@ import {
   saveActiveSession,
   getActiveSession,
   clearActiveSession,
+  getPathwayMode,
+  getPathwayWeight,
 } from '@/lib/activeSessionStorage';
 import { getBradyTachySession, clearBradyTachySession } from '@/lib/bradyTachyStorage';
 import { logger } from '@/utils/logger';
@@ -313,7 +315,10 @@ export function CodeScreen() {
   };
 
   // If Brady/Tachy module is active, show it instead of normal CODE screen
+  // Pass initialMode and initialWeight from persisted toggle state
   if (showBradyTachyModule) {
+    const bradyTachyInitialMode = getPathwayMode();
+    const bradyTachyInitialWeight = bradyTachyInitialMode === 'pediatric' ? getPathwayWeight() : null;
     return (
       <div className="min-h-screen bg-background flex flex-col">
         <Suspense
@@ -326,6 +331,8 @@ export function CodeScreen() {
           <BradyTachyModule
             onSwitchToArrest={handleSwitchToArrestFromBradyTachy}
             onExit={handleCloseBradyTachy}
+            initialMode={bradyTachyInitialMode}
+            initialWeight={bradyTachyInitialWeight}
           />
         </Suspense>
       </div>
@@ -388,6 +395,7 @@ export function CodeScreen() {
                 pregnancyCauses={session.pregnancyCauses}
                 pregnancyInterventions={session.pregnancyInterventions}
                 pregnancyStartTime={session.pregnancyStartTime}
+                specialCircumstances={session.specialCircumstances}
                 vibrationEnabled={settings.vibrationEnabled}
                 onSetWeight={actions.setPatientWeight}
                 onSelectRhythm={actions.selectRhythm}
@@ -400,6 +408,7 @@ export function CodeScreen() {
                 onUpdatePregnancyCauses={actions.updatePregnancyCauses}
                 onUpdatePregnancyInterventions={actions.updatePregnancyInterventions}
                 onDeliveryAlert={handleDeliveryAlert}
+                onToggleSpecialCircumstance={actions.toggleSpecialCircumstance}
                 onAddNote={() => setShowNoteDialog(true)}
                 onNewCode={handleNewCode}
                 onROSC={actions.achieveROSC}
@@ -425,6 +434,7 @@ export function CodeScreen() {
                 pregnancyCauses={session.pregnancyCauses}
                 pregnancyInterventions={session.pregnancyInterventions}
                 pregnancyStartTime={session.pregnancyStartTime}
+                specialCircumstances={session.specialCircumstances}
                 cprCycleRemaining={timerState.cprCycleRemaining}
                 epiRemaining={timerState.epiRemaining}
                 preShockAlert={timerState.preShockAlert}
@@ -450,6 +460,7 @@ export function CodeScreen() {
                 onUpdatePregnancyCauses={actions.updatePregnancyCauses}
                 onUpdatePregnancyInterventions={actions.updatePregnancyInterventions}
                 onDeliveryAlert={handleDeliveryAlert}
+                onToggleSpecialCircumstance={actions.toggleSpecialCircumstance}
                 onAddNote={() => setShowNoteDialog(true)}
                 onExport={actions.exportSession}
                 onNewCode={handleNewCode}

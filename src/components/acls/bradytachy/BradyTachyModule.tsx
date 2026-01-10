@@ -8,16 +8,23 @@ import { BradyTachyPatientSelector } from './BradyTachyPatientSelector';
 import { BradycardiaScreen } from './BradycardiaScreen';
 import { TachycardiaScreen } from './TachycardiaScreen';
 import { BradyTachyTimeline } from './BradyTachyTimeline';
+import { WeightDisplay, WeightInput } from '../WeightInput';
+import { PathwayMode } from '@/types/acls';
 
 interface BradyTachyModuleProps {
   onSwitchToArrest: (patientGroup: 'adult' | 'pediatric') => void;
   onExit: () => void;
+  /** If provided, skips patient selection and starts at branch selection with this mode */
+  initialMode?: PathwayMode;
+  /** If provided, sets the initial weight (only used with pediatric mode) */
+  initialWeight?: number | null;
 }
 
-export function BradyTachyModule({ onSwitchToArrest, onExit }: BradyTachyModuleProps) {
+export function BradyTachyModule({ onSwitchToArrest, onExit, initialMode, initialWeight }: BradyTachyModuleProps) {
   const { t } = useTranslation();
-  const { session, actions } = useBradyTachyLogic();
+  const { session, actions } = useBradyTachyLogic({ initialMode, initialWeight });
   const [showExitConfirm, setShowExitConfirm] = useState(false);
+  const [showWeightDialog, setShowWeightDialog] = useState(false);
 
   const handleSwitchToArrest = () => {
     const shouldSwitch = actions.switchToArrest();
@@ -114,6 +121,29 @@ export function BradyTachyModule({ onSwitchToArrest, onExit }: BradyTachyModuleP
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
         <div className="p-4 space-y-4">
+          {session.decisionContext.patientGroup === 'pediatric' &&
+           session.phase !== 'patient_selection' &&
+           session.phase !== 'branch_selection' && (
+            <div className="flex items-center justify-center">
+              <WeightDisplay
+                weight={session.decisionContext.weightKg}
+                onEdit={() => setShowWeightDialog(true)}
+              />
+            </div>
+          )}
+
+          {session.decisionContext.patientGroup === 'pediatric' &&
+           session.phase !== 'patient_selection' &&
+           session.phase !== 'branch_selection' && (
+            <WeightInput
+              currentWeight={session.decisionContext.weightKg}
+              onWeightChange={actions.setPatientWeight}
+              isOpen={showWeightDialog}
+              onOpenChange={setShowWeightDialog}
+              showTrigger={false}
+            />
+          )}
+
           {renderContent()}
 
           {/* Timeline - Show when session is active (not in selection phases) */}

@@ -283,6 +283,33 @@ function drawSummarySection(pdf: jsPDF, session: StoredSession, y: number, t: (k
         }
       }
     }
+
+    // Special Circumstances
+    if (session.specialCircumstances) {
+      const activeConditions = Object.entries(session.specialCircumstances)
+        .filter(([_, value]) => value)
+        .map(([key]) => {
+          const keyMap: Record<string, string> = {
+            anaphylaxis: t('specialCircumstances.anaphylaxis.title'),
+            asthma: t('specialCircumstances.asthma.title'),
+            hyperthermia: t('specialCircumstances.hyperthermia.title'),
+            opioidOverdose: t('specialCircumstances.opioidOverdose.title'),
+            drowning: t('specialCircumstances.drowning.title'),
+            electrocution: t('specialCircumstances.electrocution.title'),
+            lvadFailure: t('specialCircumstances.lvadFailure.title'),
+          };
+          return keyMap[key] || key;
+        });
+
+      if (activeConditions.length > 0) {
+        pdf.setFont('helvetica', 'bold');
+        pdf.text(`${t('specialCircumstances.title')}:`, 15, y);
+        pdf.setFont('helvetica', 'normal');
+        const splitText = pdf.splitTextToSize(activeConditions.join(', '), 140);
+        pdf.text(splitText, 55, y);
+        y += splitText.length * 5 + 2;
+      }
+    }
   }
 
   // Horizontal line

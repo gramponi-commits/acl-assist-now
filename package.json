@@ -22,7 +22,11 @@
     "cap:run:ios": "npm run cap:sync:ios && npx cap run ios",
     "android:build": "npm run build && npx cap sync android && cd android && ./gradlew assembleRelease",
     "android:dev": "npm run build:dev && npx cap sync android && npx cap run android",
-    "ios:dev": "npm run build:dev && npx cap sync ios && npx cap run ios"
+    "ios:dev": "npm run build:dev && npx cap sync ios && npx cap run ios",
+    "validate:translation": "tsx scripts/lint-translations.ts -- --lang=XX",
+    "validate:translations": "tsx scripts/validate-all-translations.ts",
+    "test:languages": "tsx scripts/test-languages.ts",
+    "test:performance": "tsx scripts/performance-test.ts"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.0",

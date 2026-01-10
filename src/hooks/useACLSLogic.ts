@@ -15,6 +15,14 @@ import {
   PathwayMode,
   PregnancyCauses,
   PregnancyInterventions,
+  SpecialCircumstances,
+  AnaphylaxisChecklist,
+  AsthmaChecklist,
+  HyperthermiaChecklist,
+  OpioidOverdoseChecklist,
+  DrowningChecklist,
+  ElectrocutionChecklist,
+  LVADFailureChecklist,
   createInitialSession,
 } from '@/types/acls';
 import { StoredSession, saveSession } from '@/lib/sessionStorage';
@@ -841,6 +849,77 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
     }));
   }, []);
 
+  // Special Circumstances actions
+  const toggleSpecialCircumstance = useCallback((key: keyof SpecialCircumstances, active: boolean) => {
+    setSession(prev => ({
+      ...prev,
+      specialCircumstances: { ...prev.specialCircumstances, [key]: active },
+    }));
+    if (active) {
+      // Map each condition key to its specific translation key
+      const interventionKeyMap: Record<keyof SpecialCircumstances, string> = {
+        anaphylaxis: 'interventions.anaphylaxisActivated',
+        asthma: 'interventions.asthmaActivated',
+        hyperthermia: 'interventions.hyperthermiaActivated',
+        opioidOverdose: 'interventions.opioidOverdoseActivated',
+        drowning: 'interventions.drowningActivated',
+        electrocution: 'interventions.electrocutionActivated',
+        lvadFailure: 'interventions.lvadFailureActivated',
+      };
+      const translationKey = interventionKeyMap[key];
+      addIntervention('note', t(translationKey), undefined, translationKey, {});
+    }
+  }, [addIntervention, t]);
+
+  const updateAnaphylaxisChecklist = useCallback((updates: Partial<AnaphylaxisChecklist>) => {
+    setSession(prev => ({
+      ...prev,
+      anaphylaxisChecklist: { ...prev.anaphylaxisChecklist, ...updates },
+    }));
+  }, []);
+
+  const updateAsthmaChecklist = useCallback((updates: Partial<AsthmaChecklist>) => {
+    setSession(prev => ({
+      ...prev,
+      asthmaChecklist: { ...prev.asthmaChecklist, ...updates },
+    }));
+  }, []);
+
+  const updateHyperthermiaChecklist = useCallback((updates: Partial<HyperthermiaChecklist>) => {
+    setSession(prev => ({
+      ...prev,
+      hyperthermiaChecklist: { ...prev.hyperthermiaChecklist, ...updates },
+    }));
+  }, []);
+
+  const updateOpioidOverdoseChecklist = useCallback((updates: Partial<OpioidOverdoseChecklist>) => {
+    setSession(prev => ({
+      ...prev,
+      opioidOverdoseChecklist: { ...prev.opioidOverdoseChecklist, ...updates },
+    }));
+  }, []);
+
+  const updateDrowningChecklist = useCallback((updates: Partial<DrowningChecklist>) => {
+    setSession(prev => ({
+      ...prev,
+      drowningChecklist: { ...prev.drowningChecklist, ...updates },
+    }));
+  }, []);
+
+  const updateElectrocutionChecklist = useCallback((updates: Partial<ElectrocutionChecklist>) => {
+    setSession(prev => ({
+      ...prev,
+      electrocutionChecklist: { ...prev.electrocutionChecklist, ...updates },
+    }));
+  }, []);
+
+  const updateLVADFailureChecklist = useCallback((updates: Partial<LVADFailureChecklist>) => {
+    setSession(prev => ({
+      ...prev,
+      lvadFailureChecklist: { ...prev.lvadFailureChecklist, ...updates },
+    }));
+  }, []);
+
   // Allow external control of rhythm analysis state (for initial rhythm selection)
   const setRhythmAnalysisActive = useCallback((active: boolean) => {
     setIsInRhythmCheck(active);
@@ -911,6 +990,14 @@ export function useACLSLogic(config: ACLSConfig = DEFAULT_ACLS_CONFIG, defibrill
       togglePregnancy,
       updatePregnancyCauses,
       updatePregnancyInterventions,
+      toggleSpecialCircumstance,
+      updateAnaphylaxisChecklist,
+      updateAsthmaChecklist,
+      updateHyperthermiaChecklist,
+      updateOpioidOverdoseChecklist,
+      updateDrowningChecklist,
+      updateElectrocutionChecklist,
+      updateLVADFailureChecklist,
     },
     buttonStates: {
       canGiveEpinephrine,

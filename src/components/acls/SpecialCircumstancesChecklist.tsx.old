@@ -1,0 +1,525 @@
+import { useTranslation } from 'react-i18next';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { ChevronDown, ChevronRight, AlertCircle, Stethoscope, Wrench } from 'lucide-react';
+import { useState } from 'react';
+import { cn } from '@/lib/utils';
+import type {
+  SpecialCircumstances,
+  AnaphylaxisChecklist,
+  AsthmaChecklist,
+  HyperthermiaChecklist,
+  OpioidOverdoseChecklist,
+  DrowningChecklist,
+  ElectrocutionChecklist,
+  LVADFailureChecklist,
+} from '@/types/acls';
+
+// Condition-specific checklist item component
+interface ChecklistItemProps {
+  labelKey: string;
+  descKey: string;
+  checked: boolean;
+  onCheckedChange: (checked: boolean) => void;
+  diagnosticKey?: string;
+  managementKey?: string;
+}
+
+function ChecklistItem({ labelKey, descKey, checked, onCheckedChange, diagnosticKey, managementKey }: ChecklistItemProps) {
+  const { t } = useTranslation();
+  const [isExpanded, setIsExpanded] = useState(false);
+  const hasDetails = diagnosticKey || managementKey;
+
+  return (
+    <div className="border border-border rounded-lg overflow-hidden">
+      <div className="flex items-start gap-3 p-2 hover:bg-muted/50 transition-colors">
+        <Checkbox
+          checked={checked}
+          onCheckedChange={onCheckedChange}
+          className="mt-1"
+          onClick={(e) => e.stopPropagation()}
+        />
+        {hasDetails ? (
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="flex-1 flex items-start gap-2 text-left min-w-0"
+          >
+            <div className="flex-1 min-w-0">
+              <div className="font-medium text-foreground">{t(labelKey)}</div>
+              <div className="text-xs text-muted-foreground">{t(descKey)}</div>
+            </div>
+            <ChevronRight
+              className={cn(
+                'h-4 w-4 text-muted-foreground transition-transform flex-shrink-0 mt-1',
+                isExpanded && 'rotate-90'
+              )}
+            />
+          </button>
+        ) : (
+          <div className="flex-1 min-w-0">
+            <div className="font-medium text-foreground">{t(labelKey)}</div>
+            <div className="text-xs text-muted-foreground">{t(descKey)}</div>
+          </div>
+        )}
+      </div>
+
+      {isExpanded && hasDetails && (
+        <div className="px-3 pb-3 pt-1 bg-muted/30 space-y-3 animate-in slide-in-from-top-2">
+          {diagnosticKey && (
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <Stethoscope className="h-4 w-4 text-blue-600" />
+                <h4 className="text-xs font-semibold text-blue-600">{t('specialCircumstances.diagnosticEval')}</h4>
+              </div>
+              <p className="text-xs text-foreground leading-relaxed pl-6">{t(diagnosticKey)}</p>
+            </div>
+          )}
+
+          {managementKey && (
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <Wrench className="h-4 w-4 text-green-600" />
+                <h4 className="text-xs font-semibold text-green-600">{t('specialCircumstances.management')}</h4>
+              </div>
+              <p className="text-xs text-foreground leading-relaxed pl-6">{t(managementKey)}</p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Individual condition section
+interface ConditionSectionProps {
+  conditionKey: keyof SpecialCircumstances;
+  titleKey: string;
+  isActive: boolean;
+  onToggle: (active: boolean) => void;
+  children: React.ReactNode;
+}
+
+function ConditionSection({ conditionKey, titleKey, isActive, onToggle, children }: ConditionSectionProps) {
+  const { t } = useTranslation();
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div className={cn(
+      'border rounded-lg overflow-hidden transition-all',
+      isActive ? 'border-gray-400 bg-gray-100/50 dark:bg-gray-800/50' : 'border-border'
+    )}>
+      <div className="flex items-center gap-3 p-3">
+        <Checkbox
+          checked={isActive}
+          onCheckedChange={onToggle}
+          className="border-gray-400 data-[state=checked]:bg-gray-600 data-[state=checked]:border-gray-600"
+        />
+        <button
+          onClick={() => isActive && setIsExpanded(!isExpanded)}
+          className={cn(
+            'flex-1 flex items-center justify-between text-left',
+            !isActive && 'cursor-default'
+          )}
+          disabled={!isActive}
+        >
+          <span className={cn(
+            'font-medium',
+            isActive ? 'text-foreground' : 'text-muted-foreground'
+          )}>
+            {t(titleKey)}
+          </span>
+          {isActive && (
+            <ChevronDown className={cn(
+              'h-4 w-4 text-muted-foreground transition-transform',
+              isExpanded && 'rotate-180'
+            )} />
+          )}
+        </button>
+      </div>
+
+      {isActive && isExpanded && (
+        <div className="px-3 pb-3 space-y-2 animate-in slide-in-from-top-2">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
+interface SpecialCircumstancesChecklistProps {
+  specialCircumstances: SpecialCircumstances;
+  anaphylaxisChecklist: AnaphylaxisChecklist;
+  asthmaChecklist: AsthmaChecklist;
+  hyperthermiaChecklist: HyperthermiaChecklist;
+  hypothermiaChecklist: HypothermiaChecklist;
+  opioidOverdoseChecklist: OpioidOverdoseChecklist;
+  drowningChecklist: DrowningChecklist;
+  electrocutionChecklist: ElectrocutionChecklist;
+  lvadFailureChecklist: LVADFailureChecklist;
+  onToggleCondition: (key: keyof SpecialCircumstances, active: boolean) => void;
+  onUpdateAnaphylaxis: (updates: Partial<AnaphylaxisChecklist>) => void;
+  onUpdateAsthma: (updates: Partial<AsthmaChecklist>) => void;
+  onUpdateHyperthermia: (updates: Partial<HyperthermiaChecklist>) => void;
+  onUpdateHypothermia: (updates: Partial<HypothermiaChecklist>) => void;
+  onUpdateOpioidOverdose: (updates: Partial<OpioidOverdoseChecklist>) => void;
+  onUpdateDrowning: (updates: Partial<DrowningChecklist>) => void;
+  onUpdateElectrocution: (updates: Partial<ElectrocutionChecklist>) => void;
+  onUpdateLVADFailure: (updates: Partial<LVADFailureChecklist>) => void;
+}
+
+export function SpecialCircumstancesChecklist({
+  specialCircumstances,
+  anaphylaxisChecklist,
+  asthmaChecklist,
+  hyperthermiaChecklist,
+  hypothermiaChecklist,
+  opioidOverdoseChecklist,
+  drowningChecklist,
+  electrocutionChecklist,
+  lvadFailureChecklist,
+  onToggleCondition,
+  onUpdateAnaphylaxis,
+  onUpdateAsthma,
+  onUpdateHyperthermia,
+  onUpdateHypothermia,
+  onUpdateOpioidOverdose,
+  onUpdateDrowning,
+  onUpdateElectrocution,
+  onUpdateLVADFailure,
+}: SpecialCircumstancesChecklistProps) {
+  const { t } = useTranslation();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const activeCount = Object.values(specialCircumstances).filter(Boolean).length;
+
+  return (
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <CollapsibleTrigger className="w-full">
+        <div className={cn(
+          'flex items-center justify-between p-4 rounded-lg border-2 transition-all',
+          'bg-gray-100/50 dark:bg-gray-800/30 border-gray-300 dark:border-gray-600 hover:bg-gray-200/50 dark:hover:bg-gray-700/30'
+        )}>
+          <div className="flex items-center gap-3">
+            <AlertCircle className="h-5 w-5 text-gray-500" />
+            <div className="text-left">
+              <div className="font-semibold text-foreground">{t('specialCircumstances.title')}</div>
+              <div className="text-sm text-muted-foreground">
+                {activeCount > 0
+                  ? t('specialCircumstances.activeCount', { count: activeCount })
+                  : t('specialCircumstances.tapToReview')}
+              </div>
+            </div>
+          </div>
+          <ChevronDown className={cn(
+            'h-5 w-5 text-muted-foreground transition-transform',
+            isOpen && 'rotate-180'
+          )} />
+        </div>
+      </CollapsibleTrigger>
+
+      <CollapsibleContent>
+        <div className="mt-3 space-y-3 p-4 bg-card rounded-lg border border-border">
+          {/* Anaphylaxis */}
+          <ConditionSection
+            conditionKey="anaphylaxis"
+            titleKey="specialCircumstances.anaphylaxis.title"
+            isActive={specialCircumstances.anaphylaxis}
+            onToggle={(active) => onToggleCondition('anaphylaxis', active)}
+          >
+            <ChecklistItem
+              labelKey="specialCircumstances.anaphylaxis.identifyTrigger"
+              descKey="specialCircumstances.anaphylaxis.identifyTriggerDesc"
+              checked={anaphylaxisChecklist.identifyTrigger}
+              onCheckedChange={(checked) => onUpdateAnaphylaxis({ identifyTrigger: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.anaphylaxis.ivFluids"
+              descKey="specialCircumstances.anaphylaxis.ivFluidsDesc"
+              checked={anaphylaxisChecklist.ivFluids}
+              onCheckedChange={(checked) => onUpdateAnaphylaxis({ ivFluids: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.anaphylaxis.epinephrine"
+              descKey="specialCircumstances.anaphylaxis.epinephrineDesc"
+              checked={anaphylaxisChecklist.epinephrine}
+              onCheckedChange={(checked) => onUpdateAnaphylaxis({ epinephrine: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.anaphylaxis.glucagonIfBetaBlocked"
+              descKey="specialCircumstances.anaphylaxis.glucagonIfBetaBlockedDesc"
+              checked={anaphylaxisChecklist.glucagonIfBetaBlocked}
+              onCheckedChange={(checked) => onUpdateAnaphylaxis({ glucagonIfBetaBlocked: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.anaphylaxis.considerECPR"
+              descKey="specialCircumstances.anaphylaxis.considerECPRDesc"
+              checked={anaphylaxisChecklist.considerECPR}
+              onCheckedChange={(checked) => onUpdateAnaphylaxis({ considerECPR: !!checked })}
+            />
+          </ConditionSection>
+
+          {/* Asthma */}
+          <ConditionSection
+            conditionKey="asthma"
+            titleKey="specialCircumstances.asthma.title"
+            isActive={specialCircumstances.asthma}
+            onToggle={(active) => onToggleCondition('asthma', active)}
+          >
+            <ChecklistItem
+              labelKey="specialCircumstances.asthma.evaluateTensionPneumo"
+              descKey="specialCircumstances.asthma.evaluateTensionPneumoDesc"
+              checked={asthmaChecklist.evaluateTensionPneumo}
+              onCheckedChange={(checked) => onUpdateAsthma({ evaluateTensionPneumo: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.asthma.lowTidalVolumeVent"
+              descKey="specialCircumstances.asthma.lowTidalVolumeVentDesc"
+              checked={asthmaChecklist.lowTidalVolumeVent}
+              onCheckedChange={(checked) => onUpdateAsthma({ lowTidalVolumeVent: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.asthma.activeExhalation"
+              descKey="specialCircumstances.asthma.activeExhalationDesc"
+              checked={asthmaChecklist.activeExhalation}
+              onCheckedChange={(checked) => onUpdateAsthma({ activeExhalation: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.asthma.bronchodilators"
+              descKey="specialCircumstances.asthma.bronchodilatorsDesc"
+              checked={asthmaChecklist.bronchodilators}
+              onCheckedChange={(checked) => onUpdateAsthma({ bronchodilators: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.asthma.considerECLS"
+              descKey="specialCircumstances.asthma.considerECLSDesc"
+              checked={asthmaChecklist.considerECLS}
+              onCheckedChange={(checked) => onUpdateAsthma({ considerECLS: !!checked })}
+            />
+          </ConditionSection>
+
+          {/* Hyperthermia */}
+          <ConditionSection
+            conditionKey="hyperthermia"
+            titleKey="specialCircumstances.hyperthermia.title"
+            isActive={specialCircumstances.hyperthermia}
+            onToggle={(active) => onToggleCondition('hyperthermia', active)}
+          >
+            <ChecklistItem
+              labelKey="specialCircumstances.hyperthermia.measureCoreTemp"
+              descKey="specialCircumstances.hyperthermia.measureCoreTempDesc"
+              checked={hyperthermiaChecklist.measureCoreTemp}
+              onCheckedChange={(checked) => onUpdateHyperthermia({ measureCoreTemp: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.hyperthermia.iceWaterImmersion"
+              descKey="specialCircumstances.hyperthermia.iceWaterImmersionDesc"
+              checked={hyperthermiaChecklist.iceWaterImmersion}
+              onCheckedChange={(checked) => onUpdateHyperthermia({ iceWaterImmersion: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.hyperthermia.tepidWaterCooling"
+              descKey="specialCircumstances.hyperthermia.tepidWaterCoolingDesc"
+              checked={hyperthermiaChecklist.tepidWaterCooling}
+              onCheckedChange={(checked) => onUpdateHyperthermia({ tepidWaterCooling: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.hyperthermia.monitorTempDuringCooling"
+              descKey="specialCircumstances.hyperthermia.monitorTempDuringCoolingDesc"
+              checked={hyperthermiaChecklist.monitorTempDuringCooling}
+              onCheckedChange={(checked) => onUpdateHyperthermia({ monitorTempDuringCooling: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.hyperthermia.stopCoolingAt38_6"
+              descKey="specialCircumstances.hyperthermia.stopCoolingAt38_6Desc"
+              checked={hyperthermiaChecklist.stopCoolingAt38_6}
+              onCheckedChange={(checked) => onUpdateHyperthermia({ stopCoolingAt38_6: !!checked })}
+            />
+          </ConditionSection>
+
+          {/* Hypothermia */}
+          <ConditionSection
+            conditionKey="hypothermia"
+            titleKey="specialCircumstances.hypothermia.title"
+            isActive={specialCircumstances.hypothermia}
+            onToggle={(active) => onToggleCondition('hypothermia', active)}
+          >
+            <ChecklistItem
+              labelKey="specialCircumstances.hypothermia.measureCoreTemp"
+              descKey="specialCircumstances.hypothermia.measureCoreTempDesc"
+              checked={hypothermiaChecklist.measureCoreTemp}
+              onCheckedChange={(checked) => onUpdateHypothermia({ measureCoreTemp: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.hypothermia.activeRewarming"
+              descKey="specialCircumstances.hypothermia.activeRewarmingDesc"
+              checked={hypothermiaChecklist.activeRewarming}
+              onCheckedChange={(checked) => onUpdateHypothermia({ activeRewarming: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.hypothermia.warmIVFluids"
+              descKey="specialCircumstances.hypothermia.warmIVFluidsDesc"
+              checked={hypothermiaChecklist.warmIVFluids}
+              onCheckedChange={(checked) => onUpdateHypothermia({ warmIVFluids: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.hypothermia.avoidExcessiveMovement"
+              descKey="specialCircumstances.hypothermia.avoidExcessiveMovementDesc"
+              checked={hypothermiaChecklist.avoidExcessiveMovement}
+              onCheckedChange={(checked) => onUpdateHypothermia({ avoidExcessiveMovement: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.hypothermia.considerECLS"
+              descKey="specialCircumstances.hypothermia.considerECLSDesc"
+              checked={hypothermiaChecklist.considerECLS}
+              onCheckedChange={(checked) => onUpdateHypothermia({ considerECLS: !!checked })}
+            />
+          </ConditionSection>
+
+          {/* Opioid Overdose */}
+          <ConditionSection
+            conditionKey="opioidOverdose"
+            titleKey="specialCircumstances.opioidOverdose.title"
+            isActive={specialCircumstances.opioidOverdose}
+            onToggle={(active) => onToggleCondition('opioidOverdose', active)}
+          >
+            <ChecklistItem
+              labelKey="specialCircumstances.opioidOverdose.ventilationFirst"
+              descKey="specialCircumstances.opioidOverdose.ventilationFirstDesc"
+              checked={opioidOverdoseChecklist.ventilationFirst}
+              onCheckedChange={(checked) => onUpdateOpioidOverdose({ ventilationFirst: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.opioidOverdose.naloxoneAdministered"
+              descKey="specialCircumstances.opioidOverdose.naloxoneAdministeredDesc"
+              checked={opioidOverdoseChecklist.naloxoneAdministered}
+              onCheckedChange={(checked) => onUpdateOpioidOverdose({ naloxoneAdministered: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.opioidOverdose.repeatNaloxoneIfNeeded"
+              descKey="specialCircumstances.opioidOverdose.repeatNaloxoneIfNeededDesc"
+              checked={opioidOverdoseChecklist.repeatNaloxoneIfNeeded}
+              onCheckedChange={(checked) => onUpdateOpioidOverdose({ repeatNaloxoneIfNeeded: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.opioidOverdose.observeForRecurrence"
+              descKey="specialCircumstances.opioidOverdose.observeForRecurrenceDesc"
+              checked={opioidOverdoseChecklist.observeForRecurrence}
+              onCheckedChange={(checked) => onUpdateOpioidOverdose({ observeForRecurrence: !!checked })}
+            />
+          </ConditionSection>
+
+          {/* Drowning */}
+          <ConditionSection
+            conditionKey="drowning"
+            titleKey="specialCircumstances.drowning.title"
+            isActive={specialCircumstances.drowning}
+            onToggle={(active) => onToggleCondition('drowning', active)}
+          >
+            <ChecklistItem
+              labelKey="specialCircumstances.drowning.earlyVentilation"
+              descKey="specialCircumstances.drowning.earlyVentilationDesc"
+              checked={drowningChecklist.earlyVentilation}
+              onCheckedChange={(checked) => onUpdateDrowning({ earlyVentilation: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.drowning.supplementalOxygen"
+              descKey="specialCircumstances.drowning.supplementalOxygenDesc"
+              checked={drowningChecklist.supplementalOxygen}
+              onCheckedChange={(checked) => onUpdateDrowning({ supplementalOxygen: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.drowning.standardCPR"
+              descKey="specialCircumstances.drowning.standardCPRDesc"
+              checked={drowningChecklist.standardCPR}
+              onCheckedChange={(checked) => onUpdateDrowning({ standardCPR: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.drowning.considerSpinalPrecautions"
+              descKey="specialCircumstances.drowning.considerSpinalPrecautionsDesc"
+              checked={drowningChecklist.considerSpinalPrecautions}
+              onCheckedChange={(checked) => onUpdateDrowning({ considerSpinalPrecautions: !!checked })}
+            />
+          </ConditionSection>
+
+          {/* Electrocution */}
+          <ConditionSection
+            conditionKey="electrocution"
+            titleKey="specialCircumstances.electrocution.title"
+            isActive={specialCircumstances.electrocution}
+            onToggle={(active) => onToggleCondition('electrocution', active)}
+          >
+            <ChecklistItem
+              labelKey="specialCircumstances.electrocution.ensureSceneSafety"
+              descKey="specialCircumstances.electrocution.ensureSceneSafetyDesc"
+              checked={electrocutionChecklist.ensureSceneSafety}
+              onCheckedChange={(checked) => onUpdateElectrocution({ ensureSceneSafety: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.electrocution.rapidDefibrillation"
+              descKey="specialCircumstances.electrocution.rapidDefibrillationDesc"
+              checked={electrocutionChecklist.rapidDefibrillation}
+              onCheckedChange={(checked) => onUpdateElectrocution({ rapidDefibrillation: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.electrocution.standardResuscitation"
+              descKey="specialCircumstances.electrocution.standardResuscitationDesc"
+              checked={electrocutionChecklist.standardResuscitation}
+              onCheckedChange={(checked) => onUpdateElectrocution({ standardResuscitation: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.electrocution.prolongedCPRConsideration"
+              descKey="specialCircumstances.electrocution.prolongedCPRConsiderationDesc"
+              checked={electrocutionChecklist.prolongedCPRConsideration}
+              onCheckedChange={(checked) => onUpdateElectrocution({ prolongedCPRConsideration: !!checked })}
+            />
+          </ConditionSection>
+
+          {/* LVAD Failure */}
+          <ConditionSection
+            conditionKey="lvadFailure"
+            titleKey="specialCircumstances.lvadFailure.title"
+            isActive={specialCircumstances.lvadFailure}
+            onToggle={(active) => onToggleCondition('lvadFailure', active)}
+          >
+            <ChecklistItem
+              labelKey="specialCircumstances.lvadFailure.startCompressionsImmediately"
+              descKey="specialCircumstances.lvadFailure.startCompressionsImmediatelyDesc"
+              checked={lvadFailureChecklist.startCompressionsImmediately}
+              onCheckedChange={(checked) => onUpdateLVADFailure({ startCompressionsImmediately: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.lvadFailure.auscultateForHum"
+              descKey="specialCircumstances.lvadFailure.auscultateForHumDesc"
+              checked={lvadFailureChecklist.auscultateForHum}
+              onCheckedChange={(checked) => onUpdateLVADFailure({ auscultateForHum: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.lvadFailure.checkController"
+              descKey="specialCircumstances.lvadFailure.checkControllerDesc"
+              checked={lvadFailureChecklist.checkController}
+              onCheckedChange={(checked) => onUpdateLVADFailure({ checkController: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.lvadFailure.checkDriveline"
+              descKey="specialCircumstances.lvadFailure.checkDrivelineDesc"
+              checked={lvadFailureChecklist.checkDriveline}
+              onCheckedChange={(checked) => onUpdateLVADFailure({ checkDriveline: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.lvadFailure.checkPowerSource"
+              descKey="specialCircumstances.lvadFailure.checkPowerSourceDesc"
+              checked={lvadFailureChecklist.checkPowerSource}
+              onCheckedChange={(checked) => onUpdateLVADFailure({ checkPowerSource: !!checked })}
+            />
+            <ChecklistItem
+              labelKey="specialCircumstances.lvadFailure.measureBPDoppler"
+              descKey="specialCircumstances.lvadFailure.measureBPDopplerDesc"
+              checked={lvadFailureChecklist.measureBPDoppler}
+              onCheckedChange={(checked) => onUpdateLVADFailure({ measureBPDoppler: !!checked })}
+            />
+          </ConditionSection>
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
+  );
+}
